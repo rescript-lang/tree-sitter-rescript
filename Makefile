@@ -6,5 +6,5 @@ generate:
 	$(TS) generate
 
 .PHONY: test
-test:
+test: generate
 	$(TS) test

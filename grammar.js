@@ -2,7 +2,17 @@ module.exports = grammar({
   name: 'rescript',
 
   rules: {
-    // TODO: add the actual grammar rules
-    source_file: $ => 'hello'
+    source_file: $ => repeat($._definition),
+
+    _definition: $ => choice(
+      $.type_definition,
+    ),
+
+    type_definition: $ => seq(
+      'type',
+      $.identifier,
+    ),
+
+    identifier: $ => /[a-z_][a-z0-9_']*/,
   }
 });

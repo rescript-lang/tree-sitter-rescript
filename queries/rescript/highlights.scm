@@ -1,0 +1,3 @@
+(identifier) @type
+
+["type"] @keyword

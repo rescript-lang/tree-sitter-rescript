@@ -1,9 +1,11 @@
-==================
-The only statement
-==================
+===========
+Opaque type
+===========
 
-hello
+type t
 
 ---
 
-(source_file)
+(source_file
+  (type_definition
+    (identifier)))
