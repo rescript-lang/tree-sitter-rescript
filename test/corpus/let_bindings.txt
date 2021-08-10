@@ -1,0 +1,25 @@
+==============
+Var assignment
+==============
+
+let x = y
+
+---
+
+(source_file
+  (let_binding
+    (identifier)
+    (identifier)))
+
+=================
+Number assignment
+=================
+
+let x = 5
+
+---
+
+(source_file
+  (let_binding
+    (identifier)
+    (number)))

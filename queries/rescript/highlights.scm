@@ -2,4 +2,9 @@
 (type_name) @type
 (module_name) @namespace
 
-["type"] @keyword
+(number) @number
+
+[
+  "type"
+  "let"
+] @keyword
