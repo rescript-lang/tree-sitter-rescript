@@ -1,0 +1,9 @@
+==================
+The only statement
+==================
+
+hello
+
+---
+
+(source_file)

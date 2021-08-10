@@ -1,0 +1,13 @@
+{
+  "name": "tree-sitter-rescript",
+  "version": "1.0.0",
+  "main": "bindings/node",
+  "author": "Victor Nakoryakov",
+  "license": "MIT",
+  "dependencies": {
+    "nan": "^2.15.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.0"
+  }
+}
