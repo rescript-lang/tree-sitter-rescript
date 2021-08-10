@@ -3,6 +3,7 @@
 (module_name) @namespace
 
 (number) @number
+(polyvar) @constant
 
 [
   "type"

@@ -42,11 +42,14 @@ module.exports = grammar({
     _expression: $ => choice(
       $._symbol_reference,
       $.number,
+      $.polyvar,
     ),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 
     _type_reference: $ => seq(repeat(seq($.module_name, '.')), $.type_name),
+
+    polyvar: $ => seq('#', /[a-zA-Z0-9_]*/),
 
     type_name: $ => /[a-z_][a-zA-Z0-9_']*/,
 

@@ -23,3 +23,16 @@ let x = 5
   (let_binding
     (identifier)
     (number)))
+
+==================
+Polyvar assignment
+==================
+
+let foo = #foo
+
+---
+
+(source_file
+  (let_binding
+    (identifier)
+    (polyvar)))
