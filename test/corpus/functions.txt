@@ -1,0 +1,38 @@
+===================================================
+Functions
+===================================================
+
+a => 1
+() => 2
+(d, e) => 3
+(f, g) => {
+  h
+}
+(trailing,) => 4
+(h, trailing,) => 5
+(set, kv) => 2
+
+---
+
+(source_file
+  (expression_statement (function
+    (identifier)
+    (number)))
+  (expression_statement (function
+    (formal_parameters)
+    (number)))
+  (expression_statement (function
+    (formal_parameters (identifier) (identifier))
+    (number)))
+  (expression_statement (function
+    (formal_parameters (identifier) (identifier))
+    (statement_block
+      (expression_statement (identifier)))))
+  (expression_statement (function
+    (formal_parameters (identifier))
+    (number)))
+  (expression_statement (function
+    (formal_parameters (identifier) (identifier))
+    (number)))
+  (expression_statement (function
+    (formal_parameters (identifier) (identifier)) (number))))

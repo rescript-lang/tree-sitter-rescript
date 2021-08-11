@@ -1,13 +1,29 @@
 module.exports = grammar({
   name: 'rescript',
 
-  rules: {
-    source_file: $ => repeat($._top_level_statement),
+  supertypes: $ => [
+    $.statement,
+    //$.declaration,
+    $.expression,
+    $.primary_expression,
+    $.pattern,
+  ],
 
-    _top_level_statement: $ => choice(
+  rules: {
+    source_file: $ => repeat($._statement),
+
+    statement: $ => $._statement,
+
+    _statement: $ => choice(
       $._type_declaration,
       $.expression_statement,
     ),
+
+    statement_block: $ => prec.right(seq(
+      '{',
+      repeat($.statement),
+      '}',
+    )),
 
     _type_declaration: $ => choice(
       $.opaque_type,
@@ -37,17 +53,55 @@ module.exports = grammar({
       'let',
       $.identifier,
       '=',
-      $._expression,
+      $.expression,
     ),
 
-    expression_statement: $ => $._expression,
+    expression_statement: $ => $.expression,
 
-    _expression: $ => choice(
-      $._symbol_reference,
+    expression: $ => choice(
+      $.primary_expression,
+    ),
+
+    primary_expression: $ => choice(
+      //$._symbol_reference,
+      $.identifier,
       $.number,
       $.string,
+      $.function,
       $.polyvar,
     ),
+
+    function: $ => seq(
+      choice(
+        field('parameter', $.identifier),
+        $._definition_signature
+      ),
+      '=>',
+      field('body', choice(
+        $.expression,
+        $.statement_block
+      ))
+    ),
+
+    _definition_signature: $ => field('parameters', $.formal_parameters),
+    _formal_parameter: $ => choice($.pattern/*, $.assignment_pattern TODO */),
+
+    formal_parameters: $ => seq(
+      '(',
+      optional(seq(
+        commaSep1($._formal_parameter),
+        optional(',')
+      )),
+      ')'
+    ),
+
+    // This negative dynamic precedence ensures that during error recovery,
+    // unfinished constructs are generally treated as literal expressions,
+    // not patterns.
+    pattern: $ => prec.dynamic(-1, choice(
+      $.identifier,
+      // $._destructuring_pattern, // TODO
+    )),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 
@@ -126,3 +180,11 @@ module.exports = grammar({
     )),
   },
 });
+
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(',', rule)));
+}
+
+function commaSep(rule) {
+  return optional(commaSep1(rule));
+}
