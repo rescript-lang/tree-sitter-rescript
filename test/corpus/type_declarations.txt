@@ -20,7 +20,7 @@ type t = Foo.Bar.qux
 (source_file
   (type_declaration
     (type_identifier)
-    (type_annotation
+    (nested_type_identifier
       (module_name) (module_name) (type_identifier))))
 
 ===========================================
@@ -37,6 +37,6 @@ type t = {
 (source_file
   (type_declaration
     (type_identifier)
-    (type_annotation (record_type
+    (record_type
       (record_type_field (identifier) (type_identifier))
-      (record_type_field (identifier) (type_identifier))))))
+      (record_type_field (identifier) (type_identifier)))))

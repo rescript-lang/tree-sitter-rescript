@@ -7,6 +7,7 @@ module.exports = grammar({
     $.expression,
     $.primary_expression,
     $.pattern,
+    $.type_annotation,
   ],
 
   rules: {
@@ -42,7 +43,9 @@ module.exports = grammar({
 
     type_annotation: $ => choice(
       $.record_type,
-      $._type_reference,
+      $.type_identifier,
+      $.nested_type_identifier,
+      $.generic_type,
     ),
 
     record_type: $ => seq(
@@ -54,8 +57,20 @@ module.exports = grammar({
     record_type_field: $ => seq(
       $.identifier,
       ':',
-      $._type_reference,
+      $.type_annotation,
       ',',
+    ),
+
+    generic_type: $ => seq(
+      choice(
+        $.type_identifier,
+        $.nested_type_identifier
+      ),
+      $.type_arguments
+    ),
+
+    type_arguments: $ => seq(
+      '<', commaSep1($.type_annotation), optional(','), '>'
     ),
 
     let_binding: $ => seq(
@@ -114,7 +129,7 @@ module.exports = grammar({
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 
-    _type_reference: $ => seq(repeat(seq($.module_name, '.')), $.type_identifier),
+    nested_type_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.type_identifier),
 
     polyvar: $ => seq('#', /[a-zA-Z0-9_]*/),
 
