@@ -1,0 +1,42 @@
+===========================================
+Opaque
+===========================================
+
+type t
+
+---
+
+(source_file
+ (type_declaration (opaque_type (type_name))))
+
+===========================================
+Alias
+===========================================
+
+type t = Foo.Bar.qux
+
+---
+
+(source_file
+  (type_declaration
+    (alias_type
+      (type_name)
+      (module_name) (module_name) (type_name))))
+
+===========================================
+Record
+===========================================
+
+type t = {
+  a: int,
+  b: myType,
+}
+
+---
+
+(source_file
+  (type_declaration
+    (record_type
+      (type_name)
+        (record_type_field (identifier) (type_name))
+        (record_type_field (identifier) (type_name)))))

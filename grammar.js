@@ -3,7 +3,7 @@ module.exports = grammar({
 
   supertypes: $ => [
     $.statement,
-    //$.declaration,
+    $.declaration,
     $.expression,
     $.primary_expression,
     $.pattern,
@@ -15,8 +15,9 @@ module.exports = grammar({
     statement: $ => $._statement,
 
     _statement: $ => choice(
-      $._type_declaration,
       $.expression_statement,
+      $.declaration,
+      $.statement_block,
     ),
 
     statement_block: $ => prec.right(seq(
@@ -25,11 +26,15 @@ module.exports = grammar({
       '}',
     )),
 
-    _type_declaration: $ => choice(
+    declaration: $ => choice(
+      $.type_declaration,
+      $.let_binding,
+    ),
+
+    type_declaration: $ => choice(
       $.opaque_type,
       $.alias_type,
       $.record_type,
-      $.let_binding,
     ),
 
     opaque_type: $ => seq('type', $.type_name),
