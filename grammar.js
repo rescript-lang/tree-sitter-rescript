@@ -31,17 +31,21 @@ module.exports = grammar({
       $.let_binding,
     ),
 
-    type_declaration: $ => choice(
-      $.opaque_type,
-      $.alias_type,
-      $.record_type,
+    type_declaration: $ => seq(
+      'type',
+      $.type_identifier,
+      optional(seq(
+        '=',
+        $.type_annotation,
+      ))
     ),
 
-    opaque_type: $ => seq('type', $.type_name),
-    alias_type: $ => seq('type', $.type_name, '=', $._type_reference),
-    record_type: $ => seq('type', $.type_name, '=', $._record_definition),
+    type_annotation: $ => choice(
+      $.record_type,
+      $._type_reference,
+    ),
 
-    _record_definition: $ => seq(
+    record_type: $ => seq(
       '{',
       repeat($.record_type_field),
       '}',
@@ -110,15 +114,15 @@ module.exports = grammar({
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 
-    _type_reference: $ => seq(repeat(seq($.module_name, '.')), $.type_name),
+    _type_reference: $ => seq(repeat(seq($.module_name, '.')), $.type_identifier),
 
     polyvar: $ => seq('#', /[a-zA-Z0-9_]*/),
 
-    type_name: $ => /[a-z_][a-zA-Z0-9_']*/,
+    type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
+
+    identifier: $ => /[a-z_][a-zA-Z0-9_']*/,
 
     module_name: $ => /[A-Z][a-zA-Z0-9_]*/,
-
-    identifier: $ => /[a-z_][a-z0-9_']*/,
 
     number: $ => {
       const hex_literal = seq(

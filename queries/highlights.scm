@@ -1,5 +1,5 @@
 (identifier) @variable
-(type_name) @type
+(type_identifier) @type
 (module_name) @namespace
 
 

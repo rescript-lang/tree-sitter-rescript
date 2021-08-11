@@ -7,7 +7,7 @@ type t
 ---
 
 (source_file
- (type_declaration (opaque_type (type_name))))
+ (type_declaration (type_identifier)))
 
 ===========================================
 Alias
@@ -19,9 +19,9 @@ type t = Foo.Bar.qux
 
 (source_file
   (type_declaration
-    (alias_type
-      (type_name)
-      (module_name) (module_name) (type_name))))
+    (type_identifier)
+    (type_annotation
+      (module_name) (module_name) (type_identifier))))
 
 ===========================================
 Record
@@ -36,7 +36,7 @@ type t = {
 
 (source_file
   (type_declaration
-    (record_type
-      (type_name)
-        (record_type_field (identifier) (type_name))
-        (record_type_field (identifier) (type_name)))))
+    (type_identifier)
+    (type_annotation (record_type
+      (record_type_field (identifier) (type_identifier))
+      (record_type_field (identifier) (type_identifier))))))
