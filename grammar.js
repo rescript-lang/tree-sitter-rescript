@@ -30,6 +30,14 @@ module.exports = grammar({
     declaration: $ => choice(
       $.type_declaration,
       $.let_binding,
+      $.module_declaration,
+    ),
+
+    module_declaration: $ => seq(
+      'module',
+      $.module_name,
+      '=',
+      $.statement_block,
     ),
 
     type_declaration: $ => seq(

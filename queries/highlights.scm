@@ -11,6 +11,7 @@
 [
   "type"
   "let"
+  "module"
 ] @keyword
 
 (formal_parameters
