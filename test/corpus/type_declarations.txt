@@ -38,5 +38,7 @@ type t = {
   (type_declaration
     (type_identifier)
     (record_type
-      (record_type_field (identifier) (type_identifier))
-      (record_type_field (identifier) (type_identifier)))))
+      (record_type_field
+        (identifier) (type_annotation (type_identifier)))
+      (record_type_field
+        (identifier) (type_annotation (type_identifier))))))
