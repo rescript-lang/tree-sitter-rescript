@@ -42,3 +42,31 @@ type t = {
         (identifier) (type_annotation (type_identifier)))
       (record_type_field
         (identifier) (type_annotation (type_identifier))))))
+
+===========================================
+Variant
+===========================================
+
+type t =
+  | A
+  | B(anotherType)
+  | C({foo: int, bar: string})
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (variant_type
+      (variant_declaration (variant_identifier))
+      (variant_declaration
+        (variant_identifier) (variant_parameters (type_identifier)))
+      (variant_declaration
+        (variant_identifier)
+        (variant_parameters
+          (record_type
+            (record_type_field
+              (identifier) (type_annotation (type_identifier)))
+            (record_type_field
+              (identifier) (type_annotation (type_identifier)))
+            ))))))

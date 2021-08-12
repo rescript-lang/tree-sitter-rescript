@@ -47,16 +47,32 @@ module.exports = grammar({
     ),
 
     _type: $ => choice(
+      $.variant_type,
       $.record_type,
       $.type_identifier,
       $.nested_type_identifier,
       $.generic_type,
     ),
 
+    variant_type: $ => seq(
+      optional('|'),
+      barSep1($.variant_declaration),
+    ),
+
+    variant_declaration: $ => prec.right(seq(
+      $.variant_identifier,
+      optional($.variant_parameters),
+    )),
+
+    variant_parameters: $ => seq(
+      '(',
+      commaSep1t($._type),
+      ')',
+    ),
+
     record_type: $ => seq(
       '{',
-      commaSep1($.record_type_field),
-      optional(','),
+      commaSep1t($.record_type_field),
       '}',
     ),
 
@@ -135,6 +151,8 @@ module.exports = grammar({
 
     nested_type_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.type_identifier),
 
+    variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
+
     polyvar: $ => seq('#', /[a-zA-Z0-9_]*/),
 
     type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
@@ -209,8 +227,16 @@ module.exports = grammar({
   },
 });
 
+function barSep1(rule) {
+  return seq(rule, repeat(seq('|', rule)));
+}
+
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
+}
+
+function commaSep1t(rule) {
+  return seq(commaSep1(rule), optional(','))
 }
 
 function commaSep(rule) {
