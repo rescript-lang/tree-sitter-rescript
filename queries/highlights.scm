@@ -1,5 +1,6 @@
 (identifier) @variable
 (type_identifier) @type
+(variant_identifier) @constant
 (module_name) @namespace
 
 
