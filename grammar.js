@@ -136,14 +136,12 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.primary_expression,
-      $.variant,
       $.unary_expression,
       $.binary_expression,
       $.ternary_expression,
     ),
 
     primary_expression: $ => choice(
-      //$._symbol_reference,
       $.module_nested_identifier,
       $.identifier,
       $.number,
@@ -156,6 +154,7 @@ module.exports = grammar({
       $.record,
       $.tuple,
       $.array,
+      $.variant,
       $.if_expression,
       $.switch_expression,
       $.call_expression,
