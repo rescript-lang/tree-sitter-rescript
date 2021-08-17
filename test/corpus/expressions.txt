@@ -27,11 +27,14 @@ Foo.Bar.baz
 Tuple
 ===========================================
 
-(1, 2)
+(1, 2);
+(1, 2,);
 
 ---
 
 (source_file
+  (expression_statement
+    (tuple (number) (number)))
   (expression_statement
     (tuple (number) (number))))
 
