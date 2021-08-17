@@ -27,3 +27,15 @@ min(1, 2)
       (arguments
         (number)
         (number)))))
+
+===========================================
+Tuple
+===========================================
+
+(1, 2)
+
+---
+
+(source_file
+  (expression_statement
+    (tuple (number) (number))))

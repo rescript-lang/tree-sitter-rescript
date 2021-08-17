@@ -12,6 +12,7 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.call_expression, $.expression],
+    [$.primary_expression, $.pattern],
   ],
 
   rules: {
@@ -126,6 +127,7 @@ module.exports = grammar({
       $.string,
       $.function,
       $.polyvar,
+      $.tuple,
       $.call_expression,
     ),
 
@@ -144,6 +146,12 @@ module.exports = grammar({
         $.expression,
         $.statement_block
       ))
+    ),
+
+    tuple: $ => seq(
+      '(',
+      commaSep1($.expression),
+      ')',
     ),
 
     call_expression: $ => seq(
