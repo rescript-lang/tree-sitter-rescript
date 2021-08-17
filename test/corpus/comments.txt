@@ -1,0 +1,19 @@
+============================================
+Comments
+============================================
+
+// Single line
+1
+
+/*
+ * Multiline
+ */
+2
+
+---
+
+(source_file
+  (comment)
+  (expression_statement (number))
+  (comment)
+  (expression_statement (number)))

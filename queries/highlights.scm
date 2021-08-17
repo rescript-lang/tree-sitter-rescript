@@ -1,6 +1,8 @@
+(comment) @comment
+
 (identifier) @variable
 ((identifier) @constant.macro
- (#match? @constant.macro "^\\"))
+ (#match? @constant.macro "^\\.*$"))
 
 (type_identifier) @type
 (variant_identifier) @constant
