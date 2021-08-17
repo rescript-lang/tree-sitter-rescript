@@ -1,5 +1,5 @@
 ===================================================
-Functions
+With simple parameters
 ===================================================
 
 a => 1;
@@ -36,3 +36,19 @@ a => 1;
     (number)))
   (expression_statement (function
     (formal_parameters (identifier) (identifier)) (number))))
+
+===================================================
+Record pattern
+===================================================
+
+({fooField, barField}) => 5
+
+---
+
+(source_file
+  (expression_statement (function
+    (formal_parameters
+      (record_pattern
+        (shorthand_property_identifier_pattern)
+        (shorthand_property_identifier_pattern)))
+    (number))))

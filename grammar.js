@@ -210,10 +210,7 @@ module.exports = grammar({
 
     formal_parameters: $ => seq(
       '(',
-      optional(seq(
-        commaSep1($._formal_parameter),
-        optional(',')
-      )),
+      optional(commaSep1t($._formal_parameter)),
       ')'
     ),
 
@@ -222,8 +219,23 @@ module.exports = grammar({
     // not patterns.
     pattern: $ => prec.dynamic(-1, choice(
       $.identifier,
-      // $._destructuring_pattern, // TODO
+      $._destructuring_pattern,
     )),
+
+    _destructuring_pattern: $ => choice(
+      $.record_pattern,
+      //$.tuple_pattern, // TODO
+    ),
+
+    record_pattern: $ => seq(
+      '{',
+      commaSep1t(choice(
+        //$.pair_pattern,
+        //$.object_assignment_pattern,
+        alias($.identifier, $.shorthand_property_identifier_pattern)
+      )),
+      '}'
+    ),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 

@@ -2,6 +2,7 @@
 (type_identifier) @type
 (variant_identifier) @constant
 (property_identifier) @property
+(shorthand_property_identifier_pattern) @parameter
 (module_name) @namespace
 
 (formal_parameters (identifier) @parameter)
