@@ -89,7 +89,7 @@ module.exports = grammar({
     ),
 
     record_type_field: $ => seq(
-      $.identifier,
+      alias($.identifier, $.property_identifier),
       $.type_annotation,
     ),
 
