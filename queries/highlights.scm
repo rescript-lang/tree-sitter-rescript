@@ -4,14 +4,10 @@
 (property_identifier) @property
 (module_name) @namespace
 
-(formal_parameters
-  [
-    (identifier) @variable.parameter
-  ]
-)
-
-(labeled_argument
-  label: (identifier) @parameter)
+(formal_parameters (identifier) @parameter)
+(labeled_argument label: (identifier) @function)
+(labeled_argument "~" @function)
+(function "=>" @function)
 
 (string) @string
 (number) @number
@@ -30,7 +26,6 @@
 
 [
   "="
-  "=>"
   "->"
 ] @operator
 
