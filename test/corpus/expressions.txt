@@ -58,6 +58,27 @@ foo(1, ~bar=3, ())
         (labeled_argument (identifier) (number))
         (unit)))))
 
+===================================================
+Call with lambda
+===================================================
+
+keep(item => item->Foo.bar == 5)
+
+---
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (function
+          (identifier)
+          (binary_expression
+            (pipe_expression
+              (identifier)
+              (module_nested_identifier (module_name) (identifier)))
+            (number)))))))
+
 ===========================================
 Pipe
 ===========================================

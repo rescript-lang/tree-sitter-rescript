@@ -52,3 +52,20 @@ Record pattern
         (shorthand_property_identifier_pattern)
         (shorthand_property_identifier_pattern)))
     (number))))
+
+===================================================
+Operator precendence
+===================================================
+
+(a) => a->Foo.bar == 5
+
+---
+
+(source_file
+  (expression_statement (function
+    (formal_parameters (identifier))
+    (binary_expression
+      (pipe_expression
+        (identifier)
+        (module_nested_identifier (module_name) (identifier)))
+      (number)))))
