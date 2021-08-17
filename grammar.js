@@ -152,6 +152,7 @@ module.exports = grammar({
       $.unit,
       $.record,
       $.tuple,
+      $.array,
       $.if_expression,
       $.call_expression,
       $.pipe_expression,
@@ -188,8 +189,15 @@ module.exports = grammar({
 
     tuple: $ => seq(
       '(',
-      commaSep1($.expression),
+      commaSep2t($.expression),
       ')',
+    ),
+
+    array: $ => seq(
+      '[',
+      commaSep($.expression),
+      optional(','),
+      ']'
     ),
 
     if_expression: $ => seq(

@@ -185,3 +185,20 @@ i && j;
     (binary_expression
       (unary_expression (identifier))
       (unary_expression (identifier))))))
+
+============================================
+Arrays
+============================================
+
+[];
+[1];
+[1, 2];
+[1, 2,];
+
+---
+
+(source_file
+  (expression_statement (array))
+  (expression_statement (array (number)))
+  (expression_statement (array (number) (number)))
+  (expression_statement (array (number) (number))))
