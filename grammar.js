@@ -10,14 +10,17 @@ module.exports = grammar({
     $._type,
   ],
 
+  precedences: $ => [
+    ['call', $.expression],
+  ],
+
   conflicts: $ => [
     [$.pipe_expression, $.expression],
-    [$.call_expression, $.expression],
     [$.primary_expression, $.pattern],
   ],
 
   rules: {
-    source_file: $ => repeat($._statement),
+    source_file: $ => repeat(seq($._statement, optional(';'))),
 
     statement: $ => $._statement,
 
@@ -130,6 +133,7 @@ module.exports = grammar({
       $.false,
       $.function,
       $.polyvar,
+      $.unit,
       $.tuple,
       $.call_expression,
       $.pipe_expression,
@@ -149,7 +153,7 @@ module.exports = grammar({
       field('body', choice(
         $.expression,
         $.statement_block
-      ))
+      )),
     ),
 
     tuple: $ => seq(
@@ -158,10 +162,10 @@ module.exports = grammar({
       ')',
     ),
 
-    call_expression: $ => seq(
+    call_expression: $ => prec('call', seq(
       field('function', $.primary_expression),
-      field('arguments', $.arguments),
-    ),
+      field('arguments', alias($.call_arguments, $.arguments)),
+    )),
 
     pipe_expression: $ => prec.left(seq(
       $.primary_expression,
@@ -172,10 +176,20 @@ module.exports = grammar({
       ),
     )),
 
-    arguments: $ => seq(
+    call_arguments: $ => seq(
       '(',
-      commaSep(optional($.expression)),
+      commaSep(choice(
+        $.expression,
+        $.labeled_argument,
+      )),
       ')'
+    ),
+
+    labeled_argument: $ => seq(
+      '~',
+      field('label', $.identifier),
+      '=',
+      field('value', $.expression),
     ),
 
     _definition_signature: $ => field('parameters', $.formal_parameters),
@@ -249,6 +263,11 @@ module.exports = grammar({
       ))
     },
 
+    unit: $ => seq('(', ')'),
+
+    true: $ => 'true',
+    false: $ => 'false',
+
     string: $ => seq(
       '"',
       repeat(choice(
@@ -257,9 +276,6 @@ module.exports = grammar({
       )),
       '"'
     ),
-
-    true: $ => 'true',
-    false: $ => 'false',
 
     // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
     // We give names to the token() constructs containing a regexp

@@ -1,4 +1,15 @@
 ===========================================
+Unit
+===========================================
+
+()
+
+---
+
+(source_file
+  (expression_statement (unit)))
+
+===========================================
 Nested identifiers
 ===========================================
 
@@ -29,16 +40,20 @@ Call
 ===========================================
 
 min(1, 2)
+foo(1, ~bar=3, ())
 
 ---
 
 (source_file
   (expression_statement
+    (call_expression (identifier) (arguments (number) (number))))
+  (expression_statement
     (call_expression
       (identifier)
       (arguments
         (number)
-        (number)))))
+        (labeled_argument (identifier) (number))
+        (unit)))))
 
 ===========================================
 Pipe
