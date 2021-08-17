@@ -10,6 +10,9 @@
   ]
 )
 
+(labeled_argument
+  label: (identifier) @parameter)
+
 (string) @string
 (number) @number
 (polyvar) @constant
