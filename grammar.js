@@ -155,6 +155,7 @@ module.exports = grammar({
       $.tuple,
       $.array,
       $.if_expression,
+      $.switch_expression,
       $.call_expression,
       $.pipe_expression,
     ),
@@ -207,6 +208,31 @@ module.exports = grammar({
       $.statement_block, // TODO: should it be expression block?
       repeat($.else_if_clause),
       optional($.else_clause),
+    ),
+
+    switch_expression: $ => seq(
+      'switch',
+      $.expression,
+      '{',
+      repeat1($.switch_match),
+      '}',
+    ),
+
+    switch_match: $ => seq(
+      '|',
+      alias($.switch_patterns, $.patterns),
+      '=>',
+      $.expression,
+    ),
+
+    switch_patterns: $ => barSep1($._switch_pattern),
+
+    _switch_pattern: $ => choice(
+      $.string,
+      $.number,
+      $.true,
+      $.false,
+      $.identifier,
     ),
 
     else_if_clause: $ => seq(

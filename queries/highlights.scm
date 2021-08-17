@@ -28,6 +28,7 @@
 [
   "if"
   "else"
+  "switch"
 ] @conditional
 
 [

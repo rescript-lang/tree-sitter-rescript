@@ -169,6 +169,28 @@ if predicateA {
       (else_clause (statement_block (expression_statement (identifier)))))))
 
 ===========================================
+Switch
+===========================================
+
+switch foo {
+| 1 | 2 => "few"
+| _ => "many"
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (identifier)
+      (switch_match
+        (patterns (number) (number))
+        (string (string_fragment)))
+      (switch_match
+        (patterns (identifier))
+        (string (string_fragment))))))
+
+===========================================
 Math operators
 ===========================================
 
