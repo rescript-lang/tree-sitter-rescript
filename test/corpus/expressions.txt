@@ -250,6 +250,18 @@ i && j;
       (unary_expression (identifier))
       (unary_expression (identifier))))))
 
+==============================================
+Ternaries
+==============================================
+
+condition ? case1 : case2;
+
+---
+
+(source_file
+  (expression_statement (ternary_expression
+    (identifier) (identifier) (identifier))))
+
 ============================================
 Arrays
 ============================================

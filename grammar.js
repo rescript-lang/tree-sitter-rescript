@@ -20,6 +20,7 @@ module.exports = grammar({
       'binary_relation',
       'binary_and',
       'binary_or',
+      'ternary',
       $.function,
       $.let_binding,
     ],
@@ -138,6 +139,7 @@ module.exports = grammar({
       $.variant,
       $.unary_expression,
       $.binary_expression,
+      $.ternary_expression,
     ),
 
     primary_expression: $ => choice(
@@ -313,6 +315,14 @@ module.exports = grammar({
       commaSep2t($.pattern),
       ')',
     ),
+
+    ternary_expression: $ => prec.right('ternary', seq(
+      field('condition', $.expression),
+      '?',
+      field('consequence', $.expression),
+      ':',
+      field('alternative', $.expression)
+    )),
 
     binary_expression: $ => choice(
       ...[

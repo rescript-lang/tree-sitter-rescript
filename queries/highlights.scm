@@ -51,6 +51,8 @@
   "||"
 ] @operator
 
+(ternary_expression ["?" ":"] @operator)
+
 [
   "="
   "->"
