@@ -137,6 +137,7 @@ module.exports = grammar({
       $.unit,
       $.record,
       $.tuple,
+      $.if_expression,
       $.call_expression,
       $.pipe_expression,
     ),
@@ -174,6 +175,26 @@ module.exports = grammar({
       '(',
       commaSep1($.expression),
       ')',
+    ),
+
+    if_expression: $ => seq(
+      'if',
+      $.expression,
+      $.statement_block, // TODO: should it be expression block?
+      repeat($.else_if_clause),
+      optional($.else_clause),
+    ),
+
+    else_if_clause: $ => seq(
+      'else',
+      'if',
+      $.expression,
+      $.statement_block, // TODO: should it be expression block?
+    ),
+
+    else_clause: $ => seq(
+      'else',
+      $.statement_block, // TODO: should it be expression block?
     ),
 
     call_expression: $ => prec('call', seq(

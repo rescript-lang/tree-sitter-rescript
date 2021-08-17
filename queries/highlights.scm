@@ -26,6 +26,11 @@
 ] @keyword
 
 [
+  "if"
+  "else"
+] @conditional
+
+[
   "="
   "->"
 ] @operator

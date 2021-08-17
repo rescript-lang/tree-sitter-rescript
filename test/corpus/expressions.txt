@@ -95,3 +95,51 @@ Record
       (record_field (property_identifier) (number))
       (record_field (property_identifier) (string (string_fragment)))
     )))
+
+===========================================
+If/else
+===========================================
+
+if predicate {
+  foo
+};
+
+if predicate {
+  foo
+} else {
+  bar
+};
+
+if predicateA {
+  foo
+} else if predicateB {
+  qux
+} else if predicateC {
+  zoo
+} else {
+  bar
+};
+
+---
+
+(source_file
+  (expression_statement
+    (if_expression
+      (identifier)
+      (statement_block (expression_statement (identifier)))))
+  (expression_statement
+    (if_expression
+      (identifier)
+      (statement_block (expression_statement (identifier)))
+      (else_clause (statement_block (expression_statement (identifier))))))
+  (expression_statement
+    (if_expression
+      (identifier)
+      (statement_block (expression_statement (identifier)))
+      (else_if_clause
+        (identifier)
+        (statement_block (expression_statement (identifier))))
+      (else_if_clause
+        (identifier)
+        (statement_block (expression_statement (identifier))))
+      (else_clause (statement_block (expression_statement (identifier)))))))
