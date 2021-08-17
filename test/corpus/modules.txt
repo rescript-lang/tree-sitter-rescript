@@ -12,3 +12,20 @@ module MyModule = {
   (module_declaration
     (module_name)
     (block (type_declaration (type_identifier)))))
+
+===========================================
+Externals
+===========================================
+
+external aX: t => float = "aX"
+
+---
+
+(source_file
+  (external_declaration
+    (identifier)
+    (type_annotation
+      (function_type
+        (type_identifier)
+        (type_identifier)))
+    (string (string_fragment))))

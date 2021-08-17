@@ -27,6 +27,7 @@
 [
   "type"
   "let"
+  "external"
   "module"
 ] @keyword
 

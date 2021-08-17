@@ -60,6 +60,7 @@ module.exports = grammar({
       $.type_declaration,
       $.let_binding,
       $.module_declaration,
+      $.external_declaration,
     ),
 
     module_declaration: $ => seq(
@@ -67,6 +68,14 @@ module.exports = grammar({
       $.module_name,
       '=',
       $.block,
+    ),
+
+    external_declaration: $ => seq(
+      'external',
+      $.identifier,
+      $.type_annotation,
+      '=',
+      $.string,
     ),
 
     type_declaration: $ => seq(
@@ -89,6 +98,7 @@ module.exports = grammar({
       $.type_identifier,
       $.nested_type_identifier,
       $.generic_type,
+      $.function_type,
     ),
 
     variant_type: $ => seq(
@@ -129,6 +139,12 @@ module.exports = grammar({
     type_arguments: $ => seq(
       '<', commaSep1($._type), optional(','), '>'
     ),
+
+    function_type: $ => prec.left(seq(
+      $._type,
+      '=>',
+      $._type,
+    )),
 
     let_binding: $ => seq(
       'let',
