@@ -125,6 +125,8 @@ module.exports = grammar({
       $.identifier,
       $.number,
       $.string,
+      $.true,
+      $.false,
       $.function,
       $.polyvar,
       $.tuple,
@@ -244,6 +246,9 @@ module.exports = grammar({
       )),
       '"'
     ),
+
+    true: $ => 'true',
+    false: $ => 'false',
 
     // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
     // We give names to the token() constructs containing a regexp

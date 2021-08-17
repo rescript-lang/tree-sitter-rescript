@@ -15,6 +15,11 @@
 (polyvar) @constant
 
 [
+  (true)
+  (false)
+] @constant.builtin
+
+[
   "type"
   "let"
   "module"
