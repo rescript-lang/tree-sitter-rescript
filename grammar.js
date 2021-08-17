@@ -11,10 +11,23 @@ module.exports = grammar({
   ],
 
   precedences: $ => [
+    [
+      'unary_not',
+      'call',
+      'binary_times',
+      'binary_plus',
+      'binary_compare',
+      'binary_relation',
+      'binary_and',
+      'binary_or',
+      $.function,
+      $.let_binding,
+    ],
     ['call', $.expression],
   ],
 
   conflicts: $ => [
+    [$.binary_expression, $.expression_statement],
     [$.pipe_expression, $.expression],
     [$.primary_expression, $.pattern],
     [$.tuple_pattern, $._formal_parameter],
@@ -122,6 +135,8 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.primary_expression,
+      $.unary_expression,
+      $.binary_expression,
     ),
 
     primary_expression: $ => choice(
@@ -264,6 +279,48 @@ module.exports = grammar({
       commaSep2t($.pattern),
       ')',
     ),
+
+    binary_expression: $ => choice(
+      ...[
+        ['&&', 'binary_and'],
+        ['||', 'binary_or'],
+        ['+', 'binary_plus'],
+        ['+.', 'binary_plus'],
+        ['-', 'binary_plus'],
+        ['-.', 'binary_plus'],
+        ['*', 'binary_times'],
+        ['*.', 'binary_times'],
+        ['/', 'binary_times'],
+        ['/.', 'binary_times'],
+        ['<', 'binary_relation'],
+        ['<=', 'binary_relation'],
+        ['==', 'binary_relation'],
+        ['===', 'binary_relation'],
+        ['!=', 'binary_relation'],
+        ['!==', 'binary_relation'],
+        ['>=', 'binary_relation'],
+        ['>', 'binary_relation'],
+      ].map(([operator, precedence]) =>
+        prec.left(precedence, seq(
+          field('left', $.expression),
+          field('operator', operator),
+          field('right', $.expression)
+        ))
+      )
+    ),
+
+    unary_expression: $ => choice(...[
+      ['!', 'unary_not'],
+      ['-', 'unary_not'],
+      ['-.', 'unary_not'],
+      ['+', 'unary_not'],
+      ['+.', 'unary_not'],
+    ].map(([operator, precedence]) =>
+      prec.left(precedence, seq(
+        field('operator', operator),
+        field('argument', $.expression)
+      ))
+    )),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 

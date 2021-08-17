@@ -143,3 +143,45 @@ if predicateA {
         (identifier)
         (statement_block (expression_statement (identifier))))
       (else_clause (statement_block (expression_statement (identifier)))))))
+
+===========================================
+Math operators
+===========================================
+
+- 1 + 2 / 3;
+-. 1.0 +. 2.0 /. 3.0;
+
+---
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (unary_expression (number))
+      (binary_expression (number) (number)))
+  )
+  (expression_statement
+    (binary_expression
+      (unary_expression (number))
+      (binary_expression (number) (number)))
+  ))
+
+============================================
+Boolean operators
+============================================
+
+i || j;
+i && j;
+!a && !b || !c && !d;
+
+---
+
+(source_file
+  (expression_statement (binary_expression (identifier) (identifier)))
+  (expression_statement (binary_expression (identifier) (identifier)))
+  (expression_statement (binary_expression
+    (binary_expression
+      (unary_expression (identifier))
+      (unary_expression (identifier)))
+    (binary_expression
+      (unary_expression (identifier))
+      (unary_expression (identifier))))))
