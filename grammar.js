@@ -134,6 +134,7 @@ module.exports = grammar({
       $.function,
       $.polyvar,
       $.unit,
+      $.record,
       $.tuple,
       $.call_expression,
       $.pipe_expression,
@@ -154,6 +155,18 @@ module.exports = grammar({
         $.expression,
         $.statement_block
       )),
+    ),
+
+    record: $ => seq(
+      '{',
+      commaSep1t($.record_field),
+      '}',
+    ),
+
+    record_field: $ => seq(
+      alias($.identifier, $.property_identifier),
+      ':',
+      $.expression,
     ),
 
     tuple: $ => seq(
