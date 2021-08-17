@@ -4,6 +4,12 @@
 (property_identifier) @property
 (module_name) @namespace
 
+(formal_parameters
+  [
+    (identifier) @variable.parameter
+  ]
+)
+
 (string) @string
 (number) @number
 (polyvar) @constant
@@ -14,8 +20,19 @@
   "module"
 ] @keyword
 
-(formal_parameters
-  [
-    (identifier) @variable.parameter
-  ]
-)
+[
+  "="
+  "=>"
+] @operator
+
+[
+  "."
+  ","
+] @punctuation.delimiter
+
+[
+  "("
+  ")"
+  "{"
+  "}"
+]  @punctuation.bracket
