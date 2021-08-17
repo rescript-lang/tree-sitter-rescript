@@ -1,0 +1,13 @@
+===========================================
+Nested identifiers
+===========================================
+
+Foo.Bar.baz
+
+---
+
+(source_file
+  (expression_statement
+    (module_nested_identifier
+      (module_name)
+      (module_name) (identifier))))

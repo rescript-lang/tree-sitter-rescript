@@ -1,38 +1,14 @@
-==============
-Var assignment
-==============
+============================================
+Plain
+============================================
 
-let x = y
-
----
-
-(source_file
-  (let_binding
-    (identifier)
-    (identifier)))
-
-=================
-Number assignment
-=================
-
-let x = 5
+let a = 5
+let b = a
+let c = #foo
 
 ---
 
 (source_file
-  (let_binding
-    (identifier)
-    (number)))
-
-==================
-Polyvar assignment
-==================
-
-let foo = #foo
-
----
-
-(source_file
-  (let_binding
-    (identifier)
-    (polyvar)))
+  (let_binding (identifier) (number))
+  (let_binding (identifier) (identifier))
+  (let_binding (identifier) (polyvar)))

@@ -116,11 +116,17 @@ module.exports = grammar({
 
     primary_expression: $ => choice(
       //$._symbol_reference,
+      $.module_nested_identifier,
       $.identifier,
       $.number,
       $.string,
       $.function,
       $.polyvar,
+    ),
+
+    module_nested_identifier: $ => seq(
+      repeat1(seq($.module_name, '.')),
+      $.identifier,
     ),
 
     function: $ => seq(
