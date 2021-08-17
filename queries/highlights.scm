@@ -31,6 +31,8 @@
   "switch"
 ] @conditional
 
+(switch_match "=>" @conditional)
+
 [
   "-."
   "+."
@@ -57,6 +59,7 @@
 [
   "."
   ","
+  "|"
 ] @punctuation.delimiter
 
 [

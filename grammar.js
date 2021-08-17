@@ -220,14 +220,13 @@ module.exports = grammar({
 
     switch_match: $ => seq(
       '|',
-      alias($.switch_patterns, $.patterns),
+      barSep1($._switch_pattern),
       '=>',
       $.expression,
     ),
 
-    switch_patterns: $ => barSep1($._switch_pattern),
-
     _switch_pattern: $ => choice(
+      $.variant,
       $.string,
       $.number,
       $.true,

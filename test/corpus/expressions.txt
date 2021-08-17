@@ -169,7 +169,7 @@ if predicateA {
       (else_clause (statement_block (expression_statement (identifier)))))))
 
 ===========================================
-Switch
+Switch of literals
 ===========================================
 
 switch foo {
@@ -183,12 +183,30 @@ switch foo {
   (expression_statement
     (switch_expression
       (identifier)
+      (switch_match (number) (number) (string (string_fragment)))
+      (switch_match (identifier) (string (string_fragment))))))
+
+===========================================
+Switch of variants
+===========================================
+
+switch foo {
+| Some(x) => x
+| None => 42
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (identifier)
       (switch_match
-        (patterns (number) (number))
-        (string (string_fragment)))
+        (variant (variant_identifier) (arguments (identifier)))
+        (identifier))
       (switch_match
-        (patterns (identifier))
-        (string (string_fragment))))))
+        (variant (variant_identifier))
+        (number)))))
 
 ===========================================
 Math operators
