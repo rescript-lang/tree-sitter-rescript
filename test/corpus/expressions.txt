@@ -95,6 +95,7 @@ Pipe
 
 foo->bar->baz
 xs->Array.map(foo)->Array.sum
+5->Some
 
 ---
 
@@ -110,7 +111,11 @@ xs->Array.map(foo)->Array.sum
           (identifier)
           (module_nested_identifier (module_name) (identifier)))
         (arguments (identifier)))
-      (module_nested_identifier (module_name) (identifier)))))
+      (module_nested_identifier (module_name) (identifier))))
+  (expression_statement
+    (pipe_expression
+      (number)
+      (variant_identifier))))
 
 ===========================================
 Record

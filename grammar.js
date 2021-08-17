@@ -259,6 +259,7 @@ module.exports = grammar({
       choice(
         $.identifier,
         $.module_nested_identifier,
+        choice($.variant_identifier, $.nested_variant_identifier),
       ),
     )),
 
