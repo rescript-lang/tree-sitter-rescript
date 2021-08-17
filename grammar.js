@@ -390,7 +390,12 @@ module.exports = grammar({
 
     type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
 
-    identifier: $ => /[a-z_][a-zA-Z0-9_']*/,
+    identifier: $ => choice(
+      /[a-z_][a-zA-Z0-9_']*/,
+      $._escape_identifier,
+    ),
+
+    _escape_identifier: $ => token(seq('\\', '"', /[^"]+/ , '"')),
 
     module_name: $ => /[A-Z][a-zA-Z0-9_]*/,
 
