@@ -11,3 +11,19 @@ Foo.Bar.baz
     (module_nested_identifier
       (module_name)
       (module_name) (identifier))))
+
+===========================================
+Call
+===========================================
+
+min(1, 2)
+
+---
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (number)
+        (number)))))

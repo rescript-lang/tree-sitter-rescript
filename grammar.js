@@ -10,6 +10,10 @@ module.exports = grammar({
     $._type,
   ],
 
+  conflicts: $ => [
+    [$.call_expression, $.expression],
+  ],
+
   rules: {
     source_file: $ => repeat($._statement),
 
@@ -122,6 +126,7 @@ module.exports = grammar({
       $.string,
       $.function,
       $.polyvar,
+      $.call_expression,
     ),
 
     module_nested_identifier: $ => seq(
@@ -139,6 +144,17 @@ module.exports = grammar({
         $.expression,
         $.statement_block
       ))
+    ),
+
+    call_expression: $ => seq(
+      field('function', $.primary_expression),
+      field('arguments', $.arguments),
+    ),
+
+    arguments: $ => seq(
+      '(',
+      commaSep(optional($.expression)),
+      ')'
     ),
 
     _definition_signature: $ => field('parameters', $.formal_parameters),
