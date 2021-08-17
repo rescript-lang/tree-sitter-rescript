@@ -226,3 +226,23 @@ Arrays
   (expression_statement (array (number)))
   (expression_statement (array (number) (number)))
   (expression_statement (array (number) (number))))
+
+============================================
+Variants
+============================================
+
+Foo;
+Foo(42);
+Foo(qux, { bar: 3 }, );
+
+---
+
+(source_file
+  (expression_statement (variant (variant_identifier)))
+  (expression_statement (variant (variant_identifier) (arguments (number))))
+  (expression_statement
+    (variant
+      (variant_identifier)
+      (arguments
+        (identifier)
+        (record (record_field (property_identifier) (number)))))))

@@ -135,6 +135,7 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.primary_expression,
+      $.variant,
       $.unary_expression,
       $.binary_expression,
     ),
@@ -329,6 +330,20 @@ module.exports = grammar({
         field('argument', $.expression)
       ))
     )),
+
+    variant: $ => prec.right(seq(
+      choice($.variant_identifier, $.nested_variant_identifier),
+      optional(alias($.variant_arguments, $.arguments)),
+    )),
+
+    nested_variant_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.variant_identifier),
+
+    variant_arguments: $ => seq(
+      '(',
+      commaSep($.expression),
+      optional(','),
+      ')',
+    ),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
 
