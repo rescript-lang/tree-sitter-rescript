@@ -134,7 +134,7 @@ module.exports = grammar({
       'let',
       $.pattern,
       '=',
-      $.expression,
+      choice($.expression, $.block),
     ),
 
     expression_statement: $ => $.expression,

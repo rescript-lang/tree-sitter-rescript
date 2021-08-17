@@ -28,3 +28,21 @@ let (a, b, (c, d)) = foo
       (identifier)
       (tuple_pattern (identifier) (identifier)))
     (identifier)))
+
+============================================
+Block
+============================================
+
+let x = {
+  3
+  4
+}
+
+---
+
+(source_file
+  (let_binding
+    (identifier)
+    (block
+      (expression_statement (number))
+      (expression_statement (number)))))
