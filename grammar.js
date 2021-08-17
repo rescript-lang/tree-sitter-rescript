@@ -17,6 +17,7 @@ module.exports = grammar({
   conflicts: $ => [
     [$.pipe_expression, $.expression],
     [$.primary_expression, $.pattern],
+    [$.tuple_pattern, $._formal_parameter],
   ],
 
   rules: {
@@ -112,7 +113,7 @@ module.exports = grammar({
 
     let_binding: $ => seq(
       'let',
-      $.identifier,
+      $.pattern,
       '=',
       $.expression,
     ),
@@ -224,7 +225,7 @@ module.exports = grammar({
 
     _destructuring_pattern: $ => choice(
       $.record_pattern,
-      //$.tuple_pattern, // TODO
+      $.tuple_pattern,
     ),
 
     record_pattern: $ => seq(
@@ -235,6 +236,12 @@ module.exports = grammar({
         alias($.identifier, $.shorthand_property_identifier_pattern)
       )),
       '}'
+    ),
+
+    tuple_pattern: $ => seq(
+      '(',
+      commaSep2t($.pattern),
+      ')',
     ),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
@@ -330,8 +337,16 @@ function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
 }
 
+function commaSep2(rule) {
+  return seq(rule, ',', commaSep1(rule));
+}
+
 function commaSep1t(rule) {
-  return seq(commaSep1(rule), optional(','))
+  return seq(commaSep1(rule), optional(','));
+}
+
+function commaSep2t(rule) {
+  return seq(commaSep2(rule), optional(','));
 }
 
 function commaSep(rule) {

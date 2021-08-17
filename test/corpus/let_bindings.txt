@@ -12,3 +12,19 @@ let c = #foo
   (let_binding (identifier) (number))
   (let_binding (identifier) (identifier))
   (let_binding (identifier) (polyvar)))
+
+============================================
+Tuple destructuring
+============================================
+
+let (a, b, (c, d)) = foo
+
+---
+
+(source_file
+  (let_binding
+    (tuple_pattern
+      (identifier)
+      (identifier)
+      (tuple_pattern (identifier) (identifier)))
+    (identifier)))
