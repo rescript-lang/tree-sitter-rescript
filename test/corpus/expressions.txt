@@ -13,6 +13,18 @@ Foo.Bar.baz
       (module_name) (identifier))))
 
 ===========================================
+Tuple
+===========================================
+
+(1, 2)
+
+---
+
+(source_file
+  (expression_statement
+    (tuple (number) (number))))
+
+===========================================
 Call
 ===========================================
 
@@ -29,13 +41,24 @@ min(1, 2)
         (number)))))
 
 ===========================================
-Tuple
+Pipe
 ===========================================
 
-(1, 2)
+foo->bar->baz
+xs->Array.map(foo)->Array.sum
 
 ---
 
 (source_file
   (expression_statement
-    (tuple (number) (number))))
+    (pipe_expression
+      (pipe_expression (identifier) (identifier))
+      (identifier)))
+  (expression_statement
+    (pipe_expression
+      (call_expression
+        (pipe_expression
+          (identifier)
+          (module_nested_identifier (module_name) (identifier)))
+        (arguments (identifier)))
+      (module_nested_identifier (module_name) (identifier)))))

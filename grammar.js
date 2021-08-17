@@ -11,6 +11,7 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
+    [$.pipe_expression, $.expression],
     [$.call_expression, $.expression],
     [$.primary_expression, $.pattern],
   ],
@@ -131,6 +132,7 @@ module.exports = grammar({
       $.polyvar,
       $.tuple,
       $.call_expression,
+      $.pipe_expression,
     ),
 
     module_nested_identifier: $ => seq(
@@ -160,6 +162,15 @@ module.exports = grammar({
       field('function', $.primary_expression),
       field('arguments', $.arguments),
     ),
+
+    pipe_expression: $ => prec.left(seq(
+      $.primary_expression,
+      '->',
+      choice(
+        $.identifier,
+        $.module_nested_identifier,
+      ),
+    )),
 
     arguments: $ => seq(
       '(',
