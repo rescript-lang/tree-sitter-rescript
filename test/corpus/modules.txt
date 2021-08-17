@@ -11,4 +11,4 @@ module MyModule = {
 (source_file
   (module_declaration
     (module_name)
-    (statement_block (type_declaration (type_identifier)))))
+    (block (type_declaration (type_identifier)))))

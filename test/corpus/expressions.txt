@@ -165,23 +165,23 @@ if predicateA {
   (expression_statement
     (if_expression
       (identifier)
-      (statement_block (expression_statement (identifier)))))
+      (block (expression_statement (identifier)))))
   (expression_statement
     (if_expression
       (identifier)
-      (statement_block (expression_statement (identifier)))
-      (else_clause (statement_block (expression_statement (identifier))))))
+      (block (expression_statement (identifier)))
+      (else_clause (block (expression_statement (identifier))))))
   (expression_statement
     (if_expression
       (identifier)
-      (statement_block (expression_statement (identifier)))
+      (block (expression_statement (identifier)))
       (else_if_clause
         (identifier)
-        (statement_block (expression_statement (identifier))))
+        (block (expression_statement (identifier))))
       (else_if_clause
         (identifier)
-        (statement_block (expression_statement (identifier))))
-      (else_clause (statement_block (expression_statement (identifier)))))))
+        (block (expression_statement (identifier))))
+      (else_clause (block (expression_statement (identifier)))))))
 
 ===========================================
 Switch of literals

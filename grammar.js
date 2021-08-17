@@ -47,10 +47,10 @@ module.exports = grammar({
     _statement: $ => choice(
       $.expression_statement,
       $.declaration,
-      $.statement_block,
+      $.block,
     ),
 
-    statement_block: $ => prec.right(seq(
+    block: $ => prec.right(seq(
       '{',
       repeat($.statement),
       '}',
@@ -66,7 +66,7 @@ module.exports = grammar({
       'module',
       $.module_name,
       '=',
-      $.statement_block,
+      $.block,
     ),
 
     type_declaration: $ => seq(
@@ -179,7 +179,7 @@ module.exports = grammar({
       '=>',
       field('body', choice(
         $.expression,
-        $.statement_block
+        $.block
       )),
     ),
 
@@ -211,7 +211,7 @@ module.exports = grammar({
     if_expression: $ => seq(
       'if',
       $.expression,
-      $.statement_block, // TODO: should it be expression block?
+      $.block,
       repeat($.else_if_clause),
       optional($.else_clause),
     ),
@@ -244,12 +244,12 @@ module.exports = grammar({
       'else',
       'if',
       $.expression,
-      $.statement_block, // TODO: should it be expression block?
+      $.block,
     ),
 
     else_clause: $ => seq(
       'else',
-      $.statement_block, // TODO: should it be expression block?
+      $.block,
     ),
 
     call_expression: $ => prec('call', seq(
