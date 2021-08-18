@@ -382,11 +382,18 @@ module.exports = grammar({
     _formal_parameter: $ => choice(
       $.pattern,
       $.positional_parameter,
+      $.labeled_parameter,
     ),
 
     positional_parameter: $ => seq(
       $.pattern,
       $.type_annotation,
+    ),
+
+    labeled_parameter: $ => seq(
+      '~',
+      $.identifier,
+      optional($.type_annotation),
     ),
 
     // This negative dynamic precedence ensures that during error recovery,

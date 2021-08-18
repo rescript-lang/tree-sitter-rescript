@@ -41,7 +41,7 @@ a => 1;
 Type annotations
 ===================================================
 
-(x: int): int => 5;
+(x: int, ~y: float): int => 5;
 
 ---
 
@@ -49,7 +49,8 @@ Type annotations
   (expression_statement
     (function
       parameters: (formal_parameters
-        (positional_parameter (identifier) (type_annotation (type_identifier))))
+        (positional_parameter (identifier) (type_annotation (type_identifier)))
+        (labeled_parameter (identifier) (type_annotation (type_identifier))))
       return_type: (type_annotation (type_identifier))
       body: (number))))
 
