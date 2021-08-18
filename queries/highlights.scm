@@ -1,6 +1,6 @@
 (comment) @comment
 
-(identifier) @variable
+;(identifier) @variable
 ((identifier) @constant.macro
  (#match? @constant.macro "^\\.*$"))
 
