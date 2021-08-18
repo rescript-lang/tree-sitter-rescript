@@ -70,3 +70,61 @@ type t =
             (record_type_field
               (property_identifier) (type_annotation (type_identifier)))
             ))))))
+
+===========================================
+Function
+===========================================
+
+type fooA = t => float;
+type fooB = (t) => float;
+type fooC = (t1, t2) => float;
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters (type_identifier))
+      (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters (type_identifier))
+      (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters (type_identifier) (type_identifier))
+      (type_identifier))))
+
+===========================================
+Object
+===========================================
+
+type t = {..}
+type t = {.}
+type t = {.. "my-field": int }
+type t = {
+  "my-field": int,
+  "my-field-two": string,
+}
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (object_type))
+  (type_declaration
+    (type_identifier)
+    (object_type))
+  (type_declaration
+    (type_identifier)
+    (object_type
+      (field (property_identifier (string_fragment)) (type_identifier))))
+  (type_declaration
+    (type_identifier)
+    (object_type
+      (field (property_identifier (string_fragment)) (type_identifier))
+      (field (property_identifier (string_fragment)) (type_identifier)))))
