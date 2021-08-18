@@ -13,6 +13,7 @@ module.exports = grammar({
     $.primary_expression,
     $.pattern,
     $._type,
+    $.module_expression,
   ],
 
   precedences: $ => [
@@ -38,6 +39,7 @@ module.exports = grammar({
     [$.pipe_expression, $.expression],
     [$.primary_expression, $.pattern],
     [$.tuple_pattern, $._formal_parameter],
+    [$.nested_module_expression, $.module_expression],
   ],
 
   rules: {
@@ -50,6 +52,7 @@ module.exports = grammar({
       $.expression_statement,
       $.declaration,
       $.block,
+      $.include_statement,
     ),
 
     _decorated_statement: $ => seq(
@@ -62,6 +65,11 @@ module.exports = grammar({
       repeat($.statement),
       '}',
     )),
+
+    include_statement: $ => seq(
+      'include',
+      $.module_expression,
+    ),
 
     declaration: $ => choice(
       $.type_declaration,
@@ -475,6 +483,17 @@ module.exports = grammar({
       ),
 
     nested_type_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.type_identifier),
+
+    module_expression: $ => choice(
+      $.module_name,
+      $.nested_module_expression,
+    ),
+
+    nested_module_expression: $ => prec.left(seq(
+      $.module_expression,
+      '.',
+      $.module_expression,
+    )),
 
     variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 

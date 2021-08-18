@@ -22,6 +22,8 @@
 (decorator_identifier) @annotation
 ("@") @annotation
 
+(include_statement) @include
+
 [
   (true)
   (false)
