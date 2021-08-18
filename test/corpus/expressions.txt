@@ -52,8 +52,9 @@ Tuple
 Call
 ===========================================
 
-min(1, 2)
-foo(1, ~bar=3, ())
+min(1, 2);
+foo(1, ~bar=3, ());
+bar(~x?);
 
 ---
 
@@ -66,7 +67,12 @@ foo(1, ~bar=3, ())
       (arguments
         (number)
         (labeled_argument (identifier) (number))
-        (unit)))))
+        (unit))))
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (labeled_argument (identifier) (optional))))))
 
 ===================================================
 Call with lambda
