@@ -103,6 +103,7 @@ module.exports = grammar({
       $._qualified_type_identifier,
       $.variant_type,
       $.record_type,
+      $.object_type,
       $.generic_type,
       $.function_type,
     ),
@@ -127,6 +128,29 @@ module.exports = grammar({
       '{',
       commaSep1t($.record_type_field),
       '}',
+    ),
+
+    record_type_field: $ => seq(
+      alias($.identifier, $.property_identifier),
+      $.type_annotation,
+    ),
+
+    object_type: $ => seq(
+      '{',
+      choice(
+        commaSep1t($._object_type_field),
+        seq('.', commaSep($._object_type_field)),
+        seq('..', commaSep($._object_type_field)),
+      ),
+      '}',
+    ),
+
+    _object_type_field: $ => alias($.object_type_field, $.field),
+
+    object_type_field: $ => seq(
+      alias($.string, $.property_identifier),
+      ':',
+      $._type,
     ),
 
     record_type_field: $ => seq(
