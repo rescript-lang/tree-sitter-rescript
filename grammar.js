@@ -118,6 +118,7 @@ module.exports = grammar({
       $.object_type,
       $.generic_type,
       $.function_type,
+      $.unit_type,
     ),
 
     variant_type: $ => seq(
@@ -612,6 +613,7 @@ module.exports = grammar({
     },
 
     unit: $ => seq('(', ')'),
+    unit_type: $ => 'unit',
 
     true: $ => 'true',
     false: $ => 'false',

@@ -134,7 +134,7 @@ type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float;
           (identifier)
           (type_annotation (type_identifier))
           (optional))
-        (type_identifier))
+        (unit_type))
       (type_identifier))))
 
 ===========================================

@@ -4,11 +4,16 @@
 ((identifier) @constant.macro
  (#match? @constant.macro "^\\.*$"))
 
-(type_identifier) @type
+[
+  (type_identifier)
+  (unit_type)
+] @type
+
 [
   (variant_identifier)
   (polyvar_identifier)
 ] @constant
+
 (property_identifier) @property
 (shorthand_property_identifier_pattern) @parameter
 (module_name) @namespace
