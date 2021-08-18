@@ -44,7 +44,10 @@ type fooC = (t1, t2) => float;
 Externals
 ===========================================
 
-external aX: t => float = "aX"
+external aX: t => float = "aX";
+@val external foo: int = "foo";
+@bs.val external foo: int = "foo";
+@module("libfoo") @new external foo: t = "Foo";
 
 ---
 
@@ -55,4 +58,25 @@ external aX: t => float = "aX"
       (function_type
         (function_type_parameters (type_identifier))
         (type_identifier)))
-    (string (string_fragment))))
+    (string (string_fragment)))
+  (decorated
+    (decorator (decorator_identifier))
+    (external_declaration
+      (identifier)
+      (type_annotation (type_identifier))
+      (string (string_fragment))))
+  (decorated
+    (decorator (decorator_identifier))
+    (external_declaration
+      (identifier)
+      (type_annotation (type_identifier))
+      (string (string_fragment))))
+  (decorated
+    (decorator
+      (decorator_identifier)
+      (decorator_arguments (string (string_fragment))))
+    (decorator (decorator_identifier))
+    (external_declaration
+      (identifier)
+      (type_annotation (type_identifier))
+      (string (string_fragment)))))

@@ -19,6 +19,9 @@
 (number) @number
 (polyvar) @constant
 
+(decorator_identifier) @annotation
+("@") @annotation
+
 [
   (true)
   (false)

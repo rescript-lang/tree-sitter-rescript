@@ -46,9 +46,15 @@ module.exports = grammar({
     statement: $ => $._statement,
 
     _statement: $ => choice(
+      alias($._decorated_statement, $.decorated),
       $.expression_statement,
       $.declaration,
       $.block,
+    ),
+
+    _decorated_statement: $ => seq(
+      repeat1($.decorator),
+      $.declaration,
     ),
 
     block: $ => prec.right(seq(
@@ -347,6 +353,14 @@ module.exports = grammar({
       ')',
     ),
 
+    decorator: $ => seq('@', $.decorator_identifier, optional($.decorator_arguments)),
+
+    decorator_arguments: $ => seq(
+      '(',
+      commaSep($.string),
+      ')',
+    ),
+
     ternary_expression: $ => prec.right('ternary', seq(
       field('condition', $.expression),
       '?',
@@ -411,8 +425,6 @@ module.exports = grammar({
       ')',
     ),
 
-    _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
-    
     _qualified_type_identifier: $ =>
       choice(
         $.type_identifier,
@@ -435,6 +447,8 @@ module.exports = grammar({
     _escape_identifier: $ => token(seq('\\', '"', /[^"]+/ , '"')),
 
     module_name: $ => /[A-Z][a-zA-Z0-9_]*/,
+
+    decorator_identifier: $ => /[a-zA-Z0-9_\.]+/,
 
     number: $ => {
       const hex_literal = seq(
