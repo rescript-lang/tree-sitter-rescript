@@ -136,6 +136,40 @@ Record
     )))
 
 ===========================================
+Object
+===========================================
+
+{
+  "foo": 32,
+  "bar": "baz",
+};
+
+{ .  "x": 1 };
+{ .. "x": 1 };
+{ .. };
+
+---
+
+(source_file
+  (expression_statement
+    (object
+      (field
+        (property_identifier (string_fragment))
+        (number))
+      (field
+        (property_identifier (string_fragment))
+        (string (string_fragment)))
+    ))
+  (expression_statement
+    (object (field
+      (property_identifier (string_fragment)) (number))))
+  (expression_statement
+    (object (field
+      (property_identifier (string_fragment)) (number))))
+  (expression_statement
+    (object)))
+
+===========================================
 If/else
 ===========================================
 

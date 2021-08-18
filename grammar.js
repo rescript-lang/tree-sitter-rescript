@@ -189,6 +189,7 @@ module.exports = grammar({
       $.polyvar,
       $.unit,
       $.record,
+      $.object,
       $.tuple,
       $.array,
       $.variant,
@@ -223,6 +224,24 @@ module.exports = grammar({
 
     record_field: $ => seq(
       alias($.identifier, $.property_identifier),
+      ':',
+      $.expression,
+    ),
+
+    object: $ => seq(
+      '{',
+      choice(
+        commaSep1t($._object_field),
+        seq('.', commaSep($._object_field)),
+        seq('..', commaSep($._object_field)),
+      ),
+      '}',
+    ),
+
+    _object_field: $ => alias($.object_field, $.field),
+
+    object_field: $ => seq(
+      alias($.string, $.property_identifier),
       ':',
       $.expression,
     ),
