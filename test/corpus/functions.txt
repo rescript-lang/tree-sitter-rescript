@@ -55,6 +55,35 @@ Type annotations
       body: (number))))
 
 ===================================================
+Parameter defaults
+===================================================
+
+(~x: int=3, ~y=4.0, ~z: int=?, ~w=?, ()) => 5;
+
+---
+
+(source_file
+  (expression_statement
+    (function
+      parameters: (formal_parameters
+        (labeled_parameter
+          (identifier)
+          (type_annotation (type_identifier))
+          default_value: (number))
+        (labeled_parameter
+          (identifier)
+          default_value: (number))
+        (labeled_parameter
+          (identifier)
+          (type_annotation (type_identifier))
+          default_value: (optional))
+        (labeled_parameter
+          (identifier)
+          default_value: (optional))
+        (unit))
+      body: (number))))
+
+===================================================
 Record pattern
 ===================================================
 

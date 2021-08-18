@@ -40,6 +40,7 @@ module.exports = grammar({
     [$.pipe_expression, $.expression],
     [$.primary_expression, $.pattern],
     [$.tuple_pattern, $._formal_parameter],
+    [$.primary_expression, $._formal_parameter],
     [$.nested_module_expression, $.module_expression],
     [$.type_annotation, $.function_type_parameters],
   ],
@@ -383,6 +384,7 @@ module.exports = grammar({
       $.pattern,
       $.positional_parameter,
       $.labeled_parameter,
+      $.unit,
     ),
 
     positional_parameter: $ => seq(
@@ -394,6 +396,15 @@ module.exports = grammar({
       '~',
       $.identifier,
       optional($.type_annotation),
+      optional(field('default_value', $._default_value)),
+    ),
+
+    _default_value: $ => seq(
+      '=',
+      choice(
+        $.expression,
+        alias('?', $.optional),
+      ),
     ),
 
     // This negative dynamic precedence ensures that during error recovery,

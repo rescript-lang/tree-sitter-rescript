@@ -10,11 +10,6 @@
 (shorthand_property_identifier_pattern) @parameter
 (module_name) @namespace
 
-(formal_parameters (identifier) @parameter)
-(labeled_argument label: (identifier) @function)
-(labeled_argument "~" @function)
-(function "=>" @function)
-
 (string) @string
 (number) @number
 (polyvar) @constant
@@ -23,6 +18,12 @@
 ("@") @annotation
 
 (include_statement) @include
+
+[
+ (formal_parameters (identifier))
+ (positional_parameter (identifier))
+ (labeled_parameter (identifier))
+] @parameter
 
 [
   (true)
@@ -41,8 +42,6 @@
   "else"
   "switch"
 ] @conditional
-
-(switch_match "=>" @conditional)
 
 [
   "-."
@@ -83,3 +82,10 @@
   "["
   "]"
 ]  @punctuation.bracket
+
+[
+  "~"
+  "?"
+  "=>"
+  (optional)
+] @punctuation.special
