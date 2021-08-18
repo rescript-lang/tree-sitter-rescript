@@ -29,6 +29,7 @@ module.exports = grammar({
       $.function,
       $.let_binding,
     ],
+    [$.function_type_parameters, $.function_type],
     ['call', $.expression],
   ],
 
@@ -93,10 +94,9 @@ module.exports = grammar({
     ),
 
     _type: $ => choice(
+      $._qualified_type_identifier,
       $.variant_type,
       $.record_type,
-      $.type_identifier,
-      $.nested_type_identifier,
       $.generic_type,
       $.function_type,
     ),
@@ -129,10 +129,7 @@ module.exports = grammar({
     ),
 
     generic_type: $ => seq(
-      choice(
-        $.type_identifier,
-        $.nested_type_identifier
-      ),
+      $._qualified_type_identifier,
       $.type_arguments
     ),
 
@@ -141,10 +138,23 @@ module.exports = grammar({
     ),
 
     function_type: $ => prec.left(seq(
-      $._type,
+      $.function_type_parameters,
       '=>',
       $._type,
     )),
+
+    function_type_parameters: $ => choice(
+      $._type,
+      seq(
+        '(',
+        commaSep($._function_type_parameter),
+        ')',
+      ),
+    ),
+
+    _function_type_parameter: $ => choice(
+      $._type,
+    ),
 
     let_binding: $ => seq(
       'let',
@@ -402,6 +412,12 @@ module.exports = grammar({
     ),
 
     _symbol_reference: $ => seq(repeat(seq($.module_name, '.')), $.identifier),
+    
+    _qualified_type_identifier: $ =>
+      choice(
+        $.type_identifier,
+        $.nested_type_identifier
+      ),
 
     nested_type_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.type_identifier),
 

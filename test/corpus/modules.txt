@@ -14,6 +14,33 @@ module MyModule = {
     (block (type_declaration (type_identifier)))))
 
 ===========================================
+Function types
+===========================================
+
+type fooA = t => float;
+type fooB = (t) => float;
+type fooC = (t1, t2) => float;
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters (type_identifier))
+      (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters (type_identifier))
+      (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters (type_identifier) (type_identifier))
+      (type_identifier))))
+
+===========================================
 Externals
 ===========================================
 
@@ -26,6 +53,6 @@ external aX: t => float = "aX"
     (identifier)
     (type_annotation
       (function_type
-        (type_identifier)
+        (function_type_parameters (type_identifier))
         (type_identifier)))
     (string (string_fragment))))
