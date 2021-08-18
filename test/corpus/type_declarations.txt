@@ -103,6 +103,7 @@ Function
 type fooA = t => float;
 type fooB = (t) => float;
 type fooC = (t1, t2) => float;
+type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float;
 
 ---
 
@@ -121,6 +122,19 @@ type fooC = (t1, t2) => float;
     (type_identifier)
     (function_type
       (function_type_parameters (type_identifier) (type_identifier))
+      (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters
+        (labeled_parameter
+          (identifier)
+          (type_annotation (type_identifier)))
+        (labeled_parameter
+          (identifier)
+          (type_annotation (type_identifier))
+          (optional))
+        (type_identifier))
       (type_identifier))))
 
 ===========================================

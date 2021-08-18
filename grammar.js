@@ -214,6 +214,7 @@ module.exports = grammar({
 
     _function_type_parameter: $ => choice(
       $._type,
+      $.labeled_parameter,
     ),
 
     let_binding: $ => seq(
