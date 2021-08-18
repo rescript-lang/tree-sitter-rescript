@@ -82,7 +82,7 @@ module.exports = grammar({
       'module',
       $.module_name,
       '=',
-      $.block,
+      choice($.block, $.module_expression),
     ),
 
     external_declaration: $ => seq(

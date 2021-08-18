@@ -28,6 +28,21 @@ module MyModule = {
     (block (type_declaration (type_identifier)))))
 
 ===========================================
+Alias
+===========================================
+
+module Q = Foo.Bar.Qux
+
+---
+
+(source_file
+  (module_declaration
+    (module_name)
+    (nested_module_expression
+      (nested_module_expression (module_name) (module_name))
+      (module_name))))
+
+===========================================
 Function types
 ===========================================
 
