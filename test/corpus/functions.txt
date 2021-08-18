@@ -1,5 +1,5 @@
 ===================================================
-With simple parameters
+Simple parameters
 ===================================================
 
 a => 1;
@@ -36,6 +36,22 @@ a => 1;
     (number)))
   (expression_statement (function
     (formal_parameters (identifier) (identifier)) (number))))
+
+===================================================
+Type annotations
+===================================================
+
+(x: int): int => 5;
+
+---
+
+(source_file
+  (expression_statement
+    (function
+      parameters: (formal_parameters
+        (positional_parameter (identifier) (type_annotation (type_identifier))))
+      return_type: (type_annotation (type_identifier))
+      body: (number))))
 
 ===================================================
 Record pattern

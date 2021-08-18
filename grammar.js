@@ -35,11 +35,13 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
+    [$.unit, $.formal_parameters],
     [$.binary_expression, $.expression_statement],
     [$.pipe_expression, $.expression],
     [$.primary_expression, $.pattern],
     [$.tuple_pattern, $._formal_parameter],
     [$.nested_module_expression, $.module_expression],
+    [$.type_annotation, $.function_type_parameters],
   ],
 
   rules: {
@@ -366,13 +368,25 @@ module.exports = grammar({
       field('value', $.expression),
     ),
 
-    _definition_signature: $ => field('parameters', $.formal_parameters),
-    _formal_parameter: $ => choice($.pattern/*, $.assignment_pattern TODO */),
+    _definition_signature: $ => seq(
+      field('parameters', $.formal_parameters),
+      optional(field('return_type', $.type_annotation)),
+    ),
 
     formal_parameters: $ => seq(
       '(',
       optional(commaSep1t($._formal_parameter)),
       ')'
+    ),
+
+    _formal_parameter: $ => choice(
+      $.pattern,
+      $.positional_parameter,
+    ),
+
+    positional_parameter: $ => seq(
+      $.pattern,
+      $.type_annotation,
     ),
 
     // This negative dynamic precedence ensures that during error recovery,
