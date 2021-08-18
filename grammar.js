@@ -113,6 +113,7 @@ module.exports = grammar({
     _type: $ => choice(
       $._qualified_type_identifier,
       $.variant_type,
+      $.polyvar_type,
       $.record_type,
       $.object_type,
       $.generic_type,
@@ -130,6 +131,24 @@ module.exports = grammar({
     )),
 
     variant_parameters: $ => seq(
+      '(',
+      commaSep1t($._type),
+      ')',
+    ),
+
+    polyvar_type: $ => seq(
+      choice('[', '[>', '[<',),
+      optional('|'),
+      barSep1($.polyvar_declaration),
+      ']',
+    ),
+
+    polyvar_declaration: $ => prec.right(seq(
+      $.polyvar_identifier,
+      optional($.polyvar_parameters),
+    )),
+
+    polyvar_parameters: $ => seq(
       '(',
       commaSep1t($._type),
       ')',
@@ -532,6 +551,14 @@ module.exports = grammar({
     variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 
     polyvar: $ => seq('#', /[a-zA-Z0-9_]*/),
+
+    polyvar_identifier: $ => seq(
+      '#',
+      choice(
+        /[a-zA-Z0-9_]+/,
+        seq(optional('\\'), $.string)
+      ),
+    ),
 
     type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
 

@@ -72,6 +72,31 @@ type t =
             ))))))
 
 ===========================================
+Polyvar
+===========================================
+
+type t = [>
+  | #AAA
+  | #bbb(anotherType)
+  | #"cc-cc"
+  | #\"cc-cc"
+  | #42
+  ]
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (polyvar_type
+      (polyvar_declaration (polyvar_identifier))
+      (polyvar_declaration
+        (polyvar_identifier) (polyvar_parameters (type_identifier)))
+      (polyvar_declaration (polyvar_identifier (string (string_fragment))))
+      (polyvar_declaration (polyvar_identifier (string (string_fragment))))
+      (polyvar_declaration (polyvar_identifier)))))
+
+===========================================
 Function
 ===========================================
 

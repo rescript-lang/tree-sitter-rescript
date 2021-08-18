@@ -5,7 +5,10 @@
  (#match? @constant.macro "^\\.*$"))
 
 (type_identifier) @type
-(variant_identifier) @constant
+[
+  (variant_identifier)
+  (polyvar_identifier)
+] @constant
 (property_identifier) @property
 (shorthand_property_identifier_pattern) @parameter
 (module_name) @namespace
@@ -81,7 +84,15 @@
   "}"
   "["
   "]"
-]  @punctuation.bracket
+] @punctuation.bracket
+
+(polyvar_type
+  [
+   "["
+   "[>"
+   "[<"
+   "]"
+  ] @punctuation.bracket)
 
 [
   "~"
