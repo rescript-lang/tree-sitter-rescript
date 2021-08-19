@@ -59,6 +59,8 @@
 ; Misc
 ;-----
 
+(subscript_expression index: (string) @property)
+
 (decorator_identifier) @annotation
 ("@") @annotation
 

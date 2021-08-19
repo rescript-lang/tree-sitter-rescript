@@ -28,6 +28,7 @@ module.exports = grammar({
       'binary_and',
       'binary_or',
       'ternary',
+      $.expression,
       $.function,
       $.let_binding,
     ],
@@ -267,6 +268,7 @@ module.exports = grammar({
       $.switch_expression,
       $.call_expression,
       $.pipe_expression,
+      $.subscript_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -565,6 +567,11 @@ module.exports = grammar({
       commaSep($.string),
       ')',
     ),
+
+    subscript_expression: $ => prec.right('member', seq(
+      field('object', $.primary_expression),
+      '[', field('index', $.expression), ']'
+    )),
 
     spread_element: $ => seq('...', $.expression),
 

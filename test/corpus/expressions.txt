@@ -352,6 +352,20 @@ Arrays
   (expression_statement (array (number) (number))))
 
 ============================================
+Subscript expressions
+============================================
+
+myArray[42]
+myObj["foo"]
+
+---
+
+(source_file
+  (expression_statement (subscript_expression (identifier) (number)))
+  (expression_statement
+    (subscript_expression (identifier) (string (string_fragment)))))
+
+============================================
 Variants
 ============================================
 
