@@ -116,6 +116,9 @@ foo->bar->baz
 xs->Array.map(foo)->Array.sum
 5->Some
 
+bbox
+->outset
+
 ---
 
 (source_file
@@ -134,7 +137,11 @@ xs->Array.map(foo)->Array.sum
   (expression_statement
     (pipe_expression
       (number)
-      (variant_identifier))))
+      (variant_identifier)))
+  (expression_statement
+    (pipe_expression
+      (identifier)
+      (identifier))))
 
 ===========================================
 Record

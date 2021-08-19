@@ -364,10 +364,12 @@ module.exports = grammar({
       $.expression,
       '{',
       repeat1($.switch_match),
+      repeat('\n'),
       '}',
     ),
 
     switch_match: $ => seq(
+      repeat('\n'),
       '|',
       barSep1($._switch_pattern),
       '=>',
@@ -402,6 +404,7 @@ module.exports = grammar({
 
     pipe_expression: $ => prec.left(seq(
       $.primary_expression,
+      repeat('\n'),
       '->',
       choice(
         $.identifier,
