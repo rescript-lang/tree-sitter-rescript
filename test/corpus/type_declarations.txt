@@ -50,7 +50,7 @@ Variant
 type t =
   | A
   | B(anotherType)
-  | C({foo: int, bar: string})
+  | C({foo: int, bar: string});
 
 ---
 
@@ -100,10 +100,10 @@ type t = [>
 Function
 ===========================================
 
-type fooA = t => float;
-type fooB = (t) => float;
-type fooC = (t1, t2) => float;
-type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float;
+type fooA = t => float
+type fooB = (t) => float
+type fooC = (t1, t2) => float
+type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float
 
 ---
 

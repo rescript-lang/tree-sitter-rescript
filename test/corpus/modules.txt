@@ -2,8 +2,8 @@
 Include
 ===========================================
 
-include Foo;
-include Foo.Bar;
+include Foo
+include Foo.Bar
 
 ---
 
@@ -46,10 +46,10 @@ module Q = Foo.Bar.Qux
 Externals
 ===========================================
 
-external aX: t => float = "aX";
-@val external foo: int = "foo";
-@bs.val external foo: int = "foo";
-@module("libfoo") @new external foo: t = "Foo";
+external aX: t => float = "aX"
+@val external foo: int = "foo"
+@bs.val external foo: int = "foo"
+@module("libfoo") @new external foo: t = "Foo"
 
 ---
 

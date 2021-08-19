@@ -48,11 +48,11 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: $ => repeat(seq($._statement, optional(';'))),
+    source_file: $ => repeat($._statement),
 
-    statement: $ => $._statement,
+    _statement: $ => seq($.statement, choice(';', '\n')),
 
-    _statement: $ => choice(
+    statement: $ => choice(
       alias($._decorated_statement, $.decorated),
       $.expression_statement,
       $.declaration,
@@ -67,7 +67,7 @@ module.exports = grammar({
 
     block: $ => prec.right(seq(
       '{',
-      repeat($.statement),
+      repeat($._statement),
       '}',
     )),
 
@@ -131,6 +131,7 @@ module.exports = grammar({
     variant_declaration: $ => prec.right(seq(
       $.variant_identifier,
       optional($.variant_parameters),
+      optional('\n'),
     )),
 
     variant_parameters: $ => seq(
