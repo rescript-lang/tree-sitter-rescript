@@ -247,6 +247,7 @@ module.exports = grammar({
     ),
 
     primary_expression: $ => choice(
+      $.parenthesized_expression,
       $.module_nested_identifier,
       $.identifier,
       $.number,
@@ -266,6 +267,12 @@ module.exports = grammar({
       $.switch_expression,
       $.call_expression,
       $.pipe_expression,
+    ),
+
+    parenthesized_expression: $ => seq(
+      '(',
+      $.expression,
+      ')'
     ),
 
     module_nested_identifier: $ => seq(

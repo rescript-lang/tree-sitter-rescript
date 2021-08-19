@@ -10,6 +10,19 @@ Unit
   (expression_statement (unit)))
 
 ===========================================
+Parenthesized expressions
+===========================================
+
+(5)
+(())
+
+---
+
+(source_file
+  (expression_statement (parenthesized_expression (number)))
+  (expression_statement (parenthesized_expression (unit))))
+
+===========================================
 Nested identifiers
 ===========================================
 
