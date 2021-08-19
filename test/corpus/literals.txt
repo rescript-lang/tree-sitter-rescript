@@ -78,3 +78,46 @@ Quote escaping
     (string (string_fragment) (escape_sequence) (string_fragment)))
   (expression_statement (string (string_fragment))))
 
+============================================
+Template strings
+============================================
+
+`one line`
+`multi
+  line`
+
+j`Hello`
+
+`multi
+  ${2 + 2}
+  hello
+  ${1 + 1}
+  line`
+
+`The command \`git ${format(" ")}\` exited with an unexpected code: ${exitCode}.
+The caller should either handle this error, or expect that exit code.`
+
+`//`
+
+`\\`
+
+----
+
+(source_file
+  (expression_statement (template_string))
+  (expression_statement (template_string))
+  (expression_statement (template_string))
+  (expression_statement (template_string
+    (template_substitution
+      (binary_expression (number) (number)))
+    (template_substitution
+      (binary_expression (number) (number)))))
+  (expression_statement (template_string
+    (escape_sequence)
+    (template_substitution (call_expression
+      (identifier)
+      (arguments (string (string_fragment)))))
+    (escape_sequence)
+    (template_substitution (identifier))))
+  (expression_statement (template_string))
+  (expression_statement (template_string (escape_sequence))))

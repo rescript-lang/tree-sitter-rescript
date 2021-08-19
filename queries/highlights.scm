@@ -1,6 +1,9 @@
 (comment) @comment
 
-;(identifier) @variable
+; Identifiers
+;------------
+
+; Escaped identifiers like \"+."
 ((identifier) @constant.macro
  (#match? @constant.macro "^\\.*$"))
 
@@ -21,14 +24,31 @@
 (jsx_identifier) @tag
 (jsx_attribute (property_identifier) @attribute)
 
-(string) @string
+; String literals
+;----------------
+
+[
+  (string)
+  (template_string)
+] @string
+
+(template_substitution
+  "${" @punctuation.special
+  "}" @punctuation.special) @embedded
+
+; Other literals
+;---------------
+
+[
+  (true)
+  (false)
+] @constant.builtin
+
 (number) @number
 (polyvar) @constant
 
-(decorator_identifier) @annotation
-("@") @annotation
-
-(include_statement) @include
+; Functions
+;----------
 
 [
  (formal_parameters (identifier))
@@ -36,10 +56,13 @@
  (labeled_parameter (identifier))
 ] @parameter
 
-[
-  (true)
-  (false)
-] @constant.builtin
+; Misc
+;-----
+
+(decorator_identifier) @annotation
+("@") @annotation
+
+(include_statement) @include
 
 [
   "type"

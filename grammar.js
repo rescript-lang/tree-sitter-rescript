@@ -244,6 +244,7 @@ module.exports = grammar({
       $.identifier,
       $.number,
       $.string,
+      $.template_string,
       $.true,
       $.false,
       $.function,
@@ -740,6 +741,30 @@ module.exports = grammar({
         '/'
       )
     )),
+
+    template_string: $ => seq(
+      choice(
+        '`',
+        'j`',
+      ),
+      repeat(choice(
+        $._unescaped_template_string_fragment,
+        $.template_substitution,
+        choice(
+          alias('\\`', $.escape_sequence),
+          $.escape_sequence,
+        ),
+      )),
+      '`'
+    ),
+
+    template_substitution: $ => choice(
+      seq('$', $.identifier),
+      seq('${', $.expression, '}'),
+    ),
+
+    _unescaped_template_string_fragment: $ =>
+      token.immediate(prec(1, /[^`\\\$]+/)),
   },
 });
 
