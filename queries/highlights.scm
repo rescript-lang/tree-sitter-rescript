@@ -18,6 +18,9 @@
 (shorthand_property_identifier_pattern) @parameter
 (module_name) @namespace
 
+(jsx_identifier) @tag
+(jsx_attribute (property_identifier) @attribute)
+
 (string) @string
 (number) @number
 (polyvar) @constant

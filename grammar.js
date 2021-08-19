@@ -19,6 +19,7 @@ module.exports = grammar({
   precedences: $ => [
     [
       'unary_not',
+      'member',
       'call',
       'binary_times',
       'binary_plus',
@@ -43,6 +44,7 @@ module.exports = grammar({
     [$.primary_expression, $._formal_parameter],
     [$.nested_module_expression, $.module_expression],
     [$.type_annotation, $.function_type_parameters],
+    [$.generic_type, $._type],
   ],
 
   rules: {
@@ -229,6 +231,8 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.primary_expression,
+      $._jsx_element,
+      $.jsx_fragment,
       $.unary_expression,
       $.binary_expression,
       $.ternary_expression,
@@ -459,6 +463,85 @@ module.exports = grammar({
       ')',
     ),
 
+    _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),
+
+    jsx_element: $ => seq(
+      field('open_tag', $.jsx_opening_element),
+      repeat($._jsx_child),
+      field('close_tag', $.jsx_closing_element)
+    ),
+
+    jsx_fragment: $ => seq('<', '>', repeat($._jsx_child), '<', '/', '>'),
+
+    jsx_expression: $ => seq(
+      '{',
+      optional(choice(
+        $.expression,
+        $.spread_element
+      )),
+      '}'
+    ),
+
+    _jsx_child: $ => choice(
+      $.identifier,
+      $._jsx_element,
+      $.jsx_fragment,
+      $.jsx_expression
+    ),
+
+    jsx_opening_element: $ => prec.dynamic(-1, seq(
+      '<',
+      field('name', $._jsx_element_name),
+      repeat(field('attribute', $.jsx_attribute)),
+      '>'
+    )),
+
+    _jsx_identifier: $ => alias(
+      choice($.identifier, $.module_name),
+      $.jsx_identifier
+    ),
+
+    nested_jsx_identifier: $ => prec('member', seq(
+      choice($._jsx_identifier, $.nested_jsx_identifier),
+      '.',
+      $._jsx_identifier
+    )),
+
+    _jsx_element_name: $ => choice(
+      $._jsx_identifier,
+      $.nested_jsx_identifier,
+    ),
+
+    jsx_closing_element: $ => seq(
+      '<',
+      '/',
+      field('name', $._jsx_element_name),
+      '>'
+    ),
+
+    jsx_self_closing_element: $ => seq(
+      '<',
+      field('name', $._jsx_element_name),
+      repeat(field('attribute', $.jsx_attribute)),
+      '/',
+      '>'
+    ),
+
+    _jsx_attribute_name: $ => alias($.identifier, $.property_identifier),
+
+    jsx_attribute: $ => seq(
+      $._jsx_attribute_name,
+      optional(seq(
+        '=',
+        $._jsx_attribute_value
+      ))
+    ),
+
+    _jsx_attribute_value: $ => choice(
+      $.string,
+      $.jsx_expression,
+    ),
+
     decorator: $ => seq('@', $.decorator_identifier, optional($.decorator_arguments)),
 
     decorator_arguments: $ => seq(
@@ -466,6 +549,8 @@ module.exports = grammar({
       commaSep($.string),
       ')',
     ),
+
+    spread_element: $ => seq('...', $.expression),
 
     ternary_expression: $ => prec.right('ternary', seq(
       field('condition', $.expression),

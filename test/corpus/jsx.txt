@@ -1,0 +1,57 @@
+==============================================
+Simple JSX elements
+==============================================
+
+<div className="b" tabIndex={1} />;
+<Foo.Bar>a <span>b</span> c</Foo.Bar>;
+<Foo.Bar.Baz.Baz></Foo.Bar.Baz.Baz>;
+
+---
+
+(source_file
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_attribute (property_identifier) (string (string_fragment)))
+      (jsx_attribute (property_identifier) (jsx_expression (number)))))
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (nested_jsx_identifier (jsx_identifier) (jsx_identifier)))
+      (identifier)
+      (jsx_element
+        (jsx_opening_element (jsx_identifier))
+        (identifier)
+        (jsx_closing_element (jsx_identifier)))
+      (identifier)
+      (jsx_closing_element (nested_jsx_identifier (jsx_identifier) (jsx_identifier)))))
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element
+        (nested_jsx_identifier
+          (nested_jsx_identifier
+            (nested_jsx_identifier (jsx_identifier) (jsx_identifier))
+            (jsx_identifier))
+          (jsx_identifier)))
+      (jsx_closing_element
+        (nested_jsx_identifier
+          (nested_jsx_identifier
+            (nested_jsx_identifier (jsx_identifier) (jsx_identifier))
+            (jsx_identifier))
+          (jsx_identifier))))))
+
+==============================================
+Anonymous JSX element
+==============================================
+
+<></>;
+<E><></></E>;
+
+---
+
+(source_file
+  (expression_statement (jsx_fragment))
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (jsx_fragment)
+      (jsx_closing_element (jsx_identifier)))))
