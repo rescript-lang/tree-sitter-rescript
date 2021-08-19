@@ -1,4 +1,18 @@
 ===========================================
+Open
+===========================================
+
+open Foo
+open! Foo.Bar
+
+---
+
+(source_file
+  (open_statement (module_name))
+  (open_statement
+    (nested_module_expression (module_name) (module_name))))
+
+===========================================
 Include
 ===========================================
 

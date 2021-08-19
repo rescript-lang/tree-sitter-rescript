@@ -62,7 +62,10 @@
 (decorator_identifier) @annotation
 ("@") @annotation
 
-(include_statement) @include
+[
+  (include_statement)
+  (open_statement)
+] @include
 
 [
   "type"

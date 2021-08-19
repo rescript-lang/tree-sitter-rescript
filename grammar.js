@@ -57,6 +57,7 @@ module.exports = grammar({
       $.expression_statement,
       $.declaration,
       $.block,
+      $.open_statement,
       $.include_statement,
     ),
 
@@ -70,6 +71,12 @@ module.exports = grammar({
       repeat($._statement),
       '}',
     )),
+
+    open_statement: $ => seq(
+      'open',
+      optional('!'),
+      $.module_expression,
+    ),
 
     include_statement: $ => seq(
       'include',
