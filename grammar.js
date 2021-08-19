@@ -33,19 +33,16 @@ module.exports = grammar({
       $.let_binding,
     ],
     [$.function_type_parameters, $.function_type],
-    ['call', $.expression],
   ],
 
   conflicts: $ => [
     [$.unit, $.formal_parameters],
-    [$.binary_expression, $.expression_statement],
     [$.pipe_expression, $.expression],
     [$.primary_expression, $.pattern],
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
     [$.nested_module_expression, $.module_expression],
-    [$.type_annotation, $.function_type_parameters],
-    [$.generic_type, $._type],
+    [$.tuple_type, $._function_type_parameter],
   ],
 
   rules: {
@@ -117,26 +114,34 @@ module.exports = grammar({
 
     type_annotation: $ => seq(
       ':',
-      $._type,
+      $._inline_type,
     ),
 
     _type: $ => choice(
+      $._inline_type,
+      $.variant_type,
+      $.record_type,
+    ),
+
+    _inline_type: $ => choice(
+      $._non_function_inline_type,
+      $.function_type,
+    ),
+
+    _non_function_inline_type: $ => choice(
       $._qualified_type_identifier,
       $.tuple_type,
-      $.variant_type,
       $.polyvar_type,
-      $.record_type,
       $.object_type,
       $.generic_type,
-      $.function_type,
       $.unit_type,
     ),
 
-    tuple_type: $ => seq(
+    tuple_type: $ => prec.dynamic(-1, seq(
       '(',
       commaSep1t($._type),
       ')',
-    ),
+    )),
 
     variant_type: $ => seq(
       optional('|'),
@@ -223,7 +228,7 @@ module.exports = grammar({
     )),
 
     function_type_parameters: $ => choice(
-      $._type,
+      $._non_function_inline_type,
       $._function_type_parameter_list,
     ),
 
@@ -291,7 +296,7 @@ module.exports = grammar({
       $.identifier,
     ),
 
-    function: $ => seq(
+    function: $ => prec.left(seq(
       choice(
         field('parameter', $.identifier),
         $._definition_signature
@@ -301,7 +306,7 @@ module.exports = grammar({
         $.expression,
         $.block
       )),
-    ),
+    )),
 
     record: $ => seq(
       '{',
@@ -425,7 +430,12 @@ module.exports = grammar({
 
     _definition_signature: $ => seq(
       field('parameters', $.formal_parameters),
-      optional(field('return_type', $.type_annotation)),
+      optional(field('return_type', alias($._return_type_annotation, $.type_annotation))),
+    ),
+
+    _return_type_annotation: $ => seq(
+      ':',
+      $._non_function_inline_type,
     ),
 
     formal_parameters: $ => seq(
