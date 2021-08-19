@@ -24,6 +24,19 @@ type t = Foo.Bar.qux
       (module_name) (module_name) (type_identifier))))
 
 ===========================================
+Tuple
+===========================================
+
+type t = (int, string, float)
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (tuple_type (type_identifier) (type_identifier) (type_identifier))))
+
+===========================================
 Record
 ===========================================
 

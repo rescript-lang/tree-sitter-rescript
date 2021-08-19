@@ -122,6 +122,7 @@ module.exports = grammar({
 
     _type: $ => choice(
       $._qualified_type_identifier,
+      $.tuple_type,
       $.variant_type,
       $.polyvar_type,
       $.record_type,
@@ -129,6 +130,12 @@ module.exports = grammar({
       $.generic_type,
       $.function_type,
       $.unit_type,
+    ),
+
+    tuple_type: $ => seq(
+      '(',
+      commaSep1t($._type),
+      ')',
     ),
 
     variant_type: $ => seq(
@@ -217,11 +224,13 @@ module.exports = grammar({
 
     function_type_parameters: $ => choice(
       $._type,
-      seq(
-        '(',
-        commaSep($._function_type_parameter),
-        ')',
-      ),
+      $._function_type_parameter_list,
+    ),
+
+    _function_type_parameter_list: $ => seq(
+      '(',
+      commaSep($._function_type_parameter),
+      ')',
     ),
 
     _function_type_parameter: $ => choice(
