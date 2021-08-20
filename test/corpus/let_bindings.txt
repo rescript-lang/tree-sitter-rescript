@@ -46,3 +46,25 @@ let x = {
     (block
       (expression_statement (number))
       (expression_statement (number)))))
+
+============================================
+Annotated
+============================================
+
+let a: int = 5
+let b: 'a => unit = ignore
+
+---
+
+(source_file
+  (let_binding
+    (identifier)
+    (type_annotation (type_identifier))
+    (number))
+  (let_binding
+    (identifier)
+    (type_annotation
+      (function_type
+        (function_type_parameters (type_identifier))
+        (unit_type)))
+    (identifier)))

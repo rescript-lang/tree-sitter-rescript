@@ -246,6 +246,7 @@ module.exports = grammar({
     let_binding: $ => seq(
       'let',
       $.pattern,
+      optional($.type_annotation),
       '=',
       choice($.expression, $.block),
     ),
