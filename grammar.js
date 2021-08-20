@@ -27,8 +27,8 @@ module.exports = grammar({
       'binary_relation',
       'binary_and',
       'binary_or',
-      'ternary',
       $.expression,
+      $.expression_statement,
       $.function,
       $.let_binding,
     ],
@@ -47,6 +47,9 @@ module.exports = grammar({
     [$.variant, $.variant_pattern],
     [$.primary_expression, $._literal_pattern],
     [$.expression_statement, $.switch_match],
+    [$.expression_statement, $.ternary_expression],
+    [$.expression_statement, $.switch_match, $.ternary_expression],
+    [$.let_binding, $.ternary_expression],
   ],
 
   rules: {
@@ -632,10 +635,12 @@ module.exports = grammar({
 
     spread_element: $ => seq('...', $.expression),
 
-    ternary_expression: $ => prec.right('ternary', seq(
+    ternary_expression: $ => prec.left(seq(
       field('condition', $.expression),
+      repeat('\n'),
       '?',
       field('consequence', $.expression),
+      repeat('\n'),
       ':',
       field('alternative', $.expression)
     )),

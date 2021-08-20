@@ -364,9 +364,15 @@ Ternaries
 
 condition ? case1 : case2
 
+condition
+  ? case1
+  : case2
+
 ---
 
 (source_file
+  (expression_statement (ternary_expression
+    (identifier) (identifier) (identifier)))
   (expression_statement (ternary_expression
     (identifier) (identifier) (identifier))))
 
