@@ -256,7 +256,9 @@ Switch of literals
 
 switch foo {
 | 1 | 2 => "few"
-| _ => "many"
+| _ =>
+  let s = "very "
+  s ++ "many"
 }
 
 ---
@@ -266,7 +268,10 @@ switch foo {
     (switch_expression
       (identifier)
       (switch_match (number) (number) (string (string_fragment)))
-      (switch_match (identifier) (string (string_fragment))))))
+      (switch_match
+        (identifier)
+        (let_binding (identifier) (string (string_fragment)))
+        (binary_expression (identifier) (string (string_fragment)))))))
 
 ===========================================
 Switch of variants

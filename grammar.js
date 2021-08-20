@@ -46,6 +46,7 @@ module.exports = grammar({
     [$.tuple_type, $._function_type_parameter],
     [$.variant, $.variant_pattern],
     [$.primary_expression, $._literal_pattern],
+    [$.expression_statement, $.switch_match],
   ],
 
   rules: {
@@ -390,6 +391,7 @@ module.exports = grammar({
       '|',
       barSep1($._switch_pattern),
       '=>',
+      repeat($._statement),
       $.expression,
     ),
 
