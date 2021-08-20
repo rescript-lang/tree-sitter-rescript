@@ -32,6 +32,7 @@ module.exports = grammar({
       $.function,
       $.let_binding,
     ],
+    [$.module_name, $.variant_identifier],
     [$.function_type_parameters, $.function_type],
   ],
 
@@ -284,6 +285,7 @@ module.exports = grammar({
       $.call_expression,
       $.pipe_expression,
       $.subscript_expression,
+      $.member_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -595,6 +597,12 @@ module.exports = grammar({
     subscript_expression: $ => prec.right('member', seq(
       field('object', $.primary_expression),
       '[', field('index', $.expression), ']'
+    )),
+
+    member_expression: $ => prec('member', seq(
+      field('record', $.primary_expression),
+      '.',
+      field('property', alias($.identifier, $.property_identifier)),
     )),
 
     spread_element: $ => seq('...', $.expression),

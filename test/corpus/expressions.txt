@@ -27,6 +27,7 @@ Nested identifiers
 ===========================================
 
 Foo.Bar.baz
+Foo.Bar.baz.qux
 
 ---
 
@@ -34,7 +35,13 @@ Foo.Bar.baz
   (expression_statement
     (module_nested_identifier
       (module_name)
-      (module_name) (identifier))))
+      (module_name) (identifier)))
+  (expression_statement
+    (member_expression
+      (module_nested_identifier
+        (module_name)
+        (module_name) (identifier))
+      (property_identifier))))
 
 ===========================================
 Escape identifiers
