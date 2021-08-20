@@ -43,6 +43,10 @@ Simple JSX elements
 Attribute values
 ==============================================
 <Foo a=1 b=#hello c=None punned ?opt />;
+<Bar
+  x=qux->zoo
+  y=true
+/>
 
 ---
 
@@ -54,7 +58,16 @@ Attribute values
       (jsx_attribute (property_identifier) (polyvar))
       (jsx_attribute (property_identifier) (variant (variant_identifier)))
       (jsx_attribute (property_identifier))
-      (jsx_attribute (property_identifier)))))
+      (jsx_attribute (property_identifier))))
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_attribute
+        (property_identifier)
+        (pipe_expression (identifier) (identifier)))
+      (jsx_attribute
+        (property_identifier)
+        (true)))))
 
 ==============================================
 Anonymous JSX element

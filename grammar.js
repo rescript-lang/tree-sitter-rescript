@@ -32,6 +32,7 @@ module.exports = grammar({
       $.function,
       $.let_binding,
     ],
+    [$._jsx_attribute_value, $.pipe_expression],
     [$.module_name, $.variant_identifier],
     [$.function_type_parameters, $.function_type],
   ],
@@ -606,7 +607,8 @@ module.exports = grammar({
       optional(seq(
         '=',
         $._jsx_attribute_value
-      ))
+      )),
+      repeat('\n'),
     ),
 
     _jsx_attribute_value: $ => choice(
