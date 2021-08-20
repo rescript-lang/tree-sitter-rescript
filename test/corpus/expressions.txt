@@ -273,7 +273,7 @@ Switch of variants
 ===========================================
 
 switch foo {
-| Some(x) => x
+| Some(x, {y, z}) => x
 | None => 42
 }
 
@@ -284,10 +284,16 @@ switch foo {
     (switch_expression
       (identifier)
       (switch_match
-        (variant (variant_identifier) (arguments (identifier)))
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (identifier)
+            (record_pattern
+              (shorthand_property_identifier_pattern)
+              (shorthand_property_identifier_pattern))))
         (identifier))
       (switch_match
-        (variant (variant_identifier))
+        (variant_pattern (variant_identifier))
         (number)))))
 
 ===========================================

@@ -44,6 +44,8 @@ module.exports = grammar({
     [$.primary_expression, $._formal_parameter],
     [$.nested_module_expression, $.module_expression],
     [$.tuple_type, $._function_type_parameter],
+    [$.variant, $.variant_pattern],
+    [$.primary_expression, $._literal_pattern],
   ],
 
   rules: {
@@ -362,6 +364,18 @@ module.exports = grammar({
       optional($.else_clause),
     ),
 
+    else_if_clause: $ => seq(
+      'else',
+      'if',
+      $.expression,
+      $.block,
+    ),
+
+    else_clause: $ => seq(
+      'else',
+      $.block,
+    ),
+
     switch_expression: $ => seq(
       'switch',
       $.expression,
@@ -380,24 +394,8 @@ module.exports = grammar({
     ),
 
     _switch_pattern: $ => choice(
-      $.variant,
-      $.string,
-      $.number,
-      $.true,
-      $.false,
-      $.identifier,
-    ),
-
-    else_if_clause: $ => seq(
-      'else',
-      'if',
-      $.expression,
-      $.block,
-    ),
-
-    else_clause: $ => seq(
-      'else',
-      $.block,
+      $.pattern,
+      $._literal_pattern,
     ),
 
     call_expression: $ => prec('call', seq(
@@ -486,8 +484,33 @@ module.exports = grammar({
     )),
 
     _destructuring_pattern: $ => choice(
+      $.variant_pattern,
       $.record_pattern,
       $.tuple_pattern,
+    ),
+
+    variant_pattern: $ => seq(
+      $.variant_identifier,
+      optional(alias($._variant_pattern_parameters, $.formal_parameters))
+    ),
+
+    _variant_pattern_parameters: $ => seq(
+      '(',
+      commaSep1t($._variant_pattern_parameter),
+      ')',
+    ),
+
+    _variant_pattern_parameter: $ => choice(
+      $._literal_pattern,
+      $.pattern,
+    ),
+
+    _literal_pattern: $ => choice(
+      $.string,
+      $.template_string,
+      $.number,
+      $.true,
+      $.false,
     ),
 
     record_pattern: $ => seq(
