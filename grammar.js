@@ -642,6 +642,7 @@ module.exports = grammar({
       ...[
         ['&&', 'binary_and'],
         ['||', 'binary_or'],
+        ['++', 'binary_plus'],
         ['+', 'binary_plus'],
         ['+.', 'binary_plus'],
         ['-', 'binary_plus'],

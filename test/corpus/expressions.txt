@@ -338,6 +338,21 @@ i && j;
       (unary_expression (identifier))
       (unary_expression (identifier))))))
 
+============================================
+String operators
+============================================
+
+s1 ++ s2
+s1 ++ s2 ++ s3
+
+---
+
+(source_file
+  (expression_statement (binary_expression (identifier) (identifier)))
+  (expression_statement (binary_expression
+    (binary_expression (identifier) (identifier))
+    (identifier))))
+
 ==============================================
 Ternaries
 ==============================================
