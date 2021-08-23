@@ -1,5 +1,4 @@
 bindings/
 node_modules/
 src/
-binding.gyp
-Cargo.toml
+!src/scaner.c

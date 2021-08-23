@@ -1,6 +1,10 @@
 module.exports = grammar({
   name: 'rescript',
 
+  externals: $ => [
+    $._newline,
+  ],
+
   extras: $ => [
     $.comment,
     /[\s\uFEFF\u2060\u200B\u00A0]/
@@ -56,7 +60,7 @@ module.exports = grammar({
   rules: {
     source_file: $ => repeat($._statement),
 
-    _statement: $ => seq($.statement, choice(';', '\n')),
+    _statement: $ => seq($.statement, choice(';', $._newline)),
 
     statement: $ => choice(
       alias($._decorated_statement, $.decorated),
@@ -159,7 +163,6 @@ module.exports = grammar({
     variant_declaration: $ => prec.right(seq(
       $.variant_identifier,
       optional($.variant_parameters),
-      optional('\n'),
     )),
 
     variant_parameters: $ => seq(
@@ -386,12 +389,10 @@ module.exports = grammar({
       $.expression,
       '{',
       repeat1($.switch_match),
-      repeat('\n'),
       '}',
     ),
 
     switch_match: $ => seq(
-      repeat('\n'),
       '|',
       barSep1($._switch_pattern),
       '=>',
@@ -411,7 +412,6 @@ module.exports = grammar({
 
     pipe_expression: $ => prec.left(seq(
       $.primary_expression,
-      repeat('\n'),
       '->',
       choice(
         $.identifier,
@@ -608,7 +608,6 @@ module.exports = grammar({
         '=',
         $._jsx_attribute_value
       )),
-      repeat('\n'),
     ),
 
     _jsx_attribute_value: $ => choice(
@@ -639,10 +638,8 @@ module.exports = grammar({
 
     ternary_expression: $ => prec.left(seq(
       field('condition', $.expression),
-      repeat('\n'),
       '?',
       field('consequence', $.expression),
-      repeat('\n'),
       ':',
       field('alternative', $.expression)
     )),
