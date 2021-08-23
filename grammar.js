@@ -37,7 +37,7 @@ module.exports = grammar({
       $.let_binding,
     ],
     [$._jsx_attribute_value, $.pipe_expression],
-    [$.module_name, $.variant_identifier],
+    //[$.module_name, $.variant_identifier],
     [$.function_type_parameters, $.function_type],
   ],
 
@@ -55,6 +55,8 @@ module.exports = grammar({
     [$.expression_statement, $.ternary_expression],
     [$.expression_statement, $.switch_match, $.ternary_expression],
     [$.let_binding, $.ternary_expression],
+    [$.variant_identifier, $.module_name],
+    [$.variant],
   ],
 
   rules: {
@@ -687,7 +689,7 @@ module.exports = grammar({
       ))
     )),
 
-    variant: $ => prec.right(seq(
+    variant: $ => prec.dynamic(-1, seq(
       choice($.variant_identifier, $.nested_variant_identifier),
       optional(alias($.variant_arguments, $.arguments)),
     )),
