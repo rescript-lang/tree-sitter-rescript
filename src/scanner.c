@@ -101,6 +101,9 @@ bool tree_sitter_rescript_external_scanner_scan(
         // Ignore new lines before pipe operator (->)
         return false;
       }
+    } else if (lexer->lookahead == '|') {
+      // Ignore new lines before bars (|) involved in variant declarations
+      return false;
     }
 
     return is_unnested;
