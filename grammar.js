@@ -108,8 +108,14 @@ module.exports = grammar({
     module_declaration: $ => seq(
       'module',
       $.module_name,
-      '=',
-      choice($.block, $.module_expression),
+      optional(seq(
+        ':',
+        field('signature', choice($.block, $.module_expression)),
+      )),
+      optional(seq(
+        '=',
+        field('definition', choice($.block, $.module_expression)),
+      )),
     ),
 
     external_declaration: $ => seq(

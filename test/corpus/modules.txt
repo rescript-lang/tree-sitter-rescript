@@ -27,7 +27,7 @@ include Foo.Bar
     (nested_module_expression (module_name) (module_name))))
 
 ===========================================
-Definition
+Simple definition
 ===========================================
 
 module MyModule = {
@@ -40,6 +40,32 @@ module MyModule = {
   (module_declaration
     (module_name)
     (block (type_declaration (type_identifier)))))
+
+===========================================
+Signature and definition
+===========================================
+
+module MyModule: Foo.Bar = {
+  type t
+}
+
+module MyModule: {
+  type t
+} = {
+  type t = int
+}
+
+---
+
+(source_file
+  (module_declaration
+    (module_name)
+    signature: (nested_module_expression (module_name) (module_name))
+    definition: (block (type_declaration (type_identifier))))
+  (module_declaration
+    (module_name)
+    signature: (block (type_declaration (type_identifier)))
+    definition: (block (type_declaration (type_identifier) (type_identifier)))))
 
 ===========================================
 Alias
