@@ -520,7 +520,10 @@ module.exports = grammar({
     ),
 
     variant_pattern: $ => seq(
-      $.variant_identifier,
+      choice(
+        $.variant_identifier,
+        $.nested_variant_identifier,
+      ),
       optional(alias($._variant_pattern_parameters, $.formal_parameters))
     ),
 

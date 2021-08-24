@@ -291,7 +291,7 @@ Switch of variants
 
 switch foo {
 | Some(x, {y, z}) => x
-| None => 42
+| Option.None => 42
 }
 
 ---
@@ -310,7 +310,10 @@ switch foo {
               (shorthand_property_identifier_pattern))))
         (expression_statement (identifier)))
       (switch_match
-        (variant_pattern (variant_identifier))
+        (variant_pattern
+          (nested_variant_identifier
+            (module_name)
+            (variant_identifier)))
         (expression_statement (number))))))
 
 ===========================================
