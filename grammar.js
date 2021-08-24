@@ -34,12 +34,11 @@ module.exports = grammar({
       'binary_and',
       'binary_or',
       $.expression,
-      //$.expression_statement,
+      $.primary_expression,
       $.function,
       $.let_binding,
     ],
     [$._jsx_attribute_value, $.pipe_expression],
-    //[$.module_name, $.variant_identifier],
     [$.function_type_parameters, $.function_type],
   ],
 
@@ -427,6 +426,12 @@ module.exports = grammar({
         $._literal_pattern,
       ),
       optional($.as_aliasing),
+      optional($.switch_pattern_condition),
+    ),
+
+    switch_pattern_condition: $ => seq(
+      'if',
+      $.expression,
     ),
 
     as_aliasing: $ => seq(

@@ -346,6 +346,32 @@ switch foo {
         (expression_statement (number))))))
 
 ===========================================
+Switch of vars
+===========================================
+
+switch foo {
+| x if x > 42 && x < 99 => x
+| _ => 42
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (identifier)
+      (switch_match
+        (identifier)
+        (switch_pattern_condition
+          (binary_expression
+            (binary_expression (identifier) (number))
+            (binary_expression (identifier) (number))))
+        (expression_statement (identifier)))
+      (switch_match
+        (identifier)
+        (expression_statement (number))))))
+
+===========================================
 Math operators
 ===========================================
 
