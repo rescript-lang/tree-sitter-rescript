@@ -786,7 +786,7 @@ module.exports = grammar({
       ))
     },
 
-    unit: $ => seq('(', ')'),
+    unit: $ => seq($._lparen, $._rparen),
     unit_type: $ => 'unit',
 
     true: $ => 'true',

@@ -24,7 +24,7 @@ type t = Foo.Bar.qux
       (module_name) (module_name) (type_identifier))))
 
 ===========================================
-Tuple
+Tuple type
 ===========================================
 
 type t = (int, string, float)
