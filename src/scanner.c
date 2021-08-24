@@ -89,11 +89,21 @@ bool tree_sitter_rescript_external_scanner_scan(
 
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
     lexer->result_symbol = NEWLINE;
-    bool isTerminalNewline =
+    bool is_unnested =
       state->parensNesting == 0 && state->squareBracketNesting == 0;
-    lexer->advance(lexer, !isTerminalNewline);
+    lexer->advance(lexer, !is_unnested);
     lexer->mark_end(lexer);
-    return isTerminalNewline;
+
+    scan_whitespace_and_comments(lexer);
+    if (lexer->lookahead == '-') {
+      advance(lexer);
+      if (lexer->lookahead == '>') {
+        // Ignore new lines before pipe operator (->)
+        return false;
+      }
+    }
+
+    return is_unnested;
   }
 
   if (!scan_whitespace_and_comments(lexer)) {
