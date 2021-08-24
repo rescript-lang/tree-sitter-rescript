@@ -56,13 +56,19 @@
  (labeled_parameter (identifier))
 ] @parameter
 
+; Meta
+;-----
+
+(decorator_identifier) @annotation
+("@") @annotation
+
+(extension_identifier) @keyword
+("%") @keyword
+
 ; Misc
 ;-----
 
 (subscript_expression index: (string) @property)
-
-(decorator_identifier) @annotation
-("@") @annotation
 
 [
   (include_statement)
