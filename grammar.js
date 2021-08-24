@@ -71,6 +71,7 @@ module.exports = grammar({
     statement: $ => choice(
       alias($._decorated_statement, $.decorated),
       $.expression_statement,
+      $.mutation_statement,
       $.declaration,
       $.block,
       $.open_statement,
@@ -670,6 +671,18 @@ module.exports = grammar({
     _jsx_attribute_value: $ => choice(
       $.primary_expression,
       $.jsx_expression,
+    ),
+
+    mutation_statement: $ => seq(
+      $._mutation_lvalue,
+      choice('=', ':='),
+      $.expression,
+    ),
+
+    _mutation_lvalue: $ => choice(
+      $.identifier,
+      $.member_expression,
+      $.subscript_expression,
     ),
 
     decorator: $ => seq('@', $.decorator_identifier, optional($.decorator_arguments)),

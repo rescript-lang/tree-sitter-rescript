@@ -111,14 +111,12 @@
   ">="
   "&&"
   "||"
+  "="
+  ":="
+  "->"
 ] @operator
 
 (ternary_expression ["?" ":"] @operator)
-
-[
-  "="
-  "->"
-] @operator
 
 [
   "."
