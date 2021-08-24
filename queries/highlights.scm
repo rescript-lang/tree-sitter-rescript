@@ -72,6 +72,7 @@
 [
   "type"
   "let"
+  "rec"
   "external"
   "module"
   "as"
