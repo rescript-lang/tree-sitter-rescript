@@ -42,7 +42,7 @@ Simple JSX elements
 ==============================================
 Attribute values
 ==============================================
-<Foo a=1 b=#hello c=None punned ?opt />;
+<Foo a=1 b=#hello c=None punned ?optA optB=?{foo} />;
 <Bar
   x=qux->zoo
   y=true
@@ -58,7 +58,8 @@ Attribute values
       (jsx_attribute (property_identifier) (polyvar))
       (jsx_attribute (property_identifier) (variant (variant_identifier)))
       (jsx_attribute (property_identifier))
-      (jsx_attribute (property_identifier))))
+      (jsx_attribute (property_identifier))
+      (jsx_attribute (property_identifier) (jsx_expression (identifier)))))
   (expression_statement
     (jsx_self_closing_element
       (jsx_identifier)

@@ -616,6 +616,7 @@ module.exports = grammar({
       $._jsx_attribute_name,
       optional(seq(
         '=',
+        optional('?'),
         $._jsx_attribute_value
       )),
     ),
