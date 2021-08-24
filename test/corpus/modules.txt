@@ -64,6 +64,7 @@ external aX: t => float = "aX"
 @val external foo: int = "foo"
 @bs.val external foo: int = "foo"
 @module("libfoo") @new external foo: t = "Foo"
+external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
 
 ---
 
@@ -95,4 +96,13 @@ external aX: t => float = "aX"
     (external_declaration
       (identifier)
       (type_annotation (type_identifier))
-      (string (string_fragment)))))
+      (string (string_fragment))))
+  (external_declaration
+    (identifier)
+    (type_annotation
+      (function_type
+        (function_type_parameters
+          (object_type)
+          (unit_type))
+        (object_type)))
+    (string (string_fragment))))

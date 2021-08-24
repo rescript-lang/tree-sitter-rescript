@@ -257,6 +257,7 @@ module.exports = grammar({
 
     _function_type_parameter: $ => choice(
       $._type,
+      seq('.', $._type),
       $.labeled_parameter,
     ),
 
