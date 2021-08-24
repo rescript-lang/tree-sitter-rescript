@@ -161,6 +161,7 @@ Record
 ===========================================
 
 {
+  ...old,
   foo: 32,
   bar: "baz",
 }
@@ -170,6 +171,7 @@ Record
 (source_file
   (expression_statement
     (record
+      (spread_element (identifier))
       (record_field (property_identifier) (number))
       (record_field (property_identifier) (string (string_fragment)))
     )))

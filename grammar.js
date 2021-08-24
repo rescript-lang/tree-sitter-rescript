@@ -60,6 +60,7 @@ module.exports = grammar({
     [$.variant_identifier, $.module_name],
     [$.variant],
     [$.extension_expression],
+    [$._record_element, $.jsx_expression],
   ],
 
   rules: {
@@ -338,8 +339,13 @@ module.exports = grammar({
 
     record: $ => seq(
       '{',
-      commaSep1t($.record_field),
+      commaSep1t($._record_element),
       '}',
+    ),
+
+    _record_element: $ => choice(
+      $.spread_element,
+      $.record_field,
     ),
 
     record_field: $ => seq(
