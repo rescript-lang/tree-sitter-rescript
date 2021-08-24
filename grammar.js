@@ -154,9 +154,9 @@ module.exports = grammar({
     ),
 
     tuple_type: $ => prec.dynamic(-1, seq(
-      $._lparen,
+      '(',
       commaSep1t($._type),
-      $._rparen,
+      ')',
     )),
 
     variant_type: $ => prec.left(seq(
@@ -171,9 +171,9 @@ module.exports = grammar({
     )),
 
     variant_parameters: $ => seq(
-      $._lparen,
+      '(',
       commaSep1t($._type),
-      $._rparen,
+      ')',
     ),
 
     polyvar_type: $ => seq(
@@ -189,9 +189,9 @@ module.exports = grammar({
     )),
 
     polyvar_parameters: $ => seq(
-      $._lparen,
+      '(',
       commaSep1t($._type),
-      $._rparen,
+      ')',
     ),
 
     record_type: $ => seq(
@@ -249,9 +249,9 @@ module.exports = grammar({
     ),
 
     _function_type_parameter_list: $ => seq(
-      $._lparen,
+      '(',
       commaSep($._function_type_parameter),
-      $._rparen,
+      ')',
     ),
 
     _function_type_parameter: $ => choice(
@@ -304,9 +304,9 @@ module.exports = grammar({
     ),
 
     parenthesized_expression: $ => seq(
-      $._lparen,
+      '(',
       $.expression,
-      $._rparen
+      ')'
     ),
 
     module_nested_identifier: $ => seq(
@@ -357,9 +357,9 @@ module.exports = grammar({
     ),
 
     tuple: $ => seq(
-      $._lparen,
+      '(',
       commaSep2t($.expression),
-      $._rparen,
+      ')',
     ),
 
     array: $ => seq(
@@ -425,12 +425,12 @@ module.exports = grammar({
     )),
 
     call_arguments: $ => seq(
-      $._lparen,
+      '(',
       commaSep(choice(
         $.expression,
         $.labeled_argument,
       )),
-      $._rparen
+      ')'
     ),
 
     labeled_argument: $ => seq(
@@ -453,9 +453,9 @@ module.exports = grammar({
     ),
 
     formal_parameters: $ => seq(
-      $._lparen,
+      '(',
       optional(commaSep1t($._formal_parameter)),
-      $._rparen
+      ')'
     ),
 
     _formal_parameter: $ => choice(
@@ -505,9 +505,9 @@ module.exports = grammar({
     ),
 
     _variant_pattern_parameters: $ => seq(
-      $._lparen,
+      '(',
       commaSep1t($._variant_pattern_parameter),
-      $._rparen,
+      ')',
     ),
 
     _variant_pattern_parameter: $ => choice(
@@ -534,9 +534,9 @@ module.exports = grammar({
     ),
 
     tuple_pattern: $ => seq(
-      $._lparen,
+      '(',
       commaSep2t($.pattern),
-      $._rparen,
+      ')',
     ),
 
     _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),
@@ -622,9 +622,9 @@ module.exports = grammar({
     decorator: $ => seq('@', $.decorator_identifier, optional($.decorator_arguments)),
 
     decorator_arguments: $ => seq(
-      $._lparen,
+      '(',
       commaSep($.string),
-      $._rparen,
+      ')',
     ),
 
     subscript_expression: $ => prec.right('member', seq(
@@ -699,10 +699,10 @@ module.exports = grammar({
     nested_variant_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.variant_identifier),
 
     variant_arguments: $ => seq(
-      $._lparen,
+      '(',
       commaSep($.expression),
       optional(','),
-      $._rparen,
+      ')',
     ),
 
     _qualified_type_identifier: $ =>
@@ -786,7 +786,7 @@ module.exports = grammar({
       ))
     },
 
-    unit: $ => seq($._lparen, $._rparen),
+    unit: $ => seq('(', ')'),
     unit_type: $ => 'unit',
 
     true: $ => 'true',
@@ -852,6 +852,9 @@ module.exports = grammar({
 
     _unescaped_template_string_fragment: $ =>
       token.immediate(prec(1, /[^`\\\$]+/)),
+
+    lparen: $ => alias($._lparen, '('),
+    rparen: $ => alias($._rparen, ')'),
   },
 });
 
