@@ -68,3 +68,23 @@ let b: 'a => unit = ignore
         (function_type_parameters (type_identifier))
         (unit_type)))
     (identifier)))
+
+============================================
+Recursive
+============================================
+
+let rec foo = n => foo(n-1)
+
+---
+
+(source_file
+  (let_binding
+    (identifier)
+      (function
+        (identifier)
+        (call_expression
+          (identifier)
+          (arguments
+            (binary_expression
+              (identifier)
+              (number)))))))
