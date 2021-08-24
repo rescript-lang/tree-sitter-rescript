@@ -74,6 +74,7 @@
   "let"
   "external"
   "module"
+  "as"
 ] @keyword
 
 [
