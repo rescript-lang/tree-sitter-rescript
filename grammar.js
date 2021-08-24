@@ -438,10 +438,10 @@ module.exports = grammar({
     labeled_argument: $ => seq(
       '~',
       field('label', $.identifier),
-      choice(
+      optional(choice(
         alias('?', $.optional),
         seq('=', field('value', $.expression)),
-      ),
+      )),
     ),
 
     _definition_signature: $ => seq(
