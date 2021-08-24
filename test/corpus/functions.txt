@@ -106,7 +106,7 @@ Parameter aliasing
 Record pattern
 ===================================================
 
-({fooField, barField}) => 5
+({fooField, barField: {baz, qux}, mooField: baa}) => 5
 
 ---
 
@@ -115,7 +115,12 @@ Record pattern
     (formal_parameters
       (record_pattern
         (shorthand_property_identifier_pattern)
-        (shorthand_property_identifier_pattern)))
+        (shorthand_property_identifier_pattern)
+        (record_pattern
+          (shorthand_property_identifier_pattern)
+          (shorthand_property_identifier_pattern))
+        (shorthand_property_identifier_pattern)
+        (identifier)))
     (number))))
 
 ===================================================
