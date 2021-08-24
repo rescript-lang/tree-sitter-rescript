@@ -495,6 +495,7 @@ module.exports = grammar({
 
     _destructuring_pattern: $ => choice(
       $.variant_pattern,
+      $.polyvar_pattern,
       $.record_pattern,
       $.tuple_pattern,
     ),
@@ -513,6 +514,11 @@ module.exports = grammar({
     _variant_pattern_parameter: $ => choice(
       $._literal_pattern,
       $.pattern,
+    ),
+
+    polyvar_pattern: $ => seq(
+      $.polyvar_identifier,
+      optional(alias($._variant_pattern_parameters, $.formal_parameters))
     ),
 
     _literal_pattern: $ => choice(
