@@ -104,6 +104,9 @@ bool tree_sitter_rescript_external_scanner_scan(
     } else if (lexer->lookahead == '|') {
       // Ignore new lines before bars (|) involved in variant declarations
       return false;
+    } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
+      // Ignore new lines before potential ternaries
+      return false;
     }
 
     return is_unnested;
