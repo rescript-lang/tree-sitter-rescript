@@ -9,9 +9,7 @@ enum TokenType {
 };
 
 typedef struct ScannerState {
-  int parensNesting;
-  int angularBracketNesting;
-  int squareBracketNesting;
+  int parens_nesting;
 } ScannerState;
 
 void *tree_sitter_rescript_external_scanner_create() {
@@ -33,8 +31,8 @@ unsigned tree_sitter_rescript_external_scanner_serialize(void* state, char *buff
   return sizeof(ScannerState);
 }
 
-void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *buffer, unsigned nBytes) {
-  memcpy(state, buffer, nBytes);
+void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *buffer, unsigned n_bytes) {
+  memcpy(state, buffer, n_bytes);
 }
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
@@ -76,21 +74,15 @@ static bool scan_whitespace_and_comments(TSLexer *lexer) {
 }
 
 bool tree_sitter_rescript_external_scanner_scan(
-    void *pState,
-    TSLexer *lexer,
-    const bool *valid_symbols
+    void* payload,
+    TSLexer* lexer,
+    const bool* valid_symbols
     ) {
-  ScannerState* state = (ScannerState*)pState;
-
-  /*printf("---\n");
-  printf("%d %d %d\n", valid_symbols[0], valid_symbols[1], valid_symbols[2]);
-  printf("0x%X '%c'\n", lexer->lookahead, lexer->lookahead);
-  printf("nesting (%d)\n", state->parensNesting);*/
+  ScannerState* state = (ScannerState*)payload;
 
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
     lexer->result_symbol = NEWLINE;
-    bool is_unnested =
-      state->parensNesting == 0 && state->squareBracketNesting == 0;
+    bool is_unnested = state->parens_nesting == 0;
     lexer->advance(lexer, !is_unnested);
     lexer->mark_end(lexer);
 
@@ -101,9 +93,6 @@ bool tree_sitter_rescript_external_scanner_scan(
         // Ignore new lines before pipe operator (->)
         return false;
       }
-    /*} else if (lexer->lookahead == '|') {
-      // Ignore new lines before bars (|) involved in variant declarations
-      return false;*/
     } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
       // Ignore new lines before potential ternaries
       return false;
@@ -117,15 +106,13 @@ bool tree_sitter_rescript_external_scanner_scan(
   }
 
   if (valid_symbols[L_PAREN] && lexer->lookahead == '(') {
-    /*printf("lparen(\n", state->parensNesting);*/
-    ++state->parensNesting;
+    ++state->parens_nesting;
     lexer->result_symbol = L_PAREN;
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
     return true;
   } else if (valid_symbols[R_PAREN] && lexer->lookahead == ')') {
-    /*printf(")rparen\n", state->parensNesting);*/
-    --state->parensNesting;
+    --state->parens_nesting;
     lexer->result_symbol = R_PAREN;
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
