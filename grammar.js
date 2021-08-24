@@ -279,8 +279,10 @@ module.exports = grammar({
       optional('rec'),
       $.pattern,
       optional($.type_annotation),
-      '=',
-      choice($.expression, $.block),
+      optional(seq(
+        '=',
+        choice($.expression, $.block),
+      )),
     ),
 
     expression_statement: $ => $.expression,

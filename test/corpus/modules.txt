@@ -45,6 +45,12 @@ module MyModule = {
 Signature and definition
 ===========================================
 
+module MyModule: {
+  let a: int
+  let b: float
+  let c: string
+}
+
 module MyModule: Foo.Bar = {
   type t
 }
@@ -58,6 +64,12 @@ module MyModule: {
 ---
 
 (source_file
+  (module_declaration
+    (module_name)
+    signature: (block
+      (let_binding (identifier) (type_annotation (type_identifier)))
+      (let_binding (identifier) (type_annotation (type_identifier)))
+      (let_binding (identifier) (type_annotation (type_identifier)))))
   (module_declaration
     (module_name)
     signature: (nested_module_expression (module_name) (module_name))
