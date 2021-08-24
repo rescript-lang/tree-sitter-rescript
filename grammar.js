@@ -40,6 +40,7 @@ module.exports = grammar({
     ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
+    [$.nested_module_expression, $.module_type_of],
   ],
 
   conflicts: $ => [
@@ -780,11 +781,19 @@ module.exports = grammar({
     module_expression: $ => choice(
       $.module_name,
       $.nested_module_expression,
+      $.module_type_of,
     ),
 
     nested_module_expression: $ => prec.left(seq(
       $.module_expression,
       '.',
+      $.module_expression,
+    )),
+
+    module_type_of: $ => prec.dynamic(-1, seq(
+      'module',
+      'type',
+      'of',
       $.module_expression,
     )),
 

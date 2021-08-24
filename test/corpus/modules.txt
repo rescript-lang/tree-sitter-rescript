@@ -18,13 +18,17 @@ Include
 
 include Foo
 include Foo.Bar
+include module type of Belt.Array
 
 ---
 
 (source_file
   (include_statement (module_name))
   (include_statement
-    (nested_module_expression (module_name) (module_name))))
+    (nested_module_expression (module_name) (module_name)))
+  (include_statement
+    (module_type_of
+      (nested_module_expression (module_name) (module_name)))))
 
 ===========================================
 Simple definition
