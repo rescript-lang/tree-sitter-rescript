@@ -572,6 +572,13 @@ module.exports = grammar({
       $.number,
       $.true,
       $.false,
+      alias($._literal_tuple_pattern, $.tuple),
+    ),
+
+    _literal_tuple_pattern: $ => seq(
+      '(',
+      commaSep2t($._literal_pattern),
+      ')',
     ),
 
     record_pattern: $ => seq(
