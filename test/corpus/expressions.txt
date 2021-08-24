@@ -319,7 +319,7 @@ Switch of polyvars
 
 switch foo {
 | #Bar => 42
-| #Qux(a, 3) => 99
+| #Qux(a, 3) as qux => 99
 }
 
 ---
@@ -332,10 +332,12 @@ switch foo {
         (polyvar_pattern (polyvar_identifier))
         (expression_statement (number)))
       (switch_match
-        (polyvar_pattern (polyvar_identifier)
+        (polyvar_pattern
+          (polyvar_identifier)
           (formal_parameters
             (identifier)
             (number)))
+        (as_aliasing (identifier))
         (expression_statement (number))))))
 
 ===========================================

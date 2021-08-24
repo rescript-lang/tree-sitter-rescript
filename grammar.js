@@ -406,9 +406,17 @@ module.exports = grammar({
       repeat1($._statement),
     ),
 
-    _switch_pattern: $ => choice(
-      $.pattern,
-      $._literal_pattern,
+    _switch_pattern: $ => seq(
+      choice(
+        $.pattern,
+        $._literal_pattern,
+      ),
+      optional($.as_aliasing),
+    ),
+
+    as_aliasing: $ => seq(
+      'as',
+      $.identifier,
     ),
 
     call_expression: $ => prec('call', seq(
