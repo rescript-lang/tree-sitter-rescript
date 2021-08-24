@@ -140,5 +140,6 @@
   "~"
   "?"
   "=>"
+  "..."
   (optional)
 ] @punctuation.special
