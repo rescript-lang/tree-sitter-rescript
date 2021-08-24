@@ -504,6 +504,7 @@ module.exports = grammar({
     labeled_parameter: $ => seq(
       '~',
       $.identifier,
+      optional($.as_aliasing),
       optional($.type_annotation),
       optional(field('default_value', $._default_value)),
     ),

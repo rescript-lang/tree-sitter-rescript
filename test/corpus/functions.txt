@@ -84,6 +84,25 @@ Parameter defaults
       body: (number))))
 
 ===================================================
+Parameter aliasing
+===================================================
+
+(~xTheGreat as x: int=3) => 5
+
+---
+
+(source_file
+  (expression_statement
+    (function
+      (formal_parameters
+        (labeled_parameter
+          (identifier)
+          (as_aliasing (identifier))
+          (type_annotation (type_identifier))
+          (number)))
+      (number))))
+
+===================================================
 Record pattern
 ===================================================
 
