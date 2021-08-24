@@ -180,3 +180,19 @@ type t = {
     (object_type
       (field (property_identifier (string_fragment)) (type_identifier))
       (field (property_identifier (string_fragment)) (type_identifier)))))
+
+===========================================
+Generic
+===========================================
+
+type t<'a, 'b> = (array<'a>, array<'b>)
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier) (type_identifier))
+    (tuple_type
+      (generic_type (type_identifier) (type_arguments (type_identifier)))
+      (generic_type (type_identifier) (type_arguments (type_identifier))))))

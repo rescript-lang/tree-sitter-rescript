@@ -123,10 +123,17 @@ module.exports = grammar({
     type_declaration: $ => seq(
       'type',
       $.type_identifier,
+      optional($.type_parameters),
       optional(seq(
         '=',
         $._type,
       ))
+    ),
+
+    type_parameters: $ => seq(
+      '<',
+      commaSep1t($.type_identifier),
+      '>',
     ),
 
     type_annotation: $ => seq(
