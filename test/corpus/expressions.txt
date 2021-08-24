@@ -461,3 +461,25 @@ Foo(qux, { bar: 3 }, )
       (arguments
         (identifier)
         (record (record_field (property_identifier) (number)))))))
+
+============================================
+Extensions
+============================================
+
+%debugger
+%re("/[^1-9]/g")
+%%raw("function () { return 42; }")
+
+---
+
+(source_file
+  (expression_statement
+    (extension_expression (extension_identifier)))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (arguments (string (string_fragment)))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (arguments (string (string_fragment))))))

@@ -34,7 +34,7 @@ module.exports = grammar({
       'binary_and',
       'binary_or',
       $.expression,
-      $.expression_statement,
+      //$.expression_statement,
       $.function,
       $.let_binding,
     ],
@@ -59,6 +59,7 @@ module.exports = grammar({
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_name],
     [$.variant],
+    [$.extension_expression],
   ],
 
   rules: {
@@ -301,6 +302,7 @@ module.exports = grammar({
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
+      $.extension_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -698,6 +700,18 @@ module.exports = grammar({
       ))
     )),
 
+    extension_expression: $ => prec('call', seq(
+      repeat1('%'),
+      $.extension_identifier,
+      optional(alias($.extension_expression_arguments, $.arguments)),
+    )),
+
+    extension_expression_arguments: $ => seq(
+      '(',
+      commaSep($.string),
+      ')',
+    ),
+
     variant: $ => prec.dynamic(-1, seq(
       choice($.variant_identifier, $.nested_variant_identifier),
       optional(alias($.variant_arguments, $.arguments)),
@@ -755,6 +769,8 @@ module.exports = grammar({
     module_name: $ => /[A-Z][a-zA-Z0-9_]*/,
 
     decorator_identifier: $ => /[a-zA-Z0-9_\.]+/,
+
+    extension_identifier: $ => /[a-zA-Z0-9_\.]+/,
 
     number: $ => {
       const hex_literal = seq(
