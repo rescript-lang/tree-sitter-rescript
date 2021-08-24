@@ -101,9 +101,9 @@ bool tree_sitter_rescript_external_scanner_scan(
         // Ignore new lines before pipe operator (->)
         return false;
       }
-    } else if (lexer->lookahead == '|') {
+    /*} else if (lexer->lookahead == '|') {
       // Ignore new lines before bars (|) involved in variant declarations
-      return false;
+      return false;*/
     } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
       // Ignore new lines before potential ternaries
       return false;

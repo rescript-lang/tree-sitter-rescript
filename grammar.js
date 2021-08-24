@@ -159,10 +159,10 @@ module.exports = grammar({
       $._rparen,
     )),
 
-    variant_type: $ => seq(
+    variant_type: $ => prec.left(seq(
       optional('|'),
       barSep1($.variant_declaration),
-    ),
+    )),
 
     variant_declaration: $ => prec.right(seq(
       $.variant_identifier,
@@ -400,8 +400,7 @@ module.exports = grammar({
       '|',
       barSep1($._switch_pattern),
       '=>',
-      repeat($._statement),
-      $.expression,
+      repeat1($._statement),
     ),
 
     _switch_pattern: $ => choice(
