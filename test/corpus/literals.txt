@@ -121,3 +121,22 @@ The caller should either handle this error, or expect that exit code.`
     (template_substitution (identifier))))
   (expression_statement (template_string))
   (expression_statement (template_string (escape_sequence))))
+
+============================================
+Tricky template strings
+============================================
+
+`$`
+`$$`
+`$$$`
+`$-notAsubstitution`
+`$NotAsubstitution`
+
+---
+
+(source_file
+  (expression_statement (template_string))
+  (expression_statement (template_string))
+  (expression_statement (template_string))
+  (expression_statement (template_string))
+  (expression_statement (template_string)))

@@ -3,6 +3,7 @@ module.exports = grammar({
 
   externals: $ => [
     $._newline,
+    $._template_chars,
     $._lparen,
     $._rparen,
   ],
@@ -930,7 +931,7 @@ module.exports = grammar({
         'j`',
       ),
       repeat(choice(
-        $._unescaped_template_string_fragment,
+        $._template_chars,
         $.template_substitution,
         choice(
           alias('\\`', $.escape_sequence),

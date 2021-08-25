@@ -33,8 +33,8 @@
 ] @string
 
 (template_substitution
-  "${" @punctuation.special
-  "}" @punctuation.special) @embedded
+  "${" @punctuation.bracket
+  "}" @punctuation.bracket) @embedded
 
 ; Other literals
 ;---------------

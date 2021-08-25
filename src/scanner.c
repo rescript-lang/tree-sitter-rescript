@@ -4,6 +4,7 @@
 
 enum TokenType {
   NEWLINE,
+  TEMPLATE_CHARS,
   L_PAREN,
   R_PAREN,
 };
@@ -73,12 +74,41 @@ static bool scan_whitespace_and_comments(TSLexer *lexer) {
   }
 }
 
+static bool is_identifier_start(char c) {
+  return c == '_' || (c >= 'a' && c <= 'z');
+}
+
 bool tree_sitter_rescript_external_scanner_scan(
     void* payload,
     TSLexer* lexer,
     const bool* valid_symbols
     ) {
   ScannerState* state = (ScannerState*)payload;
+
+  if (valid_symbols[TEMPLATE_CHARS]) {
+    lexer->result_symbol = TEMPLATE_CHARS;
+    for (bool has_content = false;; has_content = true) {
+      lexer->mark_end(lexer);
+      switch (lexer->lookahead) {
+        case '`':
+          return has_content;
+        case '\0':
+          return false;
+        case '$':
+          advance(lexer);
+          if (lexer->lookahead == '{' || is_identifier_start(lexer->lookahead)) {
+            return has_content;
+          }
+          break;
+        case '\\':
+          return has_content;
+        default:
+          advance(lexer);
+      }
+    }
+
+    return true;
+  }
 
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
     lexer->result_symbol = NEWLINE;
