@@ -116,8 +116,6 @@
   "->"
 ] @operator
 
-(ternary_expression ["?" ":"] @operator)
-
 [
   "."
   ","
@@ -148,3 +146,6 @@
   "..."
   (optional)
 ] @punctuation.special
+
+(ternary_expression ["?" ":"] @operator)
+
