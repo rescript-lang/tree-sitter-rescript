@@ -10,3 +10,7 @@ switch foo {
 //                    ^ punctuation.special
   42
 }
+
+{ foo, bar: baz, qux: 1 }
+//^ property
+//     ^ property
