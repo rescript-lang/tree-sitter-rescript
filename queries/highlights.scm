@@ -63,6 +63,8 @@
  (labeled_parameter (identifier))
 ] @parameter
 
+(function parameter: (identifier) @parameter)
+
 ; Meta
 ;-----
 
