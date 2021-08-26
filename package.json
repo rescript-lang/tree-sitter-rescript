@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-rescript",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "bindings/node",
   "author": "Victor Nakoryakov",
   "license": "MIT",
