@@ -164,7 +164,10 @@ Record
   ...old,
   foo: 32,
   bar: "baz",
+  qux,
 }
+
+{a, b, c}
 
 ---
 
@@ -174,7 +177,12 @@ Record
       (spread_element (identifier))
       (record_field (property_identifier) (number))
       (record_field (property_identifier) (string (string_fragment)))
-    )))
+      (record_field (property_identifier))))
+  (expression_statement
+    (record
+      (record_field (property_identifier))
+      (record_field (property_identifier))
+      (record_field (property_identifier)))))
 
 ===========================================
 Object

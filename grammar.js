@@ -50,10 +50,12 @@ module.exports = grammar({
     [$.primary_expression, $.pattern],
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
+    [$.primary_expression, $.record_field],
     [$.nested_module_expression, $.module_expression],
     [$.tuple_type, $._function_type_parameter],
     [$.variant, $.variant_pattern],
     [$.list, $.list_pattern],
+    [$.record_field, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
     [$.expression_statement, $.switch_match],
@@ -64,6 +66,7 @@ module.exports = grammar({
     [$.variant],
     [$.extension_expression],
     [$._record_element, $.jsx_expression],
+    [$.record_field, $._record_single_field],
   ],
 
   rules: {
@@ -354,7 +357,10 @@ module.exports = grammar({
 
     record: $ => seq(
       '{',
-      commaSep1t($._record_element),
+      choice(
+        alias($._record_single_field, $.record_field),
+        commaSep2t($._record_element),
+      ),
       '}',
     ),
 
@@ -365,8 +371,17 @@ module.exports = grammar({
 
     record_field: $ => seq(
       alias($.identifier, $.property_identifier),
+      optional(seq(
+        ':',
+        $.expression,
+      )),
+    ),
+
+    _record_single_field: $ => seq(
+      alias($.identifier, $.property_identifier),
       ':',
       $.expression,
+      optional(','),
     ),
 
     object: $ => seq(
