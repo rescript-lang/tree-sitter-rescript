@@ -196,3 +196,14 @@ type t<'a, 'b> = (array<'a>, array<'b>)
     (tuple_type
       (generic_type (type_identifier) (type_arguments (type_identifier)))
       (generic_type (type_identifier) (type_arguments (type_identifier))))))
+
+===========================================
+Recursive
+===========================================
+
+type rec t = t
+
+---
+
+(source_file
+  (type_declaration (type_identifier) (type_identifier)))

@@ -133,6 +133,7 @@ module.exports = grammar({
 
     type_declaration: $ => seq(
       'type',
+      optional('rec'),
       $.type_identifier,
       optional($.type_parameters),
       optional(seq(
