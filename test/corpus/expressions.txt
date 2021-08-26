@@ -490,6 +490,31 @@ Arrays
   (expression_statement (array (number) (number))))
 
 ============================================
+Lists
+============================================
+
+list{}
+list{1}
+list{1,}
+list{
+  1,
+  2,
+}
+
+list{ 1, 2, ...xs }
+list{ ...xs, 1, 2 }
+
+---
+
+(source_file
+  (expression_statement (list))
+  (expression_statement (list (number)))
+  (expression_statement (list (number)))
+  (expression_statement (list (number) (number)))
+  (expression_statement (list (number) (number) (spread_element (identifier))))
+  (expression_statement (list (spread_element (identifier)) (number) (number))))
+
+============================================
 Subscript expressions
 ============================================
 

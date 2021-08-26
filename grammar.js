@@ -315,6 +315,7 @@ module.exports = grammar({
       $.object,
       $.tuple,
       $.array,
+      $.list,
       $.variant,
       $.if_expression,
       $.switch_expression,
@@ -394,6 +395,18 @@ module.exports = grammar({
       commaSep($.expression),
       optional(','),
       ']'
+    ),
+
+    list: $ => seq(
+      'list',
+      '{',
+      optional(commaSep1t($._list_element)),
+      '}'
+    ),
+
+    _list_element: $ => choice(
+      $.expression,
+      $.spread_element,
     ),
 
     if_expression: $ => seq(
