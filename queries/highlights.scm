@@ -10,6 +10,7 @@
 [
   (type_identifier)
   (unit_type)
+  "list"
 ] @type
 
 [
@@ -18,11 +19,17 @@
 ] @constant
 
 (property_identifier) @property
-(shorthand_property_identifier_pattern) @parameter
 (module_name) @namespace
 
 (jsx_identifier) @tag
 (jsx_attribute (property_identifier) @attribute)
+
+; Parameters
+;----------------
+
+(shorthand_property_identifier_pattern) @parameter
+(list_pattern (identifier) @parameter)
+(spread_pattern (identifier) @parameter)
 
 ; String literals
 ;----------------

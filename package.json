@@ -9,5 +9,12 @@
   },
   "devDependencies": {
     "tree-sitter-cli": "^0.20.0"
-  }
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.rescript",
+      "file-types": ["res", "resi"],
+      "injection-regex": "rescript"
+    }
+  ]
 }
