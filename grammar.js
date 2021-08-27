@@ -535,11 +535,14 @@ module.exports = grammar({
       ')'
     ),
 
-    _formal_parameter: $ => choice(
-      $.pattern,
-      $.positional_parameter,
-      $.labeled_parameter,
-      $.unit,
+    _formal_parameter: $ => seq(
+      optional('.'),
+      choice(
+        $.pattern,
+        $.positional_parameter,
+        $.labeled_parameter,
+        $.unit,
+      ),
     ),
 
     positional_parameter: $ => seq(

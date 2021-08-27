@@ -11,6 +11,7 @@ a => 1
 (trailing,) => 4
 (h, trailing,) => 5
 (set, kv) => 2
+(a, .b, c, .d) => 7
 
 ---
 
@@ -35,7 +36,14 @@ a => 1
     (formal_parameters (identifier) (identifier))
     (number)))
   (expression_statement (function
-    (formal_parameters (identifier) (identifier)) (number))))
+    (formal_parameters (identifier) (identifier)) (number)))
+  (expression_statement (function
+    (formal_parameters
+      (identifier)
+      (identifier)
+      (identifier)
+      (identifier))
+    (number))))
 
 ===================================================
 Type annotations
