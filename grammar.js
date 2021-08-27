@@ -510,8 +510,12 @@ module.exports = grammar({
       '~',
       field('label', $.identifier),
       optional(choice(
-        alias('?', $.optional),
-        seq('=', optional('?'), field('value', $.expression)),
+        '?',
+        seq(
+          '=',
+          optional('?'),
+          field('value', $.expression),
+        ),
       )),
     ),
 
@@ -548,14 +552,14 @@ module.exports = grammar({
       $.identifier,
       optional($.as_aliasing),
       optional($.type_annotation),
-      optional(field('default_value', $._default_value)),
+      optional(field('default_value', $._labeled_parameter_default_value)),
     ),
 
-    _default_value: $ => seq(
+    _labeled_parameter_default_value: $ => seq(
       '=',
       choice(
+        '?',
         $.expression,
-        alias('?', $.optional),
       ),
     ),
 

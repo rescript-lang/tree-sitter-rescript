@@ -153,7 +153,6 @@
   "?"
   "=>"
   "..."
-  (optional)
 ] @punctuation.special
 
 (ternary_expression ["?" ":"] @operator)

@@ -75,11 +75,9 @@ Parameter defaults
           default_value: (number))
         (labeled_parameter
           (identifier)
-          (type_annotation (type_identifier))
-          default_value: (optional))
+          (type_annotation (type_identifier)))
         (labeled_parameter
-          (identifier)
-          default_value: (optional))
+          (identifier))
         (unit))
       body: (number))))
 

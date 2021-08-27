@@ -100,8 +100,7 @@ qux(. 1)
       function: (identifier)
       arguments: (arguments
         (labeled_argument
-          label: (identifier)
-          (optional))
+          label: (identifier))
         (labeled_argument
           label: (identifier)
           value: (identifier)))))
