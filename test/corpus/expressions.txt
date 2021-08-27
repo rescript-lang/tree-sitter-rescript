@@ -69,13 +69,17 @@ Tuple
     (tuple (number) (number))))
 
 ===========================================
-Simple call
+Call expression
 ===========================================
 
 min(1, 2)
 foo(3, ~bar=4, ~pun, ())
 bar(~x?, ~y=?oldY)
 qux(. 1)
+keep(
+  item =>
+    item->Foo.bar == 5
+)
 
 ---
 
@@ -107,28 +111,20 @@ qux(. 1)
   (expression_statement
     (call_expression
       function: (identifier)
-      arguments: (arguments (number)))))
-
-===================================================
-Call with lambda
-===================================================
-
-keep(item => item->Foo.bar == 5)
-
----
-
-(source_file
+      arguments: (arguments (number))))
   (expression_statement
     (call_expression
-      (identifier)
-      (arguments
+      function: (identifier)
+      arguments: (arguments
         (function
-          (identifier)
-          (binary_expression
-            (pipe_expression
+          parameter: (identifier)
+          body: (binary_expression
+            left: (pipe_expression
               (identifier)
-              (module_nested_identifier (module_name) (identifier)))
-            (number)))))))
+              (module_nested_identifier
+                (module_name)
+                (identifier)))
+            right: (number)))))))
 
 ===========================================
 Pipe
