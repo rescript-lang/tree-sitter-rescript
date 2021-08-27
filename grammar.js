@@ -506,10 +506,10 @@ module.exports = grammar({
     call_arguments: $ => seq(
       '(',
       optional($.uncurry),
-      commaSep(choice(
+      optional(commaSep1t(choice(
         $.expression,
         $.labeled_argument,
-      )),
+      ))),
       ')'
     ),
 
