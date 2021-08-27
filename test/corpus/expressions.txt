@@ -305,7 +305,7 @@ Switch of variants
 ===========================================
 
 switch foo {
-| Some(x, {y, z}) => x
+| Some(x: int, {y, z}) => x
 | Option.None => 42
 }
 
@@ -320,6 +320,7 @@ switch foo {
           (variant_identifier)
           (formal_parameters
             (identifier)
+            (type_annotation (type_identifier))
             (record_pattern
               (shorthand_property_identifier_pattern)
               (shorthand_property_identifier_pattern))))
@@ -337,7 +338,7 @@ Switch of polyvars
 
 switch foo {
 | #Bar => 42
-| #Qux(a, 3) as qux => 99
+| #Qux(a: int, 3) as qux => 99
 }
 
 ---
@@ -354,6 +355,7 @@ switch foo {
           (polyvar_identifier)
           (formal_parameters
             (identifier)
+            (type_annotation (type_identifier))
             (number)))
         (as_aliasing (identifier))
         (expression_statement (number))))))

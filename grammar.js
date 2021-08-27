@@ -603,9 +603,12 @@ module.exports = grammar({
       ')',
     ),
 
-    _variant_pattern_parameter: $ => choice(
-      $._literal_pattern,
-      $.pattern,
+    _variant_pattern_parameter: $ => seq(
+      choice(
+        $._literal_pattern,
+        $.pattern,
+      ),
+      optional($.type_annotation),
     ),
 
     polyvar_pattern: $ => seq(
