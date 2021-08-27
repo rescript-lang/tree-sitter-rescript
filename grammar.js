@@ -65,6 +65,7 @@ module.exports = grammar({
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_name],
     [$.variant],
+    [$._literal_pattern],
     [$.extension_expression],
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
@@ -611,6 +612,7 @@ module.exports = grammar({
         $._literal_pattern,
         $.pattern,
       ),
+      optional($.as_aliasing),
       optional($.type_annotation),
     ),
 
@@ -619,13 +621,16 @@ module.exports = grammar({
       optional(alias($._variant_pattern_parameters, $.formal_parameters))
     ),
 
-    _literal_pattern: $ => choice(
-      $.string,
-      $.template_string,
-      $.number,
-      $.true,
-      $.false,
-      alias($._literal_tuple_pattern, $.tuple),
+    _literal_pattern: $ => seq(
+      choice(
+        $.string,
+        $.template_string,
+        $.number,
+        $.true,
+        $.false,
+        alias($._literal_tuple_pattern, $.tuple),
+      ),
+      optional($.as_aliasing),
     ),
 
     _literal_tuple_pattern: $ => seq(
@@ -648,7 +653,10 @@ module.exports = grammar({
 
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t($.pattern),
+      commaSep2t(seq(
+        $.pattern,
+        optional($.as_aliasing),
+      )),
       ')',
     ),
 
@@ -665,10 +673,13 @@ module.exports = grammar({
       '}',
     ),
 
-    _collection_element_pattern: $ => choice(
-      $.pattern,
-      $._literal_pattern,
-      $.spread_pattern,
+    _collection_element_pattern: $ => seq(
+      choice(
+        $.pattern,
+        $._literal_pattern,
+        $.spread_pattern,
+      ),
+      optional($.as_aliasing),
     ),
 
     spread_pattern: $ => seq(
