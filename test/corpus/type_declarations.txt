@@ -85,6 +85,23 @@ type t =
             ))))))
 
 ===========================================
+Annotated variant
+===========================================
+
+type rec t = Any('a): t;
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (variant_type
+      (variant_declaration
+        (variant_identifier)
+        (variant_parameters (type_identifier))
+        (type_annotation (type_identifier))))))
+
+===========================================
 Polyvar
 ===========================================
 

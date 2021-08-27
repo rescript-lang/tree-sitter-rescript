@@ -197,6 +197,7 @@ module.exports = grammar({
     variant_declaration: $ => prec.right(seq(
       $.variant_identifier,
       optional($.variant_parameters),
+      optional($.type_annotation),
       optional($._newline),
     )),
 
