@@ -55,6 +55,7 @@ module.exports = grammar({
     [$.tuple_type, $._function_type_parameter],
     [$.variant, $.variant_pattern],
     [$.list, $.list_pattern],
+    [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
@@ -64,6 +65,7 @@ module.exports = grammar({
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_name],
     [$.variant],
+    [$._literal_pattern],
     [$.extension_expression],
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
@@ -587,6 +589,7 @@ module.exports = grammar({
       $.polyvar_pattern,
       $.record_pattern,
       $.tuple_pattern,
+      $.array_pattern,
       $.list_pattern,
     ),
 
@@ -609,6 +612,7 @@ module.exports = grammar({
         $._literal_pattern,
         $.pattern,
       ),
+      optional($.as_aliasing),
       optional($.type_annotation),
     ),
 
@@ -617,13 +621,16 @@ module.exports = grammar({
       optional(alias($._variant_pattern_parameters, $.formal_parameters))
     ),
 
-    _literal_pattern: $ => choice(
-      $.string,
-      $.template_string,
-      $.number,
-      $.true,
-      $.false,
-      alias($._literal_tuple_pattern, $.tuple),
+    _literal_pattern: $ => seq(
+      choice(
+        $.string,
+        $.template_string,
+        $.number,
+        $.true,
+        $.false,
+        alias($._literal_tuple_pattern, $.tuple),
+      ),
+      optional($.as_aliasing),
     ),
 
     _literal_tuple_pattern: $ => seq(
@@ -646,21 +653,33 @@ module.exports = grammar({
 
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t($.pattern),
+      commaSep2t(seq(
+        $.pattern,
+        optional($.as_aliasing),
+      )),
       ')',
+    ),
+
+    array_pattern: $ => seq(
+      '[',
+      optional(commaSep1t($._collection_element_pattern)),
+      ']',
     ),
 
     list_pattern: $ => seq(
       'list',
       '{',
-      optional(commaSep1t($._list_element_pattern)),
+      optional(commaSep1t($._collection_element_pattern)),
       '}',
     ),
 
-    _list_element_pattern: $ => choice(
-      $.pattern,
-      $._literal_pattern,
-      $.spread_pattern,
+    _collection_element_pattern: $ => seq(
+      choice(
+        $.pattern,
+        $._literal_pattern,
+        $.spread_pattern,
+      ),
+      optional($.as_aliasing),
     ),
 
     spread_pattern: $ => seq(
