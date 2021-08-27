@@ -74,31 +74,41 @@ Simple call
 
 min(1, 2)
 foo(3, ~bar=4, ~pun, ())
-bar(~x?)
+bar(~x?, ~y=?oldY)
 qux(. 1)
 
 ---
 
 (source_file
   (expression_statement
-    (call_expression (identifier) (arguments (number) (number))))
+    (call_expression
+      function: (identifier)
+      arguments: (arguments (number) (number))))
   (expression_statement
     (call_expression
-      (identifier)
-      (arguments
+      function: (identifier)
+      arguments: (arguments
         (number)
-        (labeled_argument (identifier) (number))
-        (labeled_argument (identifier))
+        (labeled_argument
+          label: (identifier)
+          value: (number))
+        (labeled_argument
+          label: (identifier))
         (unit))))
   (expression_statement
     (call_expression
-      (identifier)
-      (arguments
-        (labeled_argument (identifier) (optional)))))
+      function: (identifier)
+      arguments: (arguments
+        (labeled_argument
+          label: (identifier)
+          (optional))
+        (labeled_argument
+          label: (identifier)
+          value: (identifier)))))
   (expression_statement
     (call_expression
-      (identifier)
-      (arguments (number)))))
+      function: (identifier)
+      arguments: (arguments (number)))))
 
 ===================================================
 Call with lambda

@@ -511,7 +511,7 @@ module.exports = grammar({
       field('label', $.identifier),
       optional(choice(
         alias('?', $.optional),
-        seq('=', field('value', $.expression)),
+        seq('=', optional('?'), field('value', $.expression)),
       )),
     ),
 
