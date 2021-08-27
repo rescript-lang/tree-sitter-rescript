@@ -11,6 +11,7 @@ a => 1
 (trailing,) => 4
 (h, trailing,) => 5
 (set, kv) => 2
+(a, .b, c, .d) => 7
 
 ---
 
@@ -35,7 +36,16 @@ a => 1
     (formal_parameters (identifier) (identifier))
     (number)))
   (expression_statement (function
-    (formal_parameters (identifier) (identifier)) (number))))
+    (formal_parameters (identifier) (identifier)) (number)))
+  (expression_statement (function
+    (formal_parameters
+      (identifier)
+      (uncurry)
+      (identifier)
+      (identifier)
+      (uncurry)
+      (identifier))
+    (number))))
 
 ===================================================
 Type annotations
@@ -75,11 +85,9 @@ Parameter defaults
           default_value: (number))
         (labeled_parameter
           (identifier)
-          (type_annotation (type_identifier))
-          default_value: (optional))
+          (type_annotation (type_identifier)))
         (labeled_parameter
-          (identifier)
-          default_value: (optional))
+          (identifier))
         (unit))
       body: (number))))
 

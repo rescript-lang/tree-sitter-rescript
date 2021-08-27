@@ -279,7 +279,7 @@ module.exports = grammar({
 
     _function_type_parameter: $ => choice(
       $._type,
-      seq('.', $._type),
+      seq($.uncurry, $._type),
       $.labeled_parameter,
     ),
 
@@ -498,7 +498,7 @@ module.exports = grammar({
 
     call_arguments: $ => seq(
       '(',
-      optional('.'),
+      optional($.uncurry),
       commaSep(choice(
         $.expression,
         $.labeled_argument,
@@ -510,8 +510,12 @@ module.exports = grammar({
       '~',
       field('label', $.identifier),
       optional(choice(
-        alias('?', $.optional),
-        seq('=', field('value', $.expression)),
+        '?',
+        seq(
+          '=',
+          optional('?'),
+          field('value', $.expression),
+        ),
       )),
     ),
 
@@ -531,11 +535,14 @@ module.exports = grammar({
       ')'
     ),
 
-    _formal_parameter: $ => choice(
-      $.pattern,
-      $.positional_parameter,
-      $.labeled_parameter,
-      $.unit,
+    _formal_parameter: $ => seq(
+      optional($.uncurry),
+      choice(
+        $.pattern,
+        $.positional_parameter,
+        $.labeled_parameter,
+        $.unit,
+      ),
     ),
 
     positional_parameter: $ => seq(
@@ -548,14 +555,14 @@ module.exports = grammar({
       $.identifier,
       optional($.as_aliasing),
       optional($.type_annotation),
-      optional(field('default_value', $._default_value)),
+      optional(field('default_value', $._labeled_parameter_default_value)),
     ),
 
-    _default_value: $ => seq(
+    _labeled_parameter_default_value: $ => seq(
       '=',
       choice(
+        '?',
         $.expression,
-        alias('?', $.optional),
       ),
     ),
 
@@ -1001,6 +1008,7 @@ module.exports = grammar({
 
     lparen: $ => alias($._lparen, '('),
     rparen: $ => alias($._rparen, ')'),
+    uncurry: $ => '.',
   },
 });
 
