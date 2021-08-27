@@ -149,3 +149,16 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
           (unit_type))
         (object_type)))
     (string (string_fragment))))
+
+===========================================
+Decorators
+===========================================
+
+@@warning("-27")
+
+---
+
+(source_file
+  (decorator_statement
+    (decorator_identifier)
+    (decorator_arguments (string (string_fragment)))))
