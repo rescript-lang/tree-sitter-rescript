@@ -439,6 +439,37 @@ switch foo {
         (expression_statement (number))))))
 
 ===========================================
+Switch of arrays
+===========================================
+
+switch foo {
+| [head, ...others] => 1
+| [1, 2, x] => 2
+| [1,
+  ] => 3
+| [...others] => 4
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (identifier)
+      (switch_match
+        (array_pattern (identifier) (spread_pattern (identifier)))
+        (expression_statement (number)))
+      (switch_match
+        (array_pattern (number) (number) (identifier))
+        (expression_statement (number)))
+      (switch_match
+        (array_pattern (number))
+        (expression_statement (number)))
+      (switch_match
+        (array_pattern (spread_pattern (identifier)))
+        (expression_statement (number))))))
+
+===========================================
 Math operators
 ===========================================
 

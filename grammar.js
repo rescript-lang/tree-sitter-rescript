@@ -55,6 +55,7 @@ module.exports = grammar({
     [$.tuple_type, $._function_type_parameter],
     [$.variant, $.variant_pattern],
     [$.list, $.list_pattern],
+    [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
@@ -587,6 +588,7 @@ module.exports = grammar({
       $.polyvar_pattern,
       $.record_pattern,
       $.tuple_pattern,
+      $.array_pattern,
       $.list_pattern,
     ),
 
@@ -650,14 +652,20 @@ module.exports = grammar({
       ')',
     ),
 
+    array_pattern: $ => seq(
+      '[',
+      optional(commaSep1t($._collection_element_pattern)),
+      ']',
+    ),
+
     list_pattern: $ => seq(
       'list',
       '{',
-      optional(commaSep1t($._list_element_pattern)),
+      optional(commaSep1t($._collection_element_pattern)),
       '}',
     ),
 
-    _list_element_pattern: $ => choice(
+    _collection_element_pattern: $ => choice(
       $.pattern,
       $._literal_pattern,
       $.spread_pattern,
