@@ -76,6 +76,7 @@ module.exports = grammar({
 
     statement: $ => choice(
       alias($._decorated_statement, $.decorated),
+      $.decorator_statement,
       $.expression_statement,
       $.mutation_statement,
       $.declaration,
@@ -87,6 +88,12 @@ module.exports = grammar({
     _decorated_statement: $ => seq(
       repeat1($.decorator),
       $.declaration,
+    ),
+
+    decorator_statement: $ => seq(
+      '@@',
+      $.decorator_identifier,
+      optional($.decorator_arguments)
     ),
 
     block: $ => prec.right(seq(
