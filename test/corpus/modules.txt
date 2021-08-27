@@ -145,6 +145,7 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
       (function_type
         (function_type_parameters
           (object_type)
+          (uncurry)
           (unit_type))
         (object_type)))
     (string (string_fragment))))

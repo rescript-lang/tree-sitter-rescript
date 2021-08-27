@@ -100,6 +100,12 @@
 ] @conditional
 
 [
+  "."
+  ","
+  "|"
+] @punctuation.delimiter
+
+[
   "++"
   "+"
   "+."
@@ -123,13 +129,8 @@
   "="
   ":="
   "->"
+  (uncurry)
 ] @operator
-
-[
-  "."
-  ","
-  "|"
-] @punctuation.delimiter
 
 [
   "("

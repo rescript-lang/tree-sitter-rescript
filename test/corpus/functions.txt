@@ -40,8 +40,10 @@ a => 1
   (expression_statement (function
     (formal_parameters
       (identifier)
+      (uncurry)
       (identifier)
       (identifier)
+      (uncurry)
       (identifier))
     (number))))
 

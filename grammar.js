@@ -279,7 +279,7 @@ module.exports = grammar({
 
     _function_type_parameter: $ => choice(
       $._type,
-      seq('.', $._type),
+      seq($.uncurry, $._type),
       $.labeled_parameter,
     ),
 
@@ -498,7 +498,7 @@ module.exports = grammar({
 
     call_arguments: $ => seq(
       '(',
-      optional('.'),
+      optional($.uncurry),
       commaSep(choice(
         $.expression,
         $.labeled_argument,
@@ -536,7 +536,7 @@ module.exports = grammar({
     ),
 
     _formal_parameter: $ => seq(
-      optional('.'),
+      optional($.uncurry),
       choice(
         $.pattern,
         $.positional_parameter,
@@ -1008,6 +1008,7 @@ module.exports = grammar({
 
     lparen: $ => alias($._lparen, '('),
     rparen: $ => alias($._rparen, ')'),
+    uncurry: $ => '.',
   },
 });
 

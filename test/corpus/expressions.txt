@@ -111,7 +111,7 @@ keep(
   (expression_statement
     (call_expression
       function: (identifier)
-      arguments: (arguments (number))))
+      arguments: (arguments (uncurry) (number))))
   (expression_statement
     (call_expression
       function: (identifier)
