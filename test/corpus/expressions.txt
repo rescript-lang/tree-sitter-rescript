@@ -74,7 +74,7 @@ Call expression
 
 min(1, 2)
 foo(3, ~bar=4, ~pun, ())
-bar(~x?, ~y=?oldY)
+bar(~x?, ~y=?oldY,)
 qux(. 1)
 keep(
   item =>
