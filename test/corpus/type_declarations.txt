@@ -37,12 +37,15 @@ type t = (int, string, float)
     (tuple_type (type_identifier) (type_identifier) (type_identifier))))
 
 ===========================================
-Record
+Record type
 ===========================================
 
 type t = {
   a: int,
   b: myType,
+
+  @as("type")
+  type_: string,
 }
 
 ---
@@ -54,7 +57,13 @@ type t = {
       (record_type_field
         (property_identifier) (type_annotation (type_identifier)))
       (record_type_field
-        (property_identifier) (type_annotation (type_identifier))))))
+        (property_identifier) (type_annotation (type_identifier)))
+      (record_type_field
+        (decorator
+          (decorator_identifier)
+          (decorator_arguments (string (string_fragment))))
+        (property_identifier)
+        (type_annotation (type_identifier))))))
 
 ===========================================
 Variant

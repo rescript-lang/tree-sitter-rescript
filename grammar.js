@@ -234,6 +234,7 @@ module.exports = grammar({
     ),
 
     record_type_field: $ => seq(
+      repeat($.decorator),
       alias($.identifier, $.property_identifier),
       $.type_annotation,
     ),
@@ -254,11 +255,6 @@ module.exports = grammar({
       alias($.string, $.property_identifier),
       ':',
       $._type,
-    ),
-
-    record_type_field: $ => seq(
-      alias($.identifier, $.property_identifier),
-      $.type_annotation,
     ),
 
     generic_type: $ => seq(
