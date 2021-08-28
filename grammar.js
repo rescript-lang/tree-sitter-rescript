@@ -59,9 +59,7 @@ module.exports = grammar({
     [$.record_field, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
-    [$.expression_statement, $.switch_match],
     [$.expression_statement, $.ternary_expression],
-    [$.expression_statement, $.switch_match, $.ternary_expression],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_name],
     [$.variant],
@@ -100,7 +98,10 @@ module.exports = grammar({
 
     block: $ => prec.right(seq(
       '{',
-      repeat($._statement),
+      optional(seq(
+        repeat($._statement),
+        $.statement
+      )),
       '}',
     )),
 
@@ -200,7 +201,6 @@ module.exports = grammar({
       $.variant_identifier,
       optional($.variant_parameters),
       optional($.type_annotation),
-      optional($._newline),
     )),
 
     variant_parameters: $ => seq(
@@ -466,13 +466,13 @@ module.exports = grammar({
     ),
 
     switch_match: $ => seq(
-      '|',
-      barSep1($._switch_pattern),
+      repeat1($._switch_pattern),
       '=>',
-      repeat1($._statement),
+      $._switch_match_body,
     ),
 
     _switch_pattern: $ => seq(
+      '|',
       choice(
         $.pattern,
         $._literal_pattern,
@@ -484,6 +484,11 @@ module.exports = grammar({
     switch_pattern_condition: $ => seq(
       'if',
       $.expression,
+    ),
+
+    _switch_match_body: $ => seq(
+      repeat($._statement),
+      $.statement,
     ),
 
     as_aliasing: $ => seq(

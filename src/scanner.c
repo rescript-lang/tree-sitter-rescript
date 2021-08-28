@@ -123,8 +123,16 @@ bool tree_sitter_rescript_external_scanner_scan(
         // Ignore new lines before pipe operator (->)
         return false;
       }
+    } else if (lexer->lookahead == '|') {
+      // Ignore new lines before variant declarations and switch matches
+      return false;
     } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
       // Ignore new lines before potential ternaries
+      return false;
+    } else if (lexer->lookahead == '}') {
+      // Do not report new lines right before block/switch closings to avoid
+      // parser confustion between a terminated and unterminated statements
+      // for rules like seq(repeat($._statement), $.statement)
       return false;
     }
 

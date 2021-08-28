@@ -63,7 +63,7 @@ Variant
 type t =
   | A
   | B(anotherType)
-  | C({foo: int, bar: string});
+  | C({foo: int, bar: string})
 
 ---
 
@@ -88,7 +88,7 @@ type t =
 Annotated variant
 ===========================================
 
-type rec t = Any('a): t;
+type rec t = Any('a): t
 
 ---
 
