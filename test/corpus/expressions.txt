@@ -482,6 +482,29 @@ switch foo {
         (expression_statement (number))))))
 
 ===========================================
+Switch exceptions
+===========================================
+
+switch parseExn(str) {
+| json => 42
+| exception Js.Exn.Error(obj) => 99
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (call_expression (identifier) (arguments (identifier)))
+      (switch_match (identifier) (expression_statement (number)))
+      (switch_match
+        (exception
+          (variant_pattern
+            (nested_variant_identifier (module_name) (module_name) (variant_identifier))
+            (formal_parameters (identifier))))
+        (expression_statement (number))))))
+
+===========================================
 Math operators
 ===========================================
 

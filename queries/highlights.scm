@@ -94,6 +94,7 @@
   "external"
   "module"
   "as"
+  "exception"
 ] @keyword
 
 [
