@@ -470,6 +470,18 @@ module.exports = grammar({
     _switch_pattern: $ => seq(
       '|',
       choice(
+        alias($._switch_exception_pattern, $.exception),
+        $._switch_value_pattern,
+      ),
+    ),
+
+    _switch_exception_pattern: $ => seq(
+      'exception',
+      $._switch_value_pattern,
+    ),
+
+    _switch_value_pattern: $ => seq(
+      choice(
         $.pattern,
         $._literal_pattern,
       ),
