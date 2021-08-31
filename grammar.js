@@ -53,7 +53,6 @@ module.exports = grammar({
     [$.primary_expression, $.record_field],
     [$.nested_module_expression, $.module_expression],
     [$.tuple_type, $._function_type_parameter],
-    [$.variant, $.variant_pattern],
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
@@ -63,6 +62,9 @@ module.exports = grammar({
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_name],
     [$.variant],
+    [$.variant, $.variant_pattern],
+    [$.polyvar],
+    [$.polyvar, $.polyvar_pattern],
     [$._literal_pattern],
     [$.extension_expression],
     [$._record_element, $.jsx_expression],
@@ -321,7 +323,6 @@ module.exports = grammar({
       $.true,
       $.false,
       $.function,
-      $.polyvar,
       $.unit,
       $.record,
       $.object,
@@ -329,6 +330,7 @@ module.exports = grammar({
       $.array,
       $.list,
       $.variant,
+      $.polyvar,
       $.if_expression,
       $.switch_expression,
       $.call_expression,
@@ -882,7 +884,10 @@ module.exports = grammar({
       optional(alias($.variant_arguments, $.arguments)),
     )),
 
-    nested_variant_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.variant_identifier),
+    nested_variant_identifier: $ => seq(
+      repeat1(seq($.module_name, '.')),
+      $.variant_identifier
+    ),
 
     variant_arguments: $ => seq(
       '(',
@@ -891,13 +896,21 @@ module.exports = grammar({
       ')',
     ),
 
+    polyvar: $ => seq(
+      $.polyvar_identifier,
+      optional(alias($.variant_arguments, $.arguments)),
+    ),
+
     _qualified_type_identifier: $ =>
       choice(
         $.type_identifier,
         $.nested_type_identifier
       ),
 
-    nested_type_identifier: $ => seq(repeat1(seq($.module_name, '.')), $.type_identifier),
+    nested_type_identifier: $ => seq(
+      repeat1(seq($.module_name, '.')),
+      $.type_identifier
+    ),
 
     module_expression: $ => choice(
       $.module_name,
@@ -919,8 +932,6 @@ module.exports = grammar({
     )),
 
     variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
-
-    polyvar: $ => seq('#', /[a-zA-Z0-9_]*/),
 
     polyvar_identifier: $ => seq(
       '#',
