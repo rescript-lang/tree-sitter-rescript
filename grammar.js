@@ -459,15 +459,15 @@ module.exports = grammar({
       'switch',
       $.expression,
       '{',
-      repeat1($.switch_match),
+      repeat($.switch_match),
       '}',
     ),
 
-    switch_match: $ => seq(
+    switch_match: $ => prec.dynamic(-1, seq(
       repeat1($._switch_pattern),
       '=>',
       $._switch_match_body,
-    ),
+    )),
 
     _switch_pattern: $ => seq(
       '|',
