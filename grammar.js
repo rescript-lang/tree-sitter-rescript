@@ -937,7 +937,10 @@ module.exports = grammar({
       '#',
       choice(
         /[a-zA-Z0-9_]+/,
-        seq(optional('\\'), $.string)
+        seq(
+          optional('\\'),
+          alias($.string, $.polyvar_string),
+        ),
       ),
     ),
 

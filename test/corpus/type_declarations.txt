@@ -131,8 +131,8 @@ type t = [>
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration
         (polyvar_identifier) (polyvar_parameters (type_identifier)))
-      (polyvar_declaration (polyvar_identifier (string (string_fragment))))
-      (polyvar_declaration (polyvar_identifier (string (string_fragment))))
+      (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
+      (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
       (polyvar_declaration (polyvar_identifier)))))
 
 ===========================================

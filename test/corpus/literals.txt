@@ -159,8 +159,8 @@ Polyvars
   (expression_statement
     (polyvar (polyvar_identifier) (arguments (number))))
   (expression_statement
-    (polyvar (polyvar_identifier (string (string_fragment)))))
+    (polyvar (polyvar_identifier (polyvar_string (string_fragment)))))
   (expression_statement
-    (polyvar (polyvar_identifier (string (string_fragment)))))
+    (polyvar (polyvar_identifier (polyvar_string (string_fragment)))))
   (expression_statement
     (polyvar (polyvar_identifier))))
