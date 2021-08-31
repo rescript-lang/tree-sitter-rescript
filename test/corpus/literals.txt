@@ -140,3 +140,27 @@ Tricky template strings
   (expression_statement (template_string))
   (expression_statement (template_string))
   (expression_statement (template_string)))
+
+============================================
+Polyvars
+============================================
+
+#foo
+#Bar(7)
+#"baz"
+#\"qux"
+#77
+
+---
+
+(source_file
+  (expression_statement
+    (polyvar (polyvar_identifier)))
+  (expression_statement
+    (polyvar (polyvar_identifier) (arguments (number))))
+  (expression_statement
+    (polyvar (polyvar_identifier (polyvar_string (string_fragment)))))
+  (expression_statement
+    (polyvar (polyvar_identifier (polyvar_string (string_fragment)))))
+  (expression_statement
+    (polyvar (polyvar_identifier))))

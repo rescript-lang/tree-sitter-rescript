@@ -53,6 +53,7 @@
 
 (number) @number
 (polyvar) @constant
+(polyvar_string) @constant
 
 ; Functions
 ;----------
