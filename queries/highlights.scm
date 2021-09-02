@@ -96,6 +96,7 @@
   "module"
   "as"
   "exception"
+  "export"
 ] @keyword
 
 [
