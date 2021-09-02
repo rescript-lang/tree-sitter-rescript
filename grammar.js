@@ -321,6 +321,7 @@ module.exports = grammar({
       $.number,
       $.string,
       $.template_string,
+      $.character,
       $.true,
       $.false,
       $.function,
@@ -641,6 +642,7 @@ module.exports = grammar({
       choice(
         $.string,
         $.template_string,
+        $.character,
         $.number,
         $.true,
         $.false,
@@ -1059,6 +1061,12 @@ module.exports = grammar({
     template_substitution: $ => choice(
       seq('$', $.identifier),
       seq('${', $.expression, '}'),
+    ),
+
+    character: $ => seq(
+      "'",
+      choice(/[^\\']/, $.escape_sequence),
+      "'"
     ),
 
     _unescaped_template_string_fragment: $ =>
