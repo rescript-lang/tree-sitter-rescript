@@ -17,3 +17,10 @@
 /**/ #77
 //   ^ constant
 //    ^ constant
+
+/**/ 'R'
+//   ^ string.special
+//    ^ string.special
+
+/**/ '\\'
+//    ^ string.escape
