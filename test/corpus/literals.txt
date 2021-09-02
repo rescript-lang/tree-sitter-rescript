@@ -142,6 +142,24 @@ Tricky template strings
   (expression_statement (template_string)))
 
 ============================================
+Characters
+============================================
+'a'
+'\''
+'\\'
+'Ж'
+'😬'
+
+---
+
+(source_file
+  (expression_statement (character))
+  (expression_statement (character (escape_sequence)))
+  (expression_statement (character (escape_sequence)))
+  (expression_statement (character))
+  (expression_statement (character)))
+
+============================================
 Polyvars
 ============================================
 
