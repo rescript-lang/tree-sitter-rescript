@@ -147,6 +147,7 @@ module.exports = grammar({
     ),
 
     type_declaration: $ => seq(
+      optional('export'),
       'type',
       optional('rec'),
       $.type_identifier,
@@ -292,7 +293,7 @@ module.exports = grammar({
     ),
 
     let_binding: $ => seq(
-      'let',
+      choice('export', 'let'),
       optional('rec'),
       $.pattern,
       optional($.type_annotation),

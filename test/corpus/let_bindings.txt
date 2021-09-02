@@ -5,13 +5,15 @@ Plain
 let a = 5
 let b = a
 let c = #foo
+export d = 5
 
 ---
 
 (source_file
   (let_binding (identifier) (number))
   (let_binding (identifier) (identifier))
-  (let_binding (identifier) (polyvar (polyvar_identifier))))
+  (let_binding (identifier) (polyvar (polyvar_identifier)))
+  (let_binding (identifier) (number)))
 
 ============================================
 Tuple destructuring

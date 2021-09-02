@@ -10,6 +10,18 @@ type t
  (type_declaration (type_identifier)))
 
 ===========================================
+Export
+===========================================
+
+export type t
+
+---
+
+(source_file
+ (type_declaration (type_identifier)))
+
+
+===========================================
 Alias
 ===========================================
 
