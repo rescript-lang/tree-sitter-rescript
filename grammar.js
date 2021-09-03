@@ -70,6 +70,7 @@ module.exports = grammar({
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
+    [$.decorator],
   ],
 
   rules: {
@@ -320,10 +321,13 @@ module.exports = grammar({
       ')',
     ),
 
-    _function_type_parameter: $ => choice(
-      $._type,
-      seq($.uncurry, $._type),
-      $.labeled_parameter,
+    _function_type_parameter: $ => seq(
+      repeat($.decorator),
+      choice(
+        $._type,
+        seq($.uncurry, $._type),
+        $.labeled_parameter,
+      ),
     ),
 
     let_binding: $ => seq(
@@ -1113,6 +1117,7 @@ module.exports = grammar({
       choice(
         '`',
         'j`',
+        'json`',
       ),
       repeat(choice(
         $._template_chars,
