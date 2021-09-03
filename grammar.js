@@ -127,15 +127,47 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       'module',
-      $.module_identifier,
+      field('name', $.module_identifier),
       optional(seq(
         ':',
         field('signature', choice($.block, $.module_expression)),
       )),
       optional(seq(
         '=',
-        field('definition', choice($.block, $.module_expression)),
+        field('definition', $._module_definition),
       )),
+    ),
+
+    _module_definition: $ => choice(
+      $.block,
+      $.module_expression,
+      $.functor,
+    ),
+
+    functor: $ => seq(
+      field('parameters', $.functor_parameters),
+      optional(field('return_module_type', $.module_type_annotation)),
+      '=>',
+      field('body', $._module_definition),
+    ),
+
+    functor_parameters: $ => seq(
+      '(',
+      optional(commaSep1t($.functor_parameter)),
+      ')',
+    ),
+
+    functor_parameter: $ => seq(
+      $.module_identifier,
+      $.module_type_annotation,
+    ),
+
+    module_type_annotation: $ => seq(
+      ':',
+      choice(
+        $.module_expression,
+        $.block,
+      )
     ),
 
     external_declaration: $ => seq(
