@@ -179,6 +179,9 @@ Record
 
 {a, b, c}
 
+{School.age: 20}
+{School.age: 20, name: "Big ReScript"}
+
 ---
 
 (source_file
@@ -192,7 +195,20 @@ Record
     (record
       (record_field (property_identifier))
       (record_field (property_identifier))
-      (record_field (property_identifier)))))
+      (record_field (property_identifier))))
+  (expression_statement
+    (record
+      (record_field
+        (property_identifier (module_identifier) (value_identifier))
+        (number))))
+  (expression_statement
+    (record
+      (record_field
+        (property_identifier (module_identifier) (value_identifier))
+        (number))
+      (record_field
+        (property_identifier)
+        (string (string_fragment))))))
 
 ===========================================
 Object
@@ -629,6 +645,26 @@ list{ ...xs, 1, 2 }
   (expression_statement (list (number) (number)))
   (expression_statement (list (number) (number) (spread_element (value_identifier))))
   (expression_statement (list (spread_element (value_identifier)) (number) (number))))
+
+============================================
+Member expressions
+============================================
+
+foo.bar.baz
+foo.ModuleName.bar
+
+---
+
+(source_file
+  (expression_statement
+    (member_expression
+      (member_expression (value_identifier) (property_identifier))
+      (property_identifier)))
+  (expression_statement
+    (member_expression
+      (value_identifier)
+      (module_identifier)
+      (property_identifier))))
 
 ============================================
 Subscript expressions

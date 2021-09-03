@@ -69,6 +69,7 @@ module.exports = grammar({
     [$.extension_expression],
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
+    [$._record_field_name, $.record_pattern],
   ],
 
   rules: {
@@ -413,7 +414,7 @@ module.exports = grammar({
     ),
 
     record_field: $ => seq(
-      alias($.value_identifier, $.property_identifier),
+      $._record_field_name,
       optional(seq(
         ':',
         $.expression,
@@ -421,10 +422,15 @@ module.exports = grammar({
     ),
 
     _record_single_field: $ => seq(
-      alias($.value_identifier, $.property_identifier),
+      $._record_field_name,
       ':',
       $.expression,
       optional(','),
+    ),
+
+    _record_field_name: $ => choice(
+      alias($.value_identifier, $.property_identifier),
+      alias($.value_identifier_path, $.property_identifier),
     ),
 
     object: $ => seq(
@@ -847,6 +853,10 @@ module.exports = grammar({
     member_expression: $ => prec('member', seq(
       field('record', $.primary_expression),
       '.',
+      optional(seq(
+        field('module', $.module_identifier),
+        '.')
+      ),
       field('property', alias($.value_identifier, $.property_identifier)),
     )),
 
