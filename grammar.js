@@ -127,6 +127,7 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       'module',
+      optional('type'),
       field('name', $.module_identifier),
       optional(seq(
         ':',
