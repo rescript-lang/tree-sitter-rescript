@@ -179,6 +179,9 @@ Record
 
 {a, b, c}
 
+{School.age: 20}
+{School.age: 20, name: "Big ReScript"}
+
 ---
 
 (source_file
@@ -192,7 +195,20 @@ Record
     (record
       (record_field (property_identifier))
       (record_field (property_identifier))
-      (record_field (property_identifier)))))
+      (record_field (property_identifier))))
+  (expression_statement
+    (record
+      (record_field
+        (property_identifier (module_identifier) (value_identifier))
+        (number))))
+  (expression_statement
+    (record
+      (record_field
+        (property_identifier (module_identifier) (value_identifier))
+        (number))
+      (record_field
+        (property_identifier)
+        (string (string_fragment))))))
 
 ===========================================
 Object
