@@ -18,6 +18,12 @@ Include
 
 include Foo
 include Foo.Bar
+include Foo.Bar(X)
+include Foo.Bar({
+  type t
+  let x: int
+})
+
 include module type of Belt.Array
 
 ---
@@ -26,6 +32,17 @@ include module type of Belt.Array
   (include_statement (module_identifier))
   (include_statement
     (module_identifier_path (module_identifier) (module_identifier)))
+  (include_statement
+    (functor_use
+      (module_identifier_path (module_identifier) (module_identifier))
+      (arguments (module_identifier))))
+  (include_statement
+    (functor_use
+      (module_identifier_path (module_identifier) (module_identifier))
+      (arguments
+        (block
+          (type_declaration (type_identifier))
+          (let_binding (value_identifier) (type_annotation (type_identifier)))))))
   (include_statement
     (module_type_of
       (module_identifier_path (module_identifier) (module_identifier)))))
@@ -69,19 +86,81 @@ module MyModule: {
 
 (source_file
   (module_declaration
-    (module_identifier)
+    name: (module_identifier)
     signature: (block
       (let_binding (value_identifier) (type_annotation (type_identifier)))
       (let_binding (value_identifier) (type_annotation (type_identifier)))
       (let_binding (value_identifier) (type_annotation (type_identifier)))))
   (module_declaration
-    (module_identifier)
+    name: (module_identifier)
     signature: (module_identifier_path (module_identifier) (module_identifier))
     definition: (block (type_declaration (type_identifier))))
   (module_declaration
-    (module_identifier)
+    name: (module_identifier)
     signature: (block (type_declaration (type_identifier)))
     definition: (block (type_declaration (type_identifier) (type_identifier)))))
+
+===========================================
+Module types
+===========================================
+
+module type S1 = { type t }
+module type S2 = module type of MyModule.Submod
+
+---
+
+(source_file
+  (module_declaration
+    (module_identifier)
+    (block (type_declaration (type_identifier))))
+  (module_declaration
+    (module_identifier)
+    (module_type_of (module_identifier_path (module_identifier) (module_identifier)))))
+
+===========================================
+Functor definition
+===========================================
+
+module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
+  type tx = X.t
+  type ty = Y.t
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (module_identifier)
+    definition: (functor
+      parameters: (functor_parameters
+        (functor_parameter
+          (module_identifier)
+          (module_type_annotation (block (type_declaration (type_identifier)))))
+        (functor_parameter
+          (module_identifier)
+          (module_type_annotation (block (type_declaration (type_identifier))))))
+      return_module_type: (module_type_annotation
+          (block (type_declaration (type_identifier)) (type_declaration (type_identifier))))
+      body: (block
+        (type_declaration (type_identifier) (type_identifier_path (module_identifier) (type_identifier)))
+        (type_declaration (type_identifier) (type_identifier_path (module_identifier) (type_identifier)))))))
+
+===========================================
+Functor use
+===========================================
+
+module M = MyFunctor(Foo, Bar.Baz)
+
+---
+
+(source_file
+  (module_declaration
+    (module_identifier)
+    (functor_use
+      (module_identifier)
+      (arguments
+        (module_identifier)
+        (module_identifier_path (module_identifier) (module_identifier))))))
 
 ===========================================
 Alias

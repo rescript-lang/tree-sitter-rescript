@@ -127,15 +127,48 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       'module',
-      $.module_identifier,
+      optional('type'),
+      field('name', $.module_identifier),
       optional(seq(
         ':',
         field('signature', choice($.block, $.module_expression)),
       )),
       optional(seq(
         '=',
-        field('definition', choice($.block, $.module_expression)),
+        field('definition', $._module_definition),
       )),
+    ),
+
+    _module_definition: $ => choice(
+      $.block,
+      $.module_expression,
+      $.functor,
+    ),
+
+    functor: $ => seq(
+      field('parameters', $.functor_parameters),
+      optional(field('return_module_type', $.module_type_annotation)),
+      '=>',
+      field('body', $._module_definition),
+    ),
+
+    functor_parameters: $ => seq(
+      '(',
+      optional(commaSep1t($.functor_parameter)),
+      ')',
+    ),
+
+    functor_parameter: $ => seq(
+      $.module_identifier,
+      $.module_type_annotation,
+    ),
+
+    module_type_annotation: $ => seq(
+      ':',
+      choice(
+        $.module_expression,
+        $.block,
+      )
     ),
 
     external_declaration: $ => seq(
@@ -919,6 +952,7 @@ module.exports = grammar({
       $.module_identifier,
       $.module_identifier_path,
       $.module_type_of,
+      $.functor_use,
     ),
 
     module_identifier_path: $ => prec.left(seq(
@@ -933,6 +967,25 @@ module.exports = grammar({
       'of',
       $.module_expression,
     )),
+
+    functor_use: $ => seq(
+      choice(
+        $.module_identifier,
+        $.module_identifier_path,
+      ),
+      alias($.functor_arguments, $.arguments),
+    ),
+
+    functor_arguments: $ => seq(
+      '(',
+      optional(commaSep1t($._functor_argument)),
+      ')',
+    ),
+
+    _functor_argument: $ => choice(
+      $.module_expression,
+      $.block,
+    ),
 
     variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 
