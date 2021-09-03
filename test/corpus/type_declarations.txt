@@ -58,6 +58,8 @@ type t = {
 
   @as("type")
   type_: string,
+
+  mutable x: int,
 }
 
 ---
@@ -75,7 +77,9 @@ type t = {
           (decorator_identifier)
           (decorator_arguments (string (string_fragment))))
         (property_identifier)
-        (type_annotation (type_identifier))))))
+        (type_annotation (type_identifier)))
+      (record_type_field
+        (property_identifier) (type_annotation (type_identifier))))))
 
 ===========================================
 Variant

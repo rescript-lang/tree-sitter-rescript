@@ -92,14 +92,15 @@
 ] @include
 
 [
-  "type"
-  "let"
-  "rec"
-  "external"
-  "module"
   "as"
   "exception"
   "export"
+  "external"
+  "let"
+  "module"
+  "mutable"
+  "rec"
+  "type"
 ] @keyword
 
 [
