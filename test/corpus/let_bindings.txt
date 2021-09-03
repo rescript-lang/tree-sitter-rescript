@@ -10,10 +10,10 @@ export d = 5
 ---
 
 (source_file
-  (let_binding (identifier) (number))
-  (let_binding (identifier) (identifier))
-  (let_binding (identifier) (polyvar (polyvar_identifier)))
-  (let_binding (identifier) (number)))
+  (let_binding (value_identifier) (number))
+  (let_binding (value_identifier) (value_identifier))
+  (let_binding (value_identifier) (polyvar (polyvar_identifier)))
+  (let_binding (value_identifier) (number)))
 
 ============================================
 Tuple destructuring
@@ -26,10 +26,10 @@ let (a, b, (c, d)) = foo
 (source_file
   (let_binding
     (tuple_pattern
-      (identifier)
-      (identifier)
-      (tuple_pattern (identifier) (identifier)))
-    (identifier)))
+      (value_identifier)
+      (value_identifier)
+      (tuple_pattern (value_identifier) (value_identifier)))
+    (value_identifier)))
 
 ============================================
 Block
@@ -44,7 +44,7 @@ let x = {
 
 (source_file
   (let_binding
-    (identifier)
+    (value_identifier)
     (block
       (expression_statement (number))
       (expression_statement (number)))))
@@ -60,16 +60,16 @@ let b: 'a => unit = ignore
 
 (source_file
   (let_binding
-    (identifier)
+    (value_identifier)
     (type_annotation (type_identifier))
     (number))
   (let_binding
-    (identifier)
+    (value_identifier)
     (type_annotation
       (function_type
         (function_type_parameters (type_identifier))
         (unit_type)))
-    (identifier)))
+    (value_identifier)))
 
 ============================================
 Recursive
@@ -81,12 +81,12 @@ let rec foo = n => foo(n-1)
 
 (source_file
   (let_binding
-    (identifier)
+    (value_identifier)
       (function
-        (identifier)
+        (value_identifier)
         (call_expression
-          (identifier)
+          (value_identifier)
           (arguments
             (binary_expression
-              (identifier)
+              (value_identifier)
               (number)))))))
