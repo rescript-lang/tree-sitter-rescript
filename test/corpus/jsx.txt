@@ -17,12 +17,12 @@ Simple JSX elements
   (expression_statement
     (jsx_element
       (jsx_opening_element (nested_jsx_identifier (jsx_identifier) (jsx_identifier)))
-      (identifier)
+      (value_identifier)
       (jsx_element
         (jsx_opening_element (jsx_identifier))
-        (identifier)
+        (value_identifier)
         (jsx_closing_element (jsx_identifier)))
-      (identifier)
+      (value_identifier)
       (jsx_closing_element (nested_jsx_identifier (jsx_identifier) (jsx_identifier)))))
   (expression_statement
     (jsx_element
@@ -59,13 +59,13 @@ Attribute values
       (jsx_attribute (property_identifier) (variant (variant_identifier)))
       (jsx_attribute (property_identifier))
       (jsx_attribute (property_identifier))
-      (jsx_attribute (property_identifier) (jsx_expression (identifier)))))
+      (jsx_attribute (property_identifier) (jsx_expression (value_identifier)))))
   (expression_statement
     (jsx_self_closing_element
       (jsx_identifier)
       (jsx_attribute
         (property_identifier)
-        (pipe_expression (identifier) (identifier)))
+        (pipe_expression (value_identifier) (value_identifier)))
       (jsx_attribute
         (property_identifier)
         (true)))))

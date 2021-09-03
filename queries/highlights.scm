@@ -4,7 +4,7 @@
 ;------------
 
 ; Escaped identifiers like \"+."
-((identifier) @constant.macro
+((value_identifier) @constant.macro
  (#match? @constant.macro "^\\.*$"))
 
 [
@@ -19,7 +19,7 @@
 ] @constant
 
 (property_identifier) @property
-(module_name) @namespace
+(module_identifier) @namespace
 
 (jsx_identifier) @tag
 (jsx_attribute (property_identifier) @attribute)
@@ -28,8 +28,8 @@
 ;----------------
 
 (shorthand_property_identifier_pattern) @parameter
-(list_pattern (identifier) @parameter)
-(spread_pattern (identifier) @parameter)
+(list_pattern (value_identifier) @parameter)
+(spread_pattern (value_identifier) @parameter)
 
 ; String literals
 ;----------------
@@ -62,12 +62,12 @@
 ;----------
 
 [
- (formal_parameters (identifier))
- (positional_parameter (identifier))
- (labeled_parameter (identifier))
+ (formal_parameters (value_identifier))
+ (positional_parameter (value_identifier))
+ (labeled_parameter (value_identifier))
 ] @parameter
 
-(function parameter: (identifier) @parameter)
+(function parameter: (value_identifier) @parameter)
 
 ; Meta
 ;-----

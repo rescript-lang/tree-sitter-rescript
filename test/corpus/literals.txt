@@ -115,10 +115,10 @@ The caller should either handle this error, or expect that exit code.`
   (expression_statement (template_string
     (escape_sequence)
     (template_substitution (call_expression
-      (identifier)
+      (value_identifier)
       (arguments (string (string_fragment)))))
     (escape_sequence)
-    (template_substitution (identifier))))
+    (template_substitution (value_identifier))))
   (expression_statement (template_string))
   (expression_statement (template_string (escape_sequence))))
 

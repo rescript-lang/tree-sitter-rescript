@@ -32,8 +32,8 @@ type t = Foo.Bar.qux
 (source_file
   (type_declaration
     (type_identifier)
-    (nested_type_identifier
-      (module_name) (module_name) (type_identifier))))
+    (type_identifier_path
+      (module_identifier) (module_identifier) (type_identifier))))
 
 ===========================================
 Tuple type
@@ -179,10 +179,10 @@ type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float
     (function_type
       (function_type_parameters
         (labeled_parameter
-          (identifier)
+          (value_identifier)
           (type_annotation (type_identifier)))
         (labeled_parameter
-          (identifier)
+          (value_identifier)
           (type_annotation (type_identifier)))
         (unit_type))
       (type_identifier))))

@@ -41,7 +41,7 @@ module.exports = grammar({
     ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
-    [$.nested_module_expression, $.module_type_of],
+    [$.module_identifier_path, $.module_type_of],
   ],
 
   conflicts: $ => [
@@ -51,7 +51,7 @@ module.exports = grammar({
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
     [$.primary_expression, $.record_field],
-    [$.nested_module_expression, $.module_expression],
+    [$.module_identifier_path, $.module_expression],
     [$.tuple_type, $._function_type_parameter],
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
@@ -60,7 +60,7 @@ module.exports = grammar({
     [$.primary_expression, $._literal_pattern],
     [$.expression_statement, $.ternary_expression],
     [$.let_binding, $.ternary_expression],
-    [$.variant_identifier, $.module_name],
+    [$.variant_identifier, $.module_identifier],
     [$.variant],
     [$.variant, $.variant_pattern],
     [$.polyvar],
@@ -127,7 +127,7 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       'module',
-      $.module_name,
+      $.module_identifier,
       optional(seq(
         ':',
         field('signature', choice($.block, $.module_expression)),
@@ -140,7 +140,7 @@ module.exports = grammar({
 
     external_declaration: $ => seq(
       'external',
-      $.identifier,
+      $.value_identifier,
       $.type_annotation,
       '=',
       $.string,
@@ -181,7 +181,7 @@ module.exports = grammar({
     ),
 
     _non_function_inline_type: $ => choice(
-      $._qualified_type_identifier,
+      $._type_identifier,
       $.tuple_type,
       $.polyvar_type,
       $.object_type,
@@ -238,7 +238,7 @@ module.exports = grammar({
 
     record_type_field: $ => seq(
       repeat($.decorator),
-      alias($.identifier, $.property_identifier),
+      alias($.value_identifier, $.property_identifier),
       $.type_annotation,
     ),
 
@@ -261,7 +261,7 @@ module.exports = grammar({
     ),
 
     generic_type: $ => seq(
-      $._qualified_type_identifier,
+      $._type_identifier,
       $.type_arguments
     ),
 
@@ -316,8 +316,8 @@ module.exports = grammar({
 
     primary_expression: $ => choice(
       $.parenthesized_expression,
-      $.module_nested_identifier,
-      $.identifier,
+      $.value_identifier_path,
+      $.value_identifier,
       $.number,
       $.string,
       $.template_string,
@@ -348,14 +348,14 @@ module.exports = grammar({
       ')'
     ),
 
-    module_nested_identifier: $ => seq(
-      repeat1(seq($.module_name, '.')),
-      $.identifier,
+    value_identifier_path: $ => seq(
+      repeat1(seq($.module_identifier, '.')),
+      $.value_identifier,
     ),
 
     function: $ => prec.left(seq(
       choice(
-        field('parameter', $.identifier),
+        field('parameter', $.value_identifier),
         $._definition_signature
       ),
       '=>',
@@ -380,7 +380,7 @@ module.exports = grammar({
     ),
 
     record_field: $ => seq(
-      alias($.identifier, $.property_identifier),
+      alias($.value_identifier, $.property_identifier),
       optional(seq(
         ':',
         $.expression,
@@ -388,7 +388,7 @@ module.exports = grammar({
     ),
 
     _record_single_field: $ => seq(
-      alias($.identifier, $.property_identifier),
+      alias($.value_identifier, $.property_identifier),
       ':',
       $.expression,
       optional(','),
@@ -505,7 +505,7 @@ module.exports = grammar({
 
     as_aliasing: $ => seq(
       'as',
-      $.identifier,
+      $.value_identifier,
     ),
 
     call_expression: $ => prec('call', seq(
@@ -517,8 +517,8 @@ module.exports = grammar({
       $.primary_expression,
       choice('->', '|>'),
       choice(
-        $.identifier,
-        $.module_nested_identifier,
+        $.value_identifier,
+        $.value_identifier_path,
         choice($.variant_identifier, $.nested_variant_identifier),
       ),
     )),
@@ -535,7 +535,7 @@ module.exports = grammar({
 
     labeled_argument: $ => seq(
       '~',
-      field('label', $.identifier),
+      field('label', $.value_identifier),
       optional(choice(
         '?',
         seq(
@@ -579,7 +579,7 @@ module.exports = grammar({
 
     labeled_parameter: $ => seq(
       '~',
-      $.identifier,
+      $.value_identifier,
       optional($.as_aliasing),
       optional($.type_annotation),
       optional(field('default_value', $._labeled_parameter_default_value)),
@@ -597,7 +597,7 @@ module.exports = grammar({
     // unfinished constructs are generally treated as literal expressions,
     // not patterns.
     pattern: $ => prec.dynamic(-1, choice(
-      $.identifier,
+      $.value_identifier,
       $._destructuring_pattern,
     )),
 
@@ -660,7 +660,7 @@ module.exports = grammar({
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
-        alias($.identifier, $.shorthand_property_identifier_pattern),
+        alias($.value_identifier, $.shorthand_property_identifier_pattern),
         optional(seq(
           ':',
           $.pattern,
@@ -702,7 +702,7 @@ module.exports = grammar({
 
     spread_pattern: $ => seq(
       '...',
-      $.identifier,
+      $.value_identifier,
     ),
 
     _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),
@@ -725,7 +725,7 @@ module.exports = grammar({
     ),
 
     _jsx_child: $ => choice(
-      $.identifier,
+      $.value_identifier,
       $._jsx_element,
       $.jsx_fragment,
       $.jsx_expression
@@ -739,7 +739,7 @@ module.exports = grammar({
     )),
 
     _jsx_identifier: $ => alias(
-      choice($.identifier, $.module_name),
+      choice($.value_identifier, $.module_identifier),
       $.jsx_identifier
     ),
 
@@ -769,7 +769,7 @@ module.exports = grammar({
       '>'
     ),
 
-    _jsx_attribute_name: $ => alias($.identifier, $.property_identifier),
+    _jsx_attribute_name: $ => alias($.value_identifier, $.property_identifier),
 
     jsx_attribute: $ => seq(
       optional('?'),
@@ -793,7 +793,7 @@ module.exports = grammar({
     ),
 
     _mutation_lvalue: $ => choice(
-      $.identifier,
+      $.value_identifier,
       $.member_expression,
       $.subscript_expression,
     ),
@@ -814,7 +814,7 @@ module.exports = grammar({
     member_expression: $ => prec('member', seq(
       field('record', $.primary_expression),
       '.',
-      field('property', alias($.identifier, $.property_identifier)),
+      field('property', alias($.value_identifier, $.property_identifier)),
     )),
 
     spread_element: $ => seq('...', $.expression),
@@ -888,7 +888,7 @@ module.exports = grammar({
     )),
 
     nested_variant_identifier: $ => seq(
-      repeat1(seq($.module_name, '.')),
+      repeat1(seq($.module_identifier, '.')),
       $.variant_identifier
     ),
 
@@ -904,27 +904,27 @@ module.exports = grammar({
       optional(alias($.variant_arguments, $.arguments)),
     ),
 
-    _qualified_type_identifier: $ =>
+    _type_identifier: $ =>
       choice(
         $.type_identifier,
-        $.nested_type_identifier
+        $.type_identifier_path,
       ),
 
-    nested_type_identifier: $ => seq(
-      repeat1(seq($.module_name, '.')),
+    type_identifier_path: $ => seq(
+      repeat1(seq($.module_identifier, '.')),
       $.type_identifier
     ),
 
     module_expression: $ => choice(
-      $.module_name,
-      $.nested_module_expression,
+      $.module_identifier,
+      $.module_identifier_path,
       $.module_type_of,
     ),
 
-    nested_module_expression: $ => prec.left(seq(
+    module_identifier_path: $ => prec.left(seq(
       $.module_expression,
       '.',
-      $.module_expression,
+      $.module_identifier,
     )),
 
     module_type_of: $ => prec.dynamic(-1, seq(
@@ -949,14 +949,14 @@ module.exports = grammar({
 
     type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
 
-    identifier: $ => choice(
+    value_identifier: $ => choice(
       /[a-z_][a-zA-Z0-9_']*/,
       $._escape_identifier,
     ),
 
     _escape_identifier: $ => token(seq('\\', '"', /[^"]+/ , '"')),
 
-    module_name: $ => /[A-Z][a-zA-Z0-9_]*/,
+    module_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 
     decorator_identifier: $ => /[a-zA-Z0-9_\.]+/,
 
@@ -1059,7 +1059,7 @@ module.exports = grammar({
     ),
 
     template_substitution: $ => choice(
-      seq('$', $.identifier),
+      seq('$', $.value_identifier),
       seq('${', $.expression, '}'),
     ),
 

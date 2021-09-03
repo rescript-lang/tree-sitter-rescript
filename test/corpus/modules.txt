@@ -8,9 +8,9 @@ open! Foo.Bar
 ---
 
 (source_file
-  (open_statement (module_name))
+  (open_statement (module_identifier))
   (open_statement
-    (nested_module_expression (module_name) (module_name))))
+    (module_identifier_path (module_identifier) (module_identifier))))
 
 ===========================================
 Include
@@ -23,12 +23,12 @@ include module type of Belt.Array
 ---
 
 (source_file
-  (include_statement (module_name))
+  (include_statement (module_identifier))
   (include_statement
-    (nested_module_expression (module_name) (module_name)))
+    (module_identifier_path (module_identifier) (module_identifier)))
   (include_statement
     (module_type_of
-      (nested_module_expression (module_name) (module_name)))))
+      (module_identifier_path (module_identifier) (module_identifier)))))
 
 ===========================================
 Simple definition
@@ -42,7 +42,7 @@ module MyModule = {
 
 (source_file
   (module_declaration
-    (module_name)
+    (module_identifier)
     (block (type_declaration (type_identifier)))))
 
 ===========================================
@@ -69,17 +69,17 @@ module MyModule: {
 
 (source_file
   (module_declaration
-    (module_name)
+    (module_identifier)
     signature: (block
-      (let_binding (identifier) (type_annotation (type_identifier)))
-      (let_binding (identifier) (type_annotation (type_identifier)))
-      (let_binding (identifier) (type_annotation (type_identifier)))))
+      (let_binding (value_identifier) (type_annotation (type_identifier)))
+      (let_binding (value_identifier) (type_annotation (type_identifier)))
+      (let_binding (value_identifier) (type_annotation (type_identifier)))))
   (module_declaration
-    (module_name)
-    signature: (nested_module_expression (module_name) (module_name))
+    (module_identifier)
+    signature: (module_identifier_path (module_identifier) (module_identifier))
     definition: (block (type_declaration (type_identifier))))
   (module_declaration
-    (module_name)
+    (module_identifier)
     signature: (block (type_declaration (type_identifier)))
     definition: (block (type_declaration (type_identifier) (type_identifier)))))
 
@@ -93,10 +93,10 @@ module Q = Foo.Bar.Qux
 
 (source_file
   (module_declaration
-    (module_name)
-    (nested_module_expression
-      (nested_module_expression (module_name) (module_name))
-      (module_name))))
+    (module_identifier)
+    (module_identifier_path
+      (module_identifier_path (module_identifier) (module_identifier))
+      (module_identifier))))
 
 ===========================================
 Externals
@@ -112,7 +112,7 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
 
 (source_file
   (external_declaration
-    (identifier)
+    (value_identifier)
     (type_annotation
       (function_type
         (function_type_parameters (type_identifier))
@@ -121,13 +121,13 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
   (decorated
     (decorator (decorator_identifier))
     (external_declaration
-      (identifier)
+      (value_identifier)
       (type_annotation (type_identifier))
       (string (string_fragment))))
   (decorated
     (decorator (decorator_identifier))
     (external_declaration
-      (identifier)
+      (value_identifier)
       (type_annotation (type_identifier))
       (string (string_fragment))))
   (decorated
@@ -136,11 +136,11 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
       (decorator_arguments (string (string_fragment))))
     (decorator (decorator_identifier))
     (external_declaration
-      (identifier)
+      (value_identifier)
       (type_annotation (type_identifier))
       (string (string_fragment))))
   (external_declaration
-    (identifier)
+    (value_identifier)
     (type_annotation
       (function_type
         (function_type_parameters
