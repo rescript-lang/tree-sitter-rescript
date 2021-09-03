@@ -244,3 +244,24 @@ type rec t = t
 
 (source_file
   (type_declaration (type_identifier) (type_identifier)))
+
+===========================================
+Decorated
+===========================================
+
+@deriving(abstract)
+type transitionCreateArgs = {
+  easing: string,
+}
+
+---
+
+(source_file
+  (decorated
+    (decorator (decorator_identifier) (decorator_arguments (value_identifier)))
+    (type_declaration
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation (type_identifier)))))))

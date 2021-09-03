@@ -837,11 +837,15 @@ module.exports = grammar({
       $.subscript_expression,
     ),
 
-    decorator: $ => seq('@', $.decorator_identifier, optional($.decorator_arguments)),
+    decorator: $ => seq(
+      '@',
+      $.decorator_identifier,
+      optional($.decorator_arguments)
+    ),
 
     decorator_arguments: $ => seq(
       '(',
-      commaSep($.string),
+      commaSep($.expression),
       ')',
     ),
 
