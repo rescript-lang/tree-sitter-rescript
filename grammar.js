@@ -847,6 +847,10 @@ module.exports = grammar({
     member_expression: $ => prec('member', seq(
       field('record', $.primary_expression),
       '.',
+      optional(seq(
+        field('module', $.module_identifier),
+        '.')
+      ),
       field('property', alias($.value_identifier, $.property_identifier)),
     )),
 
