@@ -978,8 +978,13 @@ module.exports = grammar({
 
     functor_arguments: $ => seq(
       '(',
-      optional(commaSep1t($.module_expression)),
+      optional(commaSep1t($._functor_argument)),
       ')',
+    ),
+
+    _functor_argument: $ => choice(
+      $.module_expression,
+      $.block,
     ),
 
     variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,

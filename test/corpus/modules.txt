@@ -18,6 +18,12 @@ Include
 
 include Foo
 include Foo.Bar
+include Foo.Bar(X)
+include Foo.Bar({
+  type t
+  let x: int
+})
+
 include module type of Belt.Array
 
 ---
@@ -26,6 +32,17 @@ include module type of Belt.Array
   (include_statement (module_identifier))
   (include_statement
     (module_identifier_path (module_identifier) (module_identifier)))
+  (include_statement
+    (functor_use
+      (module_identifier_path (module_identifier) (module_identifier))
+      (arguments (module_identifier))))
+  (include_statement
+    (functor_use
+      (module_identifier_path (module_identifier) (module_identifier))
+      (arguments
+        (block
+          (type_declaration (type_identifier))
+          (let_binding (value_identifier) (type_annotation (type_identifier)))))))
   (include_statement
     (module_type_of
       (module_identifier_path (module_identifier) (module_identifier)))))
