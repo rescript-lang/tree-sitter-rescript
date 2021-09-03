@@ -52,7 +52,7 @@ module.exports = grammar({
     [$.primary_expression, $._formal_parameter],
     [$.primary_expression, $.record_field],
     [$.module_identifier_path, $.module_expression],
-    [$.tuple_type, $._function_type_parameter],
+    [$.tuple_type, $.function_type_parameter],
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
@@ -317,11 +317,11 @@ module.exports = grammar({
 
     _function_type_parameter_list: $ => seq(
       '(',
-      commaSep($._function_type_parameter),
+      commaSep(alias($.function_type_parameter, $.parameter)),
       ')',
     ),
 
-    _function_type_parameter: $ => seq(
+    function_type_parameter: $ => seq(
       repeat($.decorator),
       choice(
         $._type,

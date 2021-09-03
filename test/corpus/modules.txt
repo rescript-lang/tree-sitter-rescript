@@ -227,9 +227,8 @@ external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) =
     (type_annotation
       (function_type
         (function_type_parameters
-          (object_type)
-          (uncurry)
-          (unit_type))
+          (parameter (object_type))
+          (parameter (uncurry) (unit_type)))
         (object_type)))
     (string (string_fragment)))
   (decorated
@@ -239,12 +238,17 @@ external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) =
       (type_annotation
         (function_type
           (function_type_parameters
-            (type_identifier_path (module_identifier) (type_identifier))
-            (decorator (decorator_identifier) (decorator_arguments (template_string)))
-            (type_identifier)
-            (decorator (decorator_identifier) (decorator_arguments (string)))
-            (type_identifier)
-            (labeled_parameter (value_identifier) (type_annotation (type_identifier))))
+            (parameter
+              (type_identifier_path (module_identifier) (type_identifier)))
+            (parameter
+              (decorator (decorator_identifier) (decorator_arguments (template_string)))
+              (type_identifier))
+            (parameter
+              (decorator (decorator_identifier) (decorator_arguments (string)))
+              (type_identifier))
+            (parameter
+              (labeled_parameter
+                (value_identifier) (type_annotation (type_identifier)))))
           (unit_type)))
         (string (string_fragment)))))
 

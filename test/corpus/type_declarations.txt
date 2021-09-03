@@ -167,24 +167,26 @@ type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float
   (type_declaration
     (type_identifier)
     (function_type
-      (function_type_parameters (type_identifier))
-      (type_identifier)))
-  (type_declaration
-    (type_identifier)
-    (function_type
-      (function_type_parameters (type_identifier) (type_identifier))
+      (function_type_parameters (parameter (type_identifier)))
       (type_identifier)))
   (type_declaration
     (type_identifier)
     (function_type
       (function_type_parameters
-        (labeled_parameter
+        (parameter (type_identifier))
+        (parameter (type_identifier)))
+      (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters
+        (parameter (labeled_parameter
           (value_identifier)
-          (type_annotation (type_identifier)))
-        (labeled_parameter
+          (type_annotation (type_identifier))))
+        (parameter (labeled_parameter
           (value_identifier)
-          (type_annotation (type_identifier)))
-        (unit_type))
+          (type_annotation (type_identifier))))
+        (parameter (unit_type)))
       (type_identifier))))
 
 ===========================================
