@@ -3,3 +3,9 @@
 //<- annotation
 //^annotation
 //        ^ string
+
+include NumericCurve({
+// ^ include
+//      ^ namespace
+  let foo = foo
+})

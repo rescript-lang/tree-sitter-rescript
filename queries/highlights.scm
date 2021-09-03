@@ -87,8 +87,8 @@
 (subscript_expression index: (string) @property)
 
 [
-  (include_statement)
-  (open_statement)
+  ("include")
+  ("open")
 ] @include
 
 [
