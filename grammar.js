@@ -273,6 +273,7 @@ module.exports = grammar({
 
     record_type_field: $ => seq(
       repeat($.decorator),
+      optional('mutable'),
       alias($.value_identifier, $.property_identifier),
       $.type_annotation,
     ),
