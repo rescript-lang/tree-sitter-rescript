@@ -129,6 +129,23 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
         (type_declaration (type_identifier) (type_identifier_path (module_identifier) (type_identifier)))))))
 
 ===========================================
+Functor use
+===========================================
+
+module M = MyFunctor(Foo, Bar.Baz)
+
+---
+
+(source_file
+  (module_declaration
+    (module_identifier)
+    (functor_use
+      (module_identifier)
+      (arguments
+        (module_identifier)
+        (module_identifier_path (module_identifier) (module_identifier))))))
+
+===========================================
 Alias
 ===========================================
 

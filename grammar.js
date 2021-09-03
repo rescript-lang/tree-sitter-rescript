@@ -952,6 +952,7 @@ module.exports = grammar({
       $.module_identifier,
       $.module_identifier_path,
       $.module_type_of,
+      $.functor_use,
     ),
 
     module_identifier_path: $ => prec.left(seq(
@@ -966,6 +967,20 @@ module.exports = grammar({
       'of',
       $.module_expression,
     )),
+
+    functor_use: $ => seq(
+      choice(
+        $.module_identifier,
+        $.module_identifier_path,
+      ),
+      alias($.functor_arguments, $.arguments),
+    ),
+
+    functor_arguments: $ => seq(
+      '(',
+      optional(commaSep1t($.module_expression)),
+      ')',
+    ),
 
     variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 
