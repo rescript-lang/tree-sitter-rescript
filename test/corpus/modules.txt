@@ -178,6 +178,22 @@ module Q = Foo.Bar.Qux
       (module_identifier))))
 
 ===========================================
+Recursive
+===========================================
+
+module rec BYOBReader: {
+  include Reader
+} = BYOBReader
+
+---
+
+(source_file
+  (module_declaration
+    (module_identifier)
+    (block (include_statement (module_identifier)))
+    (module_identifier)))
+
+===========================================
 Externals
 ===========================================
 
