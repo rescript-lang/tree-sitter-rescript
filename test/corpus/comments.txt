@@ -15,6 +15,10 @@ Comments
   // */ */
 3
 
+4 // post single-line
+
+5 /* post multi-line */
+
 ---
 
 (source_file
