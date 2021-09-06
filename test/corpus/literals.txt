@@ -53,10 +53,13 @@ Strings containing comment-like content
 ==========================================
 
 "//ok\n//what"
+"/*ok\n/*what"
 
 ---
 
 (source_file
+  (expression_statement
+    (string (string_fragment) (escape_sequence) (string_fragment)))
   (expression_statement
     (string (string_fragment) (escape_sequence) (string_fragment))))
 

@@ -10,9 +10,16 @@ Comments
  */
 2
 
+/* /* Nested
+  /* multiple */ times
+  // */ */
+3
+
 ---
 
 (source_file
+  (comment)
+  (expression_statement (number))
   (comment)
   (expression_statement (number))
   (comment)

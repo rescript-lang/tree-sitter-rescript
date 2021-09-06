@@ -5,6 +5,7 @@
 enum TokenType {
   NEWLINE,
   TEMPLATE_CHARS,
+  COMMENT,
   L_PAREN,
   R_PAREN,
 };
@@ -74,6 +75,28 @@ static bool scan_whitespace_and_comments(TSLexer *lexer) {
   }
 }
 
+static void scan_multiline_comment(TSLexer *lexer) {
+  int level = 1;
+  advance(lexer);
+  while (level > 0 && !lexer->eof(lexer)) {
+    switch (lexer->lookahead) {
+      case '/':
+        advance(lexer);
+        if (lexer->lookahead == '*') {
+          ++level;
+        }
+
+      case '*':
+        advance(lexer);
+        if (lexer->lookahead == '/') {
+          --level;
+        }
+    }
+
+    advance(lexer);
+  }
+}
+
 static bool is_identifier_start(char c) {
   return c == '_' || (c >= 'a' && c <= 'z');
 }
@@ -108,6 +131,30 @@ bool tree_sitter_rescript_external_scanner_scan(
     }
 
     return true;
+  }
+
+  if (valid_symbols[COMMENT] && lexer->lookahead == '/') {
+    lexer->result_symbol = COMMENT;
+    advance(lexer);
+    switch (lexer->lookahead) {
+      case '/':
+        // Single-line comment
+        do {
+          advance(lexer);
+          lexer->mark_end(lexer);
+        } while (lexer->lookahead != '\n');
+        return true;
+
+      case '*':
+        // Multi-line comment
+        scan_multiline_comment(lexer);
+        lexer->mark_end(lexer);
+        return true;
+
+      default:
+        // Division, etc
+        return false;
+    }
   }
 
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
