@@ -3,6 +3,8 @@ module.exports = grammar({
 
   externals: $ => [
     $._newline,
+    '"',
+    "`",
     $._template_chars,
     $.comment,
     $._lparen,
@@ -1113,11 +1115,14 @@ module.exports = grammar({
     )),
 
     template_string: $ => seq(
-      choice(
+      token(seq(
+        optional(choice(
+          'j',
+          'js',
+          'json',
+        )),
         '`',
-        'j`',
-        'json`',
-      ),
+      )),
       repeat(choice(
         $._template_chars,
         $.template_substitution,

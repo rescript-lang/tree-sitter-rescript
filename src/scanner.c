@@ -4,6 +4,8 @@
 
 enum TokenType {
   NEWLINE,
+  QUOTE,
+  BACKTICK,
   TEMPLATE_CHARS,
   COMMENT,
   L_PAREN,
@@ -12,6 +14,8 @@ enum TokenType {
 
 typedef struct ScannerState {
   int parens_nesting;
+  bool in_quotes;
+  bool in_backticks;
 } ScannerState;
 
 void *tree_sitter_rescript_external_scanner_create() {
@@ -133,7 +137,10 @@ bool tree_sitter_rescript_external_scanner_scan(
     return true;
   }
 
-  if (valid_symbols[COMMENT] && lexer->lookahead == '/') {
+  if (valid_symbols[COMMENT]
+      && lexer->lookahead == '/'
+      && !state->in_quotes
+      && !state->in_backticks) {
     lexer->result_symbol = COMMENT;
     advance(lexer);
     switch (lexer->lookahead) {
@@ -184,6 +191,22 @@ bool tree_sitter_rescript_external_scanner_scan(
     }
 
     return is_unnested;
+  }
+
+  if (valid_symbols[QUOTE] && lexer->lookahead == '"') {
+    state->in_quotes = !state->in_quotes;
+    lexer->result_symbol = QUOTE;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
+  }
+
+  if (valid_symbols[BACKTICK] && lexer->lookahead == '`') {
+    state->in_backticks = !state->in_backticks;
+    lexer->result_symbol = BACKTICK;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
   }
 
   if (valid_symbols[L_PAREN] && lexer->lookahead == '(') {
