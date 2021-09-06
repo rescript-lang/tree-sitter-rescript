@@ -186,17 +186,15 @@ bool tree_sitter_rescript_external_scanner_scan(
     return is_unnested;
   }
 
-  if (!scan_whitespace_and_comments(lexer)) {
-    return false;
-  }
-
   if (valid_symbols[L_PAREN] && lexer->lookahead == '(') {
     ++state->parens_nesting;
     lexer->result_symbol = L_PAREN;
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
     return true;
-  } else if (valid_symbols[R_PAREN] && lexer->lookahead == ')') {
+  }
+
+  if (valid_symbols[R_PAREN] && lexer->lookahead == ')') {
     --state->parens_nesting;
     lexer->result_symbol = R_PAREN;
     lexer->advance(lexer, false);
