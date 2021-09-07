@@ -19,6 +19,9 @@ Comments
 
 5 /* post multi-line */
 
+/* / */
+6
+
 foo
   // in-pipe
   ->bar
@@ -41,6 +44,8 @@ switch foo {
   (comment)
   (expression_statement (number))
   (comment)
+  (comment)
+  (expression_statement (number))
   (expression_statement
     (pipe_expression
       (value_identifier)
