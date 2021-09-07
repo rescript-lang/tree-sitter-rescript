@@ -43,45 +43,9 @@ void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
-static bool scan_whitespace(TSLexer *lexer) {
+static void scan_whitespace(TSLexer *lexer) {
   while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
     lexer->advance(lexer, true);
-  }
-}
-
-static bool scan_whitespace_and_comments(TSLexer *lexer) {
-  for (;;) {
-    while (iswspace(lexer->lookahead)) {
-      advance(lexer);
-    }
-
-    if (lexer->lookahead == '/') {
-      advance(lexer);
-
-      if (lexer->lookahead == '/') {
-        advance(lexer);
-        while (lexer->lookahead != 0 && lexer->lookahead != '\n') {
-          advance(lexer);
-        }
-      } else if (lexer->lookahead == '*') {
-        advance(lexer);
-        while (lexer->lookahead != 0) {
-          if (lexer->lookahead == '*') {
-            advance(lexer);
-            if (lexer->lookahead == '/') {
-              advance(lexer);
-              break;
-            }
-          } else {
-            advance(lexer);
-          }
-        }
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
   }
 }
 
@@ -104,6 +68,30 @@ static void scan_multiline_comment(TSLexer *lexer) {
     }
 
     advance(lexer);
+  }
+}
+
+static bool scan_comment(TSLexer *lexer) {
+  if (lexer->lookahead != '/')
+    return false;
+
+  advance(lexer);
+  switch (lexer->lookahead) {
+    case '/':
+      // Single-line comment
+      do {
+        advance(lexer);
+      } while (lexer->lookahead != '\n');
+      return true;
+
+    case '*':
+      // Multi-line comment
+      scan_multiline_comment(lexer);
+      return true;
+
+    default:
+      // Division, etc
+      return false;
   }
 }
 
@@ -146,12 +134,12 @@ bool tree_sitter_rescript_external_scanner_scan(
   }
 
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
-    lexer->result_symbol = NEWLINE;
     bool is_unnested = state->parens_nesting == 0;
-    lexer->advance(lexer, !is_unnested);
+    lexer->result_symbol = NEWLINE;
+    lexer->advance(lexer, true);
     lexer->mark_end(lexer);
 
-    scan_whitespace_and_comments(lexer);
+    scan_whitespace(lexer);
     if (lexer->lookahead == '-') {
       advance(lexer);
       if (lexer->lookahead == '>') {
@@ -169,6 +157,12 @@ bool tree_sitter_rescript_external_scanner_scan(
       // parser confustion between a terminated and unterminated statements
       // for rules like seq(repeat($._statement), $.statement)
       return false;
+    } else if (lexer->lookahead == '/' && valid_symbols[COMMENT]) {
+      if (scan_comment(lexer)) {
+        lexer->result_symbol = COMMENT;
+        lexer->mark_end(lexer);
+        return true;
+      }
     }
 
     return is_unnested;

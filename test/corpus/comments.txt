@@ -19,6 +19,15 @@ Comments
 
 5 /* post multi-line */
 
+foo
+  // in-pipe
+  ->bar
+
+switch foo {
+| 1 => 1
+// in-switch
+}
+
 ---
 
 (source_file
@@ -31,4 +40,14 @@ Comments
   (expression_statement (number))
   (comment)
   (expression_statement (number))
-  (comment))
+  (comment)
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (comment)
+      (value_identifier)))
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match (number) (expression_statement (number)))
+      (comment))))
