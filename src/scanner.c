@@ -4,10 +4,11 @@
 
 enum TokenType {
   NEWLINE,
+  COMMENT,
+  NEWLINE_AND_COMMENT,
   QUOTE,
   BACKTICK,
   TEMPLATE_CHARS,
-  COMMENT,
   L_PAREN,
   R_PAREN,
 };
@@ -95,6 +96,20 @@ static bool scan_comment(TSLexer *lexer) {
   }
 }
 
+static bool scan_whitespace_and_comments(TSLexer *lexer) {
+  bool has_comments = false;
+  while (!lexer->eof(lexer)) {
+    scan_whitespace(lexer);
+    if (scan_comment(lexer)) {
+      has_comments = true;
+    } else {
+      break;
+    }
+  }
+
+  return has_comments;
+}
+
 static bool is_identifier_start(char c) {
   return c == '_' || (c >= 'a' && c <= 'z');
 }
@@ -133,39 +148,56 @@ bool tree_sitter_rescript_external_scanner_scan(
     return true;
   }
 
+  // Magic ahead!
+  // We have two types of newline in ReScript. The one which ends the current statement,
+  // and the one used just for pretty-formatting (e.g. separates variant type values).
+  // We report only the first one. The second one should be ignored and skipped as
+  // whitespace.
+  // What makes things worse is that we can have comments interleaved in statements.
+  // Tree-sitter gives just one chance to say what type of a token we’re on. We can’t
+  // say: “I see a significant newline, then I see a comment”. To deal with it, an
+  // artificial token NEWLINE_AND_COMMENT was introduced. It has the same semantics for
+  // the AST as simple newline and the same highlighting as a usual comment.
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
     bool is_unnested = state->parens_nesting == 0;
     lexer->result_symbol = NEWLINE;
     lexer->advance(lexer, true);
     lexer->mark_end(lexer);
 
-    scan_whitespace(lexer);
+    bool has_comment = scan_whitespace_and_comments(lexer);
+    if (has_comment && valid_symbols[NEWLINE_AND_COMMENT]) {
+      lexer->result_symbol = NEWLINE_AND_COMMENT;
+      lexer->mark_end(lexer);
+    }
+
+    bool in_multiline_statement = false;
     if (lexer->lookahead == '-') {
       advance(lexer);
       if (lexer->lookahead == '>') {
         // Ignore new lines before pipe operator (->)
-        return false;
+        in_multiline_statement = true;
       }
     } else if (lexer->lookahead == '|') {
       // Ignore new lines before variant declarations and switch matches
-      return false;
+      in_multiline_statement = true;
     } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
       // Ignore new lines before potential ternaries
-      return false;
+      in_multiline_statement = true;
     } else if (lexer->lookahead == '}') {
       // Do not report new lines right before block/switch closings to avoid
       // parser confustion between a terminated and unterminated statements
       // for rules like seq(repeat($._statement), $.statement)
-      return false;
-    } else if (lexer->lookahead == '/' && valid_symbols[COMMENT]) {
-      if (scan_comment(lexer)) {
-        lexer->result_symbol = COMMENT;
-        lexer->mark_end(lexer);
-        return true;
-      }
+      in_multiline_statement = true;
     }
 
-    return is_unnested;
+    if (in_multiline_statement) {
+      if (has_comment && valid_symbols[COMMENT]) {
+        lexer->result_symbol = COMMENT;
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 
   if (!in_string) {

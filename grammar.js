@@ -3,10 +3,11 @@ module.exports = grammar({
 
   externals: $ => [
     $._newline,
+    $.comment,
+    $._newline_and_comment,
     '"',
     "`",
     $._template_chars,
-    $.comment,
     $._lparen,
     $._rparen,
   ],
@@ -78,13 +79,19 @@ module.exports = grammar({
 
   rules: {
     source_file: $ => seq(
-      repeat(choice(';', $._newline)),
+      repeat($._statement_delimeter),
       repeat($._statement)
     ),
 
     _statement: $ => seq(
       $.statement,
-      repeat1(choice(';', $._newline))
+      repeat1($._statement_delimeter)
+    ),
+
+    _statement_delimeter: $ => choice(
+      ';',
+      $._newline,
+      alias($._newline_and_comment, $.comment),
     ),
 
     statement: $ => choice(
