@@ -22,6 +22,8 @@ Comments
 /* / */
 6
 
+/* */ 7
+
 foo
   // in-pipe
   ->bar
@@ -44,6 +46,8 @@ switch foo {
   (comment)
   (expression_statement (number))
   (comment)
+  (comment)
+  (expression_statement (number))
   (comment)
   (expression_statement (number))
   (expression_statement
