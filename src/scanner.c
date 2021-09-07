@@ -174,28 +174,13 @@ bool tree_sitter_rescript_external_scanner_scan(
 
   if (valid_symbols[COMMENT] && lexer->lookahead == '/' && !in_string) {
     lexer->result_symbol = COMMENT;
-    advance(lexer);
-    switch (lexer->lookahead) {
-      case '/':
-        // Single-line comment
-        do {
-          advance(lexer);
-          lexer->mark_end(lexer);
-        } while (lexer->lookahead != '\n');
-        return true;
-
-      case '*':
-        // Multi-line comment
-        scan_multiline_comment(lexer);
-        lexer->mark_end(lexer);
-        return true;
-
-      default:
-        // Division, etc
-        return false;
+    if (scan_comment(lexer)) {
+      lexer->mark_end(lexer);
+      return true;
+    } else {
+      return false;
     }
   }
-
 
   if (valid_symbols[QUOTE] && lexer->lookahead == '"') {
     state->in_quotes = !state->in_quotes;
