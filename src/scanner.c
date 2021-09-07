@@ -44,9 +44,9 @@ void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
-static void scan_whitespace(TSLexer *lexer) {
+static void scan_whitespace(TSLexer *lexer, bool skip) {
   while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
-    lexer->advance(lexer, true);
+    lexer->advance(lexer, skip);
   }
 }
 
@@ -99,7 +99,11 @@ static bool scan_comment(TSLexer *lexer) {
 static bool scan_whitespace_and_comments(TSLexer *lexer) {
   bool has_comments = false;
   while (!lexer->eof(lexer)) {
-    scan_whitespace(lexer);
+    // Once a comment is found, the subsequent whitespace should not be marked
+    // as skipped to keep the correct range of the comment node if it will be
+    // marked so.
+    bool skip_whitespace = !has_comments;
+    scan_whitespace(lexer, skip_whitespace);
     if (scan_comment(lexer)) {
       has_comments = true;
     } else {
@@ -201,7 +205,7 @@ bool tree_sitter_rescript_external_scanner_scan(
   }
 
   if (!in_string) {
-    scan_whitespace(lexer);
+    scan_whitespace(lexer, true);
   }
 
   if (valid_symbols[COMMENT] && lexer->lookahead == '/' && !in_string) {
