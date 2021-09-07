@@ -43,6 +43,12 @@ void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
+static bool scan_whitespace(TSLexer *lexer) {
+  while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
+    lexer->advance(lexer, true);
+  }
+}
+
 static bool scan_whitespace_and_comments(TSLexer *lexer) {
   for (;;) {
     while (iswspace(lexer->lookahead)) {
@@ -111,6 +117,7 @@ bool tree_sitter_rescript_external_scanner_scan(
     const bool* valid_symbols
     ) {
   ScannerState* state = (ScannerState*)payload;
+  const in_string = state->in_quotes || state->in_backticks;
 
   if (valid_symbols[TEMPLATE_CHARS]) {
     lexer->result_symbol = TEMPLATE_CHARS;
@@ -118,6 +125,7 @@ bool tree_sitter_rescript_external_scanner_scan(
       lexer->mark_end(lexer);
       switch (lexer->lookahead) {
         case '`':
+          state->in_backticks = false;
           return has_content;
         case '\0':
           return false;
@@ -135,33 +143,6 @@ bool tree_sitter_rescript_external_scanner_scan(
     }
 
     return true;
-  }
-
-  if (valid_symbols[COMMENT]
-      && lexer->lookahead == '/'
-      && !state->in_quotes
-      && !state->in_backticks) {
-    lexer->result_symbol = COMMENT;
-    advance(lexer);
-    switch (lexer->lookahead) {
-      case '/':
-        // Single-line comment
-        do {
-          advance(lexer);
-          lexer->mark_end(lexer);
-        } while (lexer->lookahead != '\n');
-        return true;
-
-      case '*':
-        // Multi-line comment
-        scan_multiline_comment(lexer);
-        lexer->mark_end(lexer);
-        return true;
-
-      default:
-        // Division, etc
-        return false;
-    }
   }
 
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
@@ -192,6 +173,35 @@ bool tree_sitter_rescript_external_scanner_scan(
 
     return is_unnested;
   }
+
+  if (!in_string) {
+    scan_whitespace(lexer);
+  }
+
+  if (valid_symbols[COMMENT] && lexer->lookahead == '/' && !in_string) {
+    lexer->result_symbol = COMMENT;
+    advance(lexer);
+    switch (lexer->lookahead) {
+      case '/':
+        // Single-line comment
+        do {
+          advance(lexer);
+          lexer->mark_end(lexer);
+        } while (lexer->lookahead != '\n');
+        return true;
+
+      case '*':
+        // Multi-line comment
+        scan_multiline_comment(lexer);
+        lexer->mark_end(lexer);
+        return true;
+
+      default:
+        // Division, etc
+        return false;
+    }
+  }
+
 
   if (valid_symbols[QUOTE] && lexer->lookahead == '"') {
     state->in_quotes = !state->in_quotes;
