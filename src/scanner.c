@@ -4,6 +4,10 @@
 
 enum TokenType {
   NEWLINE,
+  COMMENT,
+  NEWLINE_AND_COMMENT,
+  QUOTE,
+  BACKTICK,
   TEMPLATE_CHARS,
   L_PAREN,
   R_PAREN,
@@ -11,6 +15,8 @@ enum TokenType {
 
 typedef struct ScannerState {
   int parens_nesting;
+  bool in_quotes;
+  bool in_backticks;
 } ScannerState;
 
 void *tree_sitter_rescript_external_scanner_create() {
@@ -38,40 +44,74 @@ void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
-static bool scan_whitespace_and_comments(TSLexer *lexer) {
-  for (;;) {
-    while (iswspace(lexer->lookahead)) {
-      advance(lexer);
+static void scan_whitespace(TSLexer *lexer, bool skip) {
+  while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
+    lexer->advance(lexer, skip);
+  }
+}
+
+static void scan_multiline_comment(TSLexer *lexer) {
+  int level = 1;
+  advance(lexer);
+  while (level > 0 && !lexer->eof(lexer)) {
+    switch (lexer->lookahead) {
+      case '/':
+        advance(lexer);
+        if (lexer->lookahead == '*')
+          ++level;
+        break;
+
+      case '*':
+        advance(lexer);
+        if (lexer->lookahead == '/')
+          --level;
+        break;
     }
 
-    if (lexer->lookahead == '/') {
-      advance(lexer);
+    advance(lexer);
+  }
+}
 
-      if (lexer->lookahead == '/') {
+static bool scan_comment(TSLexer *lexer) {
+  if (lexer->lookahead != '/')
+    return false;
+
+  advance(lexer);
+  switch (lexer->lookahead) {
+    case '/':
+      // Single-line comment
+      do {
         advance(lexer);
-        while (lexer->lookahead != 0 && lexer->lookahead != '\n') {
-          advance(lexer);
-        }
-      } else if (lexer->lookahead == '*') {
-        advance(lexer);
-        while (lexer->lookahead != 0) {
-          if (lexer->lookahead == '*') {
-            advance(lexer);
-            if (lexer->lookahead == '/') {
-              advance(lexer);
-              break;
-            }
-          } else {
-            advance(lexer);
-          }
-        }
-      } else {
-        return false;
-      }
-    } else {
+      } while (lexer->lookahead != '\n');
       return true;
+
+    case '*':
+      // Multi-line comment
+      scan_multiline_comment(lexer);
+      return true;
+
+    default:
+      // Division, etc
+      return false;
+  }
+}
+
+static bool scan_whitespace_and_comments(TSLexer *lexer) {
+  bool has_comments = false;
+  while (!lexer->eof(lexer)) {
+    // Once a comment is found, the subsequent whitespace should not be marked
+    // as skipped to keep the correct range of the comment node if it will be
+    // marked so.
+    bool skip_whitespace = !has_comments;
+    scan_whitespace(lexer, skip_whitespace);
+    if (scan_comment(lexer)) {
+      has_comments = true;
+    } else {
+      break;
     }
   }
+
+  return has_comments;
 }
 
 static bool is_identifier_start(char c) {
@@ -84,6 +124,7 @@ bool tree_sitter_rescript_external_scanner_scan(
     const bool* valid_symbols
     ) {
   ScannerState* state = (ScannerState*)payload;
+  const in_string = state->in_quotes || state->in_backticks;
 
   if (valid_symbols[TEMPLATE_CHARS]) {
     lexer->result_symbol = TEMPLATE_CHARS;
@@ -91,6 +132,7 @@ bool tree_sitter_rescript_external_scanner_scan(
       lexer->mark_end(lexer);
       switch (lexer->lookahead) {
         case '`':
+          state->in_backticks = false;
           return has_content;
         case '\0':
           return false;
@@ -110,37 +152,86 @@ bool tree_sitter_rescript_external_scanner_scan(
     return true;
   }
 
+  // Magic ahead!
+  // We have two types of newline in ReScript. The one which ends the current statement,
+  // and the one used just for pretty-formatting (e.g. separates variant type values).
+  // We report only the first one. The second one should be ignored and skipped as
+  // whitespace.
+  // What makes things worse is that we can have comments interleaved in statements.
+  // Tree-sitter gives just one chance to say what type of a token we’re on. We can’t
+  // say: “I see a significant newline, then I see a comment”. To deal with it, an
+  // artificial token NEWLINE_AND_COMMENT was introduced. It has the same semantics for
+  // the AST as simple newline and the same highlighting as a usual comment.
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
-    lexer->result_symbol = NEWLINE;
     bool is_unnested = state->parens_nesting == 0;
-    lexer->advance(lexer, !is_unnested);
+    lexer->result_symbol = NEWLINE;
+    lexer->advance(lexer, true);
     lexer->mark_end(lexer);
 
-    scan_whitespace_and_comments(lexer);
+    bool has_comment = scan_whitespace_and_comments(lexer);
+    if (has_comment && valid_symbols[NEWLINE_AND_COMMENT]) {
+      lexer->result_symbol = NEWLINE_AND_COMMENT;
+      lexer->mark_end(lexer);
+    }
+
+    bool in_multiline_statement = false;
     if (lexer->lookahead == '-') {
       advance(lexer);
       if (lexer->lookahead == '>') {
         // Ignore new lines before pipe operator (->)
-        return false;
+        in_multiline_statement = true;
       }
     } else if (lexer->lookahead == '|') {
       // Ignore new lines before variant declarations and switch matches
-      return false;
+      in_multiline_statement = true;
     } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
       // Ignore new lines before potential ternaries
-      return false;
+      in_multiline_statement = true;
     } else if (lexer->lookahead == '}') {
       // Do not report new lines right before block/switch closings to avoid
       // parser confustion between a terminated and unterminated statements
       // for rules like seq(repeat($._statement), $.statement)
-      return false;
+      in_multiline_statement = true;
     }
 
-    return is_unnested;
+    if (in_multiline_statement) {
+      if (has_comment && valid_symbols[COMMENT]) {
+        lexer->result_symbol = COMMENT;
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 
-  if (!scan_whitespace_and_comments(lexer)) {
-    return false;
+  if (!in_string) {
+    scan_whitespace(lexer, true);
+  }
+
+  if (valid_symbols[COMMENT] && lexer->lookahead == '/' && !in_string) {
+    lexer->result_symbol = COMMENT;
+    if (scan_comment(lexer)) {
+      lexer->mark_end(lexer);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  if (valid_symbols[QUOTE] && lexer->lookahead == '"') {
+    state->in_quotes = !state->in_quotes;
+    lexer->result_symbol = QUOTE;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
+  }
+
+  if (valid_symbols[BACKTICK] && lexer->lookahead == '`') {
+    state->in_backticks = !state->in_backticks;
+    lexer->result_symbol = BACKTICK;
+    lexer->advance(lexer, false);
+    lexer->mark_end(lexer);
+    return true;
   }
 
   if (valid_symbols[L_PAREN] && lexer->lookahead == '(') {
@@ -149,7 +240,9 @@ bool tree_sitter_rescript_external_scanner_scan(
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
     return true;
-  } else if (valid_symbols[R_PAREN] && lexer->lookahead == ')') {
+  }
+
+  if (valid_symbols[R_PAREN] && lexer->lookahead == ')') {
     --state->parens_nesting;
     lexer->result_symbol = R_PAREN;
     lexer->advance(lexer, false);

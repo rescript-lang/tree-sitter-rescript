@@ -3,6 +3,10 @@ module.exports = grammar({
 
   externals: $ => [
     $._newline,
+    $.comment,
+    $._newline_and_comment,
+    '"',
+    "`",
     $._template_chars,
     $._lparen,
     $._rparen,
@@ -74,9 +78,21 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: $ => repeat($._statement),
+    source_file: $ => seq(
+      repeat($._statement_delimeter),
+      repeat($._statement)
+    ),
 
-    _statement: $ => seq($.statement, choice(';', $._newline)),
+    _statement: $ => seq(
+      $.statement,
+      repeat1($._statement_delimeter)
+    ),
+
+    _statement_delimeter: $ => choice(
+      ';',
+      $._newline,
+      alias($._newline_and_comment, $.comment),
+    ),
 
     statement: $ => choice(
       alias($._decorated_statement, $.decorated),
@@ -1105,22 +1121,15 @@ module.exports = grammar({
       )
     )),
 
-    // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
-    comment: $ => token(choice(
-      seq('//', /.*/),
-      seq(
-        '/*',
-        /[^*]*\*+([^/*][^*]*\*+)*/,
-        '/'
-      )
-    )),
-
     template_string: $ => seq(
-      choice(
+      token(seq(
+        optional(choice(
+          'j',
+          'js',
+          'json',
+        )),
         '`',
-        'j`',
-        'json`',
-      ),
+      )),
       repeat(choice(
         $._template_chars,
         $.template_substitution,
