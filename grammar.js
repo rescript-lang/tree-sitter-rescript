@@ -398,6 +398,7 @@ module.exports = grammar({
       $.polyvar,
       $.if_expression,
       $.switch_expression,
+      $.try_expression,
       $.call_expression,
       $.pipe_expression,
       $.subscript_expression,
@@ -569,6 +570,15 @@ module.exports = grammar({
     _switch_match_body: $ => seq(
       repeat($._statement),
       $.statement,
+    ),
+
+    try_expression: $ => seq(
+      'try',
+      $.block,
+      'catch',
+      '{',
+      repeat($.switch_match),
+      '}',
     ),
 
     as_aliasing: $ => seq(

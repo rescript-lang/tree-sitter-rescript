@@ -111,6 +111,8 @@
 
 [
  "exception"
+ "try"
+ "catch"
 ] @exception
 
 [
