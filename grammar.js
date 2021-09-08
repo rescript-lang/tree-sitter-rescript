@@ -400,6 +400,7 @@ module.exports = grammar({
       $.switch_expression,
       $.try_expression,
       $.call_expression,
+      $.raise_expression,
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
@@ -589,6 +590,13 @@ module.exports = grammar({
     call_expression: $ => prec('call', seq(
       field('function', $.primary_expression),
       field('arguments', alias($.call_arguments, $.arguments)),
+    )),
+
+    raise_expression: $ => prec('call', seq(
+      'raise',
+      '(',
+      $.variant,
+      ')',
     )),
 
     pipe_expression: $ => prec.left(seq(

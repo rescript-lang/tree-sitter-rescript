@@ -722,6 +722,25 @@ Extensions
       (extension_identifier)
       (arguments (string (string_fragment))))))
 
+===========================================
+Raise expression
+===========================================
+
+raise(BadArgument({myMessage: "Oops!"}))
+
+---
+
+(source_file
+  (expression_statement
+    (raise_expression
+      (variant
+        (variant_identifier)
+        (arguments
+          (record
+            (record_field
+              (property_identifier)
+              (string (string_fragment)))))))))
+
 ============================================
 Try-catch
 ============================================

@@ -113,6 +113,7 @@
  "exception"
  "try"
  "catch"
+ "raise"
 ] @exception
 
 [
