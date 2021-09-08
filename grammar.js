@@ -141,6 +141,7 @@ module.exports = grammar({
       $.let_binding,
       $.module_declaration,
       $.external_declaration,
+      $.exception_declaration,
     ),
 
     module_declaration: $ => seq(
@@ -196,6 +197,12 @@ module.exports = grammar({
       $.type_annotation,
       '=',
       $.string,
+    ),
+
+    exception_declaration: $ => seq(
+      'exception',
+      $.variant_identifier,
+      optional($.variant_parameters),
     ),
 
     type_declaration: $ => seq(
@@ -391,7 +398,9 @@ module.exports = grammar({
       $.polyvar,
       $.if_expression,
       $.switch_expression,
+      $.try_expression,
       $.call_expression,
+      $.raise_expression,
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
@@ -564,6 +573,15 @@ module.exports = grammar({
       $.statement,
     ),
 
+    try_expression: $ => seq(
+      'try',
+      $.block,
+      'catch',
+      '{',
+      repeat($.switch_match),
+      '}',
+    ),
+
     as_aliasing: $ => seq(
       'as',
       $.value_identifier,
@@ -572,6 +590,13 @@ module.exports = grammar({
     call_expression: $ => prec('call', seq(
       field('function', $.primary_expression),
       field('arguments', alias($.call_arguments, $.arguments)),
+    )),
+
+    raise_expression: $ => prec('call', seq(
+      'raise',
+      '(',
+      $.variant,
+      ')',
     )),
 
     pipe_expression: $ => prec.left(seq(

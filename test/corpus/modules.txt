@@ -280,3 +280,16 @@ Decorators
   (decorator_statement
     (decorator_identifier)
     (decorator_arguments (string (string_fragment)))))
+
+===========================================
+Exception declaration
+===========================================
+
+exception InputClosed(string)
+
+---
+
+(source_file
+  (exception_declaration
+    (variant_identifier)
+    (variant_parameters (type_identifier))))

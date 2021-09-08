@@ -93,7 +93,6 @@
 
 [
   "as"
-  "exception"
   "export"
   "external"
   "let"
@@ -108,6 +107,13 @@
   "else"
   "switch"
 ] @conditional
+
+[
+  "exception"
+  "try"
+  "catch"
+  "raise"
+] @exception
 
 [
   "."

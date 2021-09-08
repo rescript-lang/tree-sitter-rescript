@@ -721,3 +721,55 @@ Extensions
     (extension_expression
       (extension_identifier)
       (arguments (string (string_fragment))))))
+
+===========================================
+Raise expression
+===========================================
+
+raise(BadArgument({myMessage: "Oops!"}))
+
+---
+
+(source_file
+  (expression_statement
+    (raise_expression
+      (variant
+        (variant_identifier)
+        (arguments
+          (record
+            (record_field
+              (property_identifier)
+              (string (string_fragment)))))))))
+
+============================================
+Try-catch
+============================================
+
+try {
+  someOtherJSFunctionThatThrows()
+} catch {
+| Not_found => 1
+| FooBar({ x, y }) => 2
+| Js.Exn.Error(obj) => 3
+}
+
+---
+
+(source_file
+  (expression_statement
+    (try_expression
+      (block (expression_statement (call_expression (value_identifier) (arguments))))
+      (switch_match (variant_pattern (variant_identifier)) (expression_statement (number)))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (shorthand_property_identifier_pattern)
+              (shorthand_property_identifier_pattern))))
+        (expression_statement (number)))
+      (switch_match
+        (variant_pattern
+          (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
+          (formal_parameters (value_identifier)))
+        (expression_statement (number))))))
