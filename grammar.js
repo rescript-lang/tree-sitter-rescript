@@ -141,6 +141,7 @@ module.exports = grammar({
       $.let_binding,
       $.module_declaration,
       $.external_declaration,
+      $.exception_declaration,
     ),
 
     module_declaration: $ => seq(
@@ -196,6 +197,12 @@ module.exports = grammar({
       $.type_annotation,
       '=',
       $.string,
+    ),
+
+    exception_declaration: $ => seq(
+      'exception',
+      $.variant_identifier,
+      optional($.variant_parameters),
     ),
 
     type_declaration: $ => seq(

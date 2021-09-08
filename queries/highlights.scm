@@ -110,6 +110,10 @@
 ] @conditional
 
 [
+ "exception"
+] @exception
+
+[
   "."
   ","
   "|"
