@@ -93,7 +93,6 @@
 
 [
   "as"
-  "exception"
   "export"
   "external"
   "let"
@@ -110,10 +109,10 @@
 ] @conditional
 
 [
- "exception"
- "try"
- "catch"
- "raise"
+  "exception"
+  "try"
+  "catch"
+  "raise"
 ] @exception
 
 [
