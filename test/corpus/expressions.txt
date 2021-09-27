@@ -582,6 +582,16 @@ s1 ++ s2 ++ s3
     (binary_expression (value_identifier) (value_identifier))
     (value_identifier))))
 
+============================================
+Coercion operator
+============================================
+
+value :> newType
+
+---
+
+(source_file (expression_statement (coercion_expression (value_identifier) (type_identifier))))
+
 ==============================================
 Ternaries
 ==============================================
