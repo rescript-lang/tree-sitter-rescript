@@ -279,10 +279,15 @@ module.exports = grammar({
       ']',
     ),
 
-    polyvar_declaration: $ => prec.right(seq(
-      $.polyvar_identifier,
-      optional($.polyvar_parameters),
-    )),
+    polyvar_declaration: $ => prec.right(
+      choice(
+        seq(
+          $.polyvar_identifier,
+          optional($.polyvar_parameters),
+        ),
+        $._type_identifier
+      )
+    ),
 
     polyvar_parameters: $ => seq(
       '(',

@@ -136,6 +136,7 @@ type t = [>
   | #"cc-cc"
   | #\"cc-cc"
   | #42
+  | anotherType
   ]
 
 ---
@@ -149,7 +150,8 @@ type t = [>
         (polyvar_identifier) (polyvar_parameters (type_identifier)))
       (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
       (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
-      (polyvar_declaration (polyvar_identifier)))))
+      (polyvar_declaration (polyvar_identifier))
+      (polyvar_declaration (type_identifier)))))
 
 ===========================================
 Function
