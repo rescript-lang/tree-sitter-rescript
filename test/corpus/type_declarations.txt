@@ -136,6 +136,7 @@ type t = [>
   | #"cc-cc"
   | #\"cc-cc"
   | #42
+  | @as("42") #FortyTwo
   | anotherType
   ]
 
@@ -151,6 +152,7 @@ type t = [>
       (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
       (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
       (polyvar_declaration (polyvar_identifier))
+      (polyvar_declaration (decorator (decorator_identifier) (decorator_arguments (string (string_fragment)))) (polyvar_identifier))
       (polyvar_declaration (type_identifier)))))
 
 ===========================================
