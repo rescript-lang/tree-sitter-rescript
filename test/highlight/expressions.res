@@ -13,6 +13,11 @@ switch foo {
 //^ exception
 }
 
+switch bar {
+| #...Mod.t => 33
+//^ constant
+}
+
 { foo, bar: baz, qux: 1 }
 //^ property
 //     ^ property

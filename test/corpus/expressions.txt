@@ -361,6 +361,7 @@ Switch of polyvars
 switch foo {
 | #Bar => 42
 | #Qux(a as bar: int, 3) as qux => 99
+| #...Polyvar.t => 5
 }
 
 ---
@@ -381,6 +382,12 @@ switch foo {
             (type_annotation (type_identifier))
             (number)))
         (as_aliasing (value_identifier))
+        (expression_statement (number)))
+      (switch_match
+        (polyvar_type_pattern
+          (type_identifier_path
+            (module_identifier)
+            (type_identifier)))
         (expression_statement (number))))))
 
 ===========================================
