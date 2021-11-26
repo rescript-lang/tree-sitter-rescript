@@ -69,15 +69,12 @@ module.exports = grammar({
     [$.variant, $.variant_pattern],
     [$.polyvar],
     [$.polyvar, $.polyvar_pattern],
-    [$._literal_pattern],
+    [$._pattern],
     [$.extension_expression],
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
-    [$._switch_value_pattern, $.tuple_pattern],
-    [$._switch_value_pattern, $._literal_tuple_pattern],
-    [$._pattern, $._literal_tuple_pattern],
   ],
 
   rules: {
@@ -555,7 +552,6 @@ module.exports = grammar({
     _switch_pattern: $ => barSep1(choice(
       alias($._switch_exception_pattern, $.exception),
       $._switch_value_pattern,
-      alias($._switch_tuple_pattern, $.tuple_pattern),
       $.polyvar_type_pattern,
     )),
 
@@ -572,12 +568,6 @@ module.exports = grammar({
     switch_pattern_condition: $ => seq(
       'if',
       $.expression,
-    ),
-
-    _switch_tuple_pattern: $ => seq(
-      '(',
-      commaSep2t(alias($._switch_pattern, $.tuple_pattern_item)),
-      ')',
     ),
 
     polyvar_type_pattern: $ => seq(
@@ -701,11 +691,11 @@ module.exports = grammar({
     // unfinished constructs are generally treated as literal expressions,
     // not patterns.
     _pattern: $ => prec.dynamic(-1, seq(
-      choice(
+      barSep1(choice(
         $.value_identifier,
         $._literal_pattern,
         $._destructuring_pattern,
-      ),
+      )),
       optional($.as_aliasing),
     )),
 
@@ -725,13 +715,6 @@ module.exports = grammar({
       $.number,
       $.true,
       $.false,
-      alias($._literal_tuple_pattern, $.tuple),
-    ),
-
-    _literal_tuple_pattern: $ => seq(
-      '(',
-      commaSep2t($._literal_pattern),
-      ')',
     ),
 
     variant_pattern: $ => seq(
