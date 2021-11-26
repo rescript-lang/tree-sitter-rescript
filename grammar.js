@@ -22,7 +22,6 @@ module.exports = grammar({
     $.declaration,
     $.expression,
     $.primary_expression,
-    $.pattern,
     $._type,
     $.module_expression,
   ],
@@ -52,7 +51,7 @@ module.exports = grammar({
   conflicts: $ => [
     [$.unit, $.formal_parameters],
     [$.pipe_expression, $.expression],
-    [$.primary_expression, $.pattern],
+    [$.primary_expression, $._pattern],
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
     [$.primary_expression, $.record_field],
@@ -78,6 +77,7 @@ module.exports = grammar({
     [$.decorator],
     [$._switch_value_pattern, $.tuple_pattern],
     [$._switch_value_pattern, $._literal_tuple_pattern],
+    [$._pattern, $._literal_tuple_pattern],
   ],
 
   rules: {
@@ -367,7 +367,7 @@ module.exports = grammar({
     let_binding: $ => seq(
       choice('export', 'let'),
       optional('rec'),
-      $.pattern,
+      $._pattern,
       optional($.type_annotation),
       optional(seq(
         '=',
@@ -565,11 +565,7 @@ module.exports = grammar({
     ),
 
     _switch_value_pattern: $ => seq(
-      choice(
-        $.pattern,
-        $._literal_pattern,
-      ),
-      optional($.as_aliasing),
+      $._pattern,
       optional($.switch_pattern_condition),
     ),
 
@@ -673,7 +669,7 @@ module.exports = grammar({
     _formal_parameter: $ => seq(
       optional($.uncurry),
       choice(
-        $.pattern,
+        $._pattern,
         $.positional_parameter,
         $.labeled_parameter,
         $.unit,
@@ -681,7 +677,7 @@ module.exports = grammar({
     ),
 
     positional_parameter: $ => seq(
-      $.pattern,
+      $._pattern,
       $.type_annotation,
     ),
 
@@ -704,9 +700,13 @@ module.exports = grammar({
     // This negative dynamic precedence ensures that during error recovery,
     // unfinished constructs are generally treated as literal expressions,
     // not patterns.
-    pattern: $ => prec.dynamic(-1, choice(
-      $.value_identifier,
-      $._destructuring_pattern,
+    _pattern: $ => prec.dynamic(-1, seq(
+      choice(
+        $.value_identifier,
+        $._literal_pattern,
+        $._destructuring_pattern,
+      ),
+      optional($.as_aliasing),
     )),
 
     _destructuring_pattern: $ => choice(
@@ -716,6 +716,22 @@ module.exports = grammar({
       $.tuple_pattern,
       $.array_pattern,
       $.list_pattern,
+    ),
+
+    _literal_pattern: $ => choice(
+      $.string,
+      $.template_string,
+      $.character,
+      $.number,
+      $.true,
+      $.false,
+      alias($._literal_tuple_pattern, $.tuple),
+    ),
+
+    _literal_tuple_pattern: $ => seq(
+      '(',
+      commaSep2t($._literal_pattern),
+      ')',
     ),
 
     variant_pattern: $ => seq(
@@ -733,11 +749,7 @@ module.exports = grammar({
     ),
 
     _variant_pattern_parameter: $ => seq(
-      barSep1(choice(
-        $._literal_pattern,
-        $.pattern,
-      )),
-      optional($.as_aliasing),
+      barSep1($._pattern),
       optional($.type_annotation),
     ),
 
@@ -746,35 +758,13 @@ module.exports = grammar({
       optional(alias($._variant_pattern_parameters, $.formal_parameters))
     ),
 
-    _literal_pattern: $ => seq(
-      choice(
-        $.string,
-        $.template_string,
-        $.character,
-        $.number,
-        $.true,
-        $.false,
-        alias($._literal_tuple_pattern, $.tuple),
-      ),
-      optional($.as_aliasing),
-    ),
-
-    _literal_tuple_pattern: $ => seq(
-      '(',
-      commaSep2t($._literal_pattern),
-      ')',
-    ),
-
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
         alias($.value_identifier, $.shorthand_property_identifier_pattern),
         optional(seq(
           ':',
-          barSep1(choice(
-            $._literal_pattern,
-            $.pattern,
-          )),
+          barSep1($._pattern),
         )),
       )),
       '}'
@@ -782,10 +772,7 @@ module.exports = grammar({
 
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t(seq(
-        $.pattern,
-        optional($.as_aliasing),
-      )),
+      commaSep2t($._pattern),
       ')',
     ),
 
@@ -803,12 +790,7 @@ module.exports = grammar({
     ),
 
     _collection_element_pattern: $ => seq(
-      choice(
-        $.pattern,
-        $._literal_pattern,
-        $.spread_pattern,
-      ),
-      optional($.as_aliasing),
+      choice($._pattern, $.spread_pattern),
     ),
 
     spread_pattern: $ => seq(
