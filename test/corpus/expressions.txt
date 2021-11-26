@@ -344,8 +344,8 @@ switch foo {
             (as_aliasing (value_identifier))
             (type_annotation (type_identifier))
             (record_pattern
-              (shorthand_property_identifier_pattern)
-              (shorthand_property_identifier_pattern))))
+              (value_identifier)
+              (value_identifier))))
         (expression_statement (value_identifier)))
       (switch_match
         (variant_pattern
@@ -493,7 +493,7 @@ switch person {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (string (string_fragment))
               (string (string_fragment)))))
         (expression_statement (number)))
@@ -502,11 +502,11 @@ switch person {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (record_pattern
-                (shorthand_property_identifier_pattern)
+                (value_identifier)
                 (number))
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (variant_pattern
                 (variant_identifier)
                 (formal_parameters (value_identifier)))
@@ -519,14 +519,14 @@ switch person {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (variant_pattern (variant_identifier)))))
         (expression_statement (number)))
       (switch_match
         (variant_pattern
           (variant_identifier)
           (formal_parameters
-            (record_pattern (shorthand_property_identifier_pattern))))
+            (record_pattern (value_identifier))))
         (expression_statement (number))))))
 
 ===========================================
@@ -879,8 +879,8 @@ try {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
-              (shorthand_property_identifier_pattern))))
+              (value_identifier)
+              (value_identifier))))
         (expression_statement (number)))
       (switch_match
         (variant_pattern

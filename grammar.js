@@ -744,7 +744,7 @@ module.exports = grammar({
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
-        alias($.value_identifier, $.shorthand_property_identifier_pattern),
+        $.value_identifier,
         optional(seq(
           ':',
           barSep1($._pattern),

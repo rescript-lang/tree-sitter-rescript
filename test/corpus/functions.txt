@@ -122,12 +122,12 @@ Record pattern
   (expression_statement (function
     (formal_parameters
       (record_pattern
-        (shorthand_property_identifier_pattern)
-        (shorthand_property_identifier_pattern)
+        (value_identifier)
+        (value_identifier)
         (record_pattern
-          (shorthand_property_identifier_pattern)
-          (shorthand_property_identifier_pattern))
-        (shorthand_property_identifier_pattern)
+          (value_identifier)
+          (value_identifier))
+        (value_identifier)
         (value_identifier)))
     (number))))
 
