@@ -76,6 +76,8 @@ module.exports = grammar({
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
+    [$._switch_value_pattern, $.tuple_pattern],
+    [$._switch_value_pattern, $._literal_tuple_pattern],
   ],
 
   rules: {
@@ -544,19 +546,18 @@ module.exports = grammar({
     ),
 
     switch_match: $ => prec.dynamic(-1, seq(
-      repeat1($._switch_pattern),
+      '|',
+      $._switch_pattern,
       '=>',
       $._switch_match_body,
     )),
 
-    _switch_pattern: $ => seq(
-      '|',
-      choice(
-        alias($._switch_exception_pattern, $.exception),
-        $._switch_value_pattern,
-        $.polyvar_type_pattern,
-      ),
-    ),
+    _switch_pattern: $ => barSep1(choice(
+      alias($._switch_exception_pattern, $.exception),
+      $._switch_value_pattern,
+      alias($._switch_tuple_pattern, $.tuple_pattern),
+      $.polyvar_type_pattern,
+    )),
 
     _switch_exception_pattern: $ => seq(
       'exception',
@@ -575,6 +576,12 @@ module.exports = grammar({
     switch_pattern_condition: $ => seq(
       'if',
       $.expression,
+    ),
+
+    _switch_tuple_pattern: $ => seq(
+      '(',
+      commaSep2t(alias($._switch_pattern, $.tuple_pattern_item)),
+      ')',
     ),
 
     polyvar_type_pattern: $ => seq(
