@@ -344,8 +344,8 @@ switch foo {
             (as_aliasing (value_identifier))
             (type_annotation (type_identifier))
             (record_pattern
-              (shorthand_property_identifier_pattern)
-              (shorthand_property_identifier_pattern))))
+              (value_identifier)
+              (value_identifier))))
         (expression_statement (value_identifier)))
       (switch_match
         (variant_pattern
@@ -432,15 +432,14 @@ switch (foo, bar) {
     (switch_expression
       (tuple (value_identifier) (value_identifier))
       (switch_match
-        (tuple
-          (number)
-          (number)
-          (as_aliasing (value_identifier)))
+        (tuple_pattern
+          (tuple_item_pattern (number))
+          (tuple_item_pattern (number) (as_aliasing (value_identifier))))
         (expression_statement (number)))
       (switch_match
         (tuple_pattern
-          (tuple_pattern_item (value_identifier))
-          (tuple_pattern_item (value_identifier)))
+          (tuple_item_pattern (value_identifier))
+          (tuple_item_pattern (value_identifier)))
         (expression_statement (number))))))
 
 ===========================================
@@ -460,10 +459,10 @@ switch tuple {
       (value_identifier)
       (switch_match
         (tuple_pattern
-          (tuple_pattern_item
+          (tuple_item_pattern
             (variant_pattern (variant_identifier))
             (variant_pattern (variant_identifier)))
-          (tuple_pattern_item (number)))
+          (tuple_item_pattern (number)))
         (expression_statement (number)))
     (switch_match
       (value_identifier)
@@ -494,7 +493,7 @@ switch person {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (string (string_fragment))
               (string (string_fragment)))))
         (expression_statement (number)))
@@ -503,11 +502,11 @@ switch person {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (record_pattern
-                (shorthand_property_identifier_pattern)
+                (value_identifier)
                 (number))
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (variant_pattern
                 (variant_identifier)
                 (formal_parameters (value_identifier)))
@@ -520,14 +519,14 @@ switch person {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
+              (value_identifier)
               (variant_pattern (variant_identifier)))))
         (expression_statement (number)))
       (switch_match
         (variant_pattern
           (variant_identifier)
           (formal_parameters
-            (record_pattern (shorthand_property_identifier_pattern))))
+            (record_pattern (value_identifier))))
         (expression_statement (number))))))
 
 ===========================================
@@ -880,8 +879,8 @@ try {
           (variant_identifier)
           (formal_parameters
             (record_pattern
-              (shorthand_property_identifier_pattern)
-              (shorthand_property_identifier_pattern))))
+              (value_identifier)
+              (value_identifier))))
         (expression_statement (number)))
       (switch_match
         (variant_pattern

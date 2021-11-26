@@ -26,9 +26,12 @@ let (a, b, (c, d)) = foo
 (source_file
   (let_binding
     (tuple_pattern
-      (value_identifier)
-      (value_identifier)
-      (tuple_pattern (value_identifier) (value_identifier)))
+      (tuple_item_pattern (value_identifier))
+      (tuple_item_pattern (value_identifier))
+      (tuple_item_pattern
+        (tuple_pattern
+          (tuple_item_pattern (value_identifier))
+          (tuple_item_pattern (value_identifier)))))
     (value_identifier)))
 
 ============================================
