@@ -755,7 +755,7 @@ module.exports = grammar({
 
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t($._pattern),
+      commaSep2t(alias($._pattern, $.tuple_item_pattern)),
       ')',
     ),
 

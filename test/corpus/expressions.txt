@@ -433,14 +433,13 @@ switch (foo, bar) {
       (tuple (value_identifier) (value_identifier))
       (switch_match
         (tuple_pattern
-          (number)
-          (number)
-          (as_aliasing (value_identifier)))
+          (tuple_item_pattern (number))
+          (tuple_item_pattern (number) (as_aliasing (value_identifier))))
         (expression_statement (number)))
       (switch_match
         (tuple_pattern
-          (value_identifier)
-          (value_identifier))
+          (tuple_item_pattern (value_identifier))
+          (tuple_item_pattern (value_identifier)))
         (expression_statement (number))))))
 
 ===========================================
@@ -460,9 +459,10 @@ switch tuple {
       (value_identifier)
       (switch_match
         (tuple_pattern
-          (variant_pattern (variant_identifier))
-          (variant_pattern (variant_identifier))
-          (number))
+          (tuple_item_pattern
+            (variant_pattern (variant_identifier))
+            (variant_pattern (variant_identifier)))
+          (tuple_item_pattern (number)))
         (expression_statement (number)))
     (switch_match
       (value_identifier)
