@@ -470,6 +470,67 @@ switch tuple {
       (expression_statement (number))))))
 
 ===========================================
+Switch of record patterns
+===========================================
+
+switch person {
+| Teacher({name: "Mary" | "Joe"}) => 10
+| Student({
+    reportCard: {gpa: 0.0},
+    status: Vacations(daysLeft) | Sabbatical(daysLeft)
+  }) => 20
+| Student({status: Sick}) => 30
+| Student({name}) => 40
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (shorthand_property_identifier_pattern)
+              (string (string_fragment))
+              (string (string_fragment)))))
+        (expression_statement (number)))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (shorthand_property_identifier_pattern)
+              (record_pattern
+                (shorthand_property_identifier_pattern)
+                (number))
+              (shorthand_property_identifier_pattern)
+              (variant_pattern
+                (variant_identifier)
+                (formal_parameters (value_identifier)))
+              (variant_pattern
+                (variant_identifier)
+                (formal_parameters (value_identifier))))))
+        (expression_statement (number)))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (shorthand_property_identifier_pattern)
+              (variant_pattern (variant_identifier)))))
+        (expression_statement (number)))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern (shorthand_property_identifier_pattern))))
+        (expression_statement (number))))))
+
+===========================================
 Switch of lists
 ===========================================
 

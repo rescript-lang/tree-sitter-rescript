@@ -733,10 +733,10 @@ module.exports = grammar({
     ),
 
     _variant_pattern_parameter: $ => seq(
-      choice(
+      barSep1(choice(
         $._literal_pattern,
         $.pattern,
-      ),
+      )),
       optional($.as_aliasing),
       optional($.type_annotation),
     ),
@@ -771,7 +771,10 @@ module.exports = grammar({
         alias($.value_identifier, $.shorthand_property_identifier_pattern),
         optional(seq(
           ':',
-          $.pattern,
+          barSep1(choice(
+            $._literal_pattern,
+            $.pattern,
+          )),
         )),
       )),
       '}'
