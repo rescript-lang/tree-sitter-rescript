@@ -998,12 +998,12 @@ module.exports = grammar({
     extension_expression: $ => prec('call', seq(
       repeat1('%'),
       $.extension_identifier,
-      optional(alias($.extension_expression_arguments, $.arguments)),
+      optional($._extension_expression_payload),
     )),
 
-    extension_expression_arguments: $ => seq(
+    _extension_expression_payload: $ => seq(
       '(',
-      commaSep($.string),
+      commaSep($.statement),
       ')',
     ),
 

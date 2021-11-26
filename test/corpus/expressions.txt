@@ -752,6 +752,7 @@ Extensions
 %debugger
 %re("/[^1-9]/g")
 %%raw("function () { return 42; }")
+%%private(let mult = (x, y) => x * y)
 
 ---
 
@@ -761,11 +762,19 @@ Extensions
   (expression_statement
     (extension_expression
       (extension_identifier)
-      (arguments (string (string_fragment)))))
+      (expression_statement (string (string_fragment)))))
   (expression_statement
     (extension_expression
       (extension_identifier)
-      (arguments (string (string_fragment))))))
+      (expression_statement (string (string_fragment)))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (let_binding
+        (value_identifier)
+        (function
+          (formal_parameters (value_identifier) (value_identifier))
+          (binary_expression (value_identifier) (value_identifier)))))))
 
 ===========================================
 Raise expression
