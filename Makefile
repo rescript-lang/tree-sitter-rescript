@@ -1,6 +1,10 @@
 
 TS=yarn tree-sitter
 
+# This is an opinionated list of significant ReScript repos on GitHub
+# that are representative and trick-heavy enough to be a subject
+# for acceptance testing. The general idea: if `tree-sitter-rescript`
+# is 100% legit for this codebase, it should satisfy everyone.
 wild_github_repos := rescript-lang/rescript-react \
 										 tinymce/rescript-webapi
 
