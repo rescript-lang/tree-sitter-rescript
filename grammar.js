@@ -1101,11 +1101,14 @@ module.exports = grammar({
         seq(optional('0'), /[1-9]/, optional(seq(optional('_'), decimal_digits)))
       )
 
-      const decimal_literal = choice(
-        seq(decimal_integer_literal, '.', optional(decimal_digits), optional(exponent_part)),
-        seq('.', decimal_digits, optional(exponent_part)),
-        seq(decimal_integer_literal, exponent_part),
-        seq(decimal_digits),
+      const decimal_literal = seq(
+        optional(choice('-', '+')),
+        choice(
+          seq(decimal_integer_literal, '.', optional(decimal_digits), optional(exponent_part)),
+          seq('.', decimal_digits, optional(exponent_part)),
+          seq(decimal_integer_literal, exponent_part),
+          seq(decimal_digits),
+        )
       )
 
       return token(choice(

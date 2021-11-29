@@ -29,10 +29,18 @@ Numbers
 0b1_000_000n
 01
 00000123
+-3
+-3.0
++3
++3.0
 
 ---
 
 (source_file
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
