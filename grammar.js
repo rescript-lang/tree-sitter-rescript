@@ -625,6 +625,7 @@ module.exports = grammar({
       optional($.uncurry),
       optional(commaSep1t(choice(
         $.expression,
+        $.block,
         $.labeled_argument,
       ))),
       ')'
@@ -638,7 +639,7 @@ module.exports = grammar({
         seq(
           '=',
           optional('?'),
-          field('value', $.expression),
+          field('value', choice($.expression, $.block)),
         ),
       )),
     ),

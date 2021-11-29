@@ -80,6 +80,14 @@ keep(
   item =>
     item->Foo.bar == 5
 )
+blocky(
+  1,
+  {
+    open Mod
+    qrux
+  },
+  ~third={3},
+)
 
 ---
 
@@ -124,7 +132,18 @@ keep(
               (value_identifier_path
                 (module_identifier)
                 (value_identifier)))
-            right: (number)))))))
+            right: (number))))))
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (number)
+        (block
+          (open_statement (module_identifier))
+          (expression_statement (value_identifier)))
+        (labeled_argument
+          label: (value_identifier)
+          value: (block (expression_statement (number))))))))
 
 ===========================================
 Pipe
