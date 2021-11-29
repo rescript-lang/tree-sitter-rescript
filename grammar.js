@@ -40,6 +40,8 @@ module.exports = grammar({
       'coercion_relation',
       $.expression,
       $.primary_expression,
+      $.ternary_expression,
+      $.mutation_expression,
       $.function,
       $.let_binding,
     ],
@@ -98,7 +100,6 @@ module.exports = grammar({
       alias($._decorated_statement, $.decorated),
       $.decorator_statement,
       $.expression_statement,
-      $.mutation_statement,
       $.declaration,
       $.block,
       $.open_statement,
@@ -382,6 +383,7 @@ module.exports = grammar({
       $.binary_expression,
       $.coercion_expression,
       $.ternary_expression,
+      $.mutation_expression,
     ),
 
     primary_expression: $ => choice(
@@ -863,7 +865,7 @@ module.exports = grammar({
       $.jsx_expression,
     ),
 
-    mutation_statement: $ => seq(
+    mutation_expression: $ => seq(
       $._mutation_lvalue,
       choice('=', ':='),
       $.expression,

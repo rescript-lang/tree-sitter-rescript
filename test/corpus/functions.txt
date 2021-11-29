@@ -132,6 +132,24 @@ Record pattern
     (number))))
 
 ===================================================
+Ref assignment as body
+===================================================
+
+reactRef => myRef := Some(reactRef)
+
+---
+
+(source_file
+  (expression_statement
+    (function
+      (value_identifier)
+      (mutation_expression
+        (value_identifier)
+        (variant
+          (variant_identifier)
+          (arguments (value_identifier)))))))
+
+===================================================
 Operator precendence
 ===================================================
 

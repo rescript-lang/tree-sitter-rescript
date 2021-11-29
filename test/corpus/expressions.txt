@@ -887,3 +887,27 @@ try {
           (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
           (formal_parameters (value_identifier)))
         (expression_statement (number))))))
+
+===========================================
+Mutation expressions
+===========================================
+
+foo["bar"] = qux
+foo.bar = qux
+foo.bar := qux
+
+---
+
+(source_file
+  (expression_statement
+    (mutation_expression
+      (subscript_expression (value_identifier) (string (string_fragment)))
+      (value_identifier)))
+  (expression_statement
+    (mutation_expression
+      (member_expression (value_identifier) (property_identifier))
+      (value_identifier)))
+  (expression_statement
+    (mutation_expression
+      (member_expression (value_identifier) (property_identifier))
+      (value_identifier))))
