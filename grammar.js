@@ -214,6 +214,7 @@ module.exports = grammar({
       optional($.type_parameters),
       optional(seq(
         '=',
+        optional('private'),
         $._type,
       ))
     ),

@@ -36,6 +36,16 @@ type t = Foo.Bar.qux
       (module_identifier) (module_identifier) (type_identifier))))
 
 ===========================================
+Private
+===========================================
+
+type t = private string
+
+---
+
+(source_file (type_declaration (type_identifier) (type_identifier)))
+
+===========================================
 Tuple type
 ===========================================
 
