@@ -640,6 +640,27 @@ switch parseExn(str) {
         (expression_statement (number))))))
 
 ===========================================
+Switch block
+===========================================
+
+switch { open Mod; foo() } {
+| _ => 42
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (block
+        (open_statement (module_identifier))
+        (expression_statement
+          (call_expression (value_identifier) (arguments))))
+      (switch_match
+        (value_identifier)
+        (expression_statement (number))))))
+
+===========================================
 Math operators
 ===========================================
 

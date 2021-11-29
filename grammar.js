@@ -54,6 +54,9 @@ module.exports = grammar({
     [$.unit, $.formal_parameters],
     [$.pipe_expression, $.expression],
     [$.primary_expression, $._pattern],
+    [$.primary_expression, $.record_pattern],
+    [$.primary_expression, $.spread_pattern],
+    [$.primary_expression, $._literal_pattern],
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
     [$.primary_expression, $.record_field],
@@ -62,8 +65,6 @@ module.exports = grammar({
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
-    [$.primary_expression, $.spread_pattern],
-    [$.primary_expression, $._literal_pattern],
     [$.expression_statement, $.ternary_expression],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
@@ -101,7 +102,6 @@ module.exports = grammar({
       $.decorator_statement,
       $.expression_statement,
       $.declaration,
-      $.block,
       $.open_statement,
       $.include_statement,
     ),
@@ -370,7 +370,7 @@ module.exports = grammar({
       optional($.type_annotation),
       optional(seq(
         '=',
-        choice($.expression, $.block),
+        $.expression,
       )),
     ),
 
@@ -385,6 +385,7 @@ module.exports = grammar({
       $.coercion_expression,
       $.ternary_expression,
       $.mutation_expression,
+      $.block,
     ),
 
     primary_expression: $ => choice(
@@ -434,10 +435,7 @@ module.exports = grammar({
         $._definition_signature
       ),
       '=>',
-      field('body', choice(
-        $.expression,
-        $.block
-      )),
+      field('body', $.expression),
     )),
 
     record: $ => seq(
@@ -625,7 +623,6 @@ module.exports = grammar({
       optional($.uncurry),
       optional(commaSep1t(choice(
         $.expression,
-        $.block,
         $.labeled_argument,
       ))),
       ')'
@@ -639,7 +636,7 @@ module.exports = grammar({
         seq(
           '=',
           optional('?'),
-          field('value', choice($.expression, $.block)),
+          field('value', $.expression),
         ),
       )),
     ),
