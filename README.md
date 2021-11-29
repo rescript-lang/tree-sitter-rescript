@@ -19,4 +19,4 @@ Contributions are welcome. Here’s how you can help:
 yarn tree-sitter parse /path/to/your/snippet.res
 ```
 
-🤩 Add a failing test case for a snippet which is valid ReScript but produces an incorrect syntax tree. Fix the `grammar.js`. Make sure nothing is broken: `make test` shows 100% test success. Open a pull request.
+🤩 Add a failing test case for a snippet which is valid ReScript but produces an incorrect syntax tree. Fix the `grammar.js`. Make sure nothing is broken: `make test test_wild` shows 100% test success. Open a pull request.

@@ -93,3 +93,13 @@ let rec foo = n => foo(n-1)
             (binary_expression
               (value_identifier)
               (number)))))))
+
+============================================
+Unit
+============================================
+
+let () = noop
+
+---
+
+(source_file (let_binding (unit) (value_identifier)))

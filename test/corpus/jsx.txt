@@ -2,9 +2,10 @@
 Simple JSX elements
 ==============================================
 
-<div className="b" tabIndex={1} />;
-<Foo.Bar>a <span>b</span> c</Foo.Bar>;
-<Foo.Bar.Baz.Baz></Foo.Bar.Baz.Baz>;
+<div className="b" tabIndex={1} />
+<Foo.Bar>a <span>b</span> c</Foo.Bar>
+<Foo.Bar.Baz.Baz></Foo.Bar.Baz.Baz>
+<div> React.null </div>
 
 ---
 
@@ -37,7 +38,12 @@ Simple JSX elements
           (nested_jsx_identifier
             (nested_jsx_identifier (jsx_identifier) (jsx_identifier))
             (jsx_identifier))
-          (jsx_identifier))))))
+          (jsx_identifier)))))
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (value_identifier_path (module_identifier) (value_identifier))
+      (jsx_closing_element (jsx_identifier)))))
 
 ==============================================
 Attribute values
@@ -74,8 +80,8 @@ Attribute values
 Anonymous JSX element
 ==============================================
 
-<></>;
-<E><></></E>;
+<></>
+<E><></></E>
 
 ---
 

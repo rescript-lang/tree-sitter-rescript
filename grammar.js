@@ -40,6 +40,8 @@ module.exports = grammar({
       'coercion_relation',
       $.expression,
       $.primary_expression,
+      $.ternary_expression,
+      $.mutation_expression,
       $.function,
       $.let_binding,
     ],
@@ -52,6 +54,9 @@ module.exports = grammar({
     [$.unit, $.formal_parameters],
     [$.pipe_expression, $.expression],
     [$.primary_expression, $._pattern],
+    [$.primary_expression, $.record_pattern],
+    [$.primary_expression, $.spread_pattern],
+    [$.primary_expression, $._literal_pattern],
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
     [$.primary_expression, $.record_field],
@@ -60,8 +65,6 @@ module.exports = grammar({
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
-    [$.primary_expression, $.spread_pattern],
-    [$.primary_expression, $._literal_pattern],
     [$.expression_statement, $.ternary_expression],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
@@ -98,9 +101,7 @@ module.exports = grammar({
       alias($._decorated_statement, $.decorated),
       $.decorator_statement,
       $.expression_statement,
-      $.mutation_statement,
       $.declaration,
-      $.block,
       $.open_statement,
       $.include_statement,
     ),
@@ -213,6 +214,7 @@ module.exports = grammar({
       optional($.type_parameters),
       optional(seq(
         '=',
+        optional('private'),
         $._type,
       ))
     ),
@@ -364,11 +366,11 @@ module.exports = grammar({
     let_binding: $ => seq(
       choice('export', 'let'),
       optional('rec'),
-      $._pattern,
+      choice($._pattern, $.unit),
       optional($.type_annotation),
       optional(seq(
         '=',
-        choice($.expression, $.block),
+        $.expression,
       )),
     ),
 
@@ -382,6 +384,8 @@ module.exports = grammar({
       $.binary_expression,
       $.coercion_expression,
       $.ternary_expression,
+      $.mutation_expression,
+      $.block,
     ),
 
     primary_expression: $ => choice(
@@ -431,10 +435,7 @@ module.exports = grammar({
         $._definition_signature
       ),
       '=>',
-      field('body', choice(
-        $.expression,
-        $.block
-      )),
+      field('body', $.expression),
     )),
 
     record: $ => seq(
@@ -802,6 +803,7 @@ module.exports = grammar({
 
     _jsx_child: $ => choice(
       $.value_identifier,
+      $.value_identifier_path,
       $._jsx_element,
       $.jsx_fragment,
       $.jsx_expression
@@ -862,7 +864,7 @@ module.exports = grammar({
       $.jsx_expression,
     ),
 
-    mutation_statement: $ => seq(
+    mutation_expression: $ => seq(
       $._mutation_lvalue,
       choice('=', ':='),
       $.expression,
@@ -1096,11 +1098,14 @@ module.exports = grammar({
         seq(optional('0'), /[1-9]/, optional(seq(optional('_'), decimal_digits)))
       )
 
-      const decimal_literal = choice(
-        seq(decimal_integer_literal, '.', optional(decimal_digits), optional(exponent_part)),
-        seq('.', decimal_digits, optional(exponent_part)),
-        seq(decimal_integer_literal, exponent_part),
-        seq(decimal_digits),
+      const decimal_literal = seq(
+        optional(choice('-', '+')),
+        choice(
+          seq(decimal_integer_literal, '.', optional(decimal_digits), optional(exponent_part)),
+          seq('.', decimal_digits, optional(exponent_part)),
+          seq(decimal_integer_literal, exponent_part),
+          seq(decimal_digits),
+        )
       )
 
       return token(choice(

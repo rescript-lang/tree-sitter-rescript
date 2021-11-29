@@ -17,6 +17,7 @@ typedef struct ScannerState {
   int parens_nesting;
   bool in_quotes;
   bool in_backticks;
+  bool eof_reported;
 } ScannerState;
 
 void *tree_sitter_rescript_external_scanner_create() {
@@ -149,6 +150,17 @@ bool tree_sitter_rescript_external_scanner_scan(
       }
     }
 
+    return true;
+  }
+
+  // If a source file missing EOL at EOF, give the last statement a chance:
+  // report the statement delimiting EOL at the very end of file. Make sure
+  // it’s done only once, otherwise the scanner will enter dead-lock because
+  // we report NEWLINE again and again, no matter the lexer is exhausted
+  // already.
+  if (valid_symbols[NEWLINE] && lexer->eof(lexer) && !state->eof_reported) {
+    lexer->result_symbol = NEWLINE;
+    state->eof_reported = true;
     return true;
   }
 

@@ -98,6 +98,7 @@
   "let"
   "module"
   "mutable"
+  "private"
   "rec"
   "type"
 ] @keyword
