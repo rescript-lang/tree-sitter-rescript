@@ -6,7 +6,8 @@ TS=yarn tree-sitter
 # for acceptance testing. The general idea: if `tree-sitter-rescript`
 # is 100% legit for this codebase, it should satisfy everyone.
 wild_github_repos := rescript-lang/rescript-react \
-										 tinymce/rescript-webapi
+										 tinymce/rescript-webapi \
+										 cca-io/rescript-material-ui
 
 wild_sandboxes := $(patsubst %,test_wild/%,$(wild_github_repos))
 

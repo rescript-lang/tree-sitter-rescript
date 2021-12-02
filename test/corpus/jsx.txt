@@ -46,6 +46,27 @@ Simple JSX elements
       (jsx_closing_element (jsx_identifier)))))
 
 ==============================================
+Custom type children
+==============================================
+
+<div> "Hello" </div>
+<div> 48 </div>
+
+---
+
+(source_file
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (string (string_fragment))
+      (jsx_closing_element (jsx_identifier))))
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (number)
+      (jsx_closing_element (jsx_identifier)))))
+
+==============================================
 Attribute values
 ==============================================
 <Foo a=1 b=#hello c=None punned ?optA optB=?{foo} />;
