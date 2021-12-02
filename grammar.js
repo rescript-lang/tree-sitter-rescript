@@ -804,6 +804,10 @@ module.exports = grammar({
     _jsx_child: $ => choice(
       $.value_identifier,
       $.value_identifier_path,
+      $.number,
+      $.string,
+      $.template_string,
+      $.character,
       $._jsx_element,
       $.jsx_fragment,
       $.jsx_expression
