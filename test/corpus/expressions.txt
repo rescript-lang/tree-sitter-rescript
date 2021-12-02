@@ -252,8 +252,7 @@ Object
         (number))
       (field
         (property_identifier (string_fragment))
-        (string (string_fragment)))
-    ))
+        (string (string_fragment)))))
   (expression_statement
     (object (field
       (property_identifier (string_fragment)) (number))))
