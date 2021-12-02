@@ -164,6 +164,7 @@ module.exports = grammar({
       $.block,
       $.module_expression,
       $.functor,
+      $.extension_expression,
     ),
 
     functor: $ => seq(

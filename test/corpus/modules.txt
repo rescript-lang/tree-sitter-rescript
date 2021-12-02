@@ -194,6 +194,21 @@ module rec BYOBReader: {
     (module_identifier)))
 
 ===========================================
+Definition through extension
+===========================================
+
+module Styles = %makeStyles(())
+
+---
+
+(source_file
+  (module_declaration
+    (module_identifier)
+    (extension_expression
+      (extension_identifier)
+      (expression_statement (unit)))))
+
+===========================================
 Externals
 ===========================================
 
