@@ -222,6 +222,12 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
 external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) => unit =
   "pushState"
 
+@scope("AccessibilityInfo") @module("react-native")
+external addEventListener: @string
+[
+  | #boldTextChanged(bool => unit)
+] => EventSubscription.t = "addEventListener"
+
 ---
 
 (source_file
@@ -281,7 +287,28 @@ external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) =
               (labeled_parameter
                 (value_identifier) (type_annotation (type_identifier)))))
           (unit_type)))
-        (string (string_fragment)))))
+        (string (string_fragment))))
+  (decorated
+    (decorator
+      (decorator_identifier)
+      (decorator_arguments (string (string_fragment))))
+    (decorator (decorator_identifier)
+      (decorator_arguments (string (string_fragment))))
+    (external_declaration
+      (value_identifier)
+      (type_annotation
+        (decorator (decorator_identifier))
+        (function_type
+          (function_type_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (polyvar_parameters
+                  (function_type
+                    (function_type_parameters (type_identifier))
+                    (unit_type))))))
+          (type_identifier_path (module_identifier) (type_identifier))))
+      (string (string_fragment)))))
 
 ===========================================
 Decorators

@@ -22,7 +22,6 @@ module.exports = grammar({
     $.declaration,
     $.expression,
     $.primary_expression,
-    $._type,
     $.module_expression,
   ],
 
@@ -78,6 +77,7 @@ module.exports = grammar({
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
+    [$._type],
   ],
 
   rules: {
@@ -228,13 +228,17 @@ module.exports = grammar({
 
     type_annotation: $ => seq(
       ':',
+      repeat($.decorator),
       $._inline_type,
     ),
 
-    _type: $ => choice(
-      $._inline_type,
-      $.variant_type,
-      $.record_type,
+    _type: $ => seq(
+      repeat($.decorator),
+      choice(
+        $._inline_type,
+        $.variant_type,
+        $.record_type,
+      ),
     ),
 
     _inline_type: $ => choice(

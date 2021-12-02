@@ -7,7 +7,8 @@ TS=yarn tree-sitter
 # is 100% legit for this codebase, it should satisfy everyone.
 wild_github_repos := rescript-lang/rescript-react \
 										 tinymce/rescript-webapi \
-										 cca-io/rescript-material-ui
+										 cca-io/rescript-material-ui \
+										 rescript-react-native/rescript-react-native
 
 wild_sandboxes := $(patsubst %,test_wild/%,$(wild_github_repos))
 

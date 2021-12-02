@@ -166,6 +166,20 @@ type t = [>
       (polyvar_declaration (type_identifier)))))
 
 ===========================================
+Decorated polyvar
+===========================================
+
+type t = @string [ | #AAA ]
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (decorator (decorator_identifier))
+    (polyvar_type (polyvar_declaration (polyvar_identifier)))))
+
+===========================================
 Function
 ===========================================
 
