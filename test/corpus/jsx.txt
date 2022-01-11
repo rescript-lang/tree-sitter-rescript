@@ -113,3 +113,48 @@ Anonymous JSX element
       (jsx_opening_element (jsx_identifier))
       (jsx_fragment)
       (jsx_closing_element (jsx_identifier)))))
+
+===================================================
+Block children
+===================================================
+
+<div>
+  {
+    let href = "https://github.com"
+    <a href> {React.string("Hello")} </a>
+  }
+</div>
+
+---
+
+(source_file
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (block
+        (let_binding (value_identifier) (string (string_fragment)))
+        (expression_statement
+          (jsx_element
+            (jsx_opening_element (jsx_identifier) (jsx_attribute (property_identifier)))
+            (block
+              (expression_statement
+                (call_expression
+                  (value_identifier_path (module_identifier) (value_identifier))
+                  (arguments (string (string_fragment))))))
+            (jsx_closing_element (jsx_identifier)))))
+      (jsx_closing_element (jsx_identifier)))))
+
+===================================================
+Children spread
+===================================================
+
+<MyComponent> ...myChild </MyComponent>
+
+---
+
+(source_file
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (spread_element (value_identifier))
+      (jsx_closing_element (jsx_identifier)))))

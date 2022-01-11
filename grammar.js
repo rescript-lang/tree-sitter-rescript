@@ -31,6 +31,7 @@ module.exports = grammar({
       'unary_not',
       'member',
       'call',
+      $.spread_element,
       'binary_times',
       'binary_plus',
       'binary_compare',
@@ -811,7 +812,8 @@ module.exports = grammar({
       $.character,
       $._jsx_element,
       $.jsx_fragment,
-      $.jsx_expression
+      $.block,
+      $.spread_element,
     ),
 
     jsx_opening_element: $ => prec.dynamic(-1, seq(
