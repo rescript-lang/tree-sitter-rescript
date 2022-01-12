@@ -10,6 +10,7 @@ module.exports = grammar({
     $._template_chars,
     $._lparen,
     $._rparen,
+    $.raw_text,
   ],
 
   extras: $ => [
@@ -66,6 +67,7 @@ module.exports = grammar({
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
     [$.expression_statement, $.ternary_expression],
+    [$._type_declaration],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
     [$.variant],
@@ -78,6 +80,8 @@ module.exports = grammar({
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
+    [$._statement, $._extension_expression_payload],
+    [$._statement_delimeter, $._extension_expression_payload],
   ],
 
   rules: {
@@ -211,13 +215,22 @@ module.exports = grammar({
       optional('export'),
       'type',
       optional('rec'),
+      $._type_declaration,
+    ),
+
+    _type_declaration: $ => seq(
       $.type_identifier,
       optional($.type_parameters),
       optional(seq(
         '=',
         optional('private'),
         $._type,
-      ))
+      )),
+      optional(seq(
+        optional($._newline),
+        'and',
+        $._type_declaration
+      )),
     ),
 
     type_parameters: $ => seq(
@@ -581,6 +594,7 @@ module.exports = grammar({
     _switch_match_body: $ => seq(
       repeat($._statement),
       $.statement,
+      optional($._statement_delimeter),
     ),
 
     try_expression: $ => seq(
@@ -978,7 +992,11 @@ module.exports = grammar({
 
     _extension_expression_payload: $ => seq(
       '(',
-      commaSep($.statement),
+      optional($._newline),
+      repeat($._statement),
+      $.statement,
+      optional($._statement_delimeter),
+      optional($._newline),
       ')',
     ),
 
