@@ -10,7 +10,6 @@ module.exports = grammar({
     $._template_chars,
     $._lparen,
     $._rparen,
-    $.raw_text,
   ],
 
   extras: $ => [
@@ -986,9 +985,43 @@ module.exports = grammar({
 
     extension_expression: $ => prec('call', seq(
       repeat1('%'),
-      $.extension_identifier,
-      optional($._extension_expression_payload),
+      choice(
+        $._raw_js_extension_expression_payload,
+        seq(
+          $.extension_identifier,
+          optional($._extension_expression_payload),
+        ),
+      ),
     )),
+
+    _raw_js_extension_expression_payload: $ => seq(
+      alias(token('raw'), $.extension_identifier),
+      '(',
+      optional($._newline),
+      alias($._raw_js, $.expression_statement),
+      optional($._newline),
+      ')',
+    ),
+
+    _raw_js: $ =>
+      choice(
+        alias($._raw_js_template_string, $.template_string),
+        alias($._raw_js_string, $.string),
+      ),
+
+    _raw_js_string: $ => alias($.string, $.raw_js), 
+
+    _raw_js_template_string: $ => seq(
+      '`',
+      alias(repeat(choice(
+        $._template_chars,
+        choice(
+          alias('\\`', $.escape_sequence),
+          $.escape_sequence,
+        ),
+      )), $.raw_js),
+      '`',
+    ),
 
     _extension_expression_payload: $ => seq(
       '(',

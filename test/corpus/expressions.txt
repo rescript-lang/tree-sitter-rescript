@@ -904,7 +904,9 @@ Extensions
   let y = 1;
 )
 let x = %raw(`
-  raw js
+  function test(a) {
+    return "\" + a + "\";
+  }
 `)
 
 ---
@@ -924,7 +926,8 @@ let x = %raw(`
       (extension_identifier)
       (expression_statement
         (string
-          (string_fragment)))))
+          (raw_js
+            (string_fragment))))))
   (expression_statement
     (extension_expression
       (extension_identifier)
@@ -952,7 +955,10 @@ let x = %raw(`
         (extension_expression
           (extension_identifier)
           (expression_statement
-          (template_string)))))
+            (template_string
+              (raw_js
+                (escape_sequence)
+                (escape_sequence)))))))
 
 ===========================================
 Raise expression
