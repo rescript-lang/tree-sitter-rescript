@@ -227,10 +227,10 @@ module.exports = grammar({
         '=',
         optional('private'),
         $._type,
-      )),
-      optional(seq(
-        'and',
-        $._type_declaration
+        optional(seq(
+          token('and'),
+          $._type_declaration
+        )),
       )),
     ),
 
@@ -381,11 +381,19 @@ module.exports = grammar({
     let_binding: $ => seq(
       choice('export', 'let'),
       optional('rec'),
+      $._let_binding,
+    ),
+
+    _let_binding: $ => seq(
       choice($._pattern, $.unit),
       optional($.type_annotation),
       optional(seq(
         '=',
         $.expression,
+        optional(seq(
+          token('and'),
+          $._let_binding,
+        )),
       )),
     ),
 
