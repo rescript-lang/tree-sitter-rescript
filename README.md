@@ -4,6 +4,8 @@ This repository contains a parser definition of the [ReScript](https://rescript-
 
 Athough Tree-sitter has many applications, the main intent of this parser is powering the [`nvim-treesitter-rescript`](https://github.com/nkrkv/nvim-tree-sitter-rescript/) NeoVim plugin which may be used to improve development experience in the NeoVim + ReScript combo.
 
+Queries for text objects are also included which help you to navigate, select, and modify ReScript code syntactically. For NeoVim, the [`nvim-treesitter-textobjects`](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) plugin is required to use Tree-sitter text objects.
+
 ## Installation
 
 - If you want ReScript Tree-sitter in NeoVim, refer to [`nvim-treesitter-rescript`](https://github.com/nkrkv/nvim-tree-sitter-rescript/) installation notes;
