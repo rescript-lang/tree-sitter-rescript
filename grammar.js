@@ -75,14 +75,12 @@ module.exports = grammar({
     [$.polyvar],
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
-    [$.extension_expression],
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
-    [$._statement, $._extension_expression_payload],
-    [$._statement_delimeter, $._extension_expression_payload],
     [$._statement, $._one_or_more_statements],
+    [$._simple_extension],
   ],
 
   rules: {
@@ -985,26 +983,27 @@ module.exports = grammar({
     extension_expression: $ => prec('call', seq(
       repeat1('%'),
       choice(
-        $._raw_js_extension_expression_payload,
-        seq(
-          $.extension_identifier,
-          optional($._extension_expression_payload),
-        ),
+        $._raw_js_extension,
+        $._simple_extension,
       ),
     )),
 
-    _raw_js_extension_expression_payload: $ => seq(
+    _simple_extension: $ => seq(
+      $.extension_identifier,
+      optional($._extension_expression_payload),
+    ),
+
+    _raw_js_extension: $ => seq(
       alias(token('raw'), $.extension_identifier),
       '(',
       alias($._raw_js, $.expression_statement),
       ')',
     ),
 
-    _raw_js: $ =>
-      choice(
-        alias($._raw_js_template_string, $.template_string),
-        alias($._raw_js_string, $.string),
-      ),
+    _raw_js: $ => choice(
+      alias($._raw_js_template_string, $.template_string),
+      alias($._raw_js_string, $.string),
+    ),
 
     _raw_js_string: $ => alias($.string, $.raw_js),
 
