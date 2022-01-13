@@ -4,3 +4,4 @@ src/*
 !src/scanner.c
 log.html
 test_wild/
+build/

@@ -617,6 +617,52 @@ switch foo {
         (expression_statement (number))))))
 
 ===========================================
+Switch of statements
+===========================================
+
+switch (element->HtmlInputElement.ofElement) {
+| Some(input) =>
+  HtmlInputElement.focus(input);
+  HtmlInputElement.select(input);
+| None => ()
+};
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (parenthesized_expression
+        (pipe_expression
+          (value_identifier)
+          (value_identifier_path
+            (module_identifier)
+            (value_identifier))))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (value_identifier)))
+        (expression_statement
+          (call_expression
+            function: (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            arguments: (arguments
+              (value_identifier))))
+        (expression_statement
+          (call_expression
+            function: (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            arguments: (arguments
+              (value_identifier)))))
+      (switch_match
+        (variant_pattern
+          (variant_identifier))
+        (expression_statement
+          (unit))))))
+===========================================
 Switch exceptions
 ===========================================
 
@@ -853,28 +899,66 @@ Extensions
 %re("/[^1-9]/g")
 %%raw("function () { return 42; }")
 %%private(let mult = (x, y) => x * y)
+%%private(
+  let x = "1"
+  let y = 1;
+)
+let x = %raw(`
+  function test(a) {
+    return "\" + a + "\";
+  }
+`)
 
 ---
 
 (source_file
   (expression_statement
-    (extension_expression (extension_identifier)))
+    (extension_expression
+      (extension_identifier)))
   (expression_statement
     (extension_expression
       (extension_identifier)
-      (expression_statement (string (string_fragment)))))
+      (expression_statement
+        (string
+          (string_fragment)))))
   (expression_statement
     (extension_expression
       (extension_identifier)
-      (expression_statement (string (string_fragment)))))
+      (expression_statement
+        (string
+          (raw_js
+            (string_fragment))))))
   (expression_statement
     (extension_expression
       (extension_identifier)
       (let_binding
         (value_identifier)
         (function
-          (formal_parameters (value_identifier) (value_identifier))
-          (binary_expression (value_identifier) (value_identifier)))))))
+          parameters: (formal_parameters
+            (value_identifier)
+            (value_identifier))
+          body: (binary_expression
+            left: (value_identifier)
+            right: (value_identifier))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (let_binding
+        (value_identifier)
+        (string
+          (string_fragment)))
+      (let_binding
+        (value_identifier)
+        (number))))
+  (let_binding
+      (value_identifier)
+        (extension_expression
+          (extension_identifier)
+          (expression_statement
+            (template_string
+              (raw_js
+                (escape_sequence)
+                (escape_sequence)))))))
 
 ===========================================
 Raise expression

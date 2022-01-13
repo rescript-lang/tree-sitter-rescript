@@ -67,6 +67,7 @@ module.exports = grammar({
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
     [$.expression_statement, $.ternary_expression],
+    [$._type_declaration],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
     [$.variant],
@@ -79,6 +80,8 @@ module.exports = grammar({
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
+    [$._statement, $._extension_expression_payload],
+    [$._statement_delimeter, $._extension_expression_payload],
   ],
 
   rules: {
@@ -212,13 +215,22 @@ module.exports = grammar({
       optional('export'),
       'type',
       optional('rec'),
+      $._type_declaration,
+    ),
+
+    _type_declaration: $ => seq(
       $.type_identifier,
       optional($.type_parameters),
       optional(seq(
         '=',
         optional('private'),
         $._type,
-      ))
+      )),
+      optional(seq(
+        optional($._newline),
+        'and',
+        $._type_declaration
+      )),
     ),
 
     type_parameters: $ => seq(
@@ -582,6 +594,7 @@ module.exports = grammar({
     _switch_match_body: $ => seq(
       repeat($._statement),
       $.statement,
+      optional($._statement_delimeter),
     ),
 
     try_expression: $ => seq(
@@ -974,13 +987,51 @@ module.exports = grammar({
 
     extension_expression: $ => prec('call', seq(
       repeat1('%'),
-      $.extension_identifier,
-      optional($._extension_expression_payload),
+      choice(
+        $._raw_js_extension_expression_payload,
+        seq(
+          $.extension_identifier,
+          optional($._extension_expression_payload),
+        ),
+      ),
     )),
+
+    _raw_js_extension_expression_payload: $ => seq(
+      alias(token('raw'), $.extension_identifier),
+      '(',
+      optional($._newline),
+      alias($._raw_js, $.expression_statement),
+      optional($._newline),
+      ')',
+    ),
+
+    _raw_js: $ =>
+      choice(
+        alias($._raw_js_template_string, $.template_string),
+        alias($._raw_js_string, $.string),
+      ),
+
+    _raw_js_string: $ => alias($.string, $.raw_js), 
+
+    _raw_js_template_string: $ => seq(
+      '`',
+      alias(repeat(choice(
+        $._template_chars,
+        choice(
+          alias('\\`', $.escape_sequence),
+          $.escape_sequence,
+        ),
+      )), $.raw_js),
+      '`',
+    ),
 
     _extension_expression_payload: $ => seq(
       '(',
-      commaSep($.statement),
+      optional($._newline),
+      repeat($._statement),
+      $.statement,
+      optional($._statement_delimeter),
+      optional($._newline),
       ')',
     ),
 

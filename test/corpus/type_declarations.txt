@@ -285,3 +285,34 @@ type transitionCreateArgs = {
         (record_type_field
           (property_identifier)
           (type_annotation (type_identifier)))))))
+
+===========================================
+Mutually Recursive
+===========================================
+
+type rec student = {
+  teacher: teacher
+}
+and teacher = {
+  students: array<student>
+}
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (record_type
+      (record_type_field
+        (property_identifier)
+        (type_annotation
+          (type_identifier))))
+    (type_identifier)
+    (record_type
+      (record_type_field
+        (property_identifier)
+        (type_annotation
+          (generic_type
+            (type_identifier)
+            (type_arguments
+              (type_identifier))))))))
