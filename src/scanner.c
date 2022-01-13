@@ -204,6 +204,15 @@ bool tree_sitter_rescript_external_scanner_scan(
       // parser confustion between a terminated and unterminated statements
       // for rules like seq(repeat($._statement), $.statement)
       in_multiline_statement = true;
+    } else if (lexer->lookahead == 'a') {
+      advance(lexer);
+      if (lexer->lookahead == 'n') {
+        advance(lexer);
+        if (lexer->lookahead == 'd') {
+          // Ignore new lines before `and` keyword (recursive definition)
+          in_multiline_statement = true;
+        }
+      }
     }
 
     if (in_multiline_statement) {

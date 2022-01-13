@@ -75,13 +75,12 @@ module.exports = grammar({
     [$.polyvar],
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
-    [$.extension_expression],
     [$._record_element, $.jsx_expression],
     [$.record_field, $._record_single_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
-    [$._statement, $._extension_expression_payload],
-    [$._statement_delimeter, $._extension_expression_payload],
+    [$._statement, $._one_or_more_statements],
+    [$._simple_extension],
   ],
 
   rules: {
@@ -99,6 +98,12 @@ module.exports = grammar({
       ';',
       $._newline,
       alias($._newline_and_comment, $.comment),
+    ),
+
+    _one_or_more_statements: $ => seq(
+      repeat($._statement),
+      $.statement,
+      optional($._statement_delimeter),
     ),
 
     statement: $ => choice(
@@ -123,10 +128,7 @@ module.exports = grammar({
 
     block: $ => prec.right(seq(
       '{',
-      optional(seq(
-        repeat($._statement),
-        $.statement
-      )),
+      optional($._one_or_more_statements),
       '}',
     )),
 
@@ -227,7 +229,6 @@ module.exports = grammar({
         $._type,
       )),
       optional(seq(
-        optional($._newline),
         'and',
         $._type_declaration
       )),
@@ -561,7 +562,7 @@ module.exports = grammar({
       '|',
       $._switch_pattern,
       '=>',
-      $._switch_match_body,
+      $._one_or_more_statements,
     )),
 
     _switch_pattern: $ => barSep1(choice(
@@ -589,12 +590,6 @@ module.exports = grammar({
       '#',
       '...',
       $._type_identifier,
-    ),
-
-    _switch_match_body: $ => seq(
-      repeat($._statement),
-      $.statement,
-      optional($._statement_delimeter),
     ),
 
     try_expression: $ => seq(
@@ -988,30 +983,29 @@ module.exports = grammar({
     extension_expression: $ => prec('call', seq(
       repeat1('%'),
       choice(
-        $._raw_js_extension_expression_payload,
-        seq(
-          $.extension_identifier,
-          optional($._extension_expression_payload),
-        ),
+        $._raw_js_extension,
+        $._simple_extension,
       ),
     )),
 
-    _raw_js_extension_expression_payload: $ => seq(
+    _simple_extension: $ => seq(
+      $.extension_identifier,
+      optional($._extension_expression_payload),
+    ),
+
+    _raw_js_extension: $ => seq(
       alias(token('raw'), $.extension_identifier),
       '(',
-      optional($._newline),
       alias($._raw_js, $.expression_statement),
-      optional($._newline),
       ')',
     ),
 
-    _raw_js: $ =>
-      choice(
-        alias($._raw_js_template_string, $.template_string),
-        alias($._raw_js_string, $.string),
-      ),
+    _raw_js: $ => choice(
+      alias($._raw_js_template_string, $.template_string),
+      alias($._raw_js_string, $.string),
+    ),
 
-    _raw_js_string: $ => alias($.string, $.raw_js), 
+    _raw_js_string: $ => alias($.string, $.raw_js),
 
     _raw_js_template_string: $ => seq(
       '`',
@@ -1027,10 +1021,9 @@ module.exports = grammar({
 
     _extension_expression_payload: $ => seq(
       '(',
-      optional($._newline),
-      repeat($._statement),
-      $.statement,
-      optional($._statement_delimeter),
+      $._one_or_more_statements,
+      // explicit newline here because it won’t be reported otherwise by the scanner
+      // because we’re in parens
       optional($._newline),
       ')',
     ),
