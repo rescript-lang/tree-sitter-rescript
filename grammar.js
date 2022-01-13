@@ -102,6 +102,12 @@ module.exports = grammar({
       alias($._newline_and_comment, $.comment),
     ),
 
+    _one_or_more_statements: $ => seq(
+      repeat($._statement),
+      $.statement,
+      optional($._statement_delimeter),
+    ),
+
     statement: $ => choice(
       alias($._decorated_statement, $.decorated),
       $.decorator_statement,
@@ -109,12 +115,6 @@ module.exports = grammar({
       $.declaration,
       $.open_statement,
       $.include_statement,
-    ),
-
-    _one_or_more_statements: $ => seq(
-      repeat($._statement),
-      $.statement,
-      optional($._statement_delimeter),
     ),
 
     _decorated_statement: $ => seq(
@@ -231,7 +231,6 @@ module.exports = grammar({
         $._type,
       )),
       optional(seq(
-        optional($._newline),
         'and',
         $._type_declaration
       )),
