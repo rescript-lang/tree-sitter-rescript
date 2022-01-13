@@ -82,6 +82,7 @@ module.exports = grammar({
     [$.decorator],
     [$._statement, $._extension_expression_payload],
     [$._statement_delimeter, $._extension_expression_payload],
+    [$._statement, $._one_or_more_statements],
   ],
 
   rules: {
@@ -110,6 +111,12 @@ module.exports = grammar({
       $.include_statement,
     ),
 
+    _one_or_more_statements: $ => seq(
+      repeat($._statement),
+      $.statement,
+      optional($._statement_delimeter),
+    ),
+
     _decorated_statement: $ => seq(
       repeat1($.decorator),
       $.declaration,
@@ -123,10 +130,7 @@ module.exports = grammar({
 
     block: $ => prec.right(seq(
       '{',
-      optional(seq(
-        repeat($._statement),
-        $.statement
-      )),
+      optional($._one_or_more_statements),
       '}',
     )),
 
@@ -561,7 +565,7 @@ module.exports = grammar({
       '|',
       $._switch_pattern,
       '=>',
-      $._switch_match_body,
+      $._one_or_more_statements,
     )),
 
     _switch_pattern: $ => barSep1(choice(
@@ -589,12 +593,6 @@ module.exports = grammar({
       '#',
       '...',
       $._type_identifier,
-    ),
-
-    _switch_match_body: $ => seq(
-      repeat($._statement),
-      $.statement,
-      optional($._statement_delimeter),
     ),
 
     try_expression: $ => seq(
@@ -999,9 +997,7 @@ module.exports = grammar({
     _raw_js_extension_expression_payload: $ => seq(
       alias(token('raw'), $.extension_identifier),
       '(',
-      optional($._newline),
       alias($._raw_js, $.expression_statement),
-      optional($._newline),
       ')',
     ),
 
@@ -1011,7 +1007,7 @@ module.exports = grammar({
         alias($._raw_js_string, $.string),
       ),
 
-    _raw_js_string: $ => alias($.string, $.raw_js), 
+    _raw_js_string: $ => alias($.string, $.raw_js),
 
     _raw_js_template_string: $ => seq(
       '`',
@@ -1027,10 +1023,9 @@ module.exports = grammar({
 
     _extension_expression_payload: $ => seq(
       '(',
-      optional($._newline),
-      repeat($._statement),
-      $.statement,
-      optional($._statement_delimeter),
+      $._one_or_more_statements,
+      // explicit newline here because it won’t be reported otherwise by the scanner
+      // because we’re in parens
       optional($._newline),
       ')',
     ),
