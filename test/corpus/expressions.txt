@@ -908,6 +908,13 @@ let x = %raw(`
     return "\" + a + "\";
   }
 `)
+module Test = %graphql(`
+  query {
+    test {
+      id
+    }
+  }
+`)
 
 ---
 
@@ -958,7 +965,14 @@ let x = %raw(`
             (template_string
               (raw_js
                 (escape_sequence)
-                (escape_sequence)))))))
+                (escape_sequence))))))
+  (module_declaration
+    name: (module_identifier)
+    definition: (extension_expression
+      (extension_identifier)
+      (expression_statement
+        (template_string
+          (raw_gql))))))
 
 ===========================================
 Raise expression

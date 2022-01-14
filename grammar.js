@@ -992,6 +992,7 @@ module.exports = grammar({
       repeat1('%'),
       choice(
         $._raw_js_extension,
+        $._raw_gql_extension,
         $._simple_extension,
       ),
     )),
@@ -1024,6 +1025,32 @@ module.exports = grammar({
           $.escape_sequence,
         ),
       )), $.raw_js),
+      '`',
+    ),
+
+    _raw_gql_extension: $ => seq(
+      alias(token('graphql'), $.extension_identifier),
+      '(',
+      alias($._raw_gql, $.expression_statement),
+      ')',
+    ),
+
+    _raw_gql: $ => choice(
+      alias($._raw_gql_template_string, $.template_string),
+      alias($._raw_gql_string, $.string),
+    ),
+
+    _raw_gql_string: $ => alias($.string, $.raw_gql),
+
+    _raw_gql_template_string: $ => seq(
+      '`',
+      alias(repeat(choice(
+        $._template_chars,
+        choice(
+          alias('\\`', $.escape_sequence),
+          $.escape_sequence,
+        ),
+      )), $.raw_gql),
       '`',
     ),
 
