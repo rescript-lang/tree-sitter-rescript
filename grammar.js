@@ -370,6 +370,7 @@ module.exports = grammar({
     ),
 
     function_type_parameter: $ => seq(
+      optional($.uncurry),
       repeat($.decorator),
       choice(
         $._type,
@@ -813,7 +814,7 @@ module.exports = grammar({
     jsx_expression: $ => seq(
       '{',
       optional(choice(
-        $.expression,
+        $._one_or_more_statements,
         $.spread_element
       )),
       '}'
@@ -881,7 +882,7 @@ module.exports = grammar({
         $._jsx_attribute_value
       )),
     ),
-
+    
     _jsx_attribute_value: $ => choice(
       $.primary_expression,
       $.jsx_expression,

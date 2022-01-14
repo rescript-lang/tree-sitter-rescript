@@ -144,3 +144,21 @@ let rec a = x => x + b(x) and b = y => y - 1
       (binary_expression
         (value_identifier)
         (number)))))   
+    
+===========================================
+Labled function with uncurried
+===========================================
+      
+let test = (. ~attr) => ()
+
+---
+
+(source_file
+  (let_binding
+    (value_identifier)
+    (function
+      (formal_parameters
+        (uncurry)
+        (labeled_parameter
+          (value_identifier)))
+      (unit))))
