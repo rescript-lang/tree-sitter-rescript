@@ -225,7 +225,7 @@ external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) =
 @send
 external add: (
   t,
-  ~option: @unwrap [#Option(Dom.htmlOptionElement) | #OptGroup(Dom.htmlOptGroupElement)]
+  ~option: @unwrap [#Option(Dom.htmlOptionElement) | #OptGroup(Dom.htmlOptGroupElement)],
 ) => unit = "add"
 
 ---
