@@ -65,6 +65,26 @@ Type annotations
       body: (number))))
 
 ===================================================
+Type arguments
+===================================================
+
+let foo = (type a, x: 'a): a => x
+
+---
+
+(source_file
+  (let_binding
+    (value_identifier)
+    (function
+      (formal_parameters
+        (type_parameter (type_identifier))
+        (positional_parameter
+          (value_identifier)
+          (type_annotation (type_identifier))))
+      (type_annotation (type_identifier))
+      (value_identifier))))
+
+===================================================
 Parameter defaults
 ===================================================
 

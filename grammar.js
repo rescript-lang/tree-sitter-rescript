@@ -242,6 +242,7 @@ module.exports = grammar({
 
     type_annotation: $ => seq(
       ':',
+      repeat($.decorator),
       $._inline_type,
     ),
 
@@ -329,8 +330,8 @@ module.exports = grammar({
       '{',
       choice(
         commaSep1t($._object_type_field),
-        seq('.', commaSep($._object_type_field)),
-        seq('..', commaSep($._object_type_field)),
+        seq('.', commaSept($._object_type_field)),
+        seq('..', commaSept($._object_type_field)),
       ),
       '}',
     ),
@@ -349,7 +350,9 @@ module.exports = grammar({
     ),
 
     type_arguments: $ => seq(
-      '<', commaSep1($._type), optional(','), '>'
+      '<',
+      commaSep1t($._type),
+      '>'
     ),
 
     function_type: $ => prec.left(seq(
@@ -365,7 +368,7 @@ module.exports = grammar({
 
     _function_type_parameter_list: $ => seq(
       '(',
-      commaSep(alias($.function_type_parameter, $.parameter)),
+      commaSept(alias($.function_type_parameter, $.parameter)),
       ')',
     ),
 
@@ -500,8 +503,8 @@ module.exports = grammar({
       '{',
       choice(
         commaSep1t($._object_field),
-        seq('.', commaSep($._object_field)),
-        seq('..', commaSep($._object_field)),
+        seq('.', commaSept($._object_field)),
+        seq('..', commaSept($._object_field)),
       ),
       '}',
     ),
@@ -522,8 +525,7 @@ module.exports = grammar({
 
     array: $ => seq(
       '[',
-      commaSep($.expression),
-      optional(','),
+      commaSept($.expression),
       ']'
     ),
 
@@ -683,6 +685,7 @@ module.exports = grammar({
         $.positional_parameter,
         $.labeled_parameter,
         $.unit,
+        $.type_parameter,
       ),
     ),
 
@@ -697,6 +700,11 @@ module.exports = grammar({
       optional($.as_aliasing),
       optional($.type_annotation),
       optional(field('default_value', $._labeled_parameter_default_value)),
+    ),
+
+    type_parameter: $ => seq(
+      'type',
+      $.type_identifier,
     ),
 
     _labeled_parameter_default_value: $ => seq(
@@ -908,7 +916,7 @@ module.exports = grammar({
 
     decorator_arguments: $ => seq(
       '(',
-      commaSep($.expression),
+      commaSept($.expression),
       ')',
     ),
 
@@ -1064,8 +1072,7 @@ module.exports = grammar({
 
     variant_arguments: $ => seq(
       '(',
-      commaSep($.expression),
-      optional(','),
+      commaSept($.expression),
       ')',
     ),
 
@@ -1137,14 +1144,17 @@ module.exports = grammar({
       ),
     ),
 
-    type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
+    type_identifier: $ => choice(
+      /[a-z_'][a-zA-Z0-9_]*/,
+      $._escape_identifier,
+    ),
 
     value_identifier: $ => choice(
       /[a-z_][a-zA-Z0-9_']*/,
       $._escape_identifier,
     ),
 
-    _escape_identifier: $ => token(seq('\\', '"', /[^"]+/ , '"')),
+    _escape_identifier: $ => token(seq('\\"', /[^"]+/ , '"')),
 
     module_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 
@@ -1289,4 +1299,8 @@ function commaSep2t(rule) {
 
 function commaSep(rule) {
   return optional(commaSep1(rule));
+}
+
+function commaSept(rule) {
+  return optional(commaSep1t(rule));
 }
