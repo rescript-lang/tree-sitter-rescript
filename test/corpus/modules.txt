@@ -222,6 +222,12 @@ external _makeStyles: ({..}, . unit) => {..} = "makeStyles"
 external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) => unit =
   "pushState"
 
+@send
+external add: (
+  t,
+  ~option: @unwrap [#Option(Dom.htmlOptionElement) | #OptGroup(Dom.htmlOptGroupElement)]
+) => unit = "add"
+
 ---
 
 (source_file
@@ -280,6 +286,30 @@ external pushState: (Dom.history, @as(json`null`) _, @as("") _, ~href: string) =
             (parameter
               (labeled_parameter
                 (value_identifier) (type_annotation (type_identifier)))))
+          (unit_type)))
+        (string (string_fragment))))
+  (decorated
+    (decorator (decorator_identifier))
+    (external_declaration
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (parameter (type_identifier))
+            (parameter
+              (labeled_parameter
+                (value_identifier)
+                (type_annotation
+                  (decorator (decorator_identifier))
+                  (polyvar_type
+                    (polyvar_declaration
+                      (polyvar_identifier)
+                      (polyvar_parameters
+                        (type_identifier_path (module_identifier) (type_identifier))))
+                    (polyvar_declaration
+                      (polyvar_identifier)
+                      (polyvar_parameters
+                        (type_identifier_path (module_identifier) (type_identifier)))))))))
           (unit_type)))
         (string (string_fragment)))))
 

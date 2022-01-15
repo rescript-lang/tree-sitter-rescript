@@ -242,6 +242,7 @@ module.exports = grammar({
 
     type_annotation: $ => seq(
       ':',
+      repeat($.decorator),
       $._inline_type,
     ),
 
