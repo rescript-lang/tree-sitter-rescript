@@ -1144,7 +1144,10 @@ module.exports = grammar({
       ),
     ),
 
-    type_identifier: $ => /[a-z_'][a-zA-Z0-9_]*/,
+    type_identifier: $ => choice(
+      /[a-z_'][a-zA-Z0-9_]*/,
+      $._escape_identifier,
+    ),
 
     value_identifier: $ => choice(
       /[a-z_][a-zA-Z0-9_']*/,

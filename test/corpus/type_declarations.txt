@@ -3,10 +3,12 @@ Opaque
 ===========================================
 
 type t
+type \"type"
 
 ---
 
 (source_file
+ (type_declaration (type_identifier))
  (type_declaration (type_identifier)))
 
 ===========================================
@@ -321,7 +323,7 @@ and teacher = {
 ===========================================
 Labled function with uncurried
 ===========================================
-      
+
 type test = (. ~attr: string) => unit
 
 ---
