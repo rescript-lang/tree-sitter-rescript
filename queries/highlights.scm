@@ -101,6 +101,7 @@
   "private"
   "rec"
   "type"
+  "and"
 ] @keyword
 
 [

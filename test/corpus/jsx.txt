@@ -14,7 +14,7 @@ Simple JSX elements
     (jsx_self_closing_element
       (jsx_identifier)
       (jsx_attribute (property_identifier) (string (string_fragment)))
-      (jsx_attribute (property_identifier) (jsx_expression (number)))))
+      (jsx_attribute (property_identifier) (jsx_expression (expression_statement (number))))))
   (expression_statement
     (jsx_element
       (jsx_opening_element (nested_jsx_identifier (jsx_identifier) (jsx_identifier)))
@@ -86,7 +86,7 @@ Attribute values
       (jsx_attribute (property_identifier) (variant (variant_identifier)))
       (jsx_attribute (property_identifier))
       (jsx_attribute (property_identifier))
-      (jsx_attribute (property_identifier) (jsx_expression (value_identifier)))))
+      (jsx_attribute (property_identifier) (jsx_expression (expression_statement (value_identifier))))))
   (expression_statement
     (jsx_self_closing_element
       (jsx_identifier)
@@ -158,3 +158,55 @@ Children spread
       (jsx_opening_element (jsx_identifier))
       (spread_element (value_identifier))
       (jsx_closing_element (jsx_identifier)))))
+
+===================================================
+Attribute Block
+===================================================
+
+<SingleInput
+  header={React.string("What's your first name?")}
+  event={
+    open SingleInput
+    {
+      submit: toNextStep,
+      isLoading: false,
+    }
+  }>
+    <Input />
+</SingleInput>
+
+---
+
+(source_file
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element
+        (jsx_identifier)
+        (jsx_attribute
+          (property_identifier)
+          (jsx_expression
+            (expression_statement
+              (call_expression
+                (value_identifier_path
+                  (module_identifier)
+                  (value_identifier))
+                (arguments
+                  (string
+                    (string_fragment)))))))
+        (jsx_attribute
+          (property_identifier)
+          (jsx_expression
+            (open_statement
+              (module_identifier))
+            (expression_statement
+              (record
+                (record_field
+                  (property_identifier)
+                  (value_identifier))
+                (record_field
+                  (property_identifier)
+                  (false)))))))
+      (jsx_self_closing_element
+        (jsx_identifier))
+      (jsx_closing_element
+        (jsx_identifier)))))

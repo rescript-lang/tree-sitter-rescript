@@ -316,3 +316,25 @@ and teacher = {
             (type_identifier)
             (type_arguments
               (type_identifier))))))))
+
+
+===========================================
+Labled function with uncurried
+===========================================
+      
+type test = (. ~attr: string) => unit
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (function_type
+      (function_type_parameters
+        (parameter
+          (uncurry)
+          (labeled_parameter
+            (value_identifier)
+            (type_annotation
+              (type_identifier)))))
+      (unit_type))))

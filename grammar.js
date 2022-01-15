@@ -227,10 +227,10 @@ module.exports = grammar({
         '=',
         optional('private'),
         $._type,
-      )),
-      optional(seq(
-        'and',
-        $._type_declaration
+        optional(seq(
+          token('and'),
+          $._type_declaration
+        )),
       )),
     ),
 
@@ -370,6 +370,7 @@ module.exports = grammar({
     ),
 
     function_type_parameter: $ => seq(
+      optional($.uncurry),
       repeat($.decorator),
       choice(
         $._type,
@@ -381,11 +382,19 @@ module.exports = grammar({
     let_binding: $ => seq(
       choice('export', 'let'),
       optional('rec'),
+      $._let_binding,
+    ),
+
+    _let_binding: $ => seq(
       choice($._pattern, $.unit),
       optional($.type_annotation),
       optional(seq(
         '=',
         $.expression,
+        optional(seq(
+          token('and'),
+          $._let_binding,
+        )),
       )),
     ),
 
@@ -805,7 +814,7 @@ module.exports = grammar({
     jsx_expression: $ => seq(
       '{',
       optional(choice(
-        $.expression,
+        $._one_or_more_statements,
         $.spread_element
       )),
       '}'
@@ -873,7 +882,7 @@ module.exports = grammar({
         $._jsx_attribute_value
       )),
     ),
-
+    
     _jsx_attribute_value: $ => choice(
       $.primary_expression,
       $.jsx_expression,
@@ -984,6 +993,7 @@ module.exports = grammar({
       repeat1('%'),
       choice(
         $._raw_js_extension,
+        $._raw_gql_extension,
         $._simple_extension,
       ),
     )),
@@ -1016,6 +1026,32 @@ module.exports = grammar({
           $.escape_sequence,
         ),
       )), $.raw_js),
+      '`',
+    ),
+
+    _raw_gql_extension: $ => seq(
+      alias(token('graphql'), $.extension_identifier),
+      '(',
+      alias($._raw_gql, $.expression_statement),
+      ')',
+    ),
+
+    _raw_gql: $ => choice(
+      alias($._raw_gql_template_string, $.template_string),
+      alias($._raw_gql_string, $.string),
+    ),
+
+    _raw_gql_string: $ => alias($.string, $.raw_gql),
+
+    _raw_gql_template_string: $ => seq(
+      '`',
+      alias(repeat(choice(
+        $._template_chars,
+        choice(
+          alias('\\`', $.escape_sequence),
+          $.escape_sequence,
+        ),
+      )), $.raw_gql),
       '`',
     ),
 
