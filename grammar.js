@@ -1154,7 +1154,7 @@ module.exports = grammar({
       $._escape_identifier,
     ),
 
-    _escape_identifier: $ => token(seq('\\', '"', /[^"]+/ , '"')),
+    _escape_identifier: $ => token(seq('\\"', /[^"]+/ , '"')),
 
     module_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
 
