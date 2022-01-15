@@ -882,7 +882,7 @@ module.exports = grammar({
         $._jsx_attribute_value
       )),
     ),
-    
+
     _jsx_attribute_value: $ => choice(
       $.primary_expression,
       $.jsx_expression,
