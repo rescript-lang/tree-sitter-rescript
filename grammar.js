@@ -228,7 +228,7 @@ module.exports = grammar({
         optional('private'),
         $._type,
         optional(seq(
-          token('and'),
+          'and',
           $._type_declaration
         )),
       )),
@@ -392,7 +392,7 @@ module.exports = grammar({
         '=',
         $.expression,
         optional(seq(
-          token('and'),
+          'and',
           $._let_binding,
         )),
       )),
