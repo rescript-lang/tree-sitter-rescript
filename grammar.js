@@ -685,6 +685,7 @@ module.exports = grammar({
         $.positional_parameter,
         $.labeled_parameter,
         $.unit,
+        $.type_parameter,
       ),
     ),
 
@@ -699,6 +700,11 @@ module.exports = grammar({
       optional($.as_aliasing),
       optional($.type_annotation),
       optional(field('default_value', $._labeled_parameter_default_value)),
+    ),
+
+    type_parameter: $ => seq(
+      'type',
+      $.type_identifier,
     ),
 
     _labeled_parameter_default_value: $ => seq(
