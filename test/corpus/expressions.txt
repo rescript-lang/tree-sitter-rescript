@@ -662,6 +662,7 @@ switch (element->HtmlInputElement.ofElement) {
           (variant_identifier))
         (expression_statement
           (unit))))))
+
 ===========================================
 Switch exceptions
 ===========================================
