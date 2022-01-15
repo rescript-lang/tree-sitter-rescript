@@ -1019,13 +1019,7 @@ module.exports = grammar({
 
     _raw_js_template_string: $ => seq(
       '`',
-      alias(repeat(choice(
-        $._template_chars,
-        choice(
-          alias('\\`', $.escape_sequence),
-          $.escape_sequence,
-        ),
-      )), $.raw_js),
+      alias(repeat($._template_string_content), $.raw_js),
       '`',
     ),
 
@@ -1045,13 +1039,7 @@ module.exports = grammar({
 
     _raw_gql_template_string: $ => seq(
       '`',
-      alias(repeat(choice(
-        $._template_chars,
-        choice(
-          alias('\\`', $.escape_sequence),
-          $.escape_sequence,
-        ),
-      )), $.raw_gql),
+      alias(repeat($._template_string_content), $.raw_gql),
       '`',
     ),
 
@@ -1246,15 +1234,17 @@ module.exports = grammar({
         )),
         '`',
       )),
-      repeat(choice(
-        $._template_chars,
-        $.template_substitution,
-        choice(
-          alias('\\`', $.escape_sequence),
-          $.escape_sequence,
-        ),
-      )),
+      repeat($._template_string_content),
       '`'
+    ),
+
+    _template_string_content: $ => choice(
+      $._template_chars,
+      $.template_substitution,
+      choice(
+        alias('\\`', $.escape_sequence),
+        $.escape_sequence,
+      ),
     ),
 
     template_substitution: $ => choice(
