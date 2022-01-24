@@ -72,6 +72,7 @@ module.exports = grammar({
     [$.variant_identifier, $.module_identifier],
     [$.variant],
     [$.variant, $.variant_pattern],
+    [$.variant_declaration, $.function_type_parameter],
     [$.polyvar],
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
@@ -278,6 +279,7 @@ module.exports = grammar({
     )),
 
     variant_declaration: $ => prec.right(seq(
+      optional($.decorator),
       $.variant_identifier,
       optional($.variant_parameters),
       optional($.type_annotation),

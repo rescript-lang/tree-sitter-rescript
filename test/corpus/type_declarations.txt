@@ -99,6 +99,7 @@ Variant
 
 type t =
   | A
+  | @live("t.D") D
   | B(anotherType)
   | C({foo: int, bar: string})
 
@@ -109,6 +110,9 @@ type t =
     (type_identifier)
     (variant_type
       (variant_declaration (variant_identifier))
+      (variant_declaration
+        (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
+        (variant_identifier))
       (variant_declaration
         (variant_identifier) (variant_parameters (type_identifier)))
       (variant_declaration
