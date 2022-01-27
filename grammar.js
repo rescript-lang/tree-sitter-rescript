@@ -82,6 +82,7 @@ module.exports = grammar({
     [$.decorator],
     [$._statement, $._one_or_more_statements],
     [$._simple_extension],
+    [$._inline_type, $.function_type_parameters],
   ],
 
   rules: {
@@ -684,16 +685,10 @@ module.exports = grammar({
       optional($.uncurry),
       choice(
         $._pattern,
-        $.positional_parameter,
         $.labeled_parameter,
         $.unit,
         $.type_parameter,
       ),
-    ),
-
-    positional_parameter: $ => seq(
-      $._pattern,
-      $.type_annotation,
     ),
 
     labeled_parameter: $ => seq(
@@ -726,6 +721,7 @@ module.exports = grammar({
         $._literal_pattern,
         $._destructuring_pattern,
       )),
+      optional($.type_annotation),
       optional($.as_aliasing),
     )),
 

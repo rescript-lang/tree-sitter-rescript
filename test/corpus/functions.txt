@@ -59,7 +59,7 @@ Type annotations
   (expression_statement
     (function
       parameters: (formal_parameters
-        (positional_parameter (value_identifier) (type_annotation (type_identifier)))
+        (value_identifier) (type_annotation (type_identifier))
         (labeled_parameter (value_identifier) (type_annotation (type_identifier))))
       return_type: (type_annotation (type_identifier))
       body: (number))))
@@ -78,9 +78,8 @@ let foo = (type a, x: 'a): a => x
     (function
       (formal_parameters
         (type_parameter (type_identifier))
-        (positional_parameter
-          (value_identifier)
-          (type_annotation (type_identifier))))
+        (value_identifier)
+        (type_annotation (type_identifier)))
       (type_annotation (type_identifier))
       (value_identifier))))
 
