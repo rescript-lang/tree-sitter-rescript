@@ -20,6 +20,7 @@ Tuple destructuring
 ============================================
 
 let (a, b, (c, d)) = foo
+let (state: int, setState) = foo
 
 ---
 
@@ -32,6 +33,11 @@ let (a, b, (c, d)) = foo
         (tuple_pattern
           (tuple_item_pattern (value_identifier))
           (tuple_item_pattern (value_identifier)))))
+    (value_identifier))
+  (let_binding
+    (tuple_pattern
+       (tuple_item_pattern (value_identifier) (type_annotation (type_identifier)))
+       (tuple_item_pattern (value_identifier)))
     (value_identifier)))
 
 ============================================
@@ -143,12 +149,12 @@ let rec a = x => x + b(x) and b = y => y - 1
       (value_identifier)
       (binary_expression
         (value_identifier)
-        (number)))))   
-    
+        (number)))))
+
 ===========================================
 Labled function with uncurried
 ===========================================
-      
+
 let test = (. ~attr) => ()
 
 ---
