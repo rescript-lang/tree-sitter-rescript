@@ -603,6 +603,7 @@ module.exports = grammar({
       '#',
       '...',
       $._type_identifier,
+      optional($.as_aliasing)
     ),
 
     try_expression: $ => seq(
