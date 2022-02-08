@@ -1051,3 +1051,59 @@ foo.bar := qux
     (mutation_expression
       (member_expression (value_identifier) (property_identifier))
       (value_identifier))))
+
+===========================================
+For loop
+===========================================
+
+for x in 1 to 3 {
+  Js.log(x)
+}
+
+for x in 1 downto 3 {
+  Js.log(x)
+}
+
+---
+
+(source_file
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (number)
+      (number)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (value_identifier)))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (number)
+      (number)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (value_identifier))))))))
+
+===========================================
+While loop
+===========================================
+
+while true {
+  Js.log("Still running")
+}
+
+---
+
+(source_file
+  (expression_statement
+    (while_expression
+      (true)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (string (string_fragment)))))))))
