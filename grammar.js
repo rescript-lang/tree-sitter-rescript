@@ -414,6 +414,8 @@ module.exports = grammar({
       $.binary_expression,
       $.coercion_expression,
       $.ternary_expression,
+      $.for_expression,
+      $.while_expression,
       $.mutation_expression,
       $.block,
     ),
@@ -943,6 +945,22 @@ module.exports = grammar({
       ':',
       field('alternative', $.expression)
     )),
+
+    for_expression: $ => seq(
+      'for',
+      $.value_identifier,
+      'in',
+      $.expression,
+      choice('to', 'downto'),
+      $.expression,
+      $.block,
+    ),
+
+    while_expression: $ => seq(
+      'while',
+      $.expression,
+      $.block,
+    ),
 
     binary_expression: $ => choice(
       ...[

@@ -117,6 +117,14 @@
 ] @exception
 
 [
+  "for"
+  "in"
+  "to"
+  "downto"
+  "while"
+] @repeat
+
+[
   "."
   ","
   "|"
