@@ -5,15 +5,19 @@
   (while_expression)
   (if_expression)
   (let_binding)
-  (type_declaration)
   (switch_expression)
   (expression_statement)
   (array)
   (call_expression)
   (list)
   (module_declaration)
+  (record)
 ] @indent
 
+(record (record_field) @indent)
+(arguments (block) @indent) 
+
+(variant_declaration) @auto
 
 [
   "}"
@@ -26,4 +30,8 @@
   "{"
   "}"
   "]"
+  (else_clause)
+  (record)
 ] @branch
+
+(arguments (block) @branch)
