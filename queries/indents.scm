@@ -12,6 +12,7 @@
   (list)
   (module_declaration)
   (record)
+  (variant)
 ] @indent
 
 (record (record_field) @indent)
@@ -22,6 +23,7 @@
 [
   "}"
   "]"
+  ")"
 ] @indent_end
 
 [
