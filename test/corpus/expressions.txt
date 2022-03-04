@@ -406,8 +406,8 @@ switch foo {
         (polyvar_type_pattern
           (type_identifier_path
             (module_identifier)
-            (type_identifier))
-            (as_aliasing (value_identifier)))
+            (type_identifier)))
+            (as_aliasing (value_identifier))
         (expression_statement (number))))))
 
 ===========================================
@@ -442,6 +442,7 @@ Switch of tuples
 
 switch (foo, bar) {
 | (42, 99 as zoo) => 42
+| (Variant1, #...t) => 5
 | (_, _) => 13
 }
 
@@ -455,6 +456,11 @@ switch (foo, bar) {
         (tuple_pattern
           (tuple_item_pattern (number))
           (tuple_item_pattern (number) (as_aliasing (value_identifier))))
+        (expression_statement (number)))
+      (switch_match
+        (tuple_pattern
+          (tuple_item_pattern (variant_pattern (variant_identifier)))
+          (tuple_item_pattern (polyvar_type_pattern (type_identifier))))
         (expression_statement (number)))
       (switch_match
         (tuple_pattern
