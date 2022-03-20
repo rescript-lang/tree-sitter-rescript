@@ -188,7 +188,6 @@
 ; JSX
 ;----------
 (jsx_identifier) @tag
-
 (jsx_element
   open_tag: (jsx_opening_element ["<" ">"] @tag.delimiter))
 (jsx_element
@@ -196,27 +195,6 @@
 (jsx_self_closing_element ["/" ">" "<"] @tag.delimiter)
 (jsx_fragment [">" "<" "/"] @tag.delimiter)
 (jsx_attribute (property_identifier) @tag.attribute)
-
-(jsx_opening_element
-  name: (jsx_identifier) @tag)
-
-(jsx_closing_element
-  name: (jsx_identifier) @tag)
-
-(jsx_self_closing_element
-  name: (jsx_identifier) @tag)
-
-(jsx_opening_element ((jsx_identifier) @constructor
- (#lua-match? @constructor "^[A-Z]")))
-
-
-(jsx_closing_element ((jsx_identifier) @constructor
- (#lua-match? @constructor "^[A-Z]")))
-
-
-(jsx_self_closing_element ((jsx_identifier) @constructor
- (#lua-match? @constructor "^[A-Z]")))
-
 
 ; Error
 ;----------
