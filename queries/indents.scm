@@ -18,7 +18,11 @@
 (record (record_field) @indent)
 (arguments (block) @indent) 
 
-(variant_declaration) @auto
+[
+  (variant_declaration)
+  (switch_expression)
+  (ERROR)
+] @auto
 
 [
   "}"
