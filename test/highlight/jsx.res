@@ -1,8 +1,9 @@
 <div className="b" tabIndex={1} />
 // <- operator
 // ^ tag
-//        ^ property
 //                              ^ operator
+<div className="b" tabIndex={1} />
+//       ^ tag.attribute
 <Foo.Bar>a <span>b</span> c</Foo.Bar>
 // ^ tag
 //          ^ tag
@@ -11,3 +12,5 @@
 //        ^ tag
 //             ^ tag
 //                  ^ tag
+<div> React.null </div>
+//                ^ tag.delimiter 
