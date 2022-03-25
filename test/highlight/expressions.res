@@ -1,3 +1,8 @@
+foo->bar == +x +. 1.0
+// ^ operator
+//       ^ operator
+//          ^ operator
+//            ^ operator
 
 switch foo {
 // <- conditional
