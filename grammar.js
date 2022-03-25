@@ -584,7 +584,6 @@ module.exports = grammar({
     _switch_pattern: $ => barSep1(choice(
       alias($._switch_exception_pattern, $.exception),
       $._switch_value_pattern,
-      $.polyvar_type_pattern,
     )),
 
     _switch_exception_pattern: $ => seq(
@@ -606,7 +605,6 @@ module.exports = grammar({
       '#',
       '...',
       $._type_identifier,
-      optional($.as_aliasing)
     ),
 
     try_expression: $ => seq(
@@ -723,6 +721,7 @@ module.exports = grammar({
         $.value_identifier,
         $._literal_pattern,
         $._destructuring_pattern,
+        $.polyvar_type_pattern,
       )),
       optional($.type_annotation),
       optional($.as_aliasing),
