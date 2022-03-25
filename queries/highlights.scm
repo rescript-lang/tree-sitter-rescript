@@ -20,6 +20,8 @@
 
 (record_type_field (property_identifier) @property)
 (record_field (property_identifier) @property)
+(object (field (property_identifier) @property))
+(object_type (field (property_identifier) @property))
 (member_expression (property_identifier) @property)
 (module_identifier) @namespace
 

@@ -4,6 +4,10 @@ foo->bar == +x +. 1.0
 //          ^ operator
 //            ^ operator
 
+
+{ .  "x": 1 }
+//    ^ property
+
 switch foo {
 // <- conditional
 | list{1, x, ...rest} =>

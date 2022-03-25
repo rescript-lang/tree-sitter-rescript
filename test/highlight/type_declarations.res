@@ -8,3 +8,8 @@ type rec t =
 //       ^ type
   | Terminal
 //  ^ constant
+
+type obj = {
+  "x": int,
+// ^ @property
+}
