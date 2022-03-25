@@ -138,14 +138,12 @@
   "*"
   "*."
   "/."
-  "<"
   "<="
   "=="
   "==="
   "!"
   "!="
   "!=="
-  ">"
   ">="
   "&&"
   "||"
@@ -157,7 +155,9 @@
   (uncurry)
 ] @operator
 
-(binary_expression "/" @operator)
+; Explicitly enclose these operators with binary_expression
+; to avoid confusion with JSX tag delimiters
+(binary_expression ["<" ">" "/"] @operator)
 
 [
   "("
