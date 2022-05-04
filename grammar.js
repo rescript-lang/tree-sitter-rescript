@@ -772,7 +772,10 @@ module.exports = grammar({
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
-        $.value_identifier,
+        choice(
+          $.value_identifier,
+          $.value_identifier_path,
+        ),
         optional(seq(
           ':',
           barSep1($._pattern),
