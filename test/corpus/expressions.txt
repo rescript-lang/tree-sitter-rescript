@@ -916,6 +916,11 @@ let x = %raw(`
     return "\" + a + "\";
   }
 `)
+let x = %raw(j`
+  function test(a) {
+    return "\" + a + "\";
+  }
+`)
 module Test = %graphql(`
   query {
     test {
@@ -965,6 +970,15 @@ module Test = %graphql(`
       (let_binding
         (value_identifier)
         (number))))
+  (let_binding
+      (value_identifier)
+        (extension_expression
+          (extension_identifier)
+          (expression_statement
+            (template_string
+              (raw_js
+                (escape_sequence)
+                (escape_sequence))))))
   (let_binding
       (value_identifier)
         (extension_expression
