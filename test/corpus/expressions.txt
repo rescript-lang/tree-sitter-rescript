@@ -157,6 +157,10 @@ xs->Array.map(foo)->Array.sum
 bbox
 ->outset
 
+foo->(
+  x => x + 1
+)
+
 ---
 
 (source_file
@@ -183,7 +187,14 @@ bbox
   (expression_statement
     (pipe_expression
       (value_identifier)
-      (value_identifier))))
+      (value_identifier)))
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (parenthesized_expression
+        (function
+          (value_identifier)
+          (binary_expression (value_identifier) (number)))))))
 
 ===========================================
 Record
