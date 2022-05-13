@@ -1045,7 +1045,13 @@ module.exports = grammar({
     _raw_js_string: $ => alias($.string, $.raw_js),
 
     _raw_js_template_string: $ => seq(
-      '`',
+      token(seq(
+        optional(choice(
+          'j',
+          'js',
+        )),
+        '`',
+      )),
       alias(repeat($._template_string_content), $.raw_js),
       '`',
     ),
