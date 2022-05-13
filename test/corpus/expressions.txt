@@ -1027,6 +1027,14 @@ try {
 | Js.Exn.Error(obj) => 3
 }
 
+try switch foo() {
+| 1 => "1"
+| 2 => "2"
+| _ => "many"
+} catch {
+| Js.Exn.Error(obj) => "error"
+}
+
 ---
 
 (source_file
@@ -1046,7 +1054,19 @@ try {
         (variant_pattern
           (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
           (formal_parameters (value_identifier)))
-        (expression_statement (number))))))
+        (expression_statement (number)))))
+  (expression_statement
+    (try_expression
+      (switch_expression
+        (call_expression (value_identifier) (arguments))
+        (switch_match (number) (expression_statement (string (string_fragment))))
+        (switch_match (number) (expression_statement (string (string_fragment))))
+        (switch_match (value_identifier) (expression_statement (string (string_fragment)))))
+      (switch_match
+        (variant_pattern
+          (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
+          (formal_parameters (value_identifier)))
+        (expression_statement (string (string_fragment)))))))
 
 ===========================================
 Mutation expressions

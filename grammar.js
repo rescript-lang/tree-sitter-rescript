@@ -609,7 +609,10 @@ module.exports = grammar({
 
     try_expression: $ => seq(
       'try',
-      $.block,
+      choice(
+        $.block,
+        $.primary_expression,
+      ),
       'catch',
       '{',
       repeat($.switch_match),
