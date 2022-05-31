@@ -14,13 +14,20 @@ Parenthesized expressions
 ===========================================
 
 (5)
+(5: int)
 (())
 
 ---
 
 (source_file
-  (expression_statement (parenthesized_expression (number)))
-  (expression_statement (parenthesized_expression (unit))))
+  (expression_statement
+    (parenthesized_expression (number)))
+  (expression_statement
+    (parenthesized_expression
+      (number)
+      (type_annotation (type_identifier))))
+  (expression_statement
+    (parenthesized_expression (unit))))
 
 ===========================================
 Nested identifiers
@@ -73,6 +80,7 @@ Call expression
 ===========================================
 
 min(1, 2)
+pow(2.0: float, ~exp=3.0: float)
 foo(3, ~bar=4, ~pun, ())
 bar(~x?, ~y=?oldY,)
 qux(. 1)
@@ -96,6 +104,16 @@ blocky(
     (call_expression
       function: (value_identifier)
       arguments: (arguments (number) (number))))
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (number)
+        (type_annotation (type_identifier))
+        (labeled_argument
+          label: (value_identifier)
+          value: (number)
+          type: (type_annotation (type_identifier))))))
   (expression_statement
     (call_expression
       function: (value_identifier)
@@ -907,7 +925,9 @@ Variants
 
 Foo
 Foo(42)
+Foo(42: int)
 Foo(qux, { bar: 3 }, )
+Foo((Obj.magic(v): string))
 
 ---
 
@@ -918,8 +938,23 @@ Foo(qux, { bar: 3 }, )
     (variant
       (variant_identifier)
       (arguments
+        (number)
+        (type_annotation (type_identifier)))))
+  (expression_statement
+    (variant
+      (variant_identifier)
+      (arguments
         (value_identifier)
-        (record (record_field (property_identifier) (number)))))))
+        (record (record_field (property_identifier) (number))))))
+  (expression_statement
+    (variant
+      (variant_identifier)
+      (arguments
+        (parenthesized_expression
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (value_identifier)))
+          (type_annotation (type_identifier)))))))
 
 ============================================
 Extensions
