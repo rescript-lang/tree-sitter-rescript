@@ -146,6 +146,28 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
         (type_declaration (type_identifier) (type_identifier_path (module_identifier) (type_identifier)))))))
 
 ===========================================
+Functor signature
+===========================================
+
+module Make: (Content: StaticContent) => {
+  let make: string => string
+}
+
+---
+
+(source_file
+  (module_declaration
+    (module_identifier)
+    (functor
+      (functor_parameters
+        (functor_parameter (module_identifier) (module_type_annotation (module_identifier))))
+      (block
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (function_type (function_type_parameters (type_identifier)) (type_identifier))))))))
+
+===========================================
 Functor use
 ===========================================
 
