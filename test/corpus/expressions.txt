@@ -1058,6 +1058,7 @@ Raise expression
 ===========================================
 
 raise(BadArgument({myMessage: "Oops!"}))
+raise(InvalidInput,)
 
 ---
 
@@ -1070,7 +1071,10 @@ raise(BadArgument({myMessage: "Oops!"}))
           (record
             (record_field
               (property_identifier)
-              (string (string_fragment)))))))))
+              (string (string_fragment))))))))
+  (expression_statement
+    (raise_expression
+      (variant (variant_identifier)))))
 
 ============================================
 Try-catch

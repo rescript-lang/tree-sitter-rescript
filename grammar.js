@@ -633,7 +633,7 @@ module.exports = grammar({
     raise_expression: $ => prec('call', seq(
       'raise',
       '(',
-      $.variant,
+      commaSep1t($.variant),
       ')',
     )),
 
