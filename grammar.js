@@ -453,6 +453,7 @@ module.exports = grammar({
     parenthesized_expression: $ => seq(
       '(',
       $.expression,
+      optional($.type_annotation),
       ')'
     ),
 
@@ -1109,7 +1110,10 @@ module.exports = grammar({
 
     variant_arguments: $ => seq(
       '(',
-      commaSept($.expression),
+      commaSept(seq(
+        $.expression,
+        optional($.type_annotation),
+      )),
       ')',
     ),
 
