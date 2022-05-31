@@ -160,7 +160,7 @@ module.exports = grammar({
       field('name', $.module_identifier),
       optional(seq(
         ':',
-        field('signature', choice($.block, $.module_expression)),
+        field('signature', choice($.block, $.module_expression, $.functor)),
       )),
       optional(seq(
         '=',
