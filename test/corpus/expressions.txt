@@ -73,6 +73,7 @@ Call expression
 ===========================================
 
 min(1, 2)
+pow(2.0: float, ~exp=3.0: float)
 foo(3, ~bar=4, ~pun, ())
 bar(~x?, ~y=?oldY,)
 qux(. 1)
@@ -96,6 +97,16 @@ blocky(
     (call_expression
       function: (value_identifier)
       arguments: (arguments (number) (number))))
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (number)
+        (type_annotation (type_identifier))
+        (labeled_argument
+          label: (value_identifier)
+          value: (number)
+          type: (type_annotation (type_identifier))))))
   (expression_statement
     (call_expression
       function: (value_identifier)
