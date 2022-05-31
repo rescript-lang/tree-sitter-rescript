@@ -161,6 +161,11 @@ foo->(
   x => x + 1
 )
 
+foo->{
+  open Bar
+  baz
+}
+
 ---
 
 (source_file
@@ -194,7 +199,13 @@ foo->(
       (parenthesized_expression
         (function
           (value_identifier)
-          (binary_expression (value_identifier) (number)))))))
+          (binary_expression (value_identifier) (number))))))
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (block
+        (open_statement (module_identifier))
+        (expression_statement (value_identifier))))))
 
 ===========================================
 Record
