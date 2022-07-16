@@ -14,13 +14,20 @@ Parenthesized expressions
 ===========================================
 
 (5)
+(5: int)
 (())
 
 ---
 
 (source_file
-  (expression_statement (parenthesized_expression (number)))
-  (expression_statement (parenthesized_expression (unit))))
+  (expression_statement
+    (parenthesized_expression (number)))
+  (expression_statement
+    (parenthesized_expression
+      (number)
+      (type_annotation (type_identifier))))
+  (expression_statement
+    (parenthesized_expression (unit))))
 
 ===========================================
 Nested identifiers
@@ -73,6 +80,7 @@ Call expression
 ===========================================
 
 min(1, 2)
+pow(2.0: float, ~exp=3.0: float)
 foo(3, ~bar=4, ~pun, ())
 bar(~x?, ~y=?oldY,)
 qux(. 1)
@@ -96,6 +104,16 @@ blocky(
     (call_expression
       function: (value_identifier)
       arguments: (arguments (number) (number))))
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (number)
+        (type_annotation (type_identifier))
+        (labeled_argument
+          label: (value_identifier)
+          value: (number)
+          type: (type_annotation (type_identifier))))))
   (expression_statement
     (call_expression
       function: (value_identifier)
@@ -157,6 +175,15 @@ xs->Array.map(foo)->Array.sum
 bbox
 ->outset
 
+foo->(
+  x => x + 1
+)
+
+foo->{
+  open Bar
+  baz
+}
+
 ---
 
 (source_file
@@ -183,7 +210,20 @@ bbox
   (expression_statement
     (pipe_expression
       (value_identifier)
-      (value_identifier))))
+      (value_identifier)))
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (parenthesized_expression
+        (function
+          (value_identifier)
+          (binary_expression (value_identifier) (number))))))
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (block
+        (open_statement (module_identifier))
+        (expression_statement (value_identifier))))))
 
 ===========================================
 Record
@@ -406,8 +446,8 @@ switch foo {
         (polyvar_type_pattern
           (type_identifier_path
             (module_identifier)
-            (type_identifier))
-            (as_aliasing (value_identifier)))
+            (type_identifier)))
+            (as_aliasing (value_identifier))
         (expression_statement (number))))))
 
 ===========================================
@@ -442,6 +482,7 @@ Switch of tuples
 
 switch (foo, bar) {
 | (42, 99 as zoo) => 42
+| (Variant1, #...t) => 5
 | (_, _) => 13
 }
 
@@ -455,6 +496,11 @@ switch (foo, bar) {
         (tuple_pattern
           (tuple_item_pattern (number))
           (tuple_item_pattern (number) (as_aliasing (value_identifier))))
+        (expression_statement (number)))
+      (switch_match
+        (tuple_pattern
+          (tuple_item_pattern (variant_pattern (variant_identifier)))
+          (tuple_item_pattern (polyvar_type_pattern (type_identifier))))
         (expression_statement (number)))
       (switch_match
         (tuple_pattern
@@ -879,7 +925,9 @@ Variants
 
 Foo
 Foo(42)
+Foo(42: int)
 Foo(qux, { bar: 3 }, )
+Foo((Obj.magic(v): string))
 
 ---
 
@@ -890,8 +938,23 @@ Foo(qux, { bar: 3 }, )
     (variant
       (variant_identifier)
       (arguments
+        (number)
+        (type_annotation (type_identifier)))))
+  (expression_statement
+    (variant
+      (variant_identifier)
+      (arguments
         (value_identifier)
-        (record (record_field (property_identifier) (number)))))))
+        (record (record_field (property_identifier) (number))))))
+  (expression_statement
+    (variant
+      (variant_identifier)
+      (arguments
+        (parenthesized_expression
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (value_identifier)))
+          (type_annotation (type_identifier)))))))
 
 ============================================
 Extensions
@@ -906,6 +969,11 @@ Extensions
   let y = 1;
 )
 let x = %raw(`
+  function test(a) {
+    return "\" + a + "\";
+  }
+`)
+let x = %raw(j`
   function test(a) {
     return "\" + a + "\";
   }
@@ -968,6 +1036,15 @@ module Test = %graphql(`
               (raw_js
                 (escape_sequence)
                 (escape_sequence))))))
+  (let_binding
+      (value_identifier)
+        (extension_expression
+          (extension_identifier)
+          (expression_statement
+            (template_string
+              (raw_js
+                (escape_sequence)
+                (escape_sequence))))))
   (module_declaration
     name: (module_identifier)
     definition: (extension_expression
@@ -981,6 +1058,7 @@ Raise expression
 ===========================================
 
 raise(BadArgument({myMessage: "Oops!"}))
+raise(InvalidInput,)
 
 ---
 
@@ -993,7 +1071,10 @@ raise(BadArgument({myMessage: "Oops!"}))
           (record
             (record_field
               (property_identifier)
-              (string (string_fragment)))))))))
+              (string (string_fragment))))))))
+  (expression_statement
+    (raise_expression
+      (variant (variant_identifier)))))
 
 ============================================
 Try-catch
@@ -1005,6 +1086,14 @@ try {
 | Not_found => 1
 | FooBar({ x, y }) => 2
 | Js.Exn.Error(obj) => 3
+}
+
+try switch foo() {
+| 1 => "1"
+| 2 => "2"
+| _ => "many"
+} catch {
+| Js.Exn.Error(obj) => "error"
 }
 
 ---
@@ -1026,7 +1115,19 @@ try {
         (variant_pattern
           (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
           (formal_parameters (value_identifier)))
-        (expression_statement (number))))))
+        (expression_statement (number)))))
+  (expression_statement
+    (try_expression
+      (switch_expression
+        (call_expression (value_identifier) (arguments))
+        (switch_match (number) (expression_statement (string (string_fragment))))
+        (switch_match (number) (expression_statement (string (string_fragment))))
+        (switch_match (value_identifier) (expression_statement (string (string_fragment)))))
+      (switch_match
+        (variant_pattern
+          (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
+          (formal_parameters (value_identifier)))
+        (expression_statement (string (string_fragment)))))))
 
 ===========================================
 Mutation expressions
@@ -1051,3 +1152,59 @@ foo.bar := qux
     (mutation_expression
       (member_expression (value_identifier) (property_identifier))
       (value_identifier))))
+
+===========================================
+For loop
+===========================================
+
+for x in 1 to 3 {
+  Js.log(x)
+}
+
+for x in 1 downto 3 {
+  Js.log(x)
+}
+
+---
+
+(source_file
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (number)
+      (number)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (value_identifier)))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (number)
+      (number)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (value_identifier))))))))
+
+===========================================
+While loop
+===========================================
+
+while true {
+  Js.log("Still running")
+}
+
+---
+
+(source_file
+  (expression_statement
+    (while_expression
+      (true)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier_path (module_identifier) (value_identifier))
+            (arguments (string (string_fragment)))))))))

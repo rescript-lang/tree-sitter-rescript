@@ -161,7 +161,7 @@ module.exports = grammar({
       field('name', $.module_identifier),
       optional(seq(
         ':',
-        field('signature', choice($.block, $.module_expression)),
+        field('signature', choice($.block, $.module_expression, $.functor)),
       )),
       optional(seq(
         '=',
@@ -415,6 +415,8 @@ module.exports = grammar({
       $.binary_expression,
       $.coercion_expression,
       $.ternary_expression,
+      $.for_expression,
+      $.while_expression,
       $.mutation_expression,
       $.block,
     ),
@@ -452,6 +454,7 @@ module.exports = grammar({
     parenthesized_expression: $ => seq(
       '(',
       $.expression,
+      optional($.type_annotation),
       ')'
     ),
 
@@ -583,7 +586,6 @@ module.exports = grammar({
     _switch_pattern: $ => barSep1(choice(
       alias($._switch_exception_pattern, $.exception),
       $._switch_value_pattern,
-      $.polyvar_type_pattern,
     )),
 
     _switch_exception_pattern: $ => seq(
@@ -605,12 +607,14 @@ module.exports = grammar({
       '#',
       '...',
       $._type_identifier,
-      optional($.as_aliasing)
     ),
 
     try_expression: $ => seq(
       'try',
-      $.block,
+      choice(
+        $.block,
+        $.primary_expression,
+      ),
       'catch',
       '{',
       repeat($.switch_match),
@@ -630,7 +634,7 @@ module.exports = grammar({
     raise_expression: $ => prec('call', seq(
       'raise',
       '(',
-      $.variant,
+      commaSep1t($.variant),
       ')',
     )),
 
@@ -640,18 +644,26 @@ module.exports = grammar({
       choice(
         $.value_identifier,
         $.value_identifier_path,
-        choice($.variant_identifier, $.nested_variant_identifier),
+        $.variant_identifier,
+        $.nested_variant_identifier,
+        $.parenthesized_expression,
+        $.block,
       ),
     )),
 
     call_arguments: $ => seq(
       '(',
       optional($.uncurry),
-      optional(commaSep1t(choice(
-        $.expression,
-        $.labeled_argument,
-      ))),
+      optional(commaSep1t($._call_argument)),
       ')'
+    ),
+
+    _call_argument: $ => choice(
+      seq(
+        $.expression,
+        optional($.type_annotation),
+      ),
+      $.labeled_argument,
     ),
 
     labeled_argument: $ => seq(
@@ -663,6 +675,7 @@ module.exports = grammar({
           '=',
           optional('?'),
           field('value', $.expression),
+          optional(field('type', $.type_annotation)),
         ),
       )),
     ),
@@ -722,6 +735,7 @@ module.exports = grammar({
         $.value_identifier,
         $._literal_pattern,
         $._destructuring_pattern,
+        $.polyvar_type_pattern,
       )),
       optional($.type_annotation),
       optional($.as_aliasing),
@@ -772,7 +786,10 @@ module.exports = grammar({
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
-        $.value_identifier,
+        choice(
+          $.value_identifier,
+          $.value_identifier_path,
+        ),
         optional(seq(
           ':',
           barSep1($._pattern),
@@ -946,6 +963,22 @@ module.exports = grammar({
       field('alternative', $.expression)
     )),
 
+    for_expression: $ => seq(
+      'for',
+      $.value_identifier,
+      'in',
+      $.expression,
+      choice('to', 'downto'),
+      $.expression,
+      $.block,
+    ),
+
+    while_expression: $ => seq(
+      'while',
+      $.expression,
+      $.block,
+    ),
+
     binary_expression: $ => choice(
       ...[
         ['&&', 'binary_and'],
@@ -1027,7 +1060,13 @@ module.exports = grammar({
     _raw_js_string: $ => alias($.string, $.raw_js),
 
     _raw_js_template_string: $ => seq(
-      '`',
+      token(seq(
+        optional(choice(
+          'j',
+          'js',
+        )),
+        '`',
+      )),
       alias(repeat($._template_string_content), $.raw_js),
       '`',
     ),
@@ -1073,7 +1112,10 @@ module.exports = grammar({
 
     variant_arguments: $ => seq(
       '(',
-      commaSept($.expression),
+      commaSept(seq(
+        $.expression,
+        optional($.type_annotation),
+      )),
       ')',
     ),
 

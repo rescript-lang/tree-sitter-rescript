@@ -18,11 +18,12 @@
   (polyvar_identifier)
 ] @constant
 
-(property_identifier) @property
+(record_type_field (property_identifier) @property)
+(record_field (property_identifier) @property)
+(object (field (property_identifier) @property))
+(object_type (field (property_identifier) @property))
+(member_expression (property_identifier) @property)
 (module_identifier) @namespace
-
-(jsx_identifier) @tag
-(jsx_attribute (property_identifier) @attribute)
 
 ; Parameters
 ;----------------
@@ -117,6 +118,14 @@
 ] @exception
 
 [
+  "for"
+  "in"
+  "to"
+  "downto"
+  "while"
+] @repeat
+
+[
   "."
   ","
   "|"
@@ -130,16 +139,13 @@
   "-."
   "*"
   "*."
-  "/"
   "/."
-  "<"
   "<="
   "=="
   "==="
   "!"
   "!="
   "!=="
-  ">"
   ">="
   "&&"
   "||"
@@ -150,6 +156,10 @@
   ":>"
   (uncurry)
 ] @operator
+
+; Explicitly enclose these operators with binary_expression
+; to avoid confusion with JSX tag delimiters
+(binary_expression ["<" ">" "/"] @operator)
 
 [
   "("
@@ -177,3 +187,18 @@
 
 (ternary_expression ["?" ":"] @operator)
 
+; JSX
+;----------
+(jsx_identifier) @tag
+(jsx_element
+  open_tag: (jsx_opening_element ["<" ">"] @tag.delimiter))
+(jsx_element
+  close_tag: (jsx_closing_element ["<" "/" ">"] @tag.delimiter))
+(jsx_self_closing_element ["/" ">" "<"] @tag.delimiter)
+(jsx_fragment [">" "<" "/"] @tag.delimiter)
+(jsx_attribute (property_identifier) @tag.attribute)
+
+; Error
+;----------
+
+(ERROR) @error

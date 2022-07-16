@@ -1,3 +1,12 @@
+foo->bar == +x +. 1.0
+// ^ operator
+//       ^ operator
+//          ^ operator
+//            ^ operator
+
+
+{ .  "x": 1 }
+//    ^ property
 
 switch foo {
 // <- conditional

@@ -60,12 +60,18 @@ static void scan_multiline_comment(TSLexer *lexer) {
         advance(lexer);
         if (lexer->lookahead == '*')
           ++level;
+        else
+          continue;
+
         break;
 
       case '*':
         advance(lexer);
         if (lexer->lookahead == '/')
           --level;
+        else
+          continue;
+
         break;
     }
 
