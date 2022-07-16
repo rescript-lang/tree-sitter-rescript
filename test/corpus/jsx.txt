@@ -6,6 +6,7 @@ Simple JSX elements
 <Foo.Bar>a <span>b</span> c</Foo.Bar>
 <Foo.Bar.Baz.Baz></Foo.Bar.Baz.Baz>
 <div> React.null </div>
+<p> item.content </p>
 
 ---
 
@@ -43,6 +44,14 @@ Simple JSX elements
     (jsx_element
       (jsx_opening_element (jsx_identifier))
       (value_identifier_path (module_identifier) (value_identifier))
+      (jsx_closing_element (jsx_identifier))))
+
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier))
+      (member_expression
+        (value_identifier)
+        (property_identifier))
       (jsx_closing_element (jsx_identifier)))))
 
 ==============================================
