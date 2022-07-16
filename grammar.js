@@ -58,6 +58,7 @@ module.exports = grammar({
     [$.primary_expression, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
+    [$.primary_expression, $._jsx_child],
     [$.tuple_pattern, $._formal_parameter],
     [$.primary_expression, $._formal_parameter],
     [$.primary_expression, $.record_field],
@@ -838,6 +839,7 @@ module.exports = grammar({
       $.jsx_fragment,
       $.block,
       $.spread_element,
+      $.member_expression
     ),
 
     jsx_opening_element: $ => prec.dynamic(-1, seq(
