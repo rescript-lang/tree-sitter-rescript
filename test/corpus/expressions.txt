@@ -1076,6 +1076,24 @@ raise(InvalidInput,)
     (raise_expression
       (variant (variant_identifier)))))
 
+===========================================
+Assert expression
+===========================================
+
+assert false
+assert { 1 > 2 }
+
+---
+
+(source_file
+  (assert_statement (false))
+  (assert_statement
+    (block
+      (expression_statement
+        (binary_expression
+          (number)
+          (number))))))
+
 ============================================
 Try-catch
 ============================================
