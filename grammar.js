@@ -115,6 +115,7 @@ module.exports = grammar({
       $.expression_statement,
       $.declaration,
       $.open_statement,
+      $.assert_statement,
       $.include_statement,
     ),
 
@@ -625,6 +626,8 @@ module.exports = grammar({
       'as',
       $.value_identifier,
     ),
+
+    assert_statement: $ => seq('assert', $.expression),
 
     call_expression: $ => prec('call', seq(
       field('function', $.primary_expression),

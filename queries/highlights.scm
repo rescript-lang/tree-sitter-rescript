@@ -102,6 +102,7 @@
   "rec"
   "type"
   "and"
+  "assert"
 ] @keyword
 
 [
