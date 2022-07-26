@@ -648,6 +648,7 @@ module.exports = grammar({
         $.value_identifier,
         $.value_identifier_path,
         $.variant_identifier,
+        $.polyvar_identifier,
         $.nested_variant_identifier,
         $.parenthesized_expression,
         $.block,
