@@ -328,6 +328,7 @@ module.exports = grammar({
       repeat($.decorator),
       optional('mutable'),
       alias($.value_identifier, $.property_identifier),
+      optional('?'),
       $.type_annotation,
     ),
 
