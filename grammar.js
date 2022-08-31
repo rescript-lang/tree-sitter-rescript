@@ -78,7 +78,8 @@ module.exports = grammar({
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
     [$._record_element, $.jsx_expression],
-    [$.record_field, $._record_single_field],
+    [$._record_element, $._record_single_field],
+    [$._record_pun_field, $._record_single_pun_field],
     [$._record_field_name, $.record_pattern],
     [$.decorator],
     [$._statement, $._one_or_more_statements],
@@ -477,7 +478,8 @@ module.exports = grammar({
     record: $ => seq(
       '{',
       choice(
-        alias($._record_single_field, $.record_field),
+        $._record_single_field,
+        $._record_single_pun_field,
         commaSep2t($._record_element),
       ),
       '}',
@@ -486,20 +488,29 @@ module.exports = grammar({
     _record_element: $ => choice(
       $.spread_element,
       $.record_field,
+      alias($._record_pun_field, $.record_field),
     ),
 
     record_field: $ => seq(
       $._record_field_name,
-      optional(seq(
-        ':',
-        $.expression,
-      )),
+      ':',
+      optional('?'),
+      $.expression,
+    ),
+
+    _record_pun_field: $ => seq(
+      optional('?'),
+      $._record_field_name,
     ),
 
     _record_single_field: $ => seq(
+      $.record_field,
+      optional(','),
+    ),
+
+    _record_single_pun_field: $ => seq(
+      '?',
       $._record_field_name,
-      ':',
-      $.expression,
       optional(','),
     ),
 

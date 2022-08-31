@@ -241,6 +241,10 @@ Record
 {School.age: 20}
 {School.age: 20, name: "Big ReScript"}
 
+{x: ?None, ?y, z: ?(None: t)}
+
+{ ?optPunning }
+
 ---
 
 (source_file
@@ -267,7 +271,19 @@ Record
         (number))
       (record_field
         (property_identifier)
-        (string (string_fragment))))))
+        (string (string_fragment)))))
+  (expression_statement
+    (record
+      (record_field
+        (property_identifier)
+        (variant (variant_identifier)))
+      (record_field (property_identifier))
+      (record_field
+        (property_identifier)
+        (parenthesized_expression
+          (variant (variant_identifier))
+          (type_annotation (type_identifier))))))
+  (expression_statement (record (property_identifier))))
 
 ===========================================
 Object
