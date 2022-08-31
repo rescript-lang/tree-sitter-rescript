@@ -171,6 +171,7 @@ foo->bar->baz
 foo |> bar |> baz
 xs->Array.map(foo)->Array.sum
 5->Some
+foo->#Id
 
 bbox
 ->outset
@@ -207,6 +208,10 @@ foo->{
     (pipe_expression
       (number)
       (variant_identifier)))
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (polyvar_identifier)))
   (expression_statement
     (pipe_expression
       (value_identifier)
