@@ -1242,3 +1242,25 @@ while true {
           (call_expression
             (value_identifier_path (module_identifier) (value_identifier))
             (arguments (string (string_fragment)))))))))
+
+===========================================
+Await expression
+===========================================
+
+await somePromise
+await foo()
+await foo->bar + 5
+
+---
+
+(source_file
+  (expression_statement
+    (await_expression (value_identifier)))
+  (expression_statement
+    (await_expression
+      (call_expression (value_identifier) (arguments))))
+  (expression_statement
+    (binary_expression
+      (await_expression
+        (pipe_expression (value_identifier) (value_identifier)))
+      (number))))

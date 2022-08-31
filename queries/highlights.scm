@@ -103,6 +103,8 @@
   "type"
   "and"
   "assert"
+  "async"
+  "await"
 ] @keyword
 
 [

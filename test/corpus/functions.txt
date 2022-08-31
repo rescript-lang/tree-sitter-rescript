@@ -184,3 +184,15 @@ Operator precendence
         (value_identifier)
         (value_identifier_path (module_identifier) (value_identifier)))
       (number)))))
+
+===================================================
+Async
+===================================================
+
+async () => body
+
+---
+
+(source_file
+  (expression_statement
+    (function (formal_parameters) (value_identifier))))

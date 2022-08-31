@@ -32,6 +32,7 @@ module.exports = grammar({
       'member',
       'call',
       $.spread_element,
+      $.await_expression,
       'binary_times',
       'binary_plus',
       'binary_compare',
@@ -421,6 +422,7 @@ module.exports = grammar({
       $.for_expression,
       $.while_expression,
       $.mutation_expression,
+      $.await_expression,
       $.block,
     ),
 
@@ -467,6 +469,7 @@ module.exports = grammar({
     ),
 
     function: $ => prec.left(seq(
+      optional('async'),
       choice(
         field('parameter', $.value_identifier),
         $._definition_signature
@@ -939,6 +942,11 @@ module.exports = grammar({
       $.value_identifier,
       $.member_expression,
       $.subscript_expression,
+    ),
+
+    await_expression: $ => seq(
+      'await',
+      $.expression,
     ),
 
     decorator: $ => seq(
