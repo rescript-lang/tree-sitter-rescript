@@ -96,6 +96,7 @@ blocky(
   },
   ~third={3},
 )
+f(raise)
 
 ---
 
@@ -161,7 +162,13 @@ blocky(
           (expression_statement (value_identifier)))
         (labeled_argument
           label: (value_identifier)
-          value: (block (expression_statement (number))))))))
+          value: (block (expression_statement (number)))))))
+
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (value_identifier)))))
 
 ===========================================
 Pipe
@@ -1085,17 +1092,21 @@ raise(InvalidInput,)
 
 (source_file
   (expression_statement
-    (raise_expression
-      (variant
-        (variant_identifier)
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (variant
+          (variant_identifier)
         (arguments
           (record
             (record_field
               (property_identifier)
-              (string (string_fragment))))))))
+              (string (string_fragment)))))))))
   (expression_statement
-    (raise_expression
-      (variant (variant_identifier)))))
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (variant (variant_identifier))))))
 
 ===========================================
 Assert expression
