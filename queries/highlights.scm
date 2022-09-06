@@ -10,8 +10,12 @@
 [
   (type_identifier)
   (unit_type)
-  "list"
 ] @type
+
+[
+  (list)
+  (list_pattern)
+] @function.builtin
 
 [
   (variant_identifier)

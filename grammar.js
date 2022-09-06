@@ -399,7 +399,7 @@ module.exports = grammar({
     ),
 
     _let_binding: $ => seq(
-      $._pattern,
+      $._binding_pattern,
       optional($.type_annotation),
       optional(seq(
         '=',
@@ -409,6 +409,13 @@ module.exports = grammar({
           $._let_binding,
         )),
       )),
+    ),
+
+    _binding_pattern: $ => choice(
+      $.value_identifier,
+      $.tuple_pattern,
+      $.record_pattern,
+      $.unit
     ),
 
     expression_statement: $ => $.expression,
