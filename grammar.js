@@ -86,6 +86,8 @@ module.exports = grammar({
     [$._statement, $._one_or_more_statements],
     [$._simple_extension],
     [$._inline_type, $.function_type_parameters],
+    [$.primary_expression, $._formal_parameter, $._pattern],
+    [$._formal_parameter, $._pattern]
   ],
 
   rules: {
@@ -397,7 +399,7 @@ module.exports = grammar({
     ),
 
     _let_binding: $ => seq(
-      choice($._pattern, $.unit),
+      $._pattern,
       optional($.type_annotation),
       optional(seq(
         '=',
@@ -755,6 +757,7 @@ module.exports = grammar({
         $._literal_pattern,
         $._destructuring_pattern,
         $.polyvar_type_pattern,
+        $.unit
       )),
       optional($.type_annotation),
       optional($.as_aliasing),
