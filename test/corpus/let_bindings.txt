@@ -21,6 +21,7 @@ Tuple destructuring
 
 let (a, b, (c, d)) = foo
 let (state: int, setState) = foo
+let (a, b, ()) = foo
 
 ---
 
@@ -38,6 +39,12 @@ let (state: int, setState) = foo
     (tuple_pattern
        (tuple_item_pattern (value_identifier) (type_annotation (type_identifier)))
        (tuple_item_pattern (value_identifier)))
+    (value_identifier))
+  (let_binding
+    (tuple_pattern
+      (tuple_item_pattern (value_identifier))
+      (tuple_item_pattern (value_identifier))
+      (tuple_item_pattern (unit)))
     (value_identifier)))
 
 ============================================
