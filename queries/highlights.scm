@@ -17,6 +17,9 @@
   (list_pattern)
 ] @function.builtin
 
+(list "}" @function.builtin (#set! "priority" 105))
+(list_pattern "}" @function.builtin (#set! "priority" 105))
+
 [
   (variant_identifier)
   (polyvar_identifier)

@@ -561,8 +561,7 @@ module.exports = grammar({
     ),
 
     list: $ => seq(
-      'list',
-      '{',
+      'list{',
       optional(commaSep1t($._list_element)),
       '}'
     ),
@@ -832,8 +831,7 @@ module.exports = grammar({
     ),
 
     list_pattern: $ => seq(
-      'list',
-      '{',
+      'list{',
       optional(commaSep1t($._collection_element_pattern)),
       '}',
     ),
