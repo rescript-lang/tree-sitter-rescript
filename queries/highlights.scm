@@ -117,8 +117,11 @@
   "exception"
   "try"
   "catch"
-  "raise"
 ] @exception
+
+(call_expression
+  function: (value_identifier) @exception
+  (#eq? @exception "raise"))
 
 [
   "for"
