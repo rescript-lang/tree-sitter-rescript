@@ -1,0 +1,55 @@
+============================================
+This decorator
+============================================
+
+foo(bar, @this (me, amount) => set(me, amount))
+
+---
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (value_identifier)
+        (decorator (decorator_identifier))
+        (function
+          (formal_parameters
+            (value_identifier)
+            (value_identifier))
+          (call_expression
+            (value_identifier)
+            (arguments
+              (value_identifier)
+              (value_identifier))))))))
+
+============================================
+Reanalyze Decorator
+============================================
+
+let foo = (@doesNotRaise String.make)(12, ' ')
+
+let foo = @doesNotRaise String.make(12, ' ')
+
+---
+
+(source_file
+  (let_binding
+    (value_identifier)
+    (call_expression
+      (parenthesized_expression
+        (decorator (decorator_identifier))
+        (value_identifier_path
+          (module_identifier) (value_identifier)))
+      (arguments
+        (number)
+        (character))))
+
+  (let_binding
+    (value_identifier)
+    (decorator (decorator_identifier))
+    (call_expression
+      (value_identifier_path (module_identifier) (value_identifier))
+      (arguments
+        (number)
+        (character)))))

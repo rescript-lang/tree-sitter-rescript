@@ -403,6 +403,7 @@ module.exports = grammar({
       optional($.type_annotation),
       optional(seq(
         '=',
+        repeat($.decorator),
         $.expression,
         optional(seq(
           'and',
@@ -459,6 +460,7 @@ module.exports = grammar({
 
     parenthesized_expression: $ => seq(
       '(',
+      repeat($.decorator),
       $.expression,
       optional($.type_annotation),
       ')'
@@ -673,6 +675,7 @@ module.exports = grammar({
 
     _call_argument: $ => choice(
       seq(
+        repeat($.decorator),
         $.expression,
         optional($.type_annotation),
       ),
