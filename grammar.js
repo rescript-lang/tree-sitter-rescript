@@ -611,12 +611,19 @@ module.exports = grammar({
 
     _switch_pattern: $ => barSep1(choice(
       alias($._switch_exception_pattern, $.exception),
+      $._parenthesized_switch_pattern,
       $._switch_value_pattern,
     )),
 
     _switch_exception_pattern: $ => seq(
       'exception',
       $._switch_value_pattern,
+    ),
+
+    _parenthesized_switch_pattern: $ => seq(
+      '(',
+      $._switch_pattern,
+      ')',
     ),
 
     _switch_value_pattern: $ => seq(
