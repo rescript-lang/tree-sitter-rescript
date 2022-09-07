@@ -11,7 +11,7 @@ foo->bar == +x +. 1.0
 switch foo {
 // <- conditional
 | list{1, x, ...rest} =>
-//^ function.builtin
+//^ type
 //     ^ number
 //        ^ parameter
 //           ^ punctuation.special
