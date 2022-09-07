@@ -400,7 +400,7 @@ module.exports = grammar({
     ),
 
     _let_binding: $ => seq(
-      $._pattern,
+      $._binding_pattern,
       optional($.type_annotation),
       optional(seq(
         '=',
@@ -410,6 +410,13 @@ module.exports = grammar({
           $._let_binding,
         )),
       )),
+    ),
+
+    _binding_pattern: $ => choice(
+      $.value_identifier,
+      $.tuple_pattern,
+      $.record_pattern,
+      $.unit
     ),
 
     expression_statement: $ => $.expression,
@@ -555,8 +562,7 @@ module.exports = grammar({
     ),
 
     list: $ => seq(
-      'list',
-      '{',
+      'list{',
       optional(commaSep1t($._list_element)),
       '}'
     ),
@@ -826,8 +832,7 @@ module.exports = grammar({
     ),
 
     list_pattern: $ => seq(
-      'list',
-      '{',
+      'list{',
       optional(commaSep1t($._collection_element_pattern)),
       '}',
     ),

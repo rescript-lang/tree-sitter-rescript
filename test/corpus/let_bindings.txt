@@ -5,6 +5,8 @@ Plain
 let a = 5
 let b = a
 let c = #foo
+let list = 1
+let a = list
 export d = 5
 
 ---
@@ -13,6 +15,8 @@ export d = 5
   (let_binding (value_identifier) (number))
   (let_binding (value_identifier) (value_identifier))
   (let_binding (value_identifier) (polyvar (polyvar_identifier)))
+  (let_binding (value_identifier) (number))
+  (let_binding (value_identifier) (value_identifier))
   (let_binding (value_identifier) (number)))
 
 ============================================
