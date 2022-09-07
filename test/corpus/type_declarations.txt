@@ -314,6 +314,8 @@ type transitionCreateArgs = {
   easing: string,
 }
 
+type person = {@meth "say": (string, string) => unit}
+
 ---
 
 (source_file
@@ -324,7 +326,19 @@ type transitionCreateArgs = {
       (record_type
         (record_type_field
           (property_identifier)
-          (type_annotation (type_identifier)))))))
+          (type_annotation (type_identifier))))))
+
+  (type_declaration
+    (type_identifier)
+    (object_type
+      (field
+        (decorator (decorator_identifier))
+        (property_identifier (string_fragment))
+        (function_type
+          (function_type_parameters
+            (parameter (type_identifier))
+            (parameter (type_identifier)))
+          (unit_type))))))
 
 ===========================================
 Mutually Recursive
