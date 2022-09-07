@@ -783,6 +783,35 @@ switch { open Mod; foo() } {
         (expression_statement (number))))))
 
 ===========================================
+Switch parenthesized
+===========================================
+
+switch n {
+| (1 | 2) => 1
+| (n if n > 10 | n if n < 42) | 50 | (n if n > 100) => n
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match
+        (number)
+        (number)
+        (expression_statement (number)))
+      (switch_match
+        (value_identifier)
+        (switch_pattern_condition (binary_expression (value_identifier) (number)))
+        (value_identifier)
+        (switch_pattern_condition (binary_expression (value_identifier) (number)))
+        (number)
+        (value_identifier)
+        (switch_pattern_condition (binary_expression (value_identifier) (number)))
+        (expression_statement (value_identifier))))))
+
+===========================================
 Math operators
 ===========================================
 
