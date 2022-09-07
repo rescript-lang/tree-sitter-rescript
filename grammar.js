@@ -613,6 +613,7 @@ module.exports = grammar({
       alias($._switch_exception_pattern, $.exception),
       $._parenthesized_switch_pattern,
       $._switch_value_pattern,
+      $._switch_range_pattern,
     )),
 
     _switch_exception_pattern: $ => seq(
@@ -634,6 +635,12 @@ module.exports = grammar({
     switch_pattern_condition: $ => seq(
       'if',
       $.expression,
+    ),
+
+    _switch_range_pattern: $ => seq(
+      $._literal_pattern,
+      '..',
+      $._literal_pattern,
     ),
 
     polyvar_type_pattern: $ => seq(
