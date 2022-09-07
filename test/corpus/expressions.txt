@@ -812,6 +812,22 @@ switch n {
         (expression_statement (value_identifier))))))
 
 ===========================================
+Switch ranges
+===========================================
+
+switch c {
+| 'b' .. 'z' => 100
+}
+
+---
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match (character) (character) (expression_statement (number))))))
+
+===========================================
 Math operators
 ===========================================
 

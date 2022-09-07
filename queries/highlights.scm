@@ -193,6 +193,7 @@
   "~"
   "?"
   "=>"
+  ".."
   "..."
 ] @punctuation.special
 
