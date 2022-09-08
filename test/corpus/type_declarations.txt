@@ -190,6 +190,9 @@ type t = [>
   | anotherType
   ]
 
+
+type foo<'a> = [> #Blue | #DeepBlue | #LightBlue ] as 'a
+
 ---
 
 (source_file
@@ -203,7 +206,16 @@ type t = [>
       (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (decorator (decorator_identifier) (decorator_arguments (string (string_fragment)))) (polyvar_identifier))
-      (polyvar_declaration (type_identifier)))))
+      (polyvar_declaration (type_identifier))))
+
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (polyvar_type
+      (polyvar_declaration (polyvar_identifier))
+      (polyvar_declaration (polyvar_identifier))
+      (polyvar_declaration (polyvar_identifier))
+      (type_identifier))))
 
 ===========================================
 Function
