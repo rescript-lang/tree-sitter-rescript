@@ -33,10 +33,24 @@ Numbers
 -3.0
 +3
 +3.0
+1L
+1_2_3L
+-1L
+-1_2_3L
+0b1_000_000L
+0xffffffffL
+0o1234L
 
 ---
 
 (source_file
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
