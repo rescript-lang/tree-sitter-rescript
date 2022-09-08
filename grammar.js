@@ -219,6 +219,7 @@ module.exports = grammar({
       'exception',
       $.variant_identifier,
       optional($.variant_parameters),
+      optional(seq('=', choice($.variant_identifier, $.nested_variant_identifier)))
     ),
 
     type_declaration: $ => seq(

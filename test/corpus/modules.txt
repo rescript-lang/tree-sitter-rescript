@@ -353,10 +353,20 @@ Exception declaration
 ===========================================
 
 exception InputClosed(string)
+exception Error = Failed
+exception Invalid = Errors.Invalid
 
 ---
 
 (source_file
   (exception_declaration
     (variant_identifier)
-    (variant_parameters (type_identifier))))
+    (variant_parameters (type_identifier)))
+  (exception_declaration
+    (variant_identifier)
+    (variant_identifier))
+  (exception_declaration
+    (variant_identifier)
+    (nested_variant_identifier
+      (module_identifier)
+      (variant_identifier))))
