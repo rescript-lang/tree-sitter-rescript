@@ -661,10 +661,11 @@ module.exports = grammar({
       '}',
     ),
 
-    as_aliasing: $ => seq(
+    as_aliasing: $ => prec.left(seq(
       'as',
       $.value_identifier,
-    ),
+      optional($.type_annotation)
+    )),
 
     assert_statement: $ => seq('assert', $.expression),
 
