@@ -203,7 +203,8 @@ let test = (. ~attr) => ()
     (value_identifier)
     (function
       (formal_parameters
-        (uncurry)
-        (labeled_parameter
-          (value_identifier)))
+        (parameter
+          (uncurry)
+          (labeled_parameter
+            (value_identifier))))
       (unit))))

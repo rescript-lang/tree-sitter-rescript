@@ -60,8 +60,8 @@ module.exports = grammar({
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
     [$.primary_expression, $._jsx_child],
-    [$.tuple_pattern, $._formal_parameter],
-    [$.primary_expression, $._formal_parameter],
+    [$.tuple_pattern, $.parameter],
+    [$.primary_expression, $.parameter],
     [$.primary_expression, $.record_field],
     [$.module_identifier_path, $.module_expression],
     [$.tuple_type, $.function_type_parameter],
@@ -86,8 +86,8 @@ module.exports = grammar({
     [$._statement, $._one_or_more_statements],
     [$._simple_extension],
     [$._inline_type, $.function_type_parameters],
-    [$.primary_expression, $._formal_parameter, $._pattern],
-    [$._formal_parameter, $._pattern]
+    [$.primary_expression, $.parameter, $._pattern],
+    [$.parameter, $._pattern]
   ],
 
   rules: {
@@ -730,11 +730,11 @@ module.exports = grammar({
 
     formal_parameters: $ => seq(
       '(',
-      optional(commaSep1t($._formal_parameter)),
+      optional(commaSep1t($.parameter)),
       ')'
     ),
 
-    _formal_parameter: $ => seq(
+    parameter: $ => seq(
       optional($.uncurry),
       choice(
         $._pattern,

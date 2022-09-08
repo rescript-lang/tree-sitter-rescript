@@ -15,8 +15,8 @@ foo(bar, @this (me, amount) => set(me, amount))
         (decorator (decorator_identifier))
         (function
           (formal_parameters
-            (value_identifier)
-            (value_identifier))
+            (parameter (value_identifier))
+            (parameter (value_identifier)))
           (call_expression
             (value_identifier)
             (arguments
