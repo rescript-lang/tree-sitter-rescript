@@ -484,6 +484,7 @@ Switch of vars
 
 switch foo {
 | x if x > 42 && x < 99 => x
+| x when x > 100 => x
 | _ => 42
 }
 
@@ -499,6 +500,11 @@ switch foo {
           (binary_expression
             (binary_expression (value_identifier) (number))
             (binary_expression (value_identifier) (number))))
+        (expression_statement (value_identifier)))
+      (switch_match
+        (value_identifier)
+        (switch_pattern_condition
+          (binary_expression (value_identifier) (number)))
         (expression_statement (value_identifier)))
       (switch_match
         (value_identifier)
