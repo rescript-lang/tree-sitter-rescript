@@ -1,0 +1,30 @@
+name: Build/test
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Display Node versions
+        run: |
+          node --version
+          npm --version
+
+      - name: Install
+        run: npm install
+
+      - name: Generate
+        run: npm run generate
+
+      - name: Test
+        run: npm test
+
+      - name: Test Wild
+        run: |
+          make
+          npm run test-wild

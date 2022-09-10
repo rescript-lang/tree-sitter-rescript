@@ -1,7 +1,6 @@
-bindings/
 node_modules/
-src/*
-!src/scanner.c
 log.html
 test_wild/
 build/
+package-lock.json
+yarn.lock

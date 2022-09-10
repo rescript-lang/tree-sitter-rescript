@@ -10,10 +10,19 @@
   "devDependencies": {
     "tree-sitter-cli": "^0.20.0"
   },
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "test-wild": "tree-sitter parse --quiet --stat 'test_wild/**/*.res'",
+    "parse": "tree-sitter parse"
+  },
   "tree-sitter": [
     {
       "scope": "source.rescript",
-      "file-types": ["res", "resi"],
+      "file-types": [
+        "res",
+        "resi"
+      ],
       "injection-regex": "rescript"
     }
   ]
