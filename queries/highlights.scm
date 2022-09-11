@@ -116,6 +116,7 @@
   "if"
   "else"
   "switch"
+  "when"
 ] @conditional
 
 [

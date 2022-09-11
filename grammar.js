@@ -634,7 +634,7 @@ module.exports = grammar({
     ),
 
     switch_pattern_condition: $ => seq(
-      'if',
+      choice('if', 'when'),
       $.expression,
     ),
 
