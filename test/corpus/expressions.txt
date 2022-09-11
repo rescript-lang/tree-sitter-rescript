@@ -1091,8 +1091,8 @@ module Test = %graphql(`
         (value_identifier)
         (function
           parameters: (formal_parameters
-            (value_identifier)
-            (value_identifier))
+            (parameter (value_identifier))
+            (parameter (value_identifier)))
           body: (binary_expression
             left: (value_identifier)
             right: (value_identifier))))))
@@ -1331,3 +1331,28 @@ await foo->bar + 5
       (await_expression
         (pipe_expression (value_identifier) (value_identifier)))
       (number))))
+
+===========================================
+As aliasing
+===========================================
+
+let f = ({name, _} as foo: T.t) => {}
+
+---
+
+(source_file
+  (let_binding
+    (value_identifier)
+    (function
+      parameters: (formal_parameters
+        (parameter
+          (record_pattern
+            (value_identifier)
+            (value_identifier))
+          (as_aliasing
+            (value_identifier)
+            (type_annotation
+              (type_identifier_path
+                (module_identifier)
+                (type_identifier))))))
+      body: (block))))

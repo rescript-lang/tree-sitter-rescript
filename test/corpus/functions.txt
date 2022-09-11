@@ -23,28 +23,36 @@ a => 1
     (formal_parameters)
     (number)))
   (expression_statement (function
-    (formal_parameters (value_identifier) (value_identifier))
+    (formal_parameters 
+      (parameter (value_identifier)) (parameter (value_identifier)))
     (number)))
   (expression_statement (function
-    (formal_parameters (value_identifier) (value_identifier))
+    (formal_parameters
+      (parameter (value_identifier))
+      (parameter (value_identifier)))
     (block
       (expression_statement (value_identifier)))))
   (expression_statement (function
-    (formal_parameters (value_identifier))
+    (formal_parameters
+      (parameter (value_identifier)))
     (number)))
-  (expression_statement (function
-    (formal_parameters (value_identifier) (value_identifier))
-    (number)))
-  (expression_statement (function
-    (formal_parameters (value_identifier) (value_identifier)) (number)))
   (expression_statement (function
     (formal_parameters
-      (value_identifier)
-      (uncurry)
-      (value_identifier)
-      (value_identifier)
-      (uncurry)
-      (value_identifier))
+      (parameter (value_identifier)) (parameter (value_identifier)))
+    (number)))
+  (expression_statement (function
+    (formal_parameters (parameter (value_identifier)) (parameter (value_identifier)))
+    (number)))
+  (expression_statement (function
+    (formal_parameters
+      (parameter (value_identifier))
+      (parameter
+        (uncurry)
+        (value_identifier))
+      (parameter (value_identifier))
+      (parameter
+        (uncurry)
+        (value_identifier)))
     (number))))
 
 ===================================================
@@ -59,8 +67,8 @@ Type annotations
   (expression_statement
     (function
       parameters: (formal_parameters
-        (value_identifier) (type_annotation (type_identifier))
-        (labeled_parameter (value_identifier) (type_annotation (type_identifier))))
+        (parameter (value_identifier) (type_annotation (type_identifier)))
+        (parameter (labeled_parameter (value_identifier) (type_annotation (type_identifier)))))
       return_type: (type_annotation (type_identifier))
       body: (number))))
 
@@ -77,9 +85,10 @@ let foo = (type a, x: 'a): a => x
     (value_identifier)
     (function
       (formal_parameters
-        (type_parameter (type_identifier))
-        (value_identifier)
-        (type_annotation (type_identifier)))
+        (parameter (type_parameter (type_identifier)))
+        (parameter
+          (value_identifier)
+          (type_annotation (type_identifier))))
       (type_annotation (type_identifier))
       (value_identifier))))
 
@@ -95,19 +104,23 @@ Parameter defaults
   (expression_statement
     (function
       parameters: (formal_parameters
-        (labeled_parameter
+        (parameter
+          (labeled_parameter
+            (value_identifier)
+            (type_annotation (type_identifier))
+            default_value: (number)))
+        (parameter
+          (labeled_parameter
+            (value_identifier)
+            default_value: (number)))
+        (parameter
+          (labeled_parameter
           (value_identifier)
-          (type_annotation (type_identifier))
-          default_value: (number))
-        (labeled_parameter
-          (value_identifier)
-          default_value: (number))
-        (labeled_parameter
-          (value_identifier)
-          (type_annotation (type_identifier)))
-        (labeled_parameter
-          (value_identifier))
-        (unit))
+          (type_annotation (type_identifier))))
+        (parameter
+          (labeled_parameter
+            (value_identifier)))
+        (parameter (unit)))
       body: (number))))
 
 ===================================================
@@ -122,11 +135,12 @@ Parameter aliasing
   (expression_statement
     (function
       (formal_parameters
-        (labeled_parameter
-          (value_identifier)
-          (as_aliasing (value_identifier))
-          (type_annotation (type_identifier))
-          (number)))
+        (parameter
+          (labeled_parameter
+            (value_identifier)
+            (as_aliasing (value_identifier))
+            (type_annotation (type_identifier))
+            (number))))
       (number))))
 
 ===================================================
@@ -140,14 +154,15 @@ Record pattern
 (source_file
   (expression_statement (function
     (formal_parameters
-      (record_pattern
-        (value_identifier)
-        (value_identifier)
+      (parameter
         (record_pattern
           (value_identifier)
-          (value_identifier))
-        (value_identifier)
-        (value_identifier)))
+          (value_identifier)
+          (record_pattern
+            (value_identifier)
+            (value_identifier))
+          (value_identifier)
+          (value_identifier))))
     (number))))
 
 ===================================================
@@ -178,7 +193,7 @@ Operator precendence
 
 (source_file
   (expression_statement (function
-    (formal_parameters (value_identifier))
+    (formal_parameters (parameter (value_identifier)))
     (binary_expression
       (pipe_expression
         (value_identifier)
