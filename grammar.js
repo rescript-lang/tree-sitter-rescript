@@ -418,6 +418,8 @@ module.exports = grammar({
       $.value_identifier,
       $.tuple_pattern,
       $.record_pattern,
+      $.array_pattern,
+      $.list_pattern,
       $.unit
     ),
 

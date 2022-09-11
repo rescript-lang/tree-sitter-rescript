@@ -80,6 +80,45 @@ let {Bar.Bar.bar: bar} = foo
     (value_identifier)))
 
 ============================================
+Array destructuring
+============================================
+
+let [bar, baz] = foo
+let [bar, baz, _] = foo
+
+---
+
+(source_file
+  (let_binding
+    (array_pattern
+      (value_identifier)
+      (value_identifier))
+    (value_identifier))
+
+  (let_binding
+    (array_pattern
+      (value_identifier)
+      (value_identifier)
+      (value_identifier))
+    (value_identifier)))
+
+============================================
+List destructuring
+============================================
+
+let list{head, ...tail} = foo
+
+---
+
+(source_file
+  (let_binding
+    (list_pattern
+      (value_identifier)
+      (spread_pattern (value_identifier)))
+    (value_identifier)))
+
+
+============================================
 Block
 ============================================
 
