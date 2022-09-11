@@ -269,6 +269,7 @@ type t = {.. "my-field": int }
 type t = {
   "my-field": int,
   "my-field-two": string,
+  ...rest
 }
 
 ---
@@ -288,7 +289,8 @@ type t = {
     (type_identifier)
     (object_type
       (field (property_identifier (string_fragment)) (type_identifier))
-      (field (property_identifier (string_fragment)) (type_identifier)))))
+      (field (property_identifier (string_fragment)) (type_identifier))
+      (field (type_identifier)))))
 
 ===========================================
 Generic

@@ -350,11 +350,15 @@ module.exports = grammar({
 
     _object_type_field: $ => alias($.object_type_field, $.field),
 
-    object_type_field: $ => seq(
-      repeat($.decorator),
-      alias($.string, $.property_identifier),
-      ':',
-      $._type,
+    object_type_field: $ => choice(
+      seq('...', choice($.type_identifier, $.type_identifier_path)),
+      seq(
+        repeat($.decorator),
+        alias($.string, $.property_identifier),
+        ':',
+        $._type,
+      ),
+
     ),
 
     generic_type: $ => seq(
