@@ -299,12 +299,13 @@ module.exports = grammar({
       ')',
     ),
 
-    polyvar_type: $ => seq(
+    polyvar_type: $ => prec.left(seq(
       choice('[', '[>', '[<',),
       optional('|'),
       barSep1($.polyvar_declaration),
       ']',
-    ),
+      optional(seq('as', $.type_identifier))
+    )),
 
     polyvar_declaration: $ => prec.right(
       choice(
