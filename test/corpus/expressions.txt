@@ -822,6 +822,7 @@ switch n {
           (variant_identifier)
           (formal_parameters
             (variant_pattern (variant_identifier))
+            (variant_pattern (variant_identifier))
             (variant_pattern (variant_identifier))))
           (expression_statement (number))))))
 
