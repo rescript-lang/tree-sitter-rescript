@@ -1,0 +1,28 @@
+name: Build / Test
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Display Node versions
+        run: |
+          node --version
+          yarn --version
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+      - name: Generate
+        run: make
+
+      - name: Test
+        run: make test
+
+      - name: Test Wild
+        run: make test_wild
