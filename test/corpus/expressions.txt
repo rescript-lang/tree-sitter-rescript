@@ -795,6 +795,7 @@ Switch parenthesized
 switch n {
 | (1 | 2) => 1
 | (n if n > 10 | n if n < 42) | 50 | (n if n > 100) => n
+| Some((This | That) | Unknow) => 0
 }
 
 ---
@@ -815,7 +816,14 @@ switch n {
         (number)
         (value_identifier)
         (switch_pattern_condition (binary_expression (value_identifier) (number)))
-        (expression_statement (value_identifier))))))
+        (expression_statement (value_identifier)))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (variant_pattern (variant_identifier))
+            (variant_pattern (variant_identifier))))
+          (expression_statement (number))))))
 
 ===========================================
 Switch ranges

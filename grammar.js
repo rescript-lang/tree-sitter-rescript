@@ -87,7 +87,9 @@ module.exports = grammar({
     [$._simple_extension],
     [$._inline_type, $.function_type_parameters],
     [$.primary_expression, $.parameter, $._pattern],
-    [$.parameter, $._pattern]
+    [$.parameter, $._pattern],
+    [$.parameter, $._parenthesized_pattern],
+    [$._switch_value_pattern, $._parenthesized_pattern],
   ],
 
   rules: {
@@ -782,11 +784,14 @@ module.exports = grammar({
         $._literal_pattern,
         $._destructuring_pattern,
         $.polyvar_type_pattern,
-        $.unit
+        $.unit,
+        $._parenthesized_pattern
       )),
       optional($.type_annotation),
       optional($.as_aliasing),
     )),
+
+    _parenthesized_pattern: $ => seq('(', $._pattern, ')'),
 
     _destructuring_pattern: $ => choice(
       $.variant_pattern,
