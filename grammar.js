@@ -871,11 +871,12 @@ module.exports = grammar({
 
     _collection_element_pattern: $ => seq(
       choice($._pattern, $.spread_pattern),
+      optional($.as_aliasing)
     ),
 
     spread_pattern: $ => seq(
       '...',
-      $.value_identifier,
+      choice($.value_identifier, $.list_pattern, $.array_pattern),
     ),
 
     _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),
