@@ -474,6 +474,7 @@ module.exports = grammar({
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
+      $.module_destructuring_expression,
       $.extension_expression,
     ),
 
@@ -698,6 +699,10 @@ module.exports = grammar({
         $.block,
       ),
     )),
+
+    module_destructuring_expression: $ => seq(
+      'module', '(', choice($.module_identifier, $.module_identifier_path), ')'
+    ),
 
     call_arguments: $ => seq(
       '(',

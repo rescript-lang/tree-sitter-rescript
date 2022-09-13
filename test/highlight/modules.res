@@ -9,3 +9,8 @@ include NumericCurve({
 //      ^ namespace
   let foo = foo
 })
+
+let {baz, _} = module(User.Inner)
+//             ^ keyword
+//                    ^ namespace
+//                          ^ namespace

@@ -13,6 +13,32 @@ open! Foo.Bar
     (module_identifier_path (module_identifier) (module_identifier))))
 
 ===========================================
+Module destructuring
+===========================================
+
+
+let {foo, bar} = module(User)
+let {baz, _} = module(User.Inner)
+
+---
+
+(source_file
+  (let_binding
+    (record_pattern
+      (value_identifier)
+      (value_identifier))
+    (module_destructuring_expression (module_identifier)))
+
+  (let_binding
+    (record_pattern
+      (value_identifier)
+      (value_identifier))
+    (module_destructuring_expression
+      (module_identifier_path
+        (module_identifier)
+        (module_identifier)))))
+
+===========================================
 Include
 ===========================================
 
