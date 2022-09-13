@@ -151,7 +151,7 @@ module.exports = grammar({
 
     include_statement: $ => seq(
       'include',
-      $.module_expression,
+      choice($.module_expression, seq('(', $.module_expression, ')')),
     ),
 
     declaration: $ => choice(
@@ -1199,6 +1199,7 @@ module.exports = grammar({
       $.module_identifier_path,
       $.module_type_of,
       $.functor_use,
+      $.module_type_constraint
     ),
 
     module_identifier_path: $ => prec.left(seq(
@@ -1211,8 +1212,25 @@ module.exports = grammar({
       'module',
       'type',
       'of',
-      $.module_expression,
+      choice($.module_expression, $.block),
     )),
+
+    module_type_constraint: $ => seq(
+      '(',
+      choice($.module_identifier, $.module_identifier_path),
+      ':',
+      $.module_type_of,
+      'with',
+      sep1('and',
+        seq(
+          'module',
+          $.module_expression,
+          choice('=', ':='),
+          $.module_expression
+        )
+      ),
+      ')'
+    ),
 
     functor_use: $ => seq(
       choice(
@@ -1412,4 +1430,8 @@ function commaSep(rule) {
 
 function commaSept(rule) {
   return optional(commaSep1t(rule));
+}
+
+function sep1(delimiter, rule) {
+  return seq(rule, repeat(seq(delimiter, rule)))
 }

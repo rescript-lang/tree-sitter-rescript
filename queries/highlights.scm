@@ -110,6 +110,7 @@
   "assert"
   "async"
   "await"
+  "with"
 ] @keyword
 
 [
