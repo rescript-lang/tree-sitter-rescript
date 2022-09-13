@@ -91,6 +91,7 @@ module.exports = grammar({
     [$.parameter, $._pattern],
     [$.parameter, $._parenthesized_pattern],
     [$._switch_value_pattern, $._parenthesized_pattern],
+    [$.variant_declaration]
   ],
 
   rules: {
@@ -290,7 +291,7 @@ module.exports = grammar({
     )),
 
     variant_declaration: $ => prec.right(seq(
-      optional($.decorator),
+      repeat($.decorator),
       $.variant_identifier,
       optional($.variant_parameters),
       optional($.type_annotation),
@@ -498,6 +499,7 @@ module.exports = grammar({
         $._definition_signature
       ),
       '=>',
+      repeat($.decorator),
       field('body', $.expression),
     )),
 
