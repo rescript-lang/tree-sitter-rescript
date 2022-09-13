@@ -128,6 +128,7 @@ Parameter aliasing
 ===================================================
 
 (~xTheGreat as x: int=3) => 5
+(~p as (x, _)) => x
 
 ---
 
@@ -138,10 +139,22 @@ Parameter aliasing
         (parameter
           (labeled_parameter
             (value_identifier)
-            (as_aliasing (value_identifier))
-            (type_annotation (type_identifier))
+            (as_aliasing (value_identifier)
+            (type_annotation (type_identifier)))
             (number))))
-      (number))))
+      (number)))
+  
+  (expression_statement
+    (function
+      (formal_parameters
+        (parameter
+          (labeled_parameter
+            (value_identifier)
+            (as_aliasing
+              (tuple_pattern
+                (tuple_item_pattern (value_identifier))
+                (tuple_item_pattern (value_identifier)))))))
+      (value_identifier))))
 
 ===================================================
 Record pattern

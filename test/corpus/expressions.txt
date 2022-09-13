@@ -428,8 +428,8 @@ switch foo {
           (variant_identifier)
           (formal_parameters
             (value_identifier)
-            (as_aliasing (value_identifier))
-            (type_annotation (type_identifier))
+            (as_aliasing (value_identifier)
+            (type_annotation (type_identifier)))
             (record_pattern
               (value_identifier)
               (value_identifier))))
@@ -465,8 +465,8 @@ switch foo {
           (polyvar_identifier)
           (formal_parameters
             (value_identifier)
-            (as_aliasing (value_identifier))
-            (type_annotation (type_identifier))
+            (as_aliasing (value_identifier)
+            (type_annotation (type_identifier)))
             (number)))
         (as_aliasing (value_identifier))
         (expression_statement (number)))

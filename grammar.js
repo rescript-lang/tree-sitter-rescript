@@ -675,7 +675,7 @@ module.exports = grammar({
 
     as_aliasing: $ => prec.left(seq(
       'as',
-      $.value_identifier,
+      $._pattern,
       optional($.type_annotation)
     )),
 
