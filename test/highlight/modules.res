@@ -9,3 +9,11 @@ include NumericCurve({
 //      ^ namespace
   let foo = foo
 })
+
+module Belt = {
+  include (Belt: module type of Belt with module Map := Belt.Map and module Result := Belt.Result)
+  // ^ include
+  //              ^ keyword
+  //                                  ^ keyword
+  //                                                                                ^ operator
+}

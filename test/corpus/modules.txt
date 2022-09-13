@@ -25,6 +25,11 @@ include Foo.Bar({
 })
 
 include module type of Belt.Array
+include (module type of Belt.Array)
+include (Belt: module type of Belt with module Map := Belt.Map and module Result := Belt.Result)
+include module type of {
+  include T
+}
 
 ---
 
@@ -45,7 +50,26 @@ include module type of Belt.Array
           (let_binding (value_identifier) (type_annotation (type_identifier)))))))
   (include_statement
     (module_type_of
-      (module_identifier_path (module_identifier) (module_identifier)))))
+      (module_identifier_path (module_identifier) (module_identifier))))
+  
+  (include_statement
+    (module_type_of
+      (module_identifier_path (module_identifier) (module_identifier))))
+
+  (include_statement
+    (module_type_constraint
+      (module_identifier)
+      (module_type_of
+        (module_identifier))
+      (module_identifier)
+      (module_identifier_path (module_identifier) (module_identifier))
+      (module_identifier)
+      (module_identifier_path (module_identifier) (module_identifier))))
+
+  (include_statement
+    (module_type_of
+      (block
+        (include_statement (module_identifier))))))
 
 ===========================================
 Simple definition
