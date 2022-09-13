@@ -18,6 +18,9 @@ switch foo {
 //              ^ parameter
 //                    ^ punctuation.special
   42
+| list{1, 2, ...list{b, ..._} as rest} => rest
+//                   ^ parameter
+//                                ^ variable
 | exception Js.Exn.Error(_) => 99
 //^ exception
 }
@@ -47,3 +50,8 @@ try {
 | Js.Exn.Error(obj) => 3 // catch the JS exception
 }
 
+
+let c = list{a, ...list{b}}
+//          ^ type
+//           ^ variable
+//                      ^ variable

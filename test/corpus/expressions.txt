@@ -638,6 +638,7 @@ switch foo {
 | list{1, 2, x} => 2
 | list{1, } => 3
 | list{...others} => 4
+| list{1, 2, ...list{b, ..._} as rest} => rest
 }
 
 ---
@@ -660,7 +661,17 @@ switch foo {
         (expression_statement (number)))
       (switch_match
         (list_pattern (spread_pattern (value_identifier)))
-        (expression_statement (number))))))
+        (expression_statement (number)))
+      (switch_match
+        (list_pattern
+          (number)
+          (number)
+          (spread_pattern
+            (list_pattern
+              (value_identifier)
+              (spread_pattern (value_identifier))))
+          (as_aliasing (value_identifier)))
+        (expression_statement (value_identifier))))))
 
 ===========================================
 Switch of arrays
