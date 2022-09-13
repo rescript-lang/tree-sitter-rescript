@@ -10,6 +10,11 @@ include NumericCurve({
   let foo = foo
 })
 
+let {baz, _} = module(User.Inner)
+//             ^ keyword
+//                    ^ namespace
+//                          ^ namespace
+
 module Belt = {
   include (Belt: module type of Belt with module Map := Belt.Map and module Result := Belt.Result)
   // ^ include
