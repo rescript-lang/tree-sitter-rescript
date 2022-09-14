@@ -166,7 +166,7 @@ module.exports = grammar({
       'module',
       optional('rec'),
       optional('type'),
-      field('name', $.module_identifier),
+      field('name', choice($.module_identifier, $._type_identifier)),
       optional(seq(
         ':',
         field('signature', choice($.block, $.module_expression, $.functor)),
@@ -182,7 +182,10 @@ module.exports = grammar({
       $.module_expression,
       $.functor,
       $.extension_expression,
+      $.module_unpack,
     ),
+
+    module_unpack: $ => seq('unpack', $.call_arguments),
 
     functor: $ => seq(
       field('parameters', $.functor_parameters),
@@ -276,6 +279,17 @@ module.exports = grammar({
       $.object_type,
       $.generic_type,
       $.unit_type,
+      $.module_type,
+    ),
+
+    module_type: $ => seq(
+      'module',
+      '(',
+      choice($.module_identifier, $._type_identifier),
+      optional(
+        seq('with', sep1('and', seq('type', $._type_identifier, '=', $._type_identifier)))
+      ),
+      ')'
     ),
 
     tuple_type: $ => prec.dynamic(-1, seq(
@@ -428,6 +442,7 @@ module.exports = grammar({
       $.record_pattern,
       $.array_pattern,
       $.list_pattern,
+      $.module_unpack_pattern,
       $.unit
     ),
 
@@ -474,7 +489,7 @@ module.exports = grammar({
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
-      $.module_destructuring_expression,
+      $.module_pack_expression,
       $.extension_expression,
     ),
 
@@ -700,8 +715,17 @@ module.exports = grammar({
       ),
     )),
 
-    module_destructuring_expression: $ => seq(
-      'module', '(', choice($.module_identifier, $.module_identifier_path), ')'
+    module_pack_expression: $ => seq(
+      'module', '(',
+      choice(
+        seq(
+          field('name', choice($.module_identifier, $.module_identifier_path)),
+          optional(field('signature', seq(':', $.module_identifier))),
+          optional(field('definition', seq('(', $.module_unpack, ')')))
+        ),
+        seq(field('definition', $.block), ':', field('signature', $.module_identifier))
+      ),
+      ')'
     ),
 
     call_arguments: $ => seq(
@@ -770,7 +794,7 @@ module.exports = grammar({
 
     type_parameter: $ => seq(
       'type',
-      $.type_identifier,
+      repeat($.type_identifier),
     ),
 
     _labeled_parameter_default_value: $ => seq(
@@ -882,6 +906,10 @@ module.exports = grammar({
     spread_pattern: $ => seq(
       '...',
       choice($.value_identifier, $.list_pattern, $.array_pattern),
+    ),
+
+    module_unpack_pattern: $ => seq(
+      'module', '(', $.module_identifier, ')',
     ),
 
     _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),

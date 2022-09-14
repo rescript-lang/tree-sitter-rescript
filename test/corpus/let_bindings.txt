@@ -247,3 +247,55 @@ let test = (. ~attr) => ()
           (labeled_parameter
             (value_identifier))))
       (unit))))
+
+===========================================
+Destructuring module
+===========================================
+
+
+let {foo, bar} = module(User)
+let {baz, _} = module(User.Inner)
+
+---
+
+(source_file
+  (let_binding
+    (record_pattern
+      (value_identifier)
+      (value_identifier))
+    (module_pack_expression (module_identifier)))
+
+  (let_binding
+    (record_pattern
+      (value_identifier)
+      (value_identifier))
+    (module_pack_expression
+      (module_identifier_path
+        (module_identifier)
+        (module_identifier)))))
+
+===========================================
+Packing module
+===========================================
+
+let foo = module(Bar)
+
+---
+
+(source_file
+  (let_binding
+    (value_identifier)
+    (module_pack_expression (module_identifier))))
+
+===========================================
+Unpacking module
+===========================================
+
+let module(Bar) = foo
+
+---
+
+(source_file
+  (let_binding
+    (module_unpack_pattern (module_identifier))
+    (value_identifier)))

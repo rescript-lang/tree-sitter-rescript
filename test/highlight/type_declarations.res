@@ -8,6 +8,8 @@ type rec t =
 //       ^ type
   | Terminal
 //  ^ constant
+  | Component(module(Foo.t))
+//             ^ keyword
 
 type obj = {
   "x": int,
