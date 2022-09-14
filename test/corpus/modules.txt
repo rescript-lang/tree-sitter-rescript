@@ -174,9 +174,11 @@ module(SomeFunctor(unpack(x)))
       (module_identifier)))
   (expression_statement
     (module_pack_expression
-      (module_identifier)
-      (module_unpack
-        (call_arguments (value_identifier))))))
+      (functor_use
+        (module_identifier)
+        (arguments
+          (module_unpack
+            (call_arguments (value_identifier))))))))
 
 
 ===========================================

@@ -182,7 +182,6 @@ module.exports = grammar({
       $.module_expression,
       $.functor,
       $.extension_expression,
-      $.module_unpack,
     ),
 
     module_unpack: $ => seq('unpack', $.call_arguments),
@@ -718,10 +717,7 @@ module.exports = grammar({
     module_pack_expression: $ => seq(
       'module',
       '(',
-      choice(
-        $._module_definition,
-        seq(choice($.module_identifier, $.module_identifier_path), '(', $.module_unpack, ')')
-      ),
+      choice($.module_expression, $.block),
       optional(seq(':', $.module_expression)),
       ')'
     ),
@@ -1231,7 +1227,8 @@ module.exports = grammar({
       $.module_identifier_path,
       $.module_type_of,
       $.functor_use,
-      $.module_type_constraint
+      $.module_type_constraint,
+      $.module_unpack,
     ),
 
     module_identifier_path: $ => prec.left(seq(
