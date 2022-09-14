@@ -155,6 +155,7 @@ module(
     let foo = "Hello"
   }: X
 )
+module(SomeFunctor(unpack(x)))
 
 ---
 
@@ -170,7 +171,12 @@ module(
         (let_binding
           (value_identifier)
           (string (string_fragment))))
-      (module_identifier))))
+      (module_identifier)))
+  (expression_statement
+    (module_pack_expression
+      (module_identifier)
+      (module_unpack
+        (call_arguments (value_identifier))))))
 
 
 ===========================================

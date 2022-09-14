@@ -716,15 +716,13 @@ module.exports = grammar({
     )),
 
     module_pack_expression: $ => seq(
-      'module', '(',
+      'module',
+      '(',
       choice(
-        seq(
-          field('name', choice($.module_identifier, $.module_identifier_path)),
-          optional(field('signature', seq(':', $.module_identifier))),
-          optional(field('definition', seq('(', $.module_unpack, ')')))
-        ),
-        seq(field('definition', $.block), ':', field('signature', $.module_identifier))
+        $._module_definition,
+        seq(choice($.module_identifier, $.module_identifier_path), '(', $.module_unpack, ')')
       ),
+      optional(seq(':', $.module_expression)),
       ')'
     ),
 
