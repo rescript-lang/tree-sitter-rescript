@@ -33,7 +33,7 @@ let a = module(
 )
 
 module B = unpack(a)
-//         ^ function.builtin
+//         ^ keyword
 
 module type A = {
   type t = int

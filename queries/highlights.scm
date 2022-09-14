@@ -75,8 +75,6 @@
 
 (function parameter: (value_identifier) @parameter)
 
-("unpack") @function.builtin
-
 ; Meta
 ;-----
 
@@ -115,6 +113,7 @@
   "async"
   "await"
   "with"
+  "unpack"
 ] @keyword
 
 [
