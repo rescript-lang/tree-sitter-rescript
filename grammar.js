@@ -278,10 +278,10 @@ module.exports = grammar({
       $.object_type,
       $.generic_type,
       $.unit_type,
-      $.module_type,
+      $.module_pack_type,
     ),
 
-    module_type: $ => seq(
+    module_pack_type: $ => seq(
       'module',
       '(',
       choice($.module_identifier, $._type_identifier),

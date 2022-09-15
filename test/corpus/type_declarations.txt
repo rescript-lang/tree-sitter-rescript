@@ -162,11 +162,11 @@ type t =
       (variant_declaration
         (variant_identifier)
         (variant_parameters
-          (module_type (module_identifier))))
+          (module_pack_type (module_identifier))))
       (variant_declaration
         (variant_identifier)
         (variant_parameters
-          (module_type
+          (module_pack_type
             (type_identifier_path (module_identifier) (type_identifier))))))))
 
 ===========================================
