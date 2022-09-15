@@ -13,32 +13,6 @@ open! Foo.Bar
     (module_identifier_path (module_identifier) (module_identifier))))
 
 ===========================================
-Module destructuring
-===========================================
-
-
-let {foo, bar} = module(User)
-let {baz, _} = module(User.Inner)
-
----
-
-(source_file
-  (let_binding
-    (record_pattern
-      (value_identifier)
-      (value_identifier))
-    (module_destructuring_expression (module_identifier)))
-
-  (let_binding
-    (record_pattern
-      (value_identifier)
-      (value_identifier))
-    (module_destructuring_expression
-      (module_identifier_path
-        (module_identifier)
-        (module_identifier)))))
-
-===========================================
 Include
 ===========================================
 
@@ -156,6 +130,7 @@ Module types
 
 module type S1 = { type t }
 module type S2 = module type of MyModule.Submod
+module type t
 
 ---
 
@@ -165,7 +140,46 @@ module type S2 = module type of MyModule.Submod
     (block (type_declaration (type_identifier))))
   (module_declaration
     (module_identifier)
-    (module_type_of (module_identifier_path (module_identifier) (module_identifier)))))
+    (module_type_of (module_identifier_path (module_identifier) (module_identifier))))
+  (module_declaration (type_identifier)))
+
+===========================================
+First Class module
+===========================================
+
+module(LightTheme)
+module(A: A)
+module(
+  {
+    type t
+    let foo = "Hello"
+  }: X
+)
+module(SomeFunctor(unpack(x)))
+
+---
+
+(source_file
+  (expression_statement
+    (module_pack_expression (module_identifier)))
+  (expression_statement
+    (module_pack_expression (module_identifier) (module_identifier)))
+  (expression_statement
+    (module_pack_expression
+      (block
+        (type_declaration (type_identifier))
+        (let_binding
+          (value_identifier)
+          (string (string_fragment))))
+      (module_identifier)))
+  (expression_statement
+    (module_pack_expression
+      (functor_use
+        (module_identifier)
+        (arguments
+          (module_unpack
+            (call_arguments (value_identifier))))))))
+
 
 ===========================================
 Functor definition

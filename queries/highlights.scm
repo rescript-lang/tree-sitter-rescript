@@ -113,6 +113,7 @@
   "async"
   "await"
   "with"
+  "unpack"
 ] @keyword
 
 [

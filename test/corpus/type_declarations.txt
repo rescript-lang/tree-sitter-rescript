@@ -136,6 +136,8 @@ type t =
   | @live("t.D") D
   | B(anotherType)
   | C({foo: int, bar: string})
+  | D(module(Foo))
+  | D(module(Bar.t))
 
 ---
 
@@ -156,8 +158,16 @@ type t =
             (record_type_field
               (property_identifier) (type_annotation (type_identifier)))
             (record_type_field
-              (property_identifier) (type_annotation (type_identifier)))
-            ))))))
+              (property_identifier) (type_annotation (type_identifier))))))
+      (variant_declaration
+        (variant_identifier)
+        (variant_parameters
+          (module_pack_type (module_identifier))))
+      (variant_declaration
+        (variant_identifier)
+        (variant_parameters
+          (module_pack_type
+            (type_identifier_path (module_identifier) (type_identifier))))))))
 
 ===========================================
 Annotated variant

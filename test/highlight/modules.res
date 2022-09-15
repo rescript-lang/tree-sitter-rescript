@@ -22,3 +22,29 @@ module Belt = {
   //                                  ^ keyword
   //                                                                                ^ operator
 }
+
+let a = module(
+//      ^ keyword
+  {
+    type t
+    let hello = "Hello"
+  }: X
+//   ^ namespace
+)
+
+module B = unpack(a)
+//         ^ keyword
+
+module type A = {
+  type t = int
+  let value: t
+}
+
+module A: A = {
+  type t = int
+  let value: t = 42
+}
+
+let packedA = module(A: A)
+//                   ^ namespace
+//                      ^ namespace
