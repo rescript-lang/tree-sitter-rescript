@@ -788,7 +788,7 @@ module.exports = grammar({
 
     type_parameter: $ => seq(
       'type',
-      repeat($.type_identifier),
+      repeat1($.type_identifier),
     ),
 
     _labeled_parameter_default_value: $ => seq(
