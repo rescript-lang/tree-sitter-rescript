@@ -123,7 +123,6 @@ module.exports = grammar({
       $.expression_statement,
       $.declaration,
       $.open_statement,
-      $.assert_statement,
       $.include_statement,
     ),
 
@@ -461,6 +460,7 @@ module.exports = grammar({
       $.mutation_expression,
       $.await_expression,
       $.block,
+      $.assert_expression,
     ),
 
     primary_expression: $ => choice(
@@ -695,7 +695,7 @@ module.exports = grammar({
       optional($.type_annotation)
     )),
 
-    assert_statement: $ => seq('assert', $.expression),
+    assert_expression: $ => prec.left(seq('assert', $.expression)),
 
     call_expression: $ => prec('call', seq(
       field('function', $.primary_expression),
