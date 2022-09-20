@@ -241,11 +241,17 @@ module.exports = grammar({
         choice('=', '+='),
         optional('private'),
         $._type,
-        optional(seq(
-          'and',
-          $._type_declaration
-        )),
+        repeat(alias($._type_declaration_and, $.type_declaration)),
       )),
+    ),
+
+    _type_declaration_and: $ => seq(
+      // New line here not necessary terminates the statement,
+      // show this doubt to the parser
+      repeat($._newline),
+      repeat($.decorator),
+      'and',
+      $._type_declaration
     ),
 
     type_parameters: $ => seq(
