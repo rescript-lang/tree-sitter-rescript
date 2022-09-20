@@ -200,11 +200,12 @@ let a = 5 and b = 4
   (let_binding
     (value_identifier)
     (number)
-    (value_identifier)
-    (number)))
+    (let_binding
+      (value_identifier)
+      (number))))
 
 ============================================
-And (Fuctions)
+And (Functions)
 ============================================
 
 let rec a = x => x + b(x) and b = y => y - 1
@@ -222,10 +223,40 @@ let rec a = x => x + b(x) and b = y => y - 1
           (value_identifier)
           (arguments
             (value_identifier)))))
-    (value_identifier)
-    (function
+    (let_binding
       (value_identifier)
-      (binary_expression
+      (function
+        (value_identifier)
+        (binary_expression
+          (value_identifier)
+          (number))))))
+
+============================================
+And (decorated)
+============================================
+
+@one
+let rec a = b
+@two @three
+and b = c
+
+@four and c = 42
+
+---
+
+(source_file
+  (decorated
+    (decorator (decorator_identifier))
+    (let_binding
+      (value_identifier)
+      (value_identifier)
+      (let_binding
+        (decorator (decorator_identifier))
+        (decorator (decorator_identifier))
+        (value_identifier)
+        (value_identifier))
+      (let_binding
+        (decorator (decorator_identifier))
         (value_identifier)
         (number)))))
 
