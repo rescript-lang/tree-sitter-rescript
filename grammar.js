@@ -257,7 +257,12 @@ module.exports = grammar({
 
     type_parameters: $ => seq(
       '<',
-      commaSep1t($.type_identifier),
+      commaSep1t(
+        seq(
+          optional(choice('+', '-')),
+          $.type_identifier
+        )
+      ),
       '>',
     ),
 
