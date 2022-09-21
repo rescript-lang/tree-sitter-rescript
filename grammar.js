@@ -151,7 +151,10 @@ module.exports = grammar({
 
     include_statement: $ => seq(
       'include',
-      choice($.module_expression, seq('(', $.module_expression, ')')),
+      choice(
+        $.module_expression,
+        seq('(', choice($.module_expression, $.functor_parameter), ')')
+      ),
     ),
 
     declaration: $ => choice(
@@ -200,7 +203,7 @@ module.exports = grammar({
     ),
 
     functor_parameter: $ => seq(
-      $.module_identifier,
+      $.module_identifier_path,
       $.module_type_annotation,
     ),
 
@@ -710,8 +713,8 @@ module.exports = grammar({
     module_pack: $ => seq(
       'module',
       '(',
-      choice($.module_expression, $.block),
-      optional(seq(':', $.module_expression)),
+      $._module_definition,
+      optional($.module_type_annotation),
       ')'
     ),
 
@@ -1240,8 +1243,6 @@ module.exports = grammar({
     )),
 
     module_type_constraint: $ => seq(
-      $.module_expression,
-      optional(':'),
       $.module_expression,
       'with',
       sep1('and',
