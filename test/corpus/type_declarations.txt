@@ -417,3 +417,20 @@ type test = (. ~attr: string) => unit
             (type_annotation
               (type_identifier)))))
       (unit_type))))
+
+===========================================
+Variance annotations
+===========================================
+
+type t<+'a>
+type t<-'a>
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))))
