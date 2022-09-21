@@ -1260,7 +1260,7 @@ module.exports = grammar({
     constrain_type: $ => seq(
       'type',
       $._type_identifier,
-      '=',
+      choice('=', ':='),
       $._type_identifier
     ),
 
