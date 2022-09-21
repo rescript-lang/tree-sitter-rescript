@@ -278,17 +278,7 @@ module.exports = grammar({
       $.object_type,
       $.generic_type,
       $.unit_type,
-      $.module_pack_type,
-    ),
-
-    module_pack_type: $ => seq(
-      'module',
-      '(',
-      choice($.module_identifier, $._type_identifier),
-      optional(
-        seq('with', sep1('and', seq('type', $._type_identifier, '=', $._type_identifier)))
-      ),
-      ')'
+      $.module_pack,
     ),
 
     tuple_type: $ => prec.dynamic(-1, seq(
@@ -489,7 +479,7 @@ module.exports = grammar({
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
-      $.module_pack_expression,
+      $.module_pack,
       $.extension_expression,
     ),
 
@@ -502,7 +492,8 @@ module.exports = grammar({
     ),
 
     value_identifier_path: $ => seq(
-      repeat1(seq($.module_identifier, '.')),
+      $.module_identifier_path,
+      '.',
       $.value_identifier,
     ),
 
@@ -716,7 +707,7 @@ module.exports = grammar({
       ),
     )),
 
-    module_pack_expression: $ => seq(
+    module_pack: $ => seq(
       'module',
       '(',
       choice($.module_expression, $.block),
@@ -811,7 +802,8 @@ module.exports = grammar({
         $._destructuring_pattern,
         $.polyvar_type_pattern,
         $.unit,
-        $._parenthesized_pattern
+        $.module_pack,
+        $._parenthesized_pattern,
       )),
       optional($.type_annotation),
       optional($.as_aliasing),
@@ -1194,7 +1186,8 @@ module.exports = grammar({
     )),
 
     nested_variant_identifier: $ => seq(
-      repeat1(seq($.module_identifier, '.')),
+      $.module_identifier_path,
+      '.',
       $.variant_identifier
     ),
 
@@ -1220,54 +1213,59 @@ module.exports = grammar({
       ),
 
     type_identifier_path: $ => seq(
-      repeat1(seq($.module_identifier, '.')),
+      $.module_identifier_path,
+      '.',
       $.type_identifier
     ),
 
     module_expression: $ => choice(
-      $.module_identifier,
       $.module_identifier_path,
+      $.type_identifier_path,
       $.module_type_of,
       $.functor_use,
       $.module_type_constraint,
       $.module_unpack,
     ),
 
-    module_identifier_path: $ => prec.left(seq(
-      $.module_expression,
-      '.',
+    module_identifier_path: $ => path(
+      $.module_identifier_path,
       $.module_identifier,
-    )),
+    ),
 
-    module_type_of: $ => prec.dynamic(-1, seq(
+    module_type_of: $ => prec.left(seq(
       'module',
       'type',
       'of',
-      choice($.module_expression, $.block),
+      choice($.module_expression, $.block)
     )),
 
     module_type_constraint: $ => seq(
-      '(',
-      choice($.module_identifier, $.module_identifier_path),
-      ':',
-      $.module_type_of,
+      $.module_expression,
+      optional(':'),
+      $.module_expression,
       'with',
       sep1('and',
-        seq(
-          'module',
-          $.module_expression,
-          choice('=', ':='),
-          $.module_expression
-        )
+        choice($.constrain_module, $.constrain_type)
       ),
-      ')'
+    ),
+
+    constrain_module: $ => seq(
+      'module',
+      $.module_identifier_path,
+      choice('=', ':='),
+      $.module_identifier_path,
+    ),
+
+    // TODO: use $.type_declaration rule
+    constrain_type: $ => seq(
+      'type',
+      $._type_identifier,
+      '=',
+      $._type_identifier
     ),
 
     functor_use: $ => seq(
-      choice(
-        $.module_identifier,
-        $.module_identifier_path,
-      ),
+      $.module_identifier_path,
       alias($.functor_arguments, $.arguments),
     ),
 
@@ -1465,4 +1463,8 @@ function commaSept(rule) {
 
 function sep1(delimiter, rule) {
   return seq(rule, repeat(seq(delimiter, rule)))
+}
+
+function path(prefix, final) {
+  return choice(final, seq(prefix, '.', final))
 }

@@ -41,14 +41,20 @@ Foo.Bar.baz.qux
 (source_file
   (expression_statement
     (value_identifier_path
-      (module_identifier)
-      (module_identifier) (value_identifier)))
+      (module_identifier_path
+        (module_identifier_path
+          (module_identifier))
+        (module_identifier))
+      (value_identifier)))
   (expression_statement
     (member_expression
       (value_identifier_path
-        (module_identifier)
-        (module_identifier) (value_identifier))
-      (property_identifier))))
+        (module_identifier_path
+          (module_identifier_path
+            (module_identifier))
+          (module_identifier))
+        (value_identifier))
+    (property_identifier))))
 
 ===========================================
 Escape identifiers
@@ -149,7 +155,8 @@ f(raise)
             left: (pipe_expression
               (value_identifier)
               (value_identifier_path
-                (module_identifier)
+                (module_identifier_path
+                  (module_identifier))
                 (value_identifier)))
             right: (number))))))
   (expression_statement
@@ -158,7 +165,7 @@ f(raise)
       arguments: (arguments
         (number)
         (block
-          (open_statement (module_identifier))
+          (open_statement (module_identifier_path (module_identifier)))
           (expression_statement (value_identifier)))
         (labeled_argument
           label: (value_identifier)
@@ -208,9 +215,15 @@ foo->{
       (call_expression
         (pipe_expression
           (value_identifier)
-          (value_identifier_path (module_identifier) (value_identifier)))
+          (value_identifier_path
+            (module_identifier_path
+              (module_identifier))
+            (value_identifier)))
         (arguments (value_identifier)))
-      (value_identifier_path (module_identifier) (value_identifier))))
+      (value_identifier_path
+        (module_identifier_path
+          (module_identifier))
+        (value_identifier))))
   (expression_statement
     (pipe_expression
       (number)
@@ -234,7 +247,7 @@ foo->{
     (pipe_expression
       (value_identifier)
       (block
-        (open_statement (module_identifier))
+        (open_statement (module_identifier_path (module_identifier)))
         (expression_statement (value_identifier))))))
 
 ===========================================
@@ -274,12 +287,18 @@ Record
   (expression_statement
     (record
       (record_field
-        (property_identifier (module_identifier) (value_identifier))
+        (property_identifier
+          (module_identifier_path
+           (module_identifier))
+        (value_identifier))
         (number))))
   (expression_statement
     (record
       (record_field
-        (property_identifier (module_identifier) (value_identifier))
+        (property_identifier
+          (module_identifier_path
+            (module_identifier))
+          (value_identifier))
         (number))
       (record_field
         (property_identifier)
@@ -437,7 +456,8 @@ switch foo {
       (switch_match
         (variant_pattern
           (nested_variant_identifier
-            (module_identifier)
+            (module_identifier_path
+              (module_identifier))
             (variant_identifier)))
         (expression_statement (number))))))
 
@@ -473,7 +493,8 @@ switch foo {
       (switch_match
         (polyvar_type_pattern
           (type_identifier_path
-            (module_identifier)
+            (module_identifier_path
+              (module_identifier))
             (type_identifier)))
             (as_aliasing (value_identifier))
         (expression_statement (number))))))
@@ -728,7 +749,8 @@ switch (element->HtmlInputElement.ofElement) {
         (pipe_expression
           (value_identifier)
           (value_identifier_path
-            (module_identifier)
+            (module_identifier_path
+              (module_identifier))
             (value_identifier))))
       (switch_match
         (variant_pattern
@@ -738,14 +760,16 @@ switch (element->HtmlInputElement.ofElement) {
         (expression_statement
           (call_expression
             function: (value_identifier_path
-              (module_identifier)
+              (module_identifier_path
+                (module_identifier))
               (value_identifier))
             arguments: (arguments
               (value_identifier))))
         (expression_statement
           (call_expression
             function: (value_identifier_path
-              (module_identifier)
+              (module_identifier_path
+                (module_identifier))
               (value_identifier))
             arguments: (arguments
               (value_identifier)))))
@@ -774,7 +798,12 @@ switch parseExn(str) {
       (switch_match
         (exception
           (variant_pattern
-            (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
+            (nested_variant_identifier
+              (module_identifier_path
+               (module_identifier_path
+                (module_identifier))
+               (module_identifier))
+              (variant_identifier))
             (formal_parameters (value_identifier))))
         (expression_statement (number))))))
 
@@ -792,7 +821,7 @@ switch { open Mod; foo() } {
   (expression_statement
     (switch_expression
       (block
-        (open_statement (module_identifier))
+        (open_statement (module_identifier_path (module_identifier)))
         (expression_statement
           (call_expression (value_identifier) (arguments))))
       (switch_match
@@ -1055,7 +1084,10 @@ Foo((Obj.magic(v): string))
       (arguments
         (parenthesized_expression
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
+            (value_identifier_path
+              (module_identifier_path
+                (module_identifier))
+              (value_identifier))
             (arguments (value_identifier)))
           (type_annotation (type_identifier)))))))
 
@@ -1246,7 +1278,12 @@ try switch foo() {
         (expression_statement (number)))
       (switch_match
         (variant_pattern
-          (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
+          (nested_variant_identifier
+            (module_identifier_path
+              (module_identifier_path
+                (module_identifier))
+              (module_identifier))
+            (variant_identifier))
           (formal_parameters (value_identifier)))
         (expression_statement (number)))))
   (expression_statement
@@ -1258,7 +1295,12 @@ try switch foo() {
         (switch_match (value_identifier) (expression_statement (string (string_fragment)))))
       (switch_match
         (variant_pattern
-          (nested_variant_identifier (module_identifier) (module_identifier) (variant_identifier))
+          (nested_variant_identifier
+            (module_identifier_path
+              (module_identifier_path
+                (module_identifier))
+              (module_identifier))
+            (variant_identifier))
           (formal_parameters (value_identifier)))
         (expression_statement (string (string_fragment)))))))
 
@@ -1309,7 +1351,9 @@ for x in 1 downto 3 {
       (block
         (expression_statement
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
+            (value_identifier_path
+              (module_identifier_path (module_identifier))
+              (value_identifier))
             (arguments (value_identifier)))))))
   (expression_statement
     (for_expression
@@ -1319,7 +1363,9 @@ for x in 1 downto 3 {
       (block
         (expression_statement
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
+            (value_identifier_path
+              (module_identifier_path (module_identifier))
+              (value_identifier))
             (arguments (value_identifier))))))))
 
 ===========================================
@@ -1339,7 +1385,10 @@ while true {
       (block
         (expression_statement
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
+            (value_identifier_path
+              (module_identifier_path
+                (module_identifier))
+              (value_identifier))
             (arguments (string (string_fragment)))))))))
 
 ===========================================
@@ -1385,6 +1434,6 @@ let f = ({name, _} as foo: T.t) => {}
             (value_identifier)
             (type_annotation
               (type_identifier_path
-                (module_identifier)
+                (module_identifier_path (module_identifier))
                 (type_identifier))))))
       body: (block))))
