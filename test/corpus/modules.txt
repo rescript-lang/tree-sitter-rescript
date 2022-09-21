@@ -482,3 +482,26 @@ exception Invalid = Errors.Invalid
       (module_identifier_path
         (module_identifier))
       (variant_identifier))))
+
+=========================================
+Module Constraints
+=========================================
+
+module(M: T with type t = a and type t = b)
+
+---
+
+(source_file
+  (expression_statement
+    (module_pack
+      (module_type_constraint
+        (module_identifier_path
+          (module_identifier))
+        (module_identifier_path
+          (module_identifier))
+        (constrain_type
+          (type_identifier)
+          (type_identifier))
+        (constrain_type
+          (type_identifier)
+          (type_identifier))))))
