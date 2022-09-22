@@ -80,21 +80,21 @@ include module type of {
     (functor_parameter
       (module_identifier_path (module_identifier))
     (module_type_annotation
+      (module_type_of
       (module_type_constraint
-        (module_type_of
-          (module_identifier_path (module_identifier)))
-      (constrain_module
         (module_identifier_path (module_identifier))
-        (module_identifier_path
+        (constrain_module
+          (module_identifier_path (module_identifier))
           (module_identifier_path
-            (module_identifier))
-          (module_identifier)))
-      (constrain_module
-        (module_identifier_path (module_identifier))
-        (module_identifier_path
+            (module_identifier_path
+              (module_identifier))
+            (module_identifier)))
+        (constrain_module
+          (module_identifier_path (module_identifier))
           (module_identifier_path
-            (module_identifier))
-          (module_identifier)))))))
+            (module_identifier_path
+              (module_identifier))
+            (module_identifier))))))))
 
   (include_statement
     (module_type_of
@@ -491,20 +491,59 @@ Module Constraints
 
 module(M: T with type t = a and type t = b)
 
+module M = (): (T with type t = int) => {}
+
+module M = (Na: N, Nb: N): (
+  (S with type t = x) with type a = b
+) => {}
+
 ---
 
 (source_file
   (expression_statement
     (module_pack
-      (module_identifier_path
-        (module_identifier))
+      (module_identifier_path (module_identifier))
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path
-            (module_identifier))
+          (module_identifier_path (module_identifier))
           (constrain_type
             (type_identifier)
             (type_identifier))
           (constrain_type
             (type_identifier)
-            (type_identifier)))))))
+            (type_identifier))))))
+
+  (module_declaration
+    (module_identifier)
+    (functor
+      (functor_parameters)
+      (module_type_annotation
+        (module_type_constraint
+          (module_identifier_path (module_identifier)) 
+          (constrain_type
+            (type_identifier)
+            (type_identifier))))
+      (block)))
+
+  (module_declaration
+    (module_identifier)
+    (functor
+      (functor_parameters
+        (functor_parameter
+          (module_identifier_path (module_identifier))
+          (module_type_annotation
+            (module_identifier_path (module_identifier))))
+        (functor_parameter
+          (module_identifier_path (module_identifier))
+          (module_type_annotation
+            (module_identifier_path (module_identifier)))))
+      (module_type_annotation
+        (module_type_constraint
+          (module_identifier_path (module_identifier))
+          (constrain_type
+            (type_identifier)
+            (type_identifier))
+          (constrain_type
+            (type_identifier)
+            (type_identifier))))
+      (block))))
