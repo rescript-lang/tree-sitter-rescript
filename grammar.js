@@ -1267,12 +1267,11 @@ module.exports = grammar({
       $.module_identifier_path,
     ),
 
-    // TODO: use $.type_declaration rule
     constrain_type: $ => seq(
       'type',
-      $._type_identifier,
+      $._type,
       choice('=', ':='),
-      $._type_identifier
+      $._type,
     ),
 
     functor_use: $ => seq(
