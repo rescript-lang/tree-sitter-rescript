@@ -68,11 +68,13 @@
 ; Functions
 ;----------
 
+; parameter(s) in parens
 [
- (formal_parameters (value_identifier))
+ (parameter (value_identifier))
  (labeled_parameter (value_identifier))
 ] @parameter
 
+; single parameter with no parens
 (function parameter: (value_identifier) @parameter)
 
 ; Meta
