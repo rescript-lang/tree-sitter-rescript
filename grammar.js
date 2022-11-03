@@ -92,7 +92,8 @@ module.exports = grammar({
     [$.parameter, $._pattern],
     [$.parameter, $._parenthesized_pattern],
     [$._switch_value_pattern, $._parenthesized_pattern],
-    [$.variant_declaration]
+    [$.variant_declaration],
+    [$.unit, $._function_type_parameter_list]
   ],
 
   rules: {
@@ -290,6 +291,7 @@ module.exports = grammar({
       $.object_type,
       $.generic_type,
       $.unit_type,
+      $.unit,
       $.module_pack_type,
     ),
 
