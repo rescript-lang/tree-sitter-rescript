@@ -313,6 +313,7 @@ Generic
 ===========================================
 
 type t<'a, 'b> = (array<'a>, array<'b>)
+type t = result<(), string>
 
 ---
 
@@ -322,7 +323,14 @@ type t<'a, 'b> = (array<'a>, array<'b>)
     (type_parameters (type_identifier) (type_identifier))
     (tuple_type
       (generic_type (type_identifier) (type_arguments (type_identifier)))
-      (generic_type (type_identifier) (type_arguments (type_identifier))))))
+      (generic_type (type_identifier) (type_arguments (type_identifier)))))
+  (type_declaration
+    (type_identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (unit)
+        (type_identifier)))))
 
 ===========================================
 Recursive
@@ -391,15 +399,16 @@ and teacher = {
         (property_identifier)
         (type_annotation
           (type_identifier))))
-    (type_identifier)
-    (record_type
-      (record_type_field
-        (property_identifier)
-        (type_annotation
-          (generic_type
-            (type_identifier)
-            (type_arguments
-              (type_identifier))))))))
+    (type_declaration
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)))))))))
 
 
 ===========================================
@@ -422,3 +431,20 @@ type test = (. ~attr: string) => unit
             (type_annotation
               (type_identifier)))))
       (unit_type))))
+
+===========================================
+Variance annotations
+===========================================
+
+type t<+'a>
+type t<-'a>
+
+---
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier)))
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))))

@@ -77,3 +77,34 @@ let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
           (array)
           (number))))))
 
+============================================
+Decorator before type `and`
+============================================
+
+@deriving
+type foo = {
+  foo: string
+}
+@deriving
+and bar = {bar: int}
+
+
+@deriving @hello and baz = {baz: float}
+
+---
+
+(source_file
+  (decorated
+    (decorator (decorator_identifier))
+    (type_declaration
+      (type_identifier)
+      (record_type (record_type_field (property_identifier) (type_annotation (type_identifier))))
+      (type_declaration
+        (decorator (decorator_identifier))
+        (type_identifier)
+        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier)))))
+      (type_declaration
+        (decorator (decorator_identifier))
+        (decorator (decorator_identifier))
+        (type_identifier)
+        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier))))))))

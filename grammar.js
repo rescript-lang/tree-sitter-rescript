@@ -71,6 +71,7 @@ module.exports = grammar({
     [$.record_field, $.record_pattern],
     [$.expression_statement, $.ternary_expression],
     [$._type_declaration],
+    [$._let_binding],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
     [$.variant],
@@ -91,7 +92,8 @@ module.exports = grammar({
     [$.parameter, $._pattern],
     [$.parameter, $._parenthesized_pattern],
     [$._switch_value_pattern, $._parenthesized_pattern],
-    [$.variant_declaration]
+    [$.variant_declaration],
+    [$.unit, $._function_type_parameter_list]
   ],
 
   rules: {
@@ -245,16 +247,27 @@ module.exports = grammar({
         choice('=', '+='),
         optional('private'),
         $._type,
-        optional(seq(
-          'and',
-          $._type_declaration
-        )),
+        repeat(alias($._type_declaration_and, $.type_declaration)),
       )),
+    ),
+
+    _type_declaration_and: $ => seq(
+      // New line here not necessary terminates the statement,
+      // show this doubt to the parser
+      repeat($._newline),
+      repeat($.decorator),
+      'and',
+      $._type_declaration
     ),
 
     type_parameters: $ => seq(
       '<',
-      commaSep1t($.type_identifier),
+      commaSep1t(
+        seq(
+          optional(choice('+', '-')),
+          $.type_identifier
+        )
+      ),
       '>',
     ),
 
@@ -283,6 +296,7 @@ module.exports = grammar({
       $.generic_type,
       $.unit_type,
       $.module_pack,
+      $.unit,
     ),
 
     tuple_type: $ => prec.dynamic(-1, seq(
@@ -422,11 +436,17 @@ module.exports = grammar({
         '=',
         repeat($.decorator),
         $.expression,
-        optional(seq(
-          'and',
-          $._let_binding,
-        )),
+        repeat(alias($._let_binding_and, $.let_binding)),
       )),
+    ),
+
+    _let_binding_and: $ => seq(
+      // New line here not necessary terminates the statement,
+      // show this doubt to the parser
+      repeat($._newline),
+      repeat($.decorator),
+      'and',
+      $._let_binding,
     ),
 
     _binding_pattern: $ => choice(
