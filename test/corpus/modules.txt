@@ -60,15 +60,15 @@ include module type of {
   (include_statement
     (functor_parameter (module_identifier)
     (module_type_annotation
-      (module_type_of
       (module_type_constraint
-        (module_identifier)
+        (module_type_of (module_identifier))
         (constrain_module
           (module_identifier)
           (module_identifier_path (module_identifier) (module_identifier)))
         (constrain_module
           (module_identifier)
-          (module_identifier_path (module_identifier) (module_identifier))))))))
+          (module_identifier_path (module_identifier)
+          (module_identifier)))))))
 
   (include_statement
     (module_type_of

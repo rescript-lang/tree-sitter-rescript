@@ -1273,20 +1273,20 @@ module.exports = grammar({
       choice($.module_expression, $.block)
     )),
 
-    _module_type_constraint: $ => seq(
+    _module_type_constraint_with: $ => prec.right(seq(
       'with',
       sep1(choice('and', 'with'),
         choice($.constrain_module, $.constrain_type)
       ),
-    ),
+    )),
 
     module_type_constraint: $ => prec.left(choice(
-      seq($.module_identifier, $._module_type_constraint),
+      seq($.module_expression, $._module_type_constraint_with),
       seq(
         '(',
-        $.module_identifier, $._module_type_constraint,
+        $.module_expression, $._module_type_constraint_with,
         ')',
-        $._module_type_constraint
+        $._module_type_constraint_with
       )
     )),
 
