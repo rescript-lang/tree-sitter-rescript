@@ -50,6 +50,7 @@ module.exports = grammar({
     ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
+    [$.module_expression, $.module_identifier_path],
     [$.module_identifier_path, $.module_type_of],
   ],
 
@@ -1240,6 +1241,7 @@ module.exports = grammar({
     ),
 
     module_expression: $ => choice(
+      $.module_identifier,
       $.module_identifier_path,
       $.type_identifier_path,
       $.module_type_of,

@@ -165,7 +165,7 @@ f(raise)
       arguments: (arguments
         (number)
         (block
-          (open_statement (module_identifier_path (module_identifier)))
+          (open_statement (module_identifier))
           (expression_statement (value_identifier)))
         (labeled_argument
           label: (value_identifier)
@@ -247,7 +247,7 @@ foo->{
     (pipe_expression
       (value_identifier)
       (block
-        (open_statement (module_identifier_path (module_identifier)))
+        (open_statement (module_identifier))
         (expression_statement (value_identifier))))))
 
 ===========================================
@@ -821,7 +821,7 @@ switch { open Mod; foo() } {
   (expression_statement
     (switch_expression
       (block
-        (open_statement (module_identifier_path (module_identifier)))
+        (open_statement (module_identifier))
         (expression_statement
           (call_expression (value_identifier) (arguments))))
       (switch_match

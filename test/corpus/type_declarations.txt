@@ -166,8 +166,7 @@ type t =
       (variant_declaration
         (variant_identifier)
         (variant_parameters
-          (module_pack
-            (module_identifier_path (module_identifier)))))
+          (module_pack (module_identifier))))
       (variant_declaration
         (variant_identifier)
         (variant_parameters

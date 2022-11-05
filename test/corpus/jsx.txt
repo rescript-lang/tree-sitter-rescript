@@ -209,8 +209,7 @@ Attribute Block
         (jsx_attribute
           (property_identifier)
           (jsx_expression
-            (open_statement
-              (module_identifier_path (module_identifier)))
+            (open_statement (module_identifier))
             (expression_statement
               (record
                 (record_field
