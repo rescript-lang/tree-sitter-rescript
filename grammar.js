@@ -24,6 +24,7 @@ module.exports = grammar({
     $.primary_expression,
     $._type,
     $.module_expression,
+    $.module_primary_expression,
   ],
 
   precedences: $ => [
@@ -91,7 +92,8 @@ module.exports = grammar({
     [$.parameter, $._parenthesized_pattern],
     [$._switch_value_pattern, $._parenthesized_pattern],
     [$.variant_declaration],
-    [$.unit, $._function_type_parameter_list]
+    [$.unit, $._function_type_parameter_list],
+    [$.module_primary_expression, $.module_identifier_path],
   ],
 
   rules: {
@@ -1235,18 +1237,22 @@ module.exports = grammar({
       ),
 
     type_identifier_path: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       '.',
       $.type_identifier
     ),
 
     module_expression: $ => choice(
-      $.module_identifier,
-      $.module_identifier_path,
+      $.module_primary_expression,
       $.type_identifier_path,
       $.module_type_of,
-      $.functor_use,
       $.module_type_constraint,
+    ),
+
+    module_primary_expression: $ => choice(
+      $.module_identifier,
+      $.module_identifier_path,
+      $.functor_use,
       $.module_unpack,
     ),
 

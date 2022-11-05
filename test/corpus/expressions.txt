@@ -493,8 +493,7 @@ switch foo {
       (switch_match
         (polyvar_type_pattern
           (type_identifier_path
-            (module_identifier_path
-              (module_identifier))
+            (module_identifier)
             (type_identifier)))
             (as_aliasing (value_identifier))
         (expression_statement (number))))))
@@ -1434,6 +1433,6 @@ let f = ({name, _} as foo: T.t) => {}
             (value_identifier)
             (type_annotation
               (type_identifier_path
-                (module_identifier_path (module_identifier))
+                (module_identifier)
                 (type_identifier))))))
       body: (block))))

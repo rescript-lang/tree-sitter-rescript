@@ -240,8 +240,12 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
       return_module_type: (module_type_annotation
           (block (type_declaration (type_identifier)) (type_declaration (type_identifier))))
       body: (block
-        (type_declaration (type_identifier) (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))
-        (type_declaration (type_identifier) (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))))))
+        (type_declaration
+          (type_identifier)
+          (type_identifier_path (module_identifier) (type_identifier)))
+        (type_declaration
+          (type_identifier)
+          (type_identifier_path (module_identifier) (type_identifier)))))))
 
 ===========================================
 Functor signature
@@ -405,7 +409,7 @@ external add: (
         (function_type
           (function_type_parameters
             (parameter
-              (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))
+              (type_identifier_path (module_identifier) (type_identifier)))
             (parameter
               (decorator (decorator_identifier) (decorator_arguments (template_string)))
               (type_identifier))
@@ -434,11 +438,11 @@ external add: (
                     (polyvar_declaration
                       (polyvar_identifier)
                       (polyvar_parameters
-                        (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier))))
+                        (type_identifier_path (module_identifier) (type_identifier))))
                     (polyvar_declaration
                       (polyvar_identifier)
                       (polyvar_parameters
-                        (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))))))))
+                        (type_identifier_path (module_identifier) (type_identifier)))))))))
           (unit_type)))
         (string (string_fragment)))))
 

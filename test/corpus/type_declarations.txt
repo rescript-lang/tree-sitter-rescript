@@ -171,8 +171,7 @@ type t =
         (variant_identifier)
         (variant_parameters
           (module_pack
-            (type_identifier_path
-              (module_identifier_path (module_identifier)) (type_identifier))))))))
+            (type_identifier_path (module_identifier) (type_identifier))))))))
 
 ===========================================
 Annotated variant
