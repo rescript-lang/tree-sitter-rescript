@@ -64,7 +64,6 @@ module.exports = grammar({
     [$.tuple_pattern, $.parameter],
     [$.primary_expression, $.parameter],
     [$.primary_expression, $.record_field],
-    [$.module_identifier_path, $.module_expression],
     [$.tuple_type, $.function_type_parameter],
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
