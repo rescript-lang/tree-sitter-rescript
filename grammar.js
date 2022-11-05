@@ -203,7 +203,7 @@ module.exports = grammar({
     ),
 
     functor_parameter: $ => seq(
-      $.module_identifier_path,
+      $.module_identifier,
       $.module_type_annotation,
     ),
 

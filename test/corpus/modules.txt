@@ -74,8 +74,7 @@ include module type of {
         (module_identifier))))
 
   (include_statement
-    (functor_parameter
-      (module_identifier_path (module_identifier))
+    (functor_parameter (module_identifier)
     (module_type_annotation
       (module_type_of
       (module_type_constraint
@@ -233,10 +232,10 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
     definition: (functor
       parameters: (functor_parameters
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (block (type_declaration (type_identifier)))))
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (block (type_declaration (type_identifier))))))
       return_module_type: (module_type_annotation
           (block (type_declaration (type_identifier)) (type_declaration (type_identifier))))
@@ -260,7 +259,7 @@ module Make: (Content: StaticContent) => {
     (functor
       (functor_parameters
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (module_identifier))))
       (block
         (let_binding
@@ -525,10 +524,10 @@ module M = (Na: N, Nb: N): (
     (functor
       (functor_parameters
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (module_identifier)))
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (module_identifier))))
       (module_type_annotation
         (module_type_constraint
