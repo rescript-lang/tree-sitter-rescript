@@ -75,7 +75,6 @@ module.exports = grammar({
     [$.variant_identifier, $.module_identifier],
     [$.variant, $.variant_pattern],
     [$.variant_declaration, $.function_type_parameter],
-    [$.polyvar],
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
     [$._record_element, $.jsx_expression],
@@ -1222,10 +1221,10 @@ module.exports = grammar({
       ')',
     ),
 
-    polyvar: $ => seq(
+    polyvar: $ => prec.right(seq(
       $.polyvar_identifier,
       optional(alias($.variant_arguments, $.arguments)),
-    ),
+    )),
 
     _type_identifier: $ =>
       choice(
