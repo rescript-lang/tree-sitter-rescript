@@ -28,6 +28,7 @@ module.exports = grammar({
   ],
 
   precedences: $ => [
+    // + - Operators -> precendence
     [
       'unary_not',
       'member',
@@ -49,10 +50,15 @@ module.exports = grammar({
       $.function,
       $.let_binding,
     ],
+    // Nested.Module.Path precendence
+    [
+      $.module_primary_expression,
+      $.value_identifier_path,
+      $.nested_variant_identifier,
+      $.module_identifier_path,
+    ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
-    [$.module_expression, $.module_identifier_path],
-    [$.module_identifier_path, $.module_type_of],
   ],
 
   conflicts: $ => [
@@ -93,7 +99,6 @@ module.exports = grammar({
     [$._switch_value_pattern, $._parenthesized_pattern],
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
-    [$.module_primary_expression, $.module_identifier_path],
   ],
 
   rules: {
@@ -516,7 +521,7 @@ module.exports = grammar({
     ),
 
     value_identifier_path: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       '.',
       $.value_identifier,
     ),
@@ -1210,7 +1215,7 @@ module.exports = grammar({
     )),
 
     nested_variant_identifier: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       '.',
       $.variant_identifier
     ),
@@ -1257,7 +1262,7 @@ module.exports = grammar({
     ),
 
     module_identifier_path: $ => path(
-      $.module_identifier_path,
+      $.module_primary_expression,
       $.module_identifier,
     ),
 
@@ -1276,10 +1281,10 @@ module.exports = grammar({
     ),
 
     module_type_constraint: $ => prec.left(choice(
-      seq($.module_identifier_path, $._module_type_constraint),
+      seq($.module_identifier, $._module_type_constraint),
       seq(
         '(',
-        $.module_identifier_path, $._module_type_constraint,
+        $.module_identifier, $._module_type_constraint,
         ')',
         $._module_type_constraint
       )
@@ -1287,9 +1292,9 @@ module.exports = grammar({
 
     constrain_module: $ => seq(
       'module',
-      $.module_identifier_path,
+      $.module_identifier,
       choice('=', ':='),
-      $.module_identifier_path,
+      $.module_primary_expression,
     ),
 
     constrain_type: $ => seq(
@@ -1300,7 +1305,7 @@ module.exports = grammar({
     ),
 
     functor_use: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       alias($.functor_arguments, $.arguments),
     ),
 

@@ -36,8 +36,7 @@ type t = Foo.Bar.qux
     (type_identifier)
     (type_identifier_path
       (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
+        (module_identifier)
         (module_identifier))
       (type_identifier))))
 

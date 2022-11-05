@@ -11,8 +11,7 @@ open! Foo.Bar
   (open_statement (module_identifier))
   (open_statement
     (module_identifier_path
-      (module_identifier_path
-        (module_identifier))
+      (module_identifier)
       (module_identifier))))
 
 ===========================================
@@ -39,58 +38,37 @@ include module type of {
 (source_file
   (include_statement (module_identifier))
   (include_statement
-    (module_identifier_path
-      (module_identifier_path
-        (module_identifier))
-      (module_identifier)))
+    (module_identifier_path (module_identifier) (module_identifier)))
   (include_statement
     (functor_use
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))
+      (module_identifier_path (module_identifier) (module_identifier))
       (arguments (module_identifier))))
   (include_statement
     (functor_use
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))
+      (module_identifier_path (module_identifier) (module_identifier))
       (arguments
         (block
           (type_declaration (type_identifier))
           (let_binding (value_identifier) (type_annotation (type_identifier)))))))
   (include_statement
     (module_type_of
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))))
+      (module_identifier_path (module_identifier) (module_identifier))))
   (include_statement
     (module_type_of
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))))
+      (module_identifier_path (module_identifier) (module_identifier))))
 
   (include_statement
     (functor_parameter (module_identifier)
     (module_type_annotation
       (module_type_of
       (module_type_constraint
-        (module_identifier_path (module_identifier))
+        (module_identifier)
         (constrain_module
-          (module_identifier_path (module_identifier))
-          (module_identifier_path
-            (module_identifier_path
-              (module_identifier))
-            (module_identifier)))
+          (module_identifier)
+          (module_identifier_path (module_identifier) (module_identifier)))
         (constrain_module
-          (module_identifier_path (module_identifier))
-          (module_identifier_path
-            (module_identifier_path
-              (module_identifier))
-            (module_identifier))))))))
+          (module_identifier)
+          (module_identifier_path (module_identifier) (module_identifier))))))))
 
   (include_statement
     (module_type_of
@@ -142,10 +120,7 @@ module MyModule: {
       (let_binding (value_identifier) (type_annotation (type_identifier)))))
   (module_declaration
     name: (module_identifier)
-    signature: (module_identifier_path
-      (module_identifier_path
-        (module_identifier))
-      (module_identifier))
+    signature: (module_identifier_path (module_identifier) (module_identifier))
     definition: (block (type_declaration (type_identifier))))
   (module_declaration
     name: (module_identifier)
@@ -169,10 +144,7 @@ module type t
   (module_declaration
     (module_identifier)
     (module_type_of
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))))
+      (module_identifier_path (module_identifier) (module_identifier))))
   (module_declaration (type_identifier)))
 
 ===========================================
@@ -209,7 +181,7 @@ module(SomeFunctor(unpack(x)))
   (expression_statement
     (module_pack
       (functor_use
-        (module_identifier_path (module_identifier))
+        (module_identifier)
         (arguments
           (module_unpack
             (call_arguments (value_identifier))))))))
@@ -283,13 +255,10 @@ module M = MyFunctor(Foo, Bar.Baz)
   (module_declaration
     (module_identifier)
     (functor_use
-      (module_identifier_path (module_identifier))
+      (module_identifier)
       (arguments
         (module_identifier)
-        (module_identifier_path
-          (module_identifier_path
-            (module_identifier))
-          (module_identifier))))))
+        (module_identifier_path (module_identifier) (module_identifier))))))
 
 ===========================================
 Alias
@@ -304,8 +273,7 @@ module Q = Foo.Bar.Qux
     (module_identifier)
     (module_identifier_path
       (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
+        (module_identifier)
         (module_identifier))
       (module_identifier))))
 
@@ -479,8 +447,7 @@ exception Invalid = Errors.Invalid
   (exception_declaration
     (variant_identifier)
     (nested_variant_identifier
-      (module_identifier_path
-        (module_identifier))
+      (module_identifier)
       (variant_identifier))))
 
 =========================================
@@ -503,7 +470,7 @@ module M = (Na: N, Nb: N): (
       (module_identifier)
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (constrain_type
             (type_identifier)
             (type_identifier))
@@ -517,7 +484,7 @@ module M = (Na: N, Nb: N): (
       (functor_parameters)
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (constrain_type
             (type_identifier)
             (type_identifier))))
@@ -535,7 +502,7 @@ module M = (Na: N, Nb: N): (
           (module_type_annotation (module_identifier))))
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (constrain_type
             (type_identifier)
             (type_identifier))

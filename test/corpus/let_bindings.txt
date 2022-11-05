@@ -74,8 +74,7 @@ let {Bar.Bar.bar: bar} = foo
     (record_pattern
       (value_identifier_path
         (module_identifier_path
-          (module_identifier_path
-            (module_identifier))
+          (module_identifier)
           (module_identifier))
         (value_identifier))
       (value_identifier))
@@ -303,8 +302,7 @@ let {baz, _} = module(User.Inner)
       (value_identifier))
     (module_pack
       (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
+        (module_identifier)
         (module_identifier)))))
 
 ===========================================
