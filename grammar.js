@@ -35,6 +35,7 @@ module.exports = grammar({
       'call',
       $.spread_element,
       $.await_expression,
+      $.pipe_expression,
       'binary_times',
       'binary_pow',
       'binary_plus',
@@ -63,7 +64,6 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.unit, $.formal_parameters],
-    [$.pipe_expression, $.expression],
     [$.primary_expression, $._pattern],
     [$.primary_expression, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
