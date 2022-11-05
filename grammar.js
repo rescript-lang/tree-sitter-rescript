@@ -73,7 +73,6 @@ module.exports = grammar({
     [$._let_binding],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
-    [$.variant],
     [$.variant, $.variant_pattern],
     [$.variant_declaration, $.function_type_parameter],
     [$.polyvar],
@@ -1203,7 +1202,7 @@ module.exports = grammar({
       ')',
     ),
 
-    variant: $ => prec.dynamic(-1, seq(
+    variant: $ => prec.right(seq(
       choice($.variant_identifier, $.nested_variant_identifier),
       optional(alias($.variant_arguments, $.arguments)),
     )),
