@@ -73,8 +73,10 @@ let {Bar.Bar.bar: bar} = foo
   (let_binding
     (record_pattern
       (value_identifier_path
-        (module_identifier)
-        (module_identifier)
+        (module_identifier_path
+          (module_identifier_path
+            (module_identifier))
+          (module_identifier))
         (value_identifier))
       (value_identifier))
     (value_identifier)))
@@ -294,15 +296,17 @@ let {baz, _} = module(User.Inner)
     (record_pattern
       (value_identifier)
       (value_identifier))
-    (module_pack_expression (module_identifier)))
-
+    (module_pack
+      (module_identifier_path
+        (module_identifier))))
   (let_binding
     (record_pattern
       (value_identifier)
       (value_identifier))
-    (module_pack_expression
+    (module_pack
       (module_identifier_path
-        (module_identifier)
+        (module_identifier_path
+          (module_identifier))
         (module_identifier)))))
 
 ===========================================
@@ -316,7 +320,7 @@ let foo = module(Bar)
 (source_file
   (let_binding
     (value_identifier)
-    (module_pack_expression (module_identifier))))
+    (module_pack (module_identifier_path (module_identifier)))))
 
 ===========================================
 Unpacking module

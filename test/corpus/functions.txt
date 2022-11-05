@@ -210,7 +210,7 @@ Operator precendence
     (binary_expression
       (pipe_expression
         (value_identifier)
-        (value_identifier_path (module_identifier) (value_identifier)))
+        (value_identifier_path (module_identifier_path (module_identifier)) (value_identifier)))
       (number)))))
 
 ===================================================

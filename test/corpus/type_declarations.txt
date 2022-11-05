@@ -35,7 +35,11 @@ type t = Foo.Bar.qux
   (type_declaration
     (type_identifier)
     (type_identifier_path
-      (module_identifier) (module_identifier) (type_identifier))))
+      (module_identifier_path
+        (module_identifier_path
+          (module_identifier))
+        (module_identifier))
+      (type_identifier))))
 
 ===========================================
 Private
@@ -162,12 +166,14 @@ type t =
       (variant_declaration
         (variant_identifier)
         (variant_parameters
-          (module_pack_type (module_identifier))))
+          (module_pack
+            (module_identifier_path (module_identifier)))))
       (variant_declaration
         (variant_identifier)
         (variant_parameters
-          (module_pack_type
-            (type_identifier_path (module_identifier) (type_identifier))))))))
+          (module_pack
+            (type_identifier_path
+              (module_identifier_path (module_identifier)) (type_identifier))))))))
 
 ===========================================
 Annotated variant

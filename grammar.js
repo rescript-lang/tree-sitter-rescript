@@ -153,7 +153,10 @@ module.exports = grammar({
 
     include_statement: $ => seq(
       'include',
-      choice($.module_expression, seq('(', $.module_expression, ')')),
+      choice(
+        $.module_expression,
+        seq('(', choice($.module_expression, $.functor_parameter), ')')
+      ),
     ),
 
     declaration: $ => choice(
@@ -202,7 +205,7 @@ module.exports = grammar({
     ),
 
     functor_parameter: $ => seq(
-      $.module_identifier,
+      $.module_identifier_path,
       $.module_type_annotation,
     ),
 
@@ -210,6 +213,7 @@ module.exports = grammar({
       ':',
       choice(
         $.module_expression,
+        seq('(', $.module_expression, ')'),
         $.block,
       )
     ),
@@ -291,18 +295,8 @@ module.exports = grammar({
       $.object_type,
       $.generic_type,
       $.unit_type,
+      $.module_pack,
       $.unit,
-      $.module_pack_type,
-    ),
-
-    module_pack_type: $ => seq(
-      'module',
-      '(',
-      choice($.module_identifier, $._type_identifier),
-      optional(
-        seq('with', sep1('and', seq('type', $._type_identifier, '=', $._type_identifier)))
-      ),
-      ')'
     ),
 
     tuple_type: $ => prec.dynamic(-1, seq(
@@ -509,7 +503,7 @@ module.exports = grammar({
       $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
-      $.module_pack_expression,
+      $.module_pack,
       $.extension_expression,
     ),
 
@@ -522,7 +516,8 @@ module.exports = grammar({
     ),
 
     value_identifier_path: $ => seq(
-      repeat1(seq($.module_identifier, '.')),
+      $.module_identifier_path,
+      '.',
       $.value_identifier,
     ),
 
@@ -736,11 +731,11 @@ module.exports = grammar({
       ),
     )),
 
-    module_pack_expression: $ => seq(
+    module_pack: $ => seq(
       'module',
       '(',
-      choice($.module_expression, $.block),
-      optional(seq(':', $.module_expression)),
+      $._module_definition,
+      optional($.module_type_annotation),
       ')'
     ),
 
@@ -831,7 +826,8 @@ module.exports = grammar({
         $._destructuring_pattern,
         $.polyvar_type_pattern,
         $.unit,
-        $._parenthesized_pattern
+        $.module_pack,
+        $._parenthesized_pattern,
       )),
       optional($.type_annotation),
       optional($.as_aliasing),
@@ -1214,7 +1210,8 @@ module.exports = grammar({
     )),
 
     nested_variant_identifier: $ => seq(
-      repeat1(seq($.module_identifier, '.')),
+      $.module_identifier_path,
+      '.',
       $.variant_identifier
     ),
 
@@ -1240,54 +1237,65 @@ module.exports = grammar({
       ),
 
     type_identifier_path: $ => seq(
-      repeat1(seq($.module_identifier, '.')),
+      $.module_identifier_path,
+      '.',
       $.type_identifier
     ),
 
     module_expression: $ => choice(
-      $.module_identifier,
       $.module_identifier_path,
+      $.type_identifier_path,
       $.module_type_of,
       $.functor_use,
       $.module_type_constraint,
       $.module_unpack,
     ),
 
-    module_identifier_path: $ => prec.left(seq(
-      $.module_expression,
-      '.',
+    module_identifier_path: $ => path(
+      $.module_identifier_path,
       $.module_identifier,
-    )),
+    ),
 
-    module_type_of: $ => prec.dynamic(-1, seq(
+    module_type_of: $ => prec.left(seq(
       'module',
       'type',
       'of',
-      choice($.module_expression, $.block),
+      choice($.module_expression, $.block)
     )),
 
-    module_type_constraint: $ => seq(
-      '(',
-      choice($.module_identifier, $.module_identifier_path),
-      ':',
-      $.module_type_of,
+    _module_type_constraint: $ => seq(
       'with',
-      sep1('and',
-        seq(
-          'module',
-          $.module_expression,
-          choice('=', ':='),
-          $.module_expression
-        )
+      sep1(choice('and', 'with'),
+        choice($.constrain_module, $.constrain_type)
       ),
-      ')'
+    ),
+
+    module_type_constraint: $ => prec.left(choice(
+      seq($.module_identifier_path, $._module_type_constraint),
+      seq(
+        '(',
+        $.module_identifier_path, $._module_type_constraint,
+        ')',
+        $._module_type_constraint
+      )
+    )),
+
+    constrain_module: $ => seq(
+      'module',
+      $.module_identifier_path,
+      choice('=', ':='),
+      $.module_identifier_path,
+    ),
+
+    constrain_type: $ => seq(
+      'type',
+      $._type,
+      choice('=', ':='),
+      $._type,
     ),
 
     functor_use: $ => seq(
-      choice(
-        $.module_identifier,
-        $.module_identifier_path,
-      ),
+      $.module_identifier_path,
       alias($.functor_arguments, $.arguments),
     ),
 
@@ -1485,4 +1493,8 @@ function commaSept(rule) {
 
 function sep1(delimiter, rule) {
   return seq(rule, repeat(seq(delimiter, rule)))
+}
+
+function path(prefix, final) {
+  return choice(final, seq(prefix, '.', final))
 }
