@@ -86,7 +86,7 @@ module.exports = grammar({
     [$._record_field_name, $.record_pattern],
     [$.decorator],
     [$._statement, $._one_or_more_statements],
-    [$._simple_extension],
+    [$.extension_expression],
     [$._inline_type, $.function_type_parameters],
     [$.primary_expression, $.parameter, $._pattern],
     [$.parameter, $._pattern],
@@ -1137,63 +1137,11 @@ module.exports = grammar({
 
     extension_expression: $ => prec('call', seq(
       repeat1('%'),
-      choice(
-        $._raw_js_extension,
-        $._raw_gql_extension,
-        $._simple_extension,
-      ),
-    )),
-
-    _simple_extension: $ => seq(
       $.extension_identifier,
-      optional($._extension_expression_payload),
-    ),
-
-    _raw_js_extension: $ => seq(
-      alias(token('raw'), $.extension_identifier),
-      '(',
-      alias($._raw_js, $.expression_statement),
-      ')',
-    ),
-
-    _raw_js: $ => choice(
-      alias($._raw_js_template_string, $.template_string),
-      alias($._raw_js_string, $.string),
-    ),
-
-    _raw_js_string: $ => alias($.string, $.raw_js),
-
-    _raw_js_template_string: $ => seq(
-      token(seq(
-        optional(choice(
-          'j',
-          'js',
-        )),
-        '`',
-      )),
-      alias(repeat($._template_string_content), $.raw_js),
-      '`',
-    ),
-
-    _raw_gql_extension: $ => seq(
-      alias(token('graphql'), $.extension_identifier),
-      '(',
-      alias($._raw_gql, $.expression_statement),
-      ')',
-    ),
-
-    _raw_gql: $ => choice(
-      alias($._raw_gql_template_string, $.template_string),
-      alias($._raw_gql_string, $.string),
-    ),
-
-    _raw_gql_string: $ => alias($.string, $.raw_gql),
-
-    _raw_gql_template_string: $ => seq(
-      '`',
-      alias(repeat($._template_string_content), $.raw_gql),
-      '`',
-    ),
+      optional(
+        $._extension_expression_payload,
+      )
+    )),
 
     _extension_expression_payload: $ => seq(
       '(',
@@ -1430,18 +1378,21 @@ module.exports = grammar({
         )),
         '`',
       )),
-      repeat($._template_string_content),
+      $.template_string_content,
       '`'
     ),
 
-    _template_string_content: $ => choice(
-      $._template_chars,
-      $.template_substitution,
-      choice(
-        alias('\\`', $.escape_sequence),
-        $.escape_sequence,
+    template_string_content: $ =>
+      repeat1(
+        choice(
+          $._template_chars,
+          $.template_substitution,
+          choice(
+            alias('\\`', $.escape_sequence),
+            $.escape_sequence,
+          )
+        ),
       ),
-    ),
 
     template_substitution: $ => choice(
       seq('$', $.value_identifier),

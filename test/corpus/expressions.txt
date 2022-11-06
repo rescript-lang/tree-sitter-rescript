@@ -1138,8 +1138,7 @@ module Test = %graphql(`
       (extension_identifier)
       (expression_statement
         (string
-          (raw_js
-            (string_fragment))))))
+          (string_fragment)))))
   (expression_statement
     (extension_expression
       (extension_identifier)
@@ -1168,7 +1167,7 @@ module Test = %graphql(`
           (extension_identifier)
           (expression_statement
             (template_string
-              (raw_js
+              (template_string_content
                 (escape_sequence)
                 (escape_sequence))))))
   (let_binding
@@ -1177,7 +1176,7 @@ module Test = %graphql(`
           (extension_identifier)
           (expression_statement
             (template_string
-              (raw_js
+              (template_string_content
                 (escape_sequence)
                 (escape_sequence))))))
   (module_declaration
@@ -1186,7 +1185,7 @@ module Test = %graphql(`
       (extension_identifier)
       (expression_statement
         (template_string
-          (raw_gql))))))
+          (template_string_content))))))
 
 ===========================================
 Raise expression
