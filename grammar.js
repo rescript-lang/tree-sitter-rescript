@@ -82,7 +82,9 @@ module.exports = grammar({
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
     [$.variant, $.variant_pattern],
+    [$.variant],
     [$.variant_declaration, $.function_type_parameter],
+    [$.variant_arguments, $._variant_pattern_parameters],
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
     [$._record_element, $.jsx_expression],
@@ -868,7 +870,7 @@ module.exports = grammar({
 
     _variant_pattern_parameters: $ => seq(
       '(',
-      commaSep1t($._variant_pattern_parameter),
+      commaSept($._variant_pattern_parameter),
       ')',
     ),
 
@@ -1209,10 +1211,10 @@ module.exports = grammar({
       ')',
     ),
 
-    variant: $ => prec.right(seq(
+    variant: $ => seq(
       choice($.variant_identifier, $.nested_variant_identifier),
       optional(alias($.variant_arguments, $.arguments)),
-    )),
+    ),
 
     nested_variant_identifier: $ => seq(
       $.module_primary_expression,

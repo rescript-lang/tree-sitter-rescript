@@ -423,6 +423,7 @@ Switch of variants
 switch foo {
 | Some(x as qux: int, {y, z}) => x
 | Option.None => 42
+| Surprise() => 0
 }
 
 ---
@@ -447,6 +448,9 @@ switch foo {
           (nested_variant_identifier
             (module_identifier)
             (variant_identifier)))
+        (expression_statement (number)))
+      (switch_match
+        (variant_pattern (variant_identifier) (formal_parameters))
         (expression_statement (number))))))
 
 ===========================================
