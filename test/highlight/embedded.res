@@ -13,3 +13,6 @@ let inc = %raw(`function(x) {return x + 1;}`)
 
 // :TSInstall graphql
 let gql = %graphql(`{ hero { name } }`)
+
+// :TSInstall regex
+let re = %re(`^[A-Z][a-z0-9]*$`)
