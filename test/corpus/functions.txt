@@ -23,7 +23,7 @@ a => 1
     (formal_parameters)
     (number)))
   (expression_statement (function
-    (formal_parameters 
+    (formal_parameters
       (parameter (value_identifier)) (parameter (value_identifier)))
     (number)))
   (expression_statement (function
@@ -143,7 +143,7 @@ Parameter aliasing
             (type_annotation (type_identifier)))
             (number))))
       (number)))
-  
+
   (expression_statement
     (function
       (formal_parameters
@@ -210,7 +210,7 @@ Operator precendence
     (binary_expression
       (pipe_expression
         (value_identifier)
-        (value_identifier_path (module_identifier_path (module_identifier)) (value_identifier)))
+        (value_identifier_path (module_identifier) (value_identifier)))
       (number)))))
 
 ===================================================

@@ -36,8 +36,7 @@ type t = Foo.Bar.qux
     (type_identifier)
     (type_identifier_path
       (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
+        (module_identifier)
         (module_identifier))
       (type_identifier))))
 
@@ -166,14 +165,12 @@ type t =
       (variant_declaration
         (variant_identifier)
         (variant_parameters
-          (module_pack
-            (module_identifier_path (module_identifier)))))
+          (module_pack (module_identifier))))
       (variant_declaration
         (variant_identifier)
         (variant_parameters
           (module_pack
-            (type_identifier_path
-              (module_identifier_path (module_identifier)) (type_identifier))))))))
+            (type_identifier_path (module_identifier) (type_identifier))))))))
 
 ===========================================
 Annotated variant

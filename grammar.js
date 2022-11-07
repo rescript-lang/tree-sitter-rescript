@@ -24,15 +24,18 @@ module.exports = grammar({
     $.primary_expression,
     $._type,
     $.module_expression,
+    $.module_primary_expression,
   ],
 
   precedences: $ => [
+    // + - Operators -> precendence
     [
       'unary_not',
       'member',
       'call',
       $.spread_element,
       $.await_expression,
+      $.pipe_expression,
       'binary_times',
       'binary_pow',
       'binary_plus',
@@ -48,14 +51,19 @@ module.exports = grammar({
       $.function,
       $.let_binding,
     ],
+    // Nested.Module.Path precendence
+    [
+      $.module_primary_expression,
+      $.value_identifier_path,
+      $.nested_variant_identifier,
+      $.module_identifier_path,
+    ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
-    [$.module_identifier_path, $.module_type_of],
   ],
 
   conflicts: $ => [
     [$.unit, $.formal_parameters],
-    [$.pipe_expression, $.expression],
     [$.primary_expression, $._pattern],
     [$.primary_expression, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
@@ -64,7 +72,6 @@ module.exports = grammar({
     [$.tuple_pattern, $.parameter],
     [$.primary_expression, $.parameter],
     [$.primary_expression, $.record_field],
-    [$.module_identifier_path, $.module_expression],
     [$.tuple_type, $.function_type_parameter],
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
@@ -74,10 +81,9 @@ module.exports = grammar({
     [$._let_binding],
     [$.let_binding, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
-    [$.variant],
     [$.variant, $.variant_pattern],
     [$.variant_declaration, $.function_type_parameter],
-    [$.polyvar],
+    [$.variant_arguments, $._variant_pattern_parameters],
     [$.polyvar, $.polyvar_pattern],
     [$._pattern],
     [$._record_element, $.jsx_expression],
@@ -93,7 +99,7 @@ module.exports = grammar({
     [$.parameter, $._parenthesized_pattern],
     [$._switch_value_pattern, $._parenthesized_pattern],
     [$.variant_declaration],
-    [$.unit, $._function_type_parameter_list]
+    [$.unit, $._function_type_parameter_list],
   ],
 
   rules: {
@@ -205,7 +211,7 @@ module.exports = grammar({
     ),
 
     functor_parameter: $ => seq(
-      $.module_identifier_path,
+      $.module_identifier,
       $.module_type_annotation,
     ),
 
@@ -516,7 +522,7 @@ module.exports = grammar({
     ),
 
     value_identifier_path: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       '.',
       $.value_identifier,
     ),
@@ -863,7 +869,7 @@ module.exports = grammar({
 
     _variant_pattern_parameters: $ => seq(
       '(',
-      commaSep1t($._variant_pattern_parameter),
+      commaSept($._variant_pattern_parameter),
       ')',
     ),
 
@@ -1204,13 +1210,13 @@ module.exports = grammar({
       ')',
     ),
 
-    variant: $ => prec.dynamic(-1, seq(
+    variant: $ => prec.right(seq(
       choice($.variant_identifier, $.nested_variant_identifier),
       optional(alias($.variant_arguments, $.arguments)),
     )),
 
     nested_variant_identifier: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       '.',
       $.variant_identifier
     ),
@@ -1224,10 +1230,10 @@ module.exports = grammar({
       ')',
     ),
 
-    polyvar: $ => seq(
+    polyvar: $ => prec.right(seq(
       $.polyvar_identifier,
       optional(alias($.variant_arguments, $.arguments)),
-    ),
+    )),
 
     _type_identifier: $ =>
       choice(
@@ -1237,22 +1243,27 @@ module.exports = grammar({
       ),
 
     type_identifier_path: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       '.',
       $.type_identifier
     ),
 
     module_expression: $ => choice(
-      $.module_identifier_path,
+      $.module_primary_expression,
       $.type_identifier_path,
       $.module_type_of,
-      $.functor_use,
       $.module_type_constraint,
+    ),
+
+    module_primary_expression: $ => choice(
+      $.module_identifier,
+      $.module_identifier_path,
+      $.functor_use,
       $.module_unpack,
     ),
 
     module_identifier_path: $ => path(
-      $.module_identifier_path,
+      $.module_primary_expression,
       $.module_identifier,
     ),
 
@@ -1263,28 +1274,28 @@ module.exports = grammar({
       choice($.module_expression, $.block)
     )),
 
-    _module_type_constraint: $ => seq(
+    _module_type_constraint_with: $ => prec.right(seq(
       'with',
       sep1(choice('and', 'with'),
         choice($.constrain_module, $.constrain_type)
       ),
-    ),
+    )),
 
     module_type_constraint: $ => prec.left(choice(
-      seq($.module_identifier_path, $._module_type_constraint),
+      seq($.module_expression, $._module_type_constraint_with),
       seq(
         '(',
-        $.module_identifier_path, $._module_type_constraint,
+        $.module_expression, $._module_type_constraint_with,
         ')',
-        $._module_type_constraint
+        $._module_type_constraint_with
       )
     )),
 
     constrain_module: $ => seq(
       'module',
-      $.module_identifier_path,
+      $.module_identifier,
       choice('=', ':='),
-      $.module_identifier_path,
+      $.module_primary_expression,
     ),
 
     constrain_type: $ => seq(
@@ -1295,7 +1306,7 @@ module.exports = grammar({
     ),
 
     functor_use: $ => seq(
-      $.module_identifier_path,
+      $.module_primary_expression,
       alias($.functor_arguments, $.arguments),
     ),
 

@@ -43,7 +43,7 @@ Simple JSX elements
   (expression_statement
     (jsx_element
       (jsx_opening_element (jsx_identifier))
-      (value_identifier_path (module_identifier_path (module_identifier)) (value_identifier))
+      (value_identifier_path (module_identifier) (value_identifier))
       (jsx_closing_element (jsx_identifier))))
 
   (expression_statement
@@ -148,10 +148,7 @@ Block children
             (block
               (expression_statement
                 (call_expression
-                  (value_identifier_path
-                    (module_identifier_path
-                      (module_identifier))
-                    (value_identifier))
+                  (value_identifier_path (module_identifier) (value_identifier))
                   (arguments (string (string_fragment))))))
             (jsx_closing_element (jsx_identifier)))))
       (jsx_closing_element (jsx_identifier)))))
@@ -200,8 +197,7 @@ Attribute Block
             (expression_statement
               (call_expression
                 (value_identifier_path
-                  (module_identifier_path
-                    (module_identifier))
+                  (module_identifier)
                   (value_identifier))
                 (arguments
                   (string
@@ -209,8 +205,7 @@ Attribute Block
         (jsx_attribute
           (property_identifier)
           (jsx_expression
-            (open_statement
-              (module_identifier_path (module_identifier)))
+            (open_statement (module_identifier))
             (expression_statement
               (record
                 (record_field
