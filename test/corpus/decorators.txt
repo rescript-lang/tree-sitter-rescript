@@ -42,8 +42,7 @@ let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
       (parenthesized_expression
         (decorator (decorator_identifier))
         (value_identifier_path
-          (module_identifier_path
-            (module_identifier))
+          (module_identifier)
           (value_identifier)))
       (arguments
         (number)
@@ -54,8 +53,7 @@ let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
     (decorator (decorator_identifier))
     (call_expression
       (value_identifier_path
-        (module_identifier_path
-          (module_identifier))
+        (module_identifier)
         (value_identifier))
       (arguments
         (number)
@@ -69,8 +67,7 @@ let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
       (call_expression
         (value_identifier_path
           (module_identifier_path
-            (module_identifier_path
-              (module_identifier))
+            (module_identifier)
             (module_identifier))
           (value_identifier))
         (arguments

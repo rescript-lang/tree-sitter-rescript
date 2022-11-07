@@ -8,12 +8,10 @@ open! Foo.Bar
 ---
 
 (source_file
-  (open_statement
-    (module_identifier_path (module_identifier)))
+  (open_statement (module_identifier))
   (open_statement
     (module_identifier_path
-      (module_identifier_path
-        (module_identifier))
+      (module_identifier)
       (module_identifier))))
 
 ===========================================
@@ -38,69 +36,43 @@ include module type of {
 ---
 
 (source_file
+  (include_statement (module_identifier))
   (include_statement
-    (module_identifier_path
-      (module_identifier)))
-  (include_statement
-    (module_identifier_path
-      (module_identifier_path
-        (module_identifier))
-      (module_identifier)))
+    (module_identifier_path (module_identifier) (module_identifier)))
   (include_statement
     (functor_use
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))
-      (arguments (module_identifier_path (module_identifier)))))
+      (module_identifier_path (module_identifier) (module_identifier))
+      (arguments (module_identifier))))
   (include_statement
     (functor_use
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))
+      (module_identifier_path (module_identifier) (module_identifier))
       (arguments
         (block
           (type_declaration (type_identifier))
           (let_binding (value_identifier) (type_annotation (type_identifier)))))))
   (include_statement
     (module_type_of
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))))
+      (module_identifier_path (module_identifier) (module_identifier))))
   (include_statement
     (module_type_of
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))))
+      (module_identifier_path (module_identifier) (module_identifier))))
 
   (include_statement
-    (functor_parameter
-      (module_identifier_path (module_identifier))
+    (functor_parameter (module_identifier)
     (module_type_annotation
-      (module_type_of
       (module_type_constraint
-        (module_identifier_path (module_identifier))
+        (module_type_of (module_identifier))
         (constrain_module
-          (module_identifier_path (module_identifier))
-          (module_identifier_path
-            (module_identifier_path
-              (module_identifier))
-            (module_identifier)))
+          (module_identifier)
+          (module_identifier_path (module_identifier) (module_identifier)))
         (constrain_module
-          (module_identifier_path (module_identifier))
-          (module_identifier_path
-            (module_identifier_path
-              (module_identifier))
-            (module_identifier))))))))
+          (module_identifier)
+          (module_identifier_path (module_identifier)
+          (module_identifier)))))))
 
   (include_statement
     (module_type_of
-      (block
-        (include_statement
-          (module_identifier_path (module_identifier)))))))
+      (block (include_statement (module_identifier))))))
 
 ===========================================
 Simple definition
@@ -148,10 +120,7 @@ module MyModule: {
       (let_binding (value_identifier) (type_annotation (type_identifier)))))
   (module_declaration
     name: (module_identifier)
-    signature: (module_identifier_path
-      (module_identifier_path
-        (module_identifier))
-      (module_identifier))
+    signature: (module_identifier_path (module_identifier) (module_identifier))
     definition: (block (type_declaration (type_identifier))))
   (module_declaration
     name: (module_identifier)
@@ -175,10 +144,7 @@ module type t
   (module_declaration
     (module_identifier)
     (module_type_of
-      (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier))))
+      (module_identifier_path (module_identifier) (module_identifier))))
   (module_declaration (type_identifier)))
 
 ===========================================
@@ -199,11 +165,11 @@ module(SomeFunctor(unpack(x)))
 
 (source_file
   (expression_statement
-    (module_pack (module_identifier_path (module_identifier))))
+    (module_pack (module_identifier)))
   (expression_statement
     (module_pack
-      (module_identifier_path (module_identifier))
-      (module_type_annotation (module_identifier_path (module_identifier)))))
+      (module_identifier)
+      (module_type_annotation (module_identifier))))
   (expression_statement
     (module_pack
       (block
@@ -211,11 +177,11 @@ module(SomeFunctor(unpack(x)))
         (let_binding
           (value_identifier)
           (string (string_fragment))))
-      (module_type_annotation (module_identifier_path (module_identifier)))))
+      (module_type_annotation (module_identifier))))
   (expression_statement
     (module_pack
       (functor_use
-        (module_identifier_path (module_identifier))
+        (module_identifier)
         (arguments
           (module_unpack
             (call_arguments (value_identifier))))))))
@@ -238,16 +204,20 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
     definition: (functor
       parameters: (functor_parameters
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (block (type_declaration (type_identifier)))))
         (functor_parameter
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (module_type_annotation (block (type_declaration (type_identifier))))))
       return_module_type: (module_type_annotation
           (block (type_declaration (type_identifier)) (type_declaration (type_identifier))))
       body: (block
-        (type_declaration (type_identifier) (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))
-        (type_declaration (type_identifier) (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))))))
+        (type_declaration
+          (type_identifier)
+          (type_identifier_path (module_identifier) (type_identifier)))
+        (type_declaration
+          (type_identifier)
+          (type_identifier_path (module_identifier) (type_identifier)))))))
 
 ===========================================
 Functor signature
@@ -264,7 +234,9 @@ module Make: (Content: StaticContent) => {
     (module_identifier)
     (functor
       (functor_parameters
-        (functor_parameter (module_identifier_path (module_identifier)) (module_type_annotation (module_identifier_path (module_identifier)))))
+        (functor_parameter
+          (module_identifier)
+          (module_type_annotation (module_identifier))))
       (block
         (let_binding
           (value_identifier)
@@ -283,14 +255,10 @@ module M = MyFunctor(Foo, Bar.Baz)
   (module_declaration
     (module_identifier)
     (functor_use
-      (module_identifier_path (module_identifier))
+      (module_identifier)
       (arguments
-        (module_identifier_path
-          (module_identifier))
-        (module_identifier_path
-          (module_identifier_path
-            (module_identifier))
-          (module_identifier))))))
+        (module_identifier)
+        (module_identifier_path (module_identifier) (module_identifier))))))
 
 ===========================================
 Alias
@@ -305,8 +273,7 @@ module Q = Foo.Bar.Qux
     (module_identifier)
     (module_identifier_path
       (module_identifier_path
-        (module_identifier_path
-          (module_identifier))
+        (module_identifier)
         (module_identifier))
       (module_identifier))))
 
@@ -324,9 +291,8 @@ module rec BYOBReader: {
   (module_declaration
     (module_identifier)
     (block
-      (include_statement
-        (module_identifier_path (module_identifier))))
-    (module_identifier_path (module_identifier))))
+      (include_statement (module_identifier)))
+    (module_identifier)))
 
 ===========================================
 Definition through extension
@@ -411,7 +377,7 @@ external add: (
         (function_type
           (function_type_parameters
             (parameter
-              (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))
+              (type_identifier_path (module_identifier) (type_identifier)))
             (parameter
               (decorator (decorator_identifier) (decorator_arguments (template_string (template_string_content))))
               (type_identifier))
@@ -440,11 +406,11 @@ external add: (
                     (polyvar_declaration
                       (polyvar_identifier)
                       (polyvar_parameters
-                        (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier))))
+                        (type_identifier_path (module_identifier) (type_identifier))))
                     (polyvar_declaration
                       (polyvar_identifier)
                       (polyvar_parameters
-                        (type_identifier_path (module_identifier_path (module_identifier)) (type_identifier)))))))))
+                        (type_identifier_path (module_identifier) (type_identifier)))))))))
           (unit_type)))
         (string (string_fragment)))))
 
@@ -481,8 +447,7 @@ exception Invalid = Errors.Invalid
   (exception_declaration
     (variant_identifier)
     (nested_variant_identifier
-      (module_identifier_path
-        (module_identifier))
+      (module_identifier)
       (variant_identifier))))
 
 =========================================
@@ -502,10 +467,10 @@ module M = (Na: N, Nb: N): (
 (source_file
   (expression_statement
     (module_pack
-      (module_identifier_path (module_identifier))
+      (module_identifier)
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (constrain_type
             (type_identifier)
             (type_identifier))
@@ -519,7 +484,7 @@ module M = (Na: N, Nb: N): (
       (functor_parameters)
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path (module_identifier)) 
+          (module_identifier)
           (constrain_type
             (type_identifier)
             (type_identifier))))
@@ -530,16 +495,14 @@ module M = (Na: N, Nb: N): (
     (functor
       (functor_parameters
         (functor_parameter
-          (module_identifier_path (module_identifier))
-          (module_type_annotation
-            (module_identifier_path (module_identifier))))
+          (module_identifier)
+          (module_type_annotation (module_identifier)))
         (functor_parameter
-          (module_identifier_path (module_identifier))
-          (module_type_annotation
-            (module_identifier_path (module_identifier)))))
+          (module_identifier)
+          (module_type_annotation (module_identifier))))
       (module_type_annotation
         (module_type_constraint
-          (module_identifier_path (module_identifier))
+          (module_identifier)
           (constrain_type
             (type_identifier)
             (type_identifier))
