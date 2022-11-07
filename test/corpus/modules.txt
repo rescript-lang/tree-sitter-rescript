@@ -54,21 +54,23 @@ include module type of {
     (module_type_of
       (module_identifier_path (module_identifier) (module_identifier))))
   (include_statement
-    (module_type_of
-      (module_identifier_path (module_identifier) (module_identifier))))
+    (parenthesized_module_expression
+      (module_type_of
+        (module_identifier_path (module_identifier) (module_identifier)))))
 
   (include_statement
-    (functor_parameter (module_identifier)
-    (module_type_annotation
-      (module_type_constraint
-        (module_type_of (module_identifier))
-        (constrain_module
-          (module_identifier)
-          (module_identifier_path (module_identifier) (module_identifier)))
-        (constrain_module
-          (module_identifier)
-          (module_identifier_path (module_identifier)
-          (module_identifier)))))))
+    (parenthesized_module_expression
+      (module_identifier)
+      (module_type_annotation
+        (module_type_constraint
+          (module_type_of (module_identifier))
+          (constrain_module
+            (module_identifier)
+            (module_identifier_path (module_identifier) (module_identifier)))
+          (constrain_module
+            (module_identifier)
+            (module_identifier_path (module_identifier)
+            (module_identifier)))))))
 
   (include_statement
     (module_type_of
@@ -479,34 +481,38 @@ module M = (Na: N, Nb: N): (
             (type_identifier))))))
 
   (module_declaration
-    (module_identifier)
-    (functor
-      (functor_parameters)
-      (module_type_annotation
-        (module_type_constraint
-          (module_identifier)
-          (constrain_type
-            (type_identifier)
-            (type_identifier))))
-      (block)))
+    name: (module_identifier)
+    definition: (functor
+      parameters: (functor_parameters)
+      return_module_type: (module_type_annotation
+        (parenthesized_module_expression
+          (module_type_constraint
+            (module_identifier)
+            (constrain_type
+              (type_identifier)
+              (type_identifier)))))
+      body: (block)))
 
   (module_declaration
-    (module_identifier)
-    (functor
-      (functor_parameters
+    name: (module_identifier)
+    definition: (functor
+      parameters: (functor_parameters
         (functor_parameter
           (module_identifier)
           (module_type_annotation (module_identifier)))
         (functor_parameter
           (module_identifier)
           (module_type_annotation (module_identifier))))
-      (module_type_annotation
-        (module_type_constraint
-          (module_identifier)
-          (constrain_type
-            (type_identifier)
-            (type_identifier))
-          (constrain_type
-            (type_identifier)
-            (type_identifier))))
-      (block))))
+      return_module_type: (module_type_annotation
+        (parenthesized_module_expression
+          (module_type_constraint
+            (parenthesized_module_expression
+              (module_type_constraint
+                (module_identifier)
+                (constrain_type
+                  (type_identifier)
+                  (type_identifier))))
+            (constrain_type
+              (type_identifier)
+              (type_identifier)))))
+      body: (block))))
