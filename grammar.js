@@ -27,6 +27,10 @@ module.exports = grammar({
     $.module_primary_expression,
   ],
 
+  inline: $ => [
+    $._module_definition,
+  ],
+
   precedences: $ => [
     // + - Operators -> precendence
     [
@@ -100,7 +104,6 @@ module.exports = grammar({
     [$._switch_value_pattern, $._parenthesized_pattern],
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
-    [$._module_definition, $.parenthesized_module_expression],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
   ],
 
@@ -176,7 +179,7 @@ module.exports = grammar({
       'module',
       optional('rec'),
       optional('type'),
-      field('name', choice($.module_identifier, $._type_identifier)),
+      field('name', choice($.module_identifier, $.type_identifier)),
       optional(seq(
         ':',
         field('signature', choice($.block, $.module_expression, $.functor)),
@@ -1058,8 +1061,8 @@ module.exports = grammar({
       '.',
       optional(seq(
         field('module', $.module_identifier),
-        '.')
-      ),
+        '.'
+      )),
       field('property', alias($.value_identifier, $.property_identifier)),
     )),
 
@@ -1236,12 +1239,11 @@ module.exports = grammar({
       optional(alias($.variant_arguments, $.arguments)),
     )),
 
-    _type_identifier: $ =>
-      choice(
-        $.type_identifier,
-        $.type_identifier_path,
-        ".."
-      ),
+    _type_identifier: $ => choice(
+      $.type_identifier,
+      $.type_identifier_path,
+      ".."
+    ),
 
     type_identifier_path: $ => seq(
       $.module_primary_expression,
