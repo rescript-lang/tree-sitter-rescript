@@ -27,6 +27,10 @@ module.exports = grammar({
     $.module_primary_expression,
   ],
 
+  inline: $ => [
+    $._module_definition,
+  ],
+
   precedences: $ => [
     // + - Operators -> precendence
     [
@@ -100,6 +104,7 @@ module.exports = grammar({
     [$._switch_value_pattern, $._parenthesized_pattern],
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
+    [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
   ],
 
   rules: {
@@ -159,10 +164,7 @@ module.exports = grammar({
 
     include_statement: $ => seq(
       'include',
-      choice(
-        $.module_expression,
-        seq('(', choice($.module_expression, $.functor_parameter), ')')
-      ),
+      $.module_expression,
     ),
 
     declaration: $ => choice(
@@ -177,7 +179,7 @@ module.exports = grammar({
       'module',
       optional('rec'),
       optional('type'),
-      field('name', choice($.module_identifier, $._type_identifier)),
+      field('name', choice($.module_identifier, $.type_identifier)),
       optional(seq(
         ':',
         field('signature', choice($.block, $.module_expression, $.functor)),
@@ -219,7 +221,6 @@ module.exports = grammar({
       ':',
       choice(
         $.module_expression,
-        seq('(', $.module_expression, ')'),
         $.block,
       )
     ),
@@ -740,7 +741,10 @@ module.exports = grammar({
     module_pack: $ => seq(
       'module',
       '(',
-      $._module_definition,
+      choice(
+        $.type_identifier_path,
+        $._module_definition,
+      ),
       optional($.module_type_annotation),
       ')'
     ),
@@ -1057,8 +1061,8 @@ module.exports = grammar({
       '.',
       optional(seq(
         field('module', $.module_identifier),
-        '.')
-      ),
+        '.'
+      )),
       field('property', alias($.value_identifier, $.property_identifier)),
     )),
 
@@ -1235,12 +1239,11 @@ module.exports = grammar({
       optional(alias($.variant_arguments, $.arguments)),
     )),
 
-    _type_identifier: $ =>
-      choice(
-        $.type_identifier,
-        $.type_identifier_path,
-        ".."
-      ),
+    _type_identifier: $ => choice(
+      $.type_identifier,
+      $.type_identifier_path,
+      ".."
+    ),
 
     type_identifier_path: $ => seq(
       $.module_primary_expression,
@@ -1250,16 +1253,23 @@ module.exports = grammar({
 
     module_expression: $ => choice(
       $.module_primary_expression,
-      $.type_identifier_path,
       $.module_type_of,
       $.module_type_constraint,
     ),
 
     module_primary_expression: $ => choice(
+      $.parenthesized_module_expression,
       $.module_identifier,
       $.module_identifier_path,
       $.functor_use,
       $.module_unpack,
+    ),
+
+    parenthesized_module_expression: $ => seq(
+      '(',
+      $.module_expression,
+      optional($.module_type_annotation),
+      ')',
     ),
 
     module_identifier_path: $ => path(
