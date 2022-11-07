@@ -92,7 +92,6 @@ module.exports = grammar({
     [$._record_field_name, $.record_pattern],
     [$.decorator],
     [$._statement, $._one_or_more_statements],
-    [$.extension_expression],
     [$._inline_type, $.function_type_parameters],
     [$.primary_expression, $.parameter, $._pattern],
     [$.parameter, $._pattern],
@@ -1141,7 +1140,7 @@ module.exports = grammar({
       ))
     )),
 
-    extension_expression: $ => prec('call', seq(
+    extension_expression: $ => prec.right(seq(
       repeat1('%'),
       $.extension_identifier,
       optional(
