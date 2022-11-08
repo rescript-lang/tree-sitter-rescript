@@ -116,6 +116,7 @@
   "await"
   "with"
   "unpack"
+  "lazy"
 ] @keyword
 
 [
