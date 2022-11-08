@@ -1408,3 +1408,22 @@ let f = ({name, _} as foo: T.t) => {}
                 (module_identifier)
                 (type_identifier))))))
       body: (block))))
+
+===========================================
+Lazy Expression
+===========================================
+
+lazy { 1 }
+lazy call()
+
+---
+
+(source_file
+  (expression_statement
+    (lazy_expression
+      (block
+        (expression_statement (number)))))
+  (expression_statement
+    (lazy_expression
+      (call_expression
+        (value_identifier) (arguments)))))

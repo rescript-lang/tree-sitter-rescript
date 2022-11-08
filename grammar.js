@@ -40,6 +40,7 @@ module.exports = grammar({
       $.spread_element,
       $.await_expression,
       $.pipe_expression,
+      $.lazy_expression,
       'binary_times',
       'binary_pow',
       'binary_plus',
@@ -72,6 +73,7 @@ module.exports = grammar({
     [$.primary_expression, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
+    [$.primary_expression, $.lazy_pattern],
     [$.primary_expression, $._jsx_child],
     [$.tuple_pattern, $.parameter],
     [$.primary_expression, $.parameter],
@@ -437,7 +439,7 @@ module.exports = grammar({
     ),
 
     _let_binding: $ => seq(
-      $._binding_pattern,
+      $._pattern,
       optional($.type_annotation),
       optional(seq(
         '=',
@@ -454,16 +456,6 @@ module.exports = grammar({
       repeat($.decorator),
       'and',
       $._let_binding,
-    ),
-
-    _binding_pattern: $ => choice(
-      $.value_identifier,
-      $.tuple_pattern,
-      $.record_pattern,
-      $.array_pattern,
-      $.list_pattern,
-      $.module_unpack_pattern,
-      $.unit
     ),
 
     expression_statement: $ => $.expression,
@@ -512,6 +504,7 @@ module.exports = grammar({
       $.member_expression,
       $.module_pack,
       $.extension_expression,
+      $.lazy_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -837,6 +830,7 @@ module.exports = grammar({
         $.polyvar_type_pattern,
         $.unit,
         $.module_pack,
+        $.lazy_pattern,
         $._parenthesized_pattern,
       )),
       optional($.type_annotation),
@@ -930,8 +924,15 @@ module.exports = grammar({
       choice($.value_identifier, $.list_pattern, $.array_pattern),
     ),
 
-    module_unpack_pattern: $ => seq(
-      'module', '(', $.module_identifier, ')',
+    lazy_pattern: $ => seq(
+      'lazy',
+      choice(
+        $.value_identifier,
+        $._literal_pattern,
+        $._destructuring_pattern,
+        $.polyvar_type_pattern,
+        $._parenthesized_pattern,
+      )
     ),
 
     _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),
@@ -1090,6 +1091,11 @@ module.exports = grammar({
       'while',
       $.expression,
       $.block,
+    ),
+
+    lazy_expression: $ =>  seq(
+      'lazy',
+      $.expression,
     ),
 
     binary_expression: $ => choice(

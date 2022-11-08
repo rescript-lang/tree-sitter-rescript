@@ -328,5 +328,19 @@ let module(Bar) = foo
 
 (source_file
   (let_binding
-    (module_unpack_pattern (module_identifier))
+    (module_pack (module_identifier))
     (value_identifier)))
+
+===========================================
+Lazy Values
+===========================================
+
+let lazy x = lazy(1)
+
+---
+
+(source_file
+  (let_binding
+    (lazy_pattern (value_identifier))
+    (lazy_expression
+      (parenthesized_expression (number)))))
