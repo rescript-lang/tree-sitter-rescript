@@ -28,7 +28,7 @@ include Foo.Bar({
 
 include module type of Belt.Array
 include (module type of Belt.Array)
-include (Belt: module type of Belt with module Map := Belt.Map and module Result := Belt.Result)
+include (Belt: module type of Belt with module Map.Inner := Belt.Map and module Result := Belt.Result)
 include module type of {
   include T
 }
@@ -65,7 +65,8 @@ include module type of {
         (module_type_constraint
           (module_type_of (module_identifier))
           (constrain_module
-            (module_identifier)
+            (module_identifier_path
+              (module_identifier) (module_identifier))
             (module_identifier_path (module_identifier) (module_identifier)))
           (constrain_module
             (module_identifier)
