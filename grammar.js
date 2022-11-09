@@ -175,10 +175,7 @@ module.exports = grammar({
       $.exception_declaration,
     ),
 
-    module_declaration: $ => seq(
-      'module',
-      optional('rec'),
-      optional('type'),
+    module_binding: $ => prec.left(seq(
       field('name', choice($.module_identifier, $.type_identifier)),
       optional(seq(
         ':',
@@ -187,7 +184,20 @@ module.exports = grammar({
       optional(seq(
         '=',
         field('definition', $._module_definition),
+        repeat($._module_binding_and)
       )),
+    )),
+
+    _module_binding_and: $ => seq(
+      'and',
+      $.module_binding
+    ),
+
+    module_declaration: $ => seq(
+      'module',
+      optional('rec'),
+      optional('type'),
+      $.module_binding,
     ),
 
     _module_definition: $ => choice(
