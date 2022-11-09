@@ -40,10 +40,14 @@ Numbers
 0b1_000_000L
 0xffffffffL
 0o1234L
+10l
+0xffffffffl
 
 ---
 
 (source_file
+  (expression_statement (number))
+  (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))

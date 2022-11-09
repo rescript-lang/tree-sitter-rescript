@@ -1400,10 +1400,10 @@ module.exports = grammar({
         )
       )
 
-      const int64 = seq(
+      const int_32_64 = seq(
         optional(choice('-', '+')),
         choice(decimal_integer_literal, binary_literal, octal_literal, hex_literal),
-        'L'
+        choice('L', 'l')
       )
 
       return token(choice(
@@ -1412,7 +1412,7 @@ module.exports = grammar({
         binary_literal,
         octal_literal,
         bigint_literal,
-        int64
+        int_32_64
       ))
     },
 
