@@ -250,7 +250,7 @@ module.exports = grammar({
     ),
 
     _type_declaration: $ => seq(
-      $.type_identifier,
+      choice($.type_identifier, $.type_identifier_path),
       optional($.type_parameters),
       optional(seq(
         choice('=', '+='),
