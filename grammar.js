@@ -254,6 +254,7 @@ module.exports = grammar({
         choice('=', '+='),
         optional('private'),
         $._type,
+        optional(seq('=', $._type)),
         repeat(alias($._type_declaration_and, $.type_declaration)),
       )),
     ),
