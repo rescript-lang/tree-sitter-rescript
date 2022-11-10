@@ -118,7 +118,7 @@ type t = ..
 
 type t += Other
 
-type t +=
+type M.t +=
   | Point
   | Line
 
@@ -133,7 +133,7 @@ type t +=
       (variant_declaration
         (variant_identifier))))
   (type_declaration
-    (type_identifier)
+    (type_identifier_path (module_identifier) (type_identifier))
     (variant_type
       (variant_declaration
         (variant_identifier))
