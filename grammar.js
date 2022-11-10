@@ -1310,7 +1310,7 @@ module.exports = grammar({
 
     constrain_module: $ => seq(
       'module',
-      $.module_identifier,
+      $.module_primary_expression,
       choice('=', ':='),
       $.module_primary_expression,
     ),
