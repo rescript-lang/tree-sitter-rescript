@@ -112,12 +112,13 @@
   "type"
   "and"
   "assert"
-  "async"
   "await"
   "with"
   "unpack"
   "lazy"
 ] @keyword
+
+((function "async" @keyword))
 
 [
   "if"

@@ -107,6 +107,7 @@ module.exports = grammar({
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
+    [$._reserved_identifier, $.function]
   ],
 
   rules: {
@@ -1358,6 +1359,7 @@ module.exports = grammar({
 
     value_identifier: $ => choice(
       /[a-z_][a-zA-Z0-9_']*/,
+      $._reserved_identifier,
       $._escape_identifier,
     ),
 
@@ -1488,6 +1490,10 @@ module.exports = grammar({
     lparen: $ => alias($._lparen, '('),
     rparen: $ => alias($._rparen, ')'),
     uncurry: $ => '.',
+
+    _reserved_identifier: $ => choice(
+      'async'
+    )
   },
 });
 

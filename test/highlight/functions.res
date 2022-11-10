@@ -5,3 +5,6 @@ let inc = n => n + 1
 let uncurry = (. u, .x) => (u, x)
 //             ^ operator
 //                  ^ operator
+
+let get = async (id) => id
+//         ^ keyword
