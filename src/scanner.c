@@ -45,6 +45,10 @@ void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
+static bool is_inline_whitespace(int32_t c) {
+  return c == ' ' || c == '\t';
+}
+
 static void scan_whitespace(TSLexer *lexer, bool skip) {
   while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
     lexer->advance(lexer, skip);
@@ -132,6 +136,10 @@ bool tree_sitter_rescript_external_scanner_scan(
     ) {
   ScannerState* state = (ScannerState*)payload;
   const in_string = state->in_quotes || state->in_backticks;
+
+  while (is_inline_whitespace(lexer->lookahead) && !in_string) {
+    advance(lexer);
+  }
 
   if (valid_symbols[TEMPLATE_CHARS]) {
     lexer->result_symbol = TEMPLATE_CHARS;
