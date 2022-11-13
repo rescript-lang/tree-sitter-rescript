@@ -133,23 +133,30 @@ The caller should either handle this error, or expect that exit code.`
 ----
 
 (source_file
-  (expression_statement (template_string))
-  (expression_statement (template_string))
-  (expression_statement (template_string))
-  (expression_statement (template_string
-    (template_substitution
-      (binary_expression (number) (number)))
-    (template_substitution
-      (binary_expression (number) (number)))))
-  (expression_statement (template_string
-    (escape_sequence)
-    (template_substitution (call_expression
-      (value_identifier)
-      (arguments (string (string_fragment)))))
-    (escape_sequence)
-    (template_substitution (value_identifier))))
-  (expression_statement (template_string))
-  (expression_statement (template_string (escape_sequence))))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content
+        (template_substitution
+          (binary_expression (number) (number)))
+        (template_substitution
+          (binary_expression (number) (number))))))
+  (expression_statement
+    (template_string
+      (template_string_content
+        (escape_sequence)
+        (template_substitution
+          (call_expression
+            (value_identifier)
+            (arguments
+              (string
+                (string_fragment)))))
+      (escape_sequence)
+      (template_substitution (value_identifier)))))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content (escape_sequence)))))
 
 ============================================
 Tricky template strings
@@ -164,11 +171,11 @@ Tricky template strings
 ---
 
 (source_file
-  (expression_statement (template_string))
-  (expression_statement (template_string))
-  (expression_statement (template_string))
-  (expression_statement (template_string))
-  (expression_statement (template_string)))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content))))
 
 ============================================
 Characters

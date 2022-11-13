@@ -382,7 +382,7 @@ external add: (
             (parameter
               (type_identifier_path (module_identifier) (type_identifier)))
             (parameter
-              (decorator (decorator_identifier) (decorator_arguments (template_string)))
+              (decorator (decorator_identifier) (decorator_arguments (template_string (template_string_content))))
               (type_identifier))
             (parameter
               (decorator (decorator_identifier) (decorator_arguments (string)))
