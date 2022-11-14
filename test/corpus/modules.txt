@@ -288,6 +288,13 @@ module rec BYOBReader: {
   include Reader
 } = BYOBReader
 
+module rec A: T = {
+  let x = B.x
+}
+and B: T = {
+  let x = 1
+}
+
 ---
 
 (source_file
@@ -295,7 +302,19 @@ module rec BYOBReader: {
     (module_identifier)
     (block
       (include_statement (module_identifier)))
-    (module_identifier)))
+    (module_identifier))
+
+  (module_declaration
+    (module_identifier) (module_identifier)
+    (block
+      (let_binding
+        (value_identifier)
+        (value_identifier_path
+          (module_identifier) (value_identifier))))
+    (module_identifier) (module_identifier)
+    (block
+      (let_binding
+        (value_identifier) (number)))))
 
 ===========================================
 Definition through extension
