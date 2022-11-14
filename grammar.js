@@ -143,7 +143,10 @@ module.exports = grammar({
 
     _decorated_statement: $ => seq(
       repeat1($.decorator),
-      $.declaration,
+      choice(
+        $.declaration,
+        $.expression_statement
+      )
     ),
 
     decorator_statement: $ => seq(
