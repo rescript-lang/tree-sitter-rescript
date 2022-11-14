@@ -33,6 +33,9 @@ let foo = @doesNotRaise String.make(12, ' ')
 
 let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
 
+@local
+call()
+
 ---
 
 (source_file
@@ -72,7 +75,13 @@ let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
           (value_identifier))
         (arguments
           (array)
-          (number))))))
+          (number)))))
+
+  (decorated
+    (decorator (decorator_identifier))
+    (expression_statement
+      (call_expression
+        (value_identifier) (arguments)))))
 
 ============================================
 Decorator before type `and`
