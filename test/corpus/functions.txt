@@ -79,7 +79,7 @@ Type annotations
       body: (number))))
 
 ===================================================
-Type arguments
+Abstract type
 ===================================================
 
 let foo = (type a, x: 'a): a => x
@@ -91,7 +91,7 @@ let foo = (type a, x: 'a): a => x
     (value_identifier)
     (function
       (formal_parameters
-        (parameter (type_parameter (type_identifier)))
+        (parameter (abstract_type (type_identifier)))
         (parameter
           (value_identifier)
           (type_annotation (type_identifier))))
