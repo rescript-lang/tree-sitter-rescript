@@ -116,6 +116,7 @@
   "with"
   "unpack"
   "lazy"
+  "constraint"
 ] @keyword
 
 ((function "async" @keyword))

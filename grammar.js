@@ -269,6 +269,7 @@ module.exports = grammar({
         choice('=', '+='),
         optional('private'),
         $._type,
+        repeat($.type_constraint),
         optional(seq('=', $._type)),
         repeat(alias($._type_declaration_and, $.type_declaration)),
       )),
@@ -320,6 +321,13 @@ module.exports = grammar({
       $.unit_type,
       $.module_pack,
       $.unit,
+    ),
+
+    type_constraint: $ => seq(
+      'constraint',
+      $._type,
+      '=',
+      $._type
     ),
 
     tuple_type: $ => prec.dynamic(-1, seq(
