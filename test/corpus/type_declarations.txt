@@ -81,6 +81,8 @@ type t = {
 
 type t = Mod.t = {a: int}
 
+type t = {}
+
 ---
 
 (source_file
@@ -108,7 +110,10 @@ type t = Mod.t = {a: int}
     (record_type
       (record_type_field
         (property_identifier)
-        (type_annotation (type_identifier))))))
+        (type_annotation (type_identifier)))))
+  (type_declaration
+    (type_identifier)
+    (record_type)))
 
 ===========================================
 Extensible Variant

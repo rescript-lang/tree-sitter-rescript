@@ -373,7 +373,7 @@ module.exports = grammar({
 
     record_type: $ => seq(
       '{',
-      commaSep1t($.record_type_field),
+      commaSept($.record_type_field),
       '}',
     ),
 
