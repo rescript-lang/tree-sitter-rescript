@@ -243,7 +243,7 @@ type foo<'a> = [> #Blue | #DeepBlue | #LightBlue ] as 'a
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
-      (type_identifier))))
+      (as_aliasing_type (type_identifier)))))
 
 ===========================================
 Function
@@ -299,6 +299,7 @@ type t = {
   "my-field-two": string,
   ...rest
 }
+type t<'a> = {.."name": string} as 'a
 
 ---
 
@@ -318,7 +319,13 @@ type t = {
     (object_type
       (field (property_identifier (string_fragment)) (type_identifier))
       (field (property_identifier (string_fragment)) (type_identifier))
-      (field (type_identifier)))))
+      (field (type_identifier))))
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (object_type
+      (field (property_identifier (string_fragment)) (type_identifier))
+      (as_aliasing_type (type_identifier)))))
 
 ===========================================
 Generic
