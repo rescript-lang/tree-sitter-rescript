@@ -198,7 +198,8 @@ Characters
   (expression_statement (character))
   (expression_statement (character))
   (expression_statement (character (escape_sequence)))
-  (expression_statement (character (escape_sequence))) (expression_statement (character (escape_sequence))))
+  (expression_statement (character (escape_sequence)))
+  (expression_statement (character (escape_sequence))))
 
 ============================================
 Polyvars
