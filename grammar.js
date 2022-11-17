@@ -996,7 +996,7 @@ module.exports = grammar({
     jsx_opening_element: $ => prec.dynamic(-1, seq(
       '<',
       field('name', $._jsx_element_name),
-      repeat(field('attribute', $.jsx_attribute)),
+      repeat(field('attribute', $._jsx_attribute)),
       '>'
     )),
 
@@ -1026,12 +1026,14 @@ module.exports = grammar({
     jsx_self_closing_element: $ => seq(
       '<',
       field('name', $._jsx_element_name),
-      repeat(field('attribute', $.jsx_attribute)),
+      repeat(field('attribute', $._jsx_attribute)),
       '/',
       '>'
     ),
 
     _jsx_attribute_name: $ => alias($.value_identifier, $.property_identifier),
+
+    _jsx_attribute: $ => choice($.jsx_attribute, $.jsx_expression),
 
     jsx_attribute: $ => seq(
       optional('?'),
