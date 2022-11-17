@@ -257,11 +257,11 @@ and b = c
         (decorator (decorator_identifier))
         (decorator (decorator_identifier))
         (value_identifier)
-        (value_identifier))
+        (value_identifier)
       (let_binding
         (decorator (decorator_identifier))
         (value_identifier)
-        (number)))))
+        (number))))))
 
 ===========================================
 Labled function with uncurried
