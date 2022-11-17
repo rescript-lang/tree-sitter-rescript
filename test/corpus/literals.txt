@@ -185,6 +185,9 @@ Characters
 '\\'
 'Ж'
 '😬'
+'\o021'
+'\179'
+'\u{1F600}'
 
 ---
 
@@ -193,7 +196,9 @@ Characters
   (expression_statement (character (escape_sequence)))
   (expression_statement (character (escape_sequence)))
   (expression_statement (character))
-  (expression_statement (character)))
+  (expression_statement (character))
+  (expression_statement (character (escape_sequence)))
+  (expression_statement (character (escape_sequence))) (expression_statement (character (escape_sequence))))
 
 ============================================
 Polyvars
