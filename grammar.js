@@ -1073,7 +1073,10 @@ module.exports = grammar({
 
     decorator_arguments: $ => seq(
       '(',
-      commaSept($.expression),
+      choice(
+        commaSept($.expression),
+        $.type_annotation
+      ),
       ')',
     ),
 

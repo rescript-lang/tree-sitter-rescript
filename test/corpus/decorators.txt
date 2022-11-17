@@ -114,3 +114,31 @@ and bar = {bar: int}
         (decorator (decorator_identifier))
         (type_identifier)
         (record_type (record_type_field (property_identifier) (type_annotation (type_identifier))))))))
+
+============================================
+Decorator with type
+============================================
+
+@react.component(:sharedProps)
+let make = (~x, ~y) => React.string(x ++ y)
+
+---
+
+(source_file
+  (decorated
+    (decorator
+      (decorator_identifier)
+      (decorator_arguments
+        (type_annotation (type_identifier))))
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter (labeled_parameter (value_identifier)))
+          (parameter (labeled_parameter (value_identifier))))
+        (call_expression
+          (value_identifier_path
+            (module_identifier) (value_identifier))
+          (arguments
+            (binary_expression
+              (value_identifier) (value_identifier))))))))
