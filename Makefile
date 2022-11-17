@@ -8,7 +8,8 @@ TS=yarn tree-sitter
 wild_github_repos := rescript-lang/rescript-react \
 										 rescript-association/rescript-lang.org \
 										 tinymce/rescript-webapi \
-										 cca-io/rescript-material-ui
+										 cca-io/rescript-material-ui \
+										 rescript-association/reanalyze
 
 wild_sandboxes := $(patsubst %,test_wild/%,$(wild_github_repos))
 
