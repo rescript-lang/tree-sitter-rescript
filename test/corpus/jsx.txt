@@ -218,3 +218,24 @@ Attribute Block
         (jsx_identifier))
       (jsx_closing_element
         (jsx_identifier)))))
+
+===================================================
+Spread props
+===================================================
+
+<div {...a}/>
+<Comp {...a}></Comp>
+
+---
+
+(source_file
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_expression
+        (spread_element (value_identifier)))))
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element (jsx_identifier)
+        (jsx_expression (spread_element (value_identifier))))
+      (jsx_closing_element (jsx_identifier)))))
