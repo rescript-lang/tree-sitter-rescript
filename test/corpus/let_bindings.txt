@@ -258,10 +258,10 @@ and b = c
         (decorator (decorator_identifier))
         (value_identifier)
         (value_identifier)
-      (let_binding
-        (decorator (decorator_identifier))
-        (value_identifier)
-        (number))))))
+        (let_binding
+          (decorator (decorator_identifier))
+          (value_identifier)
+          (number))))))
 
 ===========================================
 Labled function with uncurried
