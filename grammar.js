@@ -468,7 +468,7 @@ module.exports = grammar({
         '=',
         repeat($.decorator),
         $.expression,
-        repeat(alias($._let_binding_and, $.let_binding)),
+        optional(alias($._let_binding_and, $.let_binding)),
       )),
     ),
 
