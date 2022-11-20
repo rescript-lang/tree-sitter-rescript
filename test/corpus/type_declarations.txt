@@ -220,6 +220,7 @@ type t = [>
 
 
 type foo<'a> = [> #Blue | #DeepBlue | #LightBlue ] as 'a
+type t<'w> = [M.t<'w>]
 
 ---
 
@@ -243,7 +244,16 @@ type foo<'a> = [> #Blue | #DeepBlue | #LightBlue ] as 'a
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
-      (as_aliasing_type (type_identifier)))))
+      (as_aliasing_type (type_identifier))))
+
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (polyvar_type
+      (polyvar_declaration
+        (generic_type
+          (type_identifier_path (module_identifier) (type_identifier))
+          (type_arguments (type_identifier)))))))
 
 ===========================================
 Function
