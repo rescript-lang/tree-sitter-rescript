@@ -38,8 +38,8 @@ module.exports = grammar({
       'member',
       'call',
       $.spread_element,
-      $.await_expression,
       $.pipe_expression,
+      $.await_expression,
       $.lazy_expression,
       'binary_times',
       'binary_pow',
@@ -106,7 +106,10 @@ module.exports = grammar({
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
-    [$._reserved_identifier, $.function]
+    [$._reserved_identifier, $.function],
+    [$.expression, $._jsx_child],
+    [$.expression, $._jsx_attribute_value],
+    [$.block, $.jsx_expression]
   ],
 
   rules: {
@@ -743,17 +746,9 @@ module.exports = grammar({
     )),
 
     pipe_expression: $ => prec.left(seq(
-      $.primary_expression,
+      $.expression,
       choice('->', '|>'),
-      choice(
-        $.value_identifier,
-        $.value_identifier_path,
-        $.variant_identifier,
-        $.polyvar_identifier,
-        $.nested_variant_identifier,
-        $.parenthesized_expression,
-        $.block,
-      ),
+      $.expression,
     )),
 
     module_pack: $ => seq(
