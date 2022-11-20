@@ -101,7 +101,7 @@ Attribute values
       (jsx_identifier)
       (jsx_attribute
         (property_identifier)
-        (pipe_expression (value_identifier) (value_identifier)))
+        (binary_expression (value_identifier) (value_identifier)))
       (jsx_attribute
         (property_identifier)
         (true)))))

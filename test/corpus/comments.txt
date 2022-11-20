@@ -59,7 +59,7 @@ switch foo {
   (comment)
   (expression_statement (number))
   (expression_statement
-    (pipe_expression
+    (binary_expression
       (value_identifier)
       (comment)
       (value_identifier)))

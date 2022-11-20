@@ -38,8 +38,8 @@ module.exports = grammar({
       'member',
       'call',
       $.spread_element,
+      'binary_pipe',
       $.await_expression,
-      $.pipe_expression,
       $.lazy_expression,
       'binary_times',
       'binary_pow',
@@ -55,6 +55,7 @@ module.exports = grammar({
       $.mutation_expression,
       $.function,
       $.let_binding,
+      $.try_expression
     ],
     // Nested.Module.Path precendence
     [
@@ -63,7 +64,7 @@ module.exports = grammar({
       $.nested_variant_identifier,
       $.module_identifier_path,
     ],
-    [$._jsx_attribute_value, $.pipe_expression],
+    [$._jsx_attribute_value, $.binary_expression],
     [$.function_type_parameters, $.function_type],
   ],
 
@@ -106,7 +107,9 @@ module.exports = grammar({
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
-    [$._reserved_identifier, $.function]
+    [$._reserved_identifier, $.function],
+    [$._jsx_attribute_value, $.ternary_expression],
+    [$.jsx_expression, $.block],
   ],
 
   rules: {
@@ -522,7 +525,6 @@ module.exports = grammar({
       $.switch_expression,
       $.try_expression,
       $.call_expression,
-      $.pipe_expression,
       $.subscript_expression,
       $.member_expression,
       $.module_pack,
@@ -717,10 +719,7 @@ module.exports = grammar({
 
     try_expression: $ => seq(
       'try',
-      choice(
-        $.block,
-        $.primary_expression,
-      ),
+      $.expression,
       'catch',
       '{',
       repeat($.switch_match),
@@ -740,20 +739,6 @@ module.exports = grammar({
     call_expression: $ => prec('call', seq(
       field('function', $.primary_expression),
       field('arguments', alias($.call_arguments, $.arguments)),
-    )),
-
-    pipe_expression: $ => prec.left(seq(
-      $.primary_expression,
-      choice('->', '|>'),
-      choice(
-        $.value_identifier,
-        $.value_identifier_path,
-        $.variant_identifier,
-        $.polyvar_identifier,
-        $.nested_variant_identifier,
-        $.parenthesized_expression,
-        $.block,
-      ),
     )),
 
     module_pack: $ => seq(
@@ -1046,7 +1031,7 @@ module.exports = grammar({
     ),
 
     _jsx_attribute_value: $ => choice(
-      $.primary_expression,
+      $.expression,
       $.jsx_expression,
     ),
 
@@ -1150,6 +1135,7 @@ module.exports = grammar({
         ['!==', 'binary_relation'],
         ['>=', 'binary_relation'],
         ['>', 'binary_relation'],
+        [choice('|>', '->'), 'binary_pipe']
       ].map(([operator, precedence]) =>
         prec.left(precedence, seq(
           field('left', $.expression),

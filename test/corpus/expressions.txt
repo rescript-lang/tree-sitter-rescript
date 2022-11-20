@@ -150,9 +150,9 @@ f(raise)
         (function
           parameter: (value_identifier)
           body: (binary_expression
-            left: (pipe_expression
-              (value_identifier)
-              (value_identifier_path
+            left: (binary_expression
+              left: (value_identifier)
+              right: (value_identifier_path
                 (module_identifier)
                 (value_identifier)))
             right: (number))))))
@@ -196,54 +196,61 @@ foo->{
   baz
 }
 
+{foo}->print()
+
 ---
 
 (source_file
  (expression_statement
-    (pipe_expression
-      (pipe_expression (value_identifier) (value_identifier))
+    (binary_expression
+      (binary_expression (value_identifier) (value_identifier))
       (value_identifier)))
  (expression_statement
-    (pipe_expression
-      (pipe_expression (value_identifier) (value_identifier))
+    (binary_expression
+      (binary_expression (value_identifier) (value_identifier))
       (value_identifier)))
   (expression_statement
-    (pipe_expression
-      (call_expression
-        (pipe_expression
-          (value_identifier)
+    (binary_expression
+      (binary_expression
+        (value_identifier)
+        (call_expression
           (value_identifier_path
-            (module_identifier)
-            (value_identifier)))
-        (arguments (value_identifier)))
+            (module_identifier) (value_identifier))
+          (arguments
+            (value_identifier))))
       (value_identifier_path
         (module_identifier)
         (value_identifier))))
   (expression_statement
-    (pipe_expression
+    (binary_expression
       (number)
-      (variant_identifier)))
+      (variant (variant_identifier))))
   (expression_statement
-    (pipe_expression
+    (binary_expression
       (value_identifier)
-      (polyvar_identifier)))
+      (polyvar (polyvar_identifier))))
   (expression_statement
-    (pipe_expression
+    (binary_expression
       (value_identifier)
       (value_identifier)))
   (expression_statement
-    (pipe_expression
+    (binary_expression
       (value_identifier)
       (parenthesized_expression
         (function
           (value_identifier)
           (binary_expression (value_identifier) (number))))))
   (expression_statement
-    (pipe_expression
+    (binary_expression
       (value_identifier)
       (block
         (open_statement (module_identifier))
-        (expression_statement (value_identifier))))))
+        (expression_statement (value_identifier)))))
+  (expression_statement
+    (binary_expression
+      (block
+        (expression_statement (value_identifier)))
+      (call_expression (value_identifier) (arguments)))))
 
 ===========================================
 Record
@@ -737,9 +744,9 @@ switch (element->HtmlInputElement.ofElement) {
   (expression_statement
     (switch_expression
       (parenthesized_expression
-        (pipe_expression
-          (value_identifier)
-          (value_identifier_path (module_identifier) (value_identifier))))
+        (binary_expression
+          left: (value_identifier)
+          right: (value_identifier_path (module_identifier) (value_identifier))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -1380,7 +1387,7 @@ await foo->bar + 5
   (expression_statement
     (binary_expression
       (await_expression
-        (pipe_expression (value_identifier) (value_identifier)))
+        (binary_expression (value_identifier) (value_identifier)))
       (number))))
 
 ===========================================
