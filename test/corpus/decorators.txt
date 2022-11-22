@@ -108,12 +108,12 @@ and bar = {bar: int}
       (type_declaration
         (decorator (decorator_identifier))
         (type_identifier)
-        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier)))))
-      (type_declaration
-        (decorator (decorator_identifier))
-        (decorator (decorator_identifier))
-        (type_identifier)
-        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier))))))))
+        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier))))
+        (type_declaration
+          (decorator (decorator_identifier))
+          (decorator (decorator_identifier))
+          (type_identifier)
+          (record_type (record_type_field (property_identifier) (type_annotation (type_identifier)))))))))
 
 ============================================
 Decorator with type
