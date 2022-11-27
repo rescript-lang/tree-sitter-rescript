@@ -196,6 +196,8 @@ foo->{
   baz
 }
 
+{foo}->print()
+
 ---
 
 (source_file
@@ -243,7 +245,13 @@ foo->{
       (value_identifier)
       (block
         (open_statement (module_identifier))
-        (expression_statement (value_identifier))))))
+        (expression_statement (value_identifier)))))
+  (expression_statement
+    (call_expression
+      (pipe_expression
+        (block (expression_statement (value_identifier)))
+        (value_identifier))
+      (arguments))))
 
 ===========================================
 Record
