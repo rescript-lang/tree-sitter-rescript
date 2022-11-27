@@ -369,7 +369,7 @@ module.exports = grammar({
           $.polyvar_identifier,
           optional($.polyvar_parameters),
         ),
-        $._type_identifier
+        $._inline_type
       )
     ),
 
