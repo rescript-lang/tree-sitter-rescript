@@ -189,7 +189,7 @@ module.exports = grammar({
       optional(seq(
         '=',
         field('definition', $._module_definition),
-        repeat($._module_binding_and)
+        optional($._module_binding_and)
       )),
     )),
 
@@ -271,7 +271,7 @@ module.exports = grammar({
         $._type,
         repeat($.type_constraint),
         optional(seq('=', $._type)),
-        repeat(alias($._type_declaration_and, $.type_declaration)),
+        optional(alias($._type_declaration_and, $.type_declaration)),
       )),
     ),
 
