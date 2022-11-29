@@ -746,12 +746,7 @@ module.exports = grammar({
       $.primary_expression,
       choice('->', '|>'),
       choice(
-        $.value_identifier,
-        $.value_identifier_path,
-        $.variant_identifier,
-        $.polyvar_identifier,
-        $.nested_variant_identifier,
-        $.parenthesized_expression,
+        $.primary_expression,
         $.block,
       ),
     )),

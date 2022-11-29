@@ -209,24 +209,24 @@ foo->{
       (value_identifier)))
   (expression_statement
     (pipe_expression
-      (call_expression
-        (pipe_expression
-          (value_identifier)
+      (pipe_expression
+        (value_identifier)
+        (call_expression
           (value_identifier_path
             (module_identifier)
-            (value_identifier)))
-        (arguments (value_identifier)))
+            (value_identifier))
+          (arguments (value_identifier))))
       (value_identifier_path
         (module_identifier)
         (value_identifier))))
   (expression_statement
     (pipe_expression
       (number)
-      (variant_identifier)))
+      (variant (variant_identifier))))
   (expression_statement
     (pipe_expression
       (value_identifier)
-      (polyvar_identifier)))
+      (polyvar (polyvar_identifier))))
   (expression_statement
     (pipe_expression
       (value_identifier)
