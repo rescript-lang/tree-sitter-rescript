@@ -259,20 +259,31 @@ module.exports = grammar({
       optional('export'),
       'type',
       optional('rec'),
-      $._type_declaration,
+      $._type_declaration
     ),
 
     _type_declaration: $ => seq(
-      choice($.type_identifier, $.type_identifier_path),
-      optional($.type_parameters),
-      optional(seq(
-        choice('=', '+='),
-        optional('private'),
-        $._type,
-        repeat($.type_constraint),
-        optional(seq('=', $._type)),
-        optional(alias($._type_declaration_and, $.type_declaration)),
-      )),
+      choice(
+        seq(
+          $.type_identifier,
+          optional($.type_parameters),
+          optional(seq('=', $._type)),
+          optional(seq(
+            '=',
+            optional('private'),
+            $._type,
+          )),
+          repeat($.type_constraint),
+        ),
+        seq(
+          choice($.type_identifier, $.type_identifier_path),
+          optional($.type_parameters),
+          '+=',
+          optional('private'),
+          $.variant_type,
+        )
+      ),
+      optional(alias($._type_declaration_and, $.type_declaration))
     ),
 
     _type_declaration_and: $ => seq(
