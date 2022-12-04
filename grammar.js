@@ -266,7 +266,6 @@ module.exports = grammar({
       choice($.type_identifier, $.type_identifier_path),
       optional($.type_parameters),
       optional(seq(
-        optional($.type_parameters),
         optional(seq('=', $._type)),
         optional(seq(
           choice('=', '+='),
