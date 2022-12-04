@@ -743,7 +743,10 @@ module.exports = grammar({
     )),
 
     pipe_expression: $ => prec.left(seq(
-      $.primary_expression,
+      choice(
+        $.primary_expression,
+        $.block,
+      ),
       choice('->', '|>'),
       choice(
         $.value_identifier,
