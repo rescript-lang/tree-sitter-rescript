@@ -268,6 +268,7 @@ Alias
 ===========================================
 
 module Q = Foo.Bar.Qux
+module Foo' = Foo
 
 ---
 
@@ -278,7 +279,10 @@ module Q = Foo.Bar.Qux
       (module_identifier_path
         (module_identifier)
         (module_identifier))
-      (module_identifier))))
+      (module_identifier)))
+  (module_declaration
+    (module_identifier)
+    (module_identifier)))
 
 ===========================================
 Recursive
