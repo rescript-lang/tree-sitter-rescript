@@ -1320,12 +1320,12 @@ module.exports = grammar({
       $.block,
     ),
 
-    variant_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
+    variant_identifier: $ => /[A-Z][a-zA-Z0-9_']*/,
 
     polyvar_identifier: $ => seq(
       '#',
       choice(
-        /[a-zA-Z0-9_]+/,
+        /[a-zA-Z0-9_']+/,
         seq(
           optional('\\'),
           alias($.string, $.polyvar_string),
@@ -1334,7 +1334,7 @@ module.exports = grammar({
     ),
 
     type_identifier: $ => choice(
-      /[a-z_'][a-zA-Z0-9_]*/,
+      /[a-z_'][a-zA-Z0-9_']*/,
       $._escape_identifier,
     ),
 
@@ -1346,7 +1346,7 @@ module.exports = grammar({
 
     _escape_identifier: $ => token(seq('\\"', /[^"]+/ , '"')),
 
-    module_identifier: $ => /[A-Z][a-zA-Z0-9_]*/,
+    module_identifier: $ => /[A-Z][a-zA-Z0-9_']*/,
 
     decorator_identifier: $ => /[a-zA-Z0-9_\.]+/,
 

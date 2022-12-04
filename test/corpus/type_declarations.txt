@@ -3,11 +3,13 @@ Opaque
 ===========================================
 
 type t
+type t'
 type \"type"
 
 ---
 
 (source_file
+ (type_declaration (type_identifier))
  (type_declaration (type_identifier))
  (type_declaration (type_identifier)))
 
@@ -151,6 +153,7 @@ Variant
 
 type t =
   | A
+  | A'
   | @live("t.D") D
   | B(anotherType)
   | C({foo: int, bar: string})
@@ -163,6 +166,7 @@ type t =
   (type_declaration
     (type_identifier)
     (variant_type
+      (variant_declaration (variant_identifier))
       (variant_declaration (variant_identifier))
       (variant_declaration
         (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
@@ -210,6 +214,7 @@ Polyvar
 
 type t = [>
   | #AAA
+  | #AAA'
   | #bbb(anotherType)
   | #"cc-cc"
   | #\"cc-cc"
@@ -228,6 +233,7 @@ type t<'w> = [M.t<'w>]
   (type_declaration
     (type_identifier)
     (polyvar_type
+      (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration
         (polyvar_identifier) (polyvar_parameters (type_identifier)))
