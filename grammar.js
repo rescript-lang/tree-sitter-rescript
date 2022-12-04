@@ -424,10 +424,11 @@ module.exports = grammar({
 
     ),
 
-    generic_type: $ => seq(
+    generic_type: $ => prec.left(seq(
       $._type_identifier,
-      $.type_arguments
-    ),
+      $.type_arguments,
+      optional($.as_aliasing_type)
+    )),
 
     type_arguments: $ => seq(
       '<',
