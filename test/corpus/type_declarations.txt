@@ -3,11 +3,13 @@ Opaque
 ===========================================
 
 type t
+type t'
 type \"type"
 
 ---
 
 (source_file
+ (type_declaration (type_identifier))
  (type_declaration (type_identifier))
  (type_declaration (type_identifier)))
 
@@ -212,6 +214,7 @@ Polyvar
 
 type t = [>
   | #AAA
+  | #AAA'
   | #bbb(anotherType)
   | #"cc-cc"
   | #\"cc-cc"
@@ -230,6 +233,7 @@ type t<'w> = [M.t<'w>]
   (type_declaration
     (type_identifier)
     (polyvar_type
+      (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration
         (polyvar_identifier) (polyvar_parameters (type_identifier)))

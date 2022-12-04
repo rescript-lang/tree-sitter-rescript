@@ -1325,7 +1325,7 @@ module.exports = grammar({
     polyvar_identifier: $ => seq(
       '#',
       choice(
-        /[a-zA-Z0-9_]+/,
+        /[a-zA-Z0-9_']+/,
         seq(
           optional('\\'),
           alias($.string, $.polyvar_string),
@@ -1334,7 +1334,7 @@ module.exports = grammar({
     ),
 
     type_identifier: $ => choice(
-      /[a-z_'][a-zA-Z0-9_]*/,
+      /[a-z_'][a-zA-Z0-9_']*/,
       $._escape_identifier,
     ),
 
