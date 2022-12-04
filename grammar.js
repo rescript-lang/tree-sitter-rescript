@@ -10,6 +10,7 @@ module.exports = grammar({
     $._template_chars,
     $._lparen,
     $._rparen,
+    $._list_constructor
   ],
 
   extras: $ => [
@@ -637,7 +638,8 @@ module.exports = grammar({
     ),
 
     list: $ => seq(
-      'list{',
+      $._list_constructor,
+      '{',
       optional(commaSep1t($._list_element)),
       '}'
     ),
@@ -939,7 +941,8 @@ module.exports = grammar({
     ),
 
     list_pattern: $ => seq(
-      'list{',
+      $._list_constructor,
+      '{',
       optional(commaSep1t($._collection_element_pattern)),
       '}',
     ),
