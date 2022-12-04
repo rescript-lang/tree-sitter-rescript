@@ -462,6 +462,46 @@ type test = (. ~attr: string) => unit
       (unit_type))))
 
 ===========================================
+Polymorphic type
+===========================================
+
+let id: 'a. 'a => 'a = x => x
+
+let add: type a. (number<a>, number<a>) => a
+
+---
+
+(source_file
+  (let_binding
+    (value_identifier)
+    (type_annotation
+      (polymorphic_type
+        (type_identifier)
+        (function_type
+          (function_type_parameters (type_identifier))
+          (type_identifier))))
+    (function
+      (value_identifier)
+      (value_identifier)))
+
+  (let_binding
+    (value_identifier)
+    (type_annotation
+      (polymorphic_type
+        (abstract_type (type_identifier))
+        (function_type
+          (function_type_parameters
+            (parameter
+              (generic_type
+                (type_identifier)
+                (type_arguments (type_identifier))))
+            (parameter
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier))))) (type_identifier))))))
+
+===========================================
 Variance annotations
 ===========================================
 

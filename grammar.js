@@ -321,6 +321,13 @@ module.exports = grammar({
       $.unit_type,
       $.module_pack,
       $.unit,
+      $.polymorphic_type,
+    ),
+
+    polymorphic_type: $ => seq(
+      choice(repeat1($.type_identifier), $.abstract_type),
+      '.',
+      $._inline_type
     ),
 
     type_constraint: $ => seq(
@@ -817,7 +824,7 @@ module.exports = grammar({
         $._pattern,
         $.labeled_parameter,
         $.unit,
-        $.type_parameter,
+        $.abstract_type
       ),
     ),
 
@@ -829,7 +836,7 @@ module.exports = grammar({
       optional(field('default_value', $._labeled_parameter_default_value)),
     ),
 
-    type_parameter: $ => seq(
+    abstract_type: $ => seq(
       'type',
       repeat1($.type_identifier),
     ),
