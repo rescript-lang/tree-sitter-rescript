@@ -247,11 +247,9 @@ foo->{
         (open_statement (module_identifier))
         (expression_statement (value_identifier)))))
   (expression_statement
-    (call_expression
-      (pipe_expression
-        (block (expression_statement (value_identifier)))
-        (value_identifier))
-      (arguments))))
+    (pipe_expression
+      (block (expression_statement (value_identifier)))
+      (call_expression (value_identifier) (arguments)))))
 
 ===========================================
 Record
