@@ -5,13 +5,16 @@ Opaque
 type t
 type t'
 type \"type"
+type t and b
 
 ---
 
 (source_file
  (type_declaration (type_identifier))
  (type_declaration (type_identifier))
- (type_declaration (type_identifier)))
+ (type_declaration (type_identifier))
+ (type_declaration (type_identifier)
+  (type_declaration (type_identifier))))
 
 ===========================================
 Export
@@ -539,6 +542,7 @@ Type constraint
 
 type t<'a> = 'a constraint 'a = int
 type decorator<'a, 'b> = 'a => 'b constraint 'a = int constraint 'b = _ => _
+type t<'a> constraint 'a = t
 
 ---
 
@@ -562,4 +566,11 @@ type decorator<'a, 'b> = 'a => 'b constraint 'a = int constraint 'b = _ => _
       (type_identifier)
       (function_type
         (function_type_parameters (type_identifier))
-        (type_identifier)))))
+        (type_identifier))))
+
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (type_constraint
+      (type_identifier)
+      (type_identifier))))
