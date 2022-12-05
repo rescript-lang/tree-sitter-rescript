@@ -227,7 +227,7 @@ type t = [>
   ]
 
 
-type foo<'a> = [> #Blue | #DeepBlue | #LightBlue ] as 'a
+type foo<'a> = @decorator [> #Blue | #DeepBlue | #LightBlue ] as 'a
 type t<'w> = [M.t<'w>]
 
 ---
@@ -250,6 +250,7 @@ type t<'w> = [M.t<'w>]
     (type_identifier)
     (type_parameters (type_identifier))
     (polyvar_type
+      (decorator (decorator_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
