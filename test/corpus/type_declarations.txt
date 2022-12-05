@@ -349,6 +349,7 @@ Generic
 
 type t<'a, 'b> = (array<'a>, array<'b>)
 type t = result<(), string>
+type t<'a> = generic<'a> as 's
 
 ---
 
@@ -365,7 +366,15 @@ type t = result<(), string>
       (type_identifier)
       (type_arguments
         (unit)
-        (type_identifier)))))
+        (type_identifier))))
+
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (generic_type
+      (type_identifier)
+      (type_arguments (type_identifier))
+      (as_aliasing_type (type_identifier)))))
 
 ===========================================
 Recursive
