@@ -101,6 +101,7 @@ blocky(
   ~third={3},
 )
 f(raise)
+call(~a=@decorator 1)
 
 ---
 
@@ -172,7 +173,16 @@ f(raise)
     (call_expression
       function: (value_identifier)
       arguments: (arguments
-        (value_identifier)))))
+        (value_identifier))))
+
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (labeled_argument
+          label: (value_identifier)
+          (decorator (decorator_identifier))
+          value: (number))))))
 
 ===========================================
 Pipe

@@ -88,6 +88,7 @@ Array destructuring
 
 let [bar, baz] = foo
 let [bar, baz, _] = foo
+let [@decorator bar, _] = foo
 
 ---
 
@@ -103,6 +104,13 @@ let [bar, baz, _] = foo
       (value_identifier)
       (value_identifier)
       (value_identifier))
+    (value_identifier))
+
+  (let_binding
+    (array_pattern
+      (decorator (decorator_identifier))
+      (value_identifier)
+      (value_identifier))
     (value_identifier)))
 
 ============================================
@@ -110,12 +118,20 @@ List destructuring
 ============================================
 
 let list{head, ...tail} = foo
+let list{@decorator head, ..._} = foo
 
 ---
 
 (source_file
   (let_binding
     (list_pattern
+      (value_identifier)
+      (spread_pattern (value_identifier)))
+    (value_identifier))
+
+  (let_binding
+    (list_pattern
+      (decorator (decorator_identifier))
       (value_identifier)
       (spread_pattern (value_identifier)))
     (value_identifier)))

@@ -106,7 +106,8 @@ module.exports = grammar({
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
-    [$._reserved_identifier, $.function]
+    [$._reserved_identifier, $.function],
+    [$.polyvar_type]
   ],
 
   rules: {
@@ -364,6 +365,7 @@ module.exports = grammar({
     ),
 
     polyvar_type: $ => prec.left(seq(
+      repeat($.decorator),
       choice('[', '[>', '[<',),
       optional('|'),
       barSep1($.polyvar_declaration),
@@ -374,7 +376,7 @@ module.exports = grammar({
     polyvar_declaration: $ => prec.right(
       choice(
         seq(
-          optional($.decorator),
+          repeat($.decorator),
           $.polyvar_identifier,
           optional($.polyvar_parameters),
         ),
@@ -629,19 +631,27 @@ module.exports = grammar({
 
     tuple: $ => seq(
       '(',
-      commaSep2t($.expression),
+      commaSep2t(
+        seq(repeat($.decorator), $.expression)
+      ),
       ')',
     ),
 
     array: $ => seq(
       '[',
-      commaSept($.expression),
+      commaSept(
+        seq(repeat($.decorator), $.expression)
+      ),
       ']'
     ),
 
     list: $ => seq(
       'list{',
-      optional(commaSep1t($._list_element)),
+      optional(
+        commaSep1t(
+          seq(repeat($.decorator), $._list_element)
+        )
+      ),
       '}'
     ),
 
@@ -799,6 +809,7 @@ module.exports = grammar({
         seq(
           '=',
           optional('?'),
+          repeat($.decorator),
           field('value', $.expression),
           optional(field('type', $.type_annotation)),
         ),
@@ -931,19 +942,28 @@ module.exports = grammar({
 
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t(alias($._pattern, $.tuple_item_pattern)),
+      commaSep2t(
+        alias(
+          seq(repeat($.decorator), $._pattern),
+          $.tuple_item_pattern
+        )
+      ),
       ')',
     ),
 
     array_pattern: $ => seq(
       '[',
-      optional(commaSep1t($._collection_element_pattern)),
+      optional(commaSep1t(
+        seq(repeat($.decorator), $._collection_element_pattern)
+      )),
       ']',
     ),
 
     list_pattern: $ => seq(
       'list{',
-      optional(commaSep1t($._collection_element_pattern)),
+      optional(commaSep1t(
+        seq(repeat($.decorator), $._collection_element_pattern)
+      )),
       '}',
     ),
 
