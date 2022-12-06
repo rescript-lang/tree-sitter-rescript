@@ -5,13 +5,16 @@ Opaque
 type t
 type t'
 type \"type"
+type t and b
 
 ---
 
 (source_file
  (type_declaration (type_identifier))
  (type_declaration (type_identifier))
- (type_declaration (type_identifier)))
+ (type_declaration (type_identifier))
+ (type_declaration (type_identifier)
+  (type_declaration (type_identifier))))
 
 ===========================================
 Export
@@ -224,7 +227,7 @@ type t = [>
   ]
 
 
-type foo<'a> = [> #Blue | #DeepBlue | #LightBlue ] as 'a
+type foo<'a> = @decorator [> #Blue | #DeepBlue | #LightBlue ] as 'a
 type t<'w> = [M.t<'w>]
 
 ---
@@ -247,6 +250,7 @@ type t<'w> = [M.t<'w>]
     (type_identifier)
     (type_parameters (type_identifier))
     (polyvar_type
+      (decorator (decorator_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
       (polyvar_declaration (polyvar_identifier))
@@ -349,6 +353,7 @@ Generic
 
 type t<'a, 'b> = (array<'a>, array<'b>)
 type t = result<(), string>
+type t<'a> = generic<'a> as 's
 
 ---
 
@@ -365,7 +370,15 @@ type t = result<(), string>
       (type_identifier)
       (type_arguments
         (unit)
-        (type_identifier)))))
+        (type_identifier))))
+
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (generic_type
+      (type_identifier)
+      (type_arguments (type_identifier))
+      (as_aliasing_type (type_identifier)))))
 
 ===========================================
 Recursive
@@ -530,6 +543,7 @@ Type constraint
 
 type t<'a> = 'a constraint 'a = int
 type decorator<'a, 'b> = 'a => 'b constraint 'a = int constraint 'b = _ => _
+type t<'a> constraint 'a = t
 
 ---
 
@@ -553,4 +567,11 @@ type decorator<'a, 'b> = 'a => 'b constraint 'a = int constraint 'b = _ => _
       (type_identifier)
       (function_type
         (function_type_parameters (type_identifier))
-        (type_identifier)))))
+        (type_identifier))))
+
+  (type_declaration
+    (type_identifier)
+    (type_parameters (type_identifier))
+    (type_constraint
+      (type_identifier)
+      (type_identifier))))
