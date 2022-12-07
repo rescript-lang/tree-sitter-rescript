@@ -1457,11 +1457,13 @@ module.exports = grammar({
 
     template_string: $ => seq(
       token(seq(
-        optional(choice(
-          'j',
-          'js',
-          'json',
-        )),
+        optional(
+          choice(
+            /[a-z_][a-zA-Z0-9_']*/,
+            // escape_sequence
+            seq('\\"', /[^"]+/ , '"'),
+          )
+        ),
         '`',
       )),
       $.template_string_content,
