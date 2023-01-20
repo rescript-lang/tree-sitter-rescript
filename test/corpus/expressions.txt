@@ -421,16 +421,18 @@ switch foo {
     (switch_expression
       (value_identifier)
       (switch_match
-        (number)
-        (number)
-        (expression_statement (string (string_fragment))))
+        (or_pattern
+          (number)
+          (number))
+        (sequence_expression (expression_statement (string (string_fragment)))))
       (switch_match
         (value_identifier)
-        (let_binding (value_identifier) (string (string_fragment)))
-        (expression_statement
-          (binary_expression
-            (value_identifier)
-            (string (string_fragment))))))))
+        (sequence_expression
+          (let_binding (value_identifier) (string (string_fragment)))
+          (expression_statement
+            (binary_expression
+              (value_identifier)
+              (string (string_fragment)))))))))
 
 ===========================================
 Switch of variants
@@ -458,16 +460,16 @@ switch foo {
             (record_pattern
               (value_identifier)
               (value_identifier))))
-        (expression_statement (value_identifier)))
+        (sequence_expression (expression_statement (value_identifier))))
       (switch_match
         (variant_pattern
           (nested_variant_identifier
             (module_identifier)
             (variant_identifier)))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern (variant_identifier) (formal_parameters))
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of polyvars
@@ -487,7 +489,7 @@ switch foo {
       (value_identifier)
       (switch_match
         (polyvar_pattern (polyvar_identifier))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (polyvar_pattern
           (polyvar_identifier)
@@ -497,14 +499,14 @@ switch foo {
             (type_annotation (type_identifier)))
             (number)))
         (as_aliasing (value_identifier))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (polyvar_type_pattern
           (type_identifier_path
             (module_identifier)
             (type_identifier)))
             (as_aliasing (value_identifier))
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of vars
@@ -524,19 +526,19 @@ switch foo {
       (value_identifier)
       (switch_match
         (value_identifier)
-        (switch_pattern_condition
+        (guard
           (binary_expression
             (binary_expression (value_identifier) (number))
             (binary_expression (value_identifier) (number))))
-        (expression_statement (value_identifier)))
+        (sequence_expression (expression_statement (value_identifier))))
       (switch_match
         (value_identifier)
-        (switch_pattern_condition
+        (guard
           (binary_expression (value_identifier) (number)))
-        (expression_statement (value_identifier)))
+        (sequence_expression (expression_statement (value_identifier))))
       (switch_match
         (value_identifier)
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of tuples
@@ -558,17 +560,17 @@ switch (foo, bar) {
         (tuple_pattern
           (tuple_item_pattern (number))
           (tuple_item_pattern (number) (as_aliasing (value_identifier))))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (tuple_pattern
           (tuple_item_pattern (variant_pattern (variant_identifier)))
           (tuple_item_pattern (polyvar_type_pattern (type_identifier))))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (tuple_pattern
           (tuple_item_pattern (value_identifier))
           (tuple_item_pattern (value_identifier)))
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of mixed tuples
@@ -588,13 +590,14 @@ switch tuple {
       (switch_match
         (tuple_pattern
           (tuple_item_pattern
-            (variant_pattern (variant_identifier))
-            (variant_pattern (variant_identifier)))
+            (or_pattern
+              (variant_pattern (variant_identifier))
+              (variant_pattern (variant_identifier))))
           (tuple_item_pattern (number)))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
     (switch_match
       (value_identifier)
-      (expression_statement (number))))))
+      (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of record patterns
@@ -622,9 +625,10 @@ switch person {
           (formal_parameters
             (record_pattern
               (value_identifier)
-              (string (string_fragment))
-              (string (string_fragment)))))
-        (expression_statement (number)))
+              (or_pattern
+                (string (string_fragment))
+                (string (string_fragment))))))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -635,13 +639,14 @@ switch person {
                 (value_identifier)
                 (number))
               (value_identifier)
-              (variant_pattern
-                (variant_identifier)
-                (formal_parameters (value_identifier)))
-              (variant_pattern
-                (variant_identifier)
-                (formal_parameters (value_identifier))))))
-        (expression_statement (number)))
+              (or_pattern
+                (variant_pattern
+                  (variant_identifier)
+                  (formal_parameters (value_identifier)))
+                (variant_pattern
+                  (variant_identifier)
+                  (formal_parameters (value_identifier)))))))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -649,13 +654,13 @@ switch person {
             (record_pattern
               (value_identifier)
               (variant_pattern (variant_identifier)))))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
           (formal_parameters
             (record_pattern (value_identifier))))
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of lists
@@ -680,16 +685,16 @@ switch foo {
           (value_identifier)
           (as_aliasing (value_identifier))
           (spread_pattern (value_identifier)))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (list_pattern (number) (number) (value_identifier))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (list_pattern (number))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (list_pattern (spread_pattern (value_identifier)))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (list_pattern
           (number)
@@ -699,7 +704,7 @@ switch foo {
               (value_identifier)
               (spread_pattern (value_identifier))))
           (as_aliasing (value_identifier)))
-        (expression_statement (value_identifier))))))
+        (sequence_expression (expression_statement (value_identifier)))))))
 
 ===========================================
 Switch of arrays
@@ -721,20 +726,20 @@ switch foo {
       (value_identifier)
       (switch_match
         (array_pattern (value_identifier) (spread_pattern (value_identifier)))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (array_pattern
           (number)
           (number)
           (as_aliasing (value_identifier))
           (value_identifier))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (array_pattern (number))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (array_pattern (spread_pattern (value_identifier)))
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch of statements
@@ -757,29 +762,33 @@ switch (element->HtmlInputElement.ofElement) {
           (value_identifier)
           (value_identifier_path (module_identifier) (value_identifier))))
       (switch_match
-        (variant_pattern
-          (variant_identifier)
-          (formal_parameters
-            (value_identifier)))
-        (expression_statement
-          (call_expression
-            function: (value_identifier_path
-              (module_identifier)
-              (value_identifier))
-            arguments: (arguments
-              (value_identifier))))
-        (expression_statement
-          (call_expression
-            function: (value_identifier_path
-              (module_identifier)
-              (value_identifier))
-            arguments: (arguments
-              (value_identifier)))))
+        pattern:
+          (variant_pattern
+            (variant_identifier)
+            (formal_parameters
+              (value_identifier)))
+        body: (sequence_expression
+          (expression_statement
+            (call_expression
+              function: (value_identifier_path
+                (module_identifier)
+                (value_identifier))
+              arguments: (arguments
+                (value_identifier))))
+          (expression_statement
+            (call_expression
+              function: (value_identifier_path
+                (module_identifier)
+                (value_identifier))
+              arguments: (arguments
+                (value_identifier))))))
       (switch_match
-        (variant_pattern
-          (variant_identifier))
-        (expression_statement
-          (unit))))))
+        pattern:
+          (variant_pattern
+            (variant_identifier))
+        body: (sequence_expression
+          (expression_statement
+            (unit)))))))
 
 ===========================================
 Switch exceptions
@@ -796,15 +805,17 @@ switch parseExn(str) {
   (expression_statement
     (switch_expression
       (call_expression (value_identifier) (arguments (value_identifier)))
-      (switch_match (value_identifier) (expression_statement (number)))
       (switch_match
-        (exception
+        (value_identifier)
+        (sequence_expression (expression_statement (number))))
+      (switch_match
+        (exception_pattern
           (variant_pattern
             (nested_variant_identifier
               (module_identifier_path (module_identifier) (module_identifier))
               (variant_identifier))
             (formal_parameters (value_identifier))))
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch block
@@ -825,7 +836,7 @@ switch { open Mod; foo() } {
           (call_expression (value_identifier) (arguments))))
       (switch_match
         (value_identifier)
-        (expression_statement (number))))))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch parenthesized
@@ -833,7 +844,6 @@ Switch parenthesized
 
 switch n {
 | (1 | 2) => 1
-| (n if n > 10 | n if n < 42) | 50 | (n if n > 100) => n
 | Some((This | That) | Unknow) => 0
 }
 
@@ -844,26 +854,22 @@ switch n {
     (switch_expression
       (value_identifier)
       (switch_match
-        (number)
-        (number)
-        (expression_statement (number)))
-      (switch_match
-        (value_identifier)
-        (switch_pattern_condition (binary_expression (value_identifier) (number)))
-        (value_identifier)
-        (switch_pattern_condition (binary_expression (value_identifier) (number)))
-        (number)
-        (value_identifier)
-        (switch_pattern_condition (binary_expression (value_identifier) (number)))
-        (expression_statement (value_identifier)))
+        (parenthesized_pattern
+          (or_pattern
+            (number)
+            (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
           (formal_parameters
-            (variant_pattern (variant_identifier))
-            (variant_pattern (variant_identifier))
-            (variant_pattern (variant_identifier))))
-          (expression_statement (number))))))
+            (or_pattern
+              (parenthesized_pattern
+                (or_pattern
+                  (variant_pattern (variant_identifier))
+                  (variant_pattern (variant_identifier))))
+            (variant_pattern (variant_identifier)))))
+          (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Switch ranges
@@ -879,7 +885,10 @@ switch c {
   (expression_statement
     (switch_expression
       (value_identifier)
-      (switch_match (character) (character) (expression_statement (number))))))
+      (switch_match
+        (range_pattern
+          (character) (character))
+        (sequence_expression (expression_statement (number)))))))
 
 ===========================================
 Math operators
@@ -1262,7 +1271,9 @@ try switch foo() {
   (expression_statement
     (try_expression
       (block (expression_statement (call_expression (value_identifier) (arguments))))
-      (switch_match (variant_pattern (variant_identifier)) (expression_statement (number)))
+      (switch_match 
+        (variant_pattern (variant_identifier)) 
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -1270,7 +1281,7 @@ try switch foo() {
             (record_pattern
               (value_identifier)
               (value_identifier))))
-        (expression_statement (number)))
+        (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern
           (nested_variant_identifier
@@ -1279,14 +1290,20 @@ try switch foo() {
               (module_identifier))
             (variant_identifier))
           (formal_parameters (value_identifier)))
-        (expression_statement (number)))))
+        (sequence_expression (expression_statement (number))))))
   (expression_statement
     (try_expression
       (switch_expression
         (call_expression (value_identifier) (arguments))
-        (switch_match (number) (expression_statement (string (string_fragment))))
-        (switch_match (number) (expression_statement (string (string_fragment))))
-        (switch_match (value_identifier) (expression_statement (string (string_fragment)))))
+        (switch_match
+          (number)
+          (sequence_expression (expression_statement (string (string_fragment)))))
+        (switch_match
+          (number)
+          (sequence_expression (expression_statement (string (string_fragment)))))
+        (switch_match
+          (value_identifier)
+          (sequence_expression (expression_statement (string (string_fragment))))))
       (switch_match
         (variant_pattern
           (nested_variant_identifier
@@ -1295,7 +1312,7 @@ try switch foo() {
               (module_identifier))
             (variant_identifier))
           (formal_parameters (value_identifier)))
-        (expression_statement (string (string_fragment)))))))
+        (sequence_expression (expression_statement (string (string_fragment))))))))
 
 ===========================================
 Mutation expressions

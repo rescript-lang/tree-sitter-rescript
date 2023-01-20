@@ -101,13 +101,14 @@ module.exports = grammar({
     [$._inline_type, $.function_type_parameters],
     [$.primary_expression, $.parameter, $._pattern],
     [$.parameter, $._pattern],
-    [$.parameter, $._parenthesized_pattern],
-    [$._switch_value_pattern, $._parenthesized_pattern],
+    [$.parameter, $.parenthesized_pattern],
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
     [$._reserved_identifier, $.function],
-    [$.polyvar_type]
+    [$.polyvar_type],
+    [$._let_binding, $.or_pattern],
+    [$.exception_pattern, $.or_pattern]
   ],
 
   rules: {
@@ -690,43 +691,15 @@ module.exports = grammar({
 
     switch_match: $ => prec.dynamic(-1, seq(
       '|',
-      $._switch_pattern,
+      field('pattern', $._pattern),
+      optional($.guard),
       '=>',
-      $._one_or_more_statements,
+      field('body', alias($._one_or_more_statements, $.sequence_expression)),
     )),
 
-    _switch_pattern: $ => barSep1(choice(
-      alias($._switch_exception_pattern, $.exception),
-      $._parenthesized_switch_pattern,
-      $._switch_value_pattern,
-      $._switch_range_pattern,
-    )),
-
-    _switch_exception_pattern: $ => seq(
-      'exception',
-      $._switch_value_pattern,
-    ),
-
-    _parenthesized_switch_pattern: $ => seq(
-      '(',
-      $._switch_pattern,
-      ')',
-    ),
-
-    _switch_value_pattern: $ => seq(
-      $._pattern,
-      optional($.switch_pattern_condition),
-    ),
-
-    switch_pattern_condition: $ => seq(
+    guard: $ => seq(
       choice('if', 'when'),
       $.expression,
-    ),
-
-    _switch_range_pattern: $ => seq(
-      $._literal_pattern,
-      '..',
-      $._literal_pattern,
     ),
 
     polyvar_type_pattern: $ => seq(
@@ -867,7 +840,7 @@ module.exports = grammar({
     // unfinished constructs are generally treated as literal expressions,
     // not patterns.
     _pattern: $ => prec.dynamic(-1, seq(
-      barSep1(choice(
+      choice(
         $.value_identifier,
         $._literal_pattern,
         $._destructuring_pattern,
@@ -875,13 +848,26 @@ module.exports = grammar({
         $.unit,
         $.module_pack,
         $.lazy_pattern,
-        $._parenthesized_pattern,
-      )),
+        $.parenthesized_pattern,
+        $.or_pattern,
+        $.range_pattern,
+        $.exception_pattern
+      ),
       optional($.type_annotation),
       optional($.as_aliasing),
     )),
 
-    _parenthesized_pattern: $ => seq('(', $._pattern, ')'),
+    parenthesized_pattern: $ => seq('(', $._pattern, ')'),
+
+    range_pattern: $ => seq(
+      $._literal_pattern,
+      '..',
+      $._literal_pattern,
+    ),
+
+    or_pattern: $ => prec.left(seq($._pattern, '|', $._pattern)),
+
+    exception_pattern: $ => seq('exception', $._pattern),
 
     _destructuring_pattern: $ => choice(
       $.variant_pattern,
@@ -916,7 +902,7 @@ module.exports = grammar({
     ),
 
     _variant_pattern_parameter: $ => seq(
-      barSep1($._pattern),
+      $._pattern,
       optional($.type_annotation),
     ),
 
@@ -934,7 +920,7 @@ module.exports = grammar({
         ),
         optional(seq(
           ':',
-          barSep1($._pattern),
+          $._pattern,
         )),
       )),
       '}'
@@ -984,7 +970,7 @@ module.exports = grammar({
         $._literal_pattern,
         $._destructuring_pattern,
         $.polyvar_type_pattern,
-        $._parenthesized_pattern,
+        $.parenthesized_pattern,
       )
     ),
 
