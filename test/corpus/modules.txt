@@ -118,9 +118,15 @@ module MyModule: {
   (module_declaration
     name: (module_identifier)
     signature: (block
-      (let_binding (value_identifier) (type_annotation (type_identifier)))
-      (let_binding (value_identifier) (type_annotation (type_identifier)))
-      (let_binding (value_identifier) (type_annotation (type_identifier)))))
+      (let_declaration
+        (let_binding
+          pattern: (value_identifier) (type_annotation (type_identifier))))
+      (let_declaration
+        (let_binding 
+          pattern: (value_identifier) (type_annotation (type_identifier))))
+      (let_declaration
+        (let_binding
+          pattern: (value_identifier) (type_annotation (type_identifier))))))
   (module_declaration
     name: (module_identifier)
     signature: (module_identifier_path (module_identifier) (module_identifier))
@@ -177,9 +183,10 @@ module(SomeFunctor(unpack(x)))
     (module_pack
       (block
         (type_declaration (type_identifier))
-        (let_binding
-          (value_identifier)
-          (string (string_fragment))))
+        (let_declaration
+          (let_binding
+            (value_identifier)
+            (string (string_fragment)))))
       (module_type_annotation (module_identifier))))
   (expression_statement
     (module_pack
@@ -241,10 +248,11 @@ module Make: (Content: StaticContent) => {
           (module_identifier)
           (module_type_annotation (module_identifier))))
       (block
-        (let_binding
-          (value_identifier)
-          (type_annotation
-            (function_type (function_type_parameters (type_identifier)) (type_identifier))))))))
+        (let_declaration
+          (let_binding
+            (value_identifier)
+            (type_annotation
+              (function_type (function_type_parameters (type_identifier)) (type_identifier)))))))))
 
 ===========================================
 Functor use
@@ -311,14 +319,16 @@ and B: T = {
   (module_declaration
     (module_identifier) (module_identifier)
     (block
-      (let_binding
-        (value_identifier)
-        (value_identifier_path
-          (module_identifier) (value_identifier))))
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (value_identifier_path
+            (module_identifier) (value_identifier)))))
     (module_identifier) (module_identifier)
     (block
-      (let_binding
-        (value_identifier) (number)))))
+      (let_declaration
+        (let_binding
+          (value_identifier) (number))))))
 
 ===========================================
 Definition through extension

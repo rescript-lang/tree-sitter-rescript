@@ -141,7 +141,8 @@ Block children
     (jsx_element
       (jsx_opening_element (jsx_identifier))
       (block
-        (let_binding (value_identifier) (string (string_fragment)))
+        (let_declaration
+          (let_binding (value_identifier) (string (string_fragment))))
         (expression_statement
           (jsx_element
             (jsx_opening_element (jsx_identifier) (jsx_attribute (property_identifier)))

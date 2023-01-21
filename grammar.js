@@ -54,7 +54,7 @@ module.exports = grammar({
       $.ternary_expression,
       $.mutation_expression,
       $.function,
-      $.let_binding,
+      $.let_declaration,
     ],
     // Nested.Module.Path precendence
     [
@@ -84,8 +84,8 @@ module.exports = grammar({
     [$.record_field, $.record_pattern],
     [$.expression_statement, $.ternary_expression],
     [$._type_declaration],
-    [$._let_binding],
-    [$.let_binding, $.ternary_expression],
+    [$.let_declaration],
+    [$.let_declaration, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
     [$.variant, $.variant_pattern],
     [$.variant_declaration, $.function_type_parameter],
@@ -175,7 +175,7 @@ module.exports = grammar({
 
     declaration: $ => choice(
       $.type_declaration,
-      $.let_binding,
+      $.let_declaration,
       $.module_declaration,
       $.external_declaration,
       $.exception_declaration,
@@ -467,31 +467,34 @@ module.exports = grammar({
       ),
     ),
 
-    let_binding: $ => seq(
+    let_declaration: $ => seq(
       choice('export', 'let'),
       optional('rec'),
-      $._let_binding,
+      sep1(
+        seq(repeat($._newline), repeat($.decorator), 'and'),
+        $.let_binding
+      )
     ),
 
-    _let_binding: $ => seq(
-      $._pattern,
-      optional($.type_annotation),
+    let_binding: $ => seq(
+      field('pattern', $._pattern),
+      // optional($.type_annotation),
       optional(seq(
         '=',
         repeat($.decorator),
-        $.expression,
-        optional(alias($._let_binding_and, $.let_binding)),
+        field('body', $.expression),
+        // optional(alias($._let_binding_and, $.let_binding)),
       )),
     ),
 
-    _let_binding_and: $ => seq(
-      // New line here not necessary terminates the statement,
-      // show this doubt to the parser
-      repeat($._newline),
-      repeat($.decorator),
-      'and',
-      $._let_binding,
-    ),
+    // _let_binding_and: $ => seq(
+    //   // New line here not necessary terminates the statement,
+    //   // show this doubt to the parser
+    //   repeat($._newline),
+    //   repeat($.decorator),
+    //   'and',
+    //   $._let_binding,
+    // ),
 
     expression_statement: $ => $.expression,
 

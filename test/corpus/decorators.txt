@@ -39,43 +39,46 @@ call()
 ---
 
 (source_file
-  (let_binding
-    (value_identifier)
-    (call_expression
-      (parenthesized_expression
-        (decorator (decorator_identifier))
-        (value_identifier_path
-          (module_identifier)
-          (value_identifier)))
-      (arguments
-        (number)
-        (character))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (parenthesized_expression
+          (decorator (decorator_identifier))
+          (value_identifier_path
+            (module_identifier)
+            (value_identifier)))
+        (arguments
+          (number)
+          (character)))))
 
-  (let_binding
-    (value_identifier)
-    (decorator (decorator_identifier))
-    (call_expression
-      (value_identifier_path
-        (module_identifier)
-        (value_identifier))
-      (arguments
-        (number)
-        (character))))
-
-  (let_binding
-    (value_identifier)
-    (function
-      (formal_parameters)
+  (let_declaration
+    (let_binding
+      (value_identifier)
       (decorator (decorator_identifier))
       (call_expression
         (value_identifier_path
-          (module_identifier_path
-            (module_identifier)
-            (module_identifier))
+          (module_identifier)
           (value_identifier))
         (arguments
-          (array)
-          (number)))))
+          (number)
+          (character)))))
+
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters)
+        (decorator (decorator_identifier))
+        (call_expression
+          (value_identifier_path
+            (module_identifier_path
+              (module_identifier)
+              (module_identifier))
+            (value_identifier))
+          (arguments
+            (array)
+            (number))))))
 
   (decorated
     (decorator (decorator_identifier))
@@ -130,15 +133,16 @@ let make = (~x, ~y) => React.string(x ++ y)
       (decorator_identifier)
       (decorator_arguments
         (type_annotation (type_identifier))))
-    (let_binding
-      (value_identifier)
-      (function
-        (formal_parameters
-          (parameter (labeled_parameter (value_identifier)))
-          (parameter (labeled_parameter (value_identifier))))
-        (call_expression
-          (value_identifier_path
-            (module_identifier) (value_identifier))
-          (arguments
-            (binary_expression
-              (value_identifier) (value_identifier))))))))
+    (let_declaration
+      (let_binding
+        (value_identifier)
+        (function
+          (formal_parameters
+            (parameter (labeled_parameter (value_identifier)))
+            (parameter (labeled_parameter (value_identifier))))
+          (call_expression
+            (value_identifier_path
+              (module_identifier) (value_identifier))
+            (arguments
+              (binary_expression
+                (value_identifier) (value_identifier)))))))))
