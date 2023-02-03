@@ -48,7 +48,7 @@ include module type of {
       (module_identifier_path (module_identifier) (module_identifier))
       (arguments
         (block
-          (type_declaration (type_identifier))
+          (type_declaration (type_binding (type_identifier)))
           (let_declaration
             (let_binding
               (value_identifier)
@@ -93,7 +93,7 @@ module MyModule = {
 (source_file
   (module_declaration
     (module_identifier)
-    (block (type_declaration (type_identifier)))))
+    (block (type_declaration (type_binding (type_identifier))))))
 
 ===========================================
 Signature and definition
@@ -133,11 +133,24 @@ module MyModule: {
   (module_declaration
     name: (module_identifier)
     signature: (module_identifier_path (module_identifier) (module_identifier))
-    definition: (block (type_declaration (type_identifier))))
+    definition:
+      (block
+        (type_declaration
+          (type_binding
+            name: (type_identifier)))))
   (module_declaration
     name: (module_identifier)
-    signature: (block (type_declaration (type_identifier)))
-    definition: (block (type_declaration (type_identifier) (type_identifier)))))
+    signature: 
+      (block
+        (type_declaration
+          (type_binding
+            name: (type_identifier))))
+    definition:
+      (block
+        (type_declaration
+          (type_binding
+            name: (type_identifier)
+            (type_identifier))))))
 
 ===========================================
 Module types
@@ -152,7 +165,7 @@ module type t
 (source_file
   (module_declaration
     (module_identifier)
-    (block (type_declaration (type_identifier))))
+    (block (type_declaration (type_binding (type_identifier)))))
   (module_declaration
     (module_identifier)
     (module_type_of
@@ -185,7 +198,7 @@ module(SomeFunctor(unpack(x)))
   (expression_statement
     (module_pack
       (block
-        (type_declaration (type_identifier))
+        (type_declaration (type_binding (type_identifier)))
         (let_declaration
           (let_binding
             (value_identifier)
@@ -218,19 +231,25 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
       parameters: (functor_parameters
         (functor_parameter
           (module_identifier)
-          (module_type_annotation (block (type_declaration (type_identifier)))))
+          (module_type_annotation (block (type_declaration (type_binding name: (type_identifier))))))
         (functor_parameter
           (module_identifier)
-          (module_type_annotation (block (type_declaration (type_identifier))))))
+          (module_type_annotation (block (type_declaration (type_binding name: (type_identifier)))))))
       return_module_type: (module_type_annotation
-          (block (type_declaration (type_identifier)) (type_declaration (type_identifier))))
+          (block 
+            (type_declaration
+              (type_binding name: (type_identifier)))
+            (type_declaration
+              (type_binding name: (type_identifier)))))
       body: (block
         (type_declaration
-          (type_identifier)
-          (type_identifier_path (module_identifier) (type_identifier)))
+          (type_binding
+            name: (type_identifier)
+            (type_identifier_path (module_identifier) (type_identifier))))
         (type_declaration
-          (type_identifier)
-          (type_identifier_path (module_identifier) (type_identifier)))))))
+          (type_binding
+            name: (type_identifier)
+            (type_identifier_path (module_identifier) (type_identifier))))))))
 
 ===========================================
 Functor signature

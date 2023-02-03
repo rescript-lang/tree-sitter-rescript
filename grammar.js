@@ -83,7 +83,8 @@ module.exports = grammar({
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
     [$.expression_statement, $.ternary_expression],
-    [$._type_declaration],
+    [$.type_declaration],
+    [$.type_binding],
     [$.let_declaration],
     [$.let_declaration, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
@@ -110,6 +111,7 @@ module.exports = grammar({
     [$.polyvar_type],
     [$.let_binding, $.or_pattern],
     [$.exception_pattern, $.or_pattern],
+    [$.type_binding, $._inline_type]
   ],
 
   rules: {
@@ -262,31 +264,24 @@ module.exports = grammar({
       optional('export'),
       'type',
       optional('rec'),
-      $._type_declaration
+      sep1(
+        seq(repeat($._newline), repeat($.decorator), 'and'),
+        $.type_binding
+      )
     ),
 
-    _type_declaration: $ => seq(
-      choice($.type_identifier, $.type_identifier_path),
+    type_binding: $ => seq(
+      field('name', choice($.type_identifier, $.type_identifier_path)),
       optional($.type_parameters),
       optional(seq(
-        optional(seq('=', $._type)),
+        optional(seq('=', $._non_function_inline_type)),
         optional(seq(
           choice('=', '+='),
           optional('private'),
-          $._type,
+          field('body', $._type),
         )),
         repeat($.type_constraint),
       )),
-      optional(alias($._type_declaration_and, $.type_declaration))
-    ),
-
-    _type_declaration_and: $ => seq(
-      // New line here not necessary terminates the statement,
-      // show this doubt to the parser
-      repeat($._newline),
-      repeat($.decorator),
-      'and',
-      $._type_declaration
     ),
 
     type_parameters: $ => seq(
