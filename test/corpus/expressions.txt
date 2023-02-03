@@ -428,7 +428,8 @@ switch foo {
       (switch_match
         (value_identifier)
         (sequence_expression
-          (let_binding (value_identifier) (string (string_fragment)))
+          (let_declaration
+            (let_binding (value_identifier) (string (string_fragment))))
           (expression_statement
             (binary_expression
               (value_identifier)
@@ -455,8 +456,8 @@ switch foo {
           (variant_identifier)
           (formal_parameters
             (value_identifier)
-            (as_aliasing (value_identifier)
-            (type_annotation (type_identifier)))
+            (as_aliasing (value_identifier))
+            (type_annotation (type_identifier))
             (record_pattern
               (value_identifier)
               (value_identifier))))
@@ -495,8 +496,8 @@ switch foo {
           (polyvar_identifier)
           (formal_parameters
             (value_identifier)
-            (as_aliasing (value_identifier)
-            (type_annotation (type_identifier)))
+            (as_aliasing (value_identifier))
+            (type_annotation (type_identifier))
             (number)))
         (as_aliasing (value_identifier))
         (sequence_expression (expression_statement (number))))
@@ -1147,43 +1148,48 @@ module Test = %graphql(`
   (expression_statement
     (extension_expression
       (extension_identifier)
-      (let_binding
-        (value_identifier)
-        (function
-          parameters: (formal_parameters
-            (parameter (value_identifier))
-            (parameter (value_identifier)))
-          body: (binary_expression
-            left: (value_identifier)
-            right: (value_identifier))))))
+      (let_declaration
+        (let_binding
+          pattern: (value_identifier)
+          body: (function
+            parameters: (formal_parameters
+              (parameter (value_identifier))
+              (parameter (value_identifier)))
+            body: (binary_expression
+              left: (value_identifier)
+              right: (value_identifier)))))))
   (expression_statement
     (extension_expression
       (extension_identifier)
-      (let_binding
-        (value_identifier)
-        (string
-          (string_fragment)))
-      (let_binding
-        (value_identifier)
-        (number))))
-  (let_binding
-      (value_identifier)
-        (extension_expression
-          (extension_identifier)
-          (expression_statement
-            (template_string
-              (template_string_content
-                (escape_sequence)
-                (escape_sequence))))))
-  (let_binding
-      (value_identifier)
-        (extension_expression
-          (extension_identifier)
-          (expression_statement
-            (template_string
-              (template_string_content
-                (escape_sequence)
-                (escape_sequence))))))
+      (let_declaration
+        (let_binding
+          pattern: (value_identifier)
+          body: (string
+            (string_fragment))))
+      (let_declaration
+        (let_binding
+          pattern: (value_identifier)
+          body: (number)))))
+  (let_declaration
+    (let_binding
+        pattern: (value_identifier)
+          body: (extension_expression
+            (extension_identifier)
+            (expression_statement
+              (template_string
+                (template_string_content
+                  (escape_sequence)
+                  (escape_sequence)))))))
+  (let_declaration
+    (let_binding
+        pattern: (value_identifier)
+          body: (extension_expression
+            (extension_identifier)
+            (expression_statement
+              (template_string
+                (template_string_content
+                  (escape_sequence)
+                  (escape_sequence)))))))
   (module_declaration
     name: (module_identifier)
     definition: (extension_expression
@@ -1239,11 +1245,12 @@ let f = () => assert false
           (binary_expression
             (number)
             (number))))))
-  (let_binding
-    (value_identifier)
-    (function
-      (formal_parameters)
-      (assert_expression (false)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters)
+        (assert_expression (false))))))
 
 ============================================
 Try-catch
@@ -1425,21 +1432,22 @@ let f = ({name, _} as foo: T.t) => {}
 ---
 
 (source_file
-  (let_binding
-    (value_identifier)
-    (function
-      parameters: (formal_parameters
-        (parameter
-          (record_pattern
-            (value_identifier)
-            (value_identifier))
-          (as_aliasing
-            (value_identifier)
-            (type_annotation
-              (type_identifier_path
-                (module_identifier)
-                (type_identifier))))))
-      body: (block))))
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (function
+        parameters: (formal_parameters
+          (parameter
+            (record_pattern
+              (value_identifier)
+              (value_identifier))
+            (as_aliasing
+              (value_identifier))
+              (type_annotation
+                (type_identifier_path
+                  (module_identifier)
+                  (type_identifier)))))
+        body: (block)))))
 
 ===========================================
 Lazy Expression

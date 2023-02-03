@@ -49,7 +49,10 @@ include module type of {
       (arguments
         (block
           (type_declaration (type_identifier))
-          (let_binding (value_identifier) (type_annotation (type_identifier)))))))
+          (let_declaration
+            (let_binding
+              (value_identifier)
+              (type_annotation (type_identifier))))))))
   (include_statement
     (module_type_of
       (module_identifier_path (module_identifier) (module_identifier))))

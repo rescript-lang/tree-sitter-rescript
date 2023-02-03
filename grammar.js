@@ -102,13 +102,14 @@ module.exports = grammar({
     [$.primary_expression, $.parameter, $._pattern],
     [$.parameter, $._pattern],
     [$.parameter, $.parenthesized_pattern],
+    [$.parameter, $.tuple_item_pattern],
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
     [$._reserved_identifier, $.function],
     [$.polyvar_type],
-    [$._let_binding, $.or_pattern],
-    [$.exception_pattern, $.or_pattern]
+    [$.let_binding, $.or_pattern],
+    [$.exception_pattern, $.or_pattern],
   ],
 
   rules: {
@@ -479,23 +480,23 @@ module.exports = grammar({
 
     let_binding: $ => seq(
       field('pattern', $._pattern),
-      // optional($.type_annotation),
-      optional(seq(
-        '=',
-        repeat($.decorator),
-        field('body', $.expression),
-        // optional(alias($._let_binding_and, $.let_binding)),
-      )),
+      choice(
+        seq(
+          $.type_annotation,
+          optional(
+            seq('=',
+              repeat($.decorator),
+              field('body', $.expression)
+            )
+          )
+        ),
+        seq(
+          '=',
+          repeat($.decorator),
+          field('body', $.expression),
+        )
+      )
     ),
-
-    // _let_binding_and: $ => seq(
-    //   // New line here not necessary terminates the statement,
-    //   // show this doubt to the parser
-    //   repeat($._newline),
-    //   repeat($.decorator),
-    //   'and',
-    //   $._let_binding,
-    // ),
 
     expression_statement: $ => $.expression,
 
@@ -811,7 +812,7 @@ module.exports = grammar({
     parameter: $ => seq(
       optional($.uncurry),
       choice(
-        $._pattern,
+        seq($._pattern, optional($.type_annotation)),
         $.labeled_parameter,
         $.unit,
         $.abstract_type
@@ -856,7 +857,7 @@ module.exports = grammar({
         $.range_pattern,
         $.exception_pattern
       ),
-      optional($.type_annotation),
+      // optional($.type_annotation),
       optional($.as_aliasing),
     )),
 
@@ -929,14 +930,15 @@ module.exports = grammar({
       '}'
     ),
 
+    tuple_item_pattern: $ => seq(
+      repeat($.decorator),
+      $._pattern,
+      optional($.type_annotation),
+    ),
+
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t(
-        alias(
-          seq(repeat($.decorator), $._pattern),
-          $.tuple_item_pattern
-        )
-      ),
+      commaSep2t($.tuple_item_pattern),
       ')',
     ),
 
