@@ -1191,12 +1191,13 @@ module Test = %graphql(`
                   (escape_sequence)
                   (escape_sequence)))))))
   (module_declaration
-    name: (module_identifier)
-    definition: (extension_expression
-      (extension_identifier)
-      (expression_statement
-        (template_string
-          (template_string_content))))))
+    (module_binding
+      name: (module_identifier)
+      definition: (extension_expression
+        (extension_identifier)
+        (expression_statement
+          (template_string
+            (template_string_content)))))))
 
 ===========================================
 Raise expression

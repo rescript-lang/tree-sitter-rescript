@@ -4,7 +4,7 @@
 ; Classes (modules)
 ;------------------
 
-(module_declaration definition: ((_) @class.inner)) @class.outer
+(module_binding definition: ((_) @class.inner)) @class.outer
 
 ; Blocks
 ;-------
