@@ -846,7 +846,6 @@ module.exports = grammar({
         $.range_pattern,
         $.exception_pattern
       ),
-      // optional($.type_annotation),
       optional($.as_aliasing),
     )),
 
