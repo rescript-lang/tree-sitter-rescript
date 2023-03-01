@@ -219,7 +219,7 @@ module.exports = grammar({
       '(',
       choice(
         seq(
-          choice($.value_identifier, $.value_identifier_path),
+          choice($.value_identifier, $.value_identifier_path, $.member_expression),
           optional($.module_type_annotation)
         ),
         $.call_expression,
