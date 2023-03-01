@@ -164,6 +164,14 @@ module(
 )
 module(SomeFunctor(unpack(x)))
 
+module T = unpack(foo: T)
+
+module S = unpack(foo: T with type t = a)
+
+module S = unpack(Mod.read(v))
+
+module S = unpack(%extension(payload))
+
 ---
 
 (source_file
@@ -187,7 +195,31 @@ module(SomeFunctor(unpack(x)))
         (module_identifier)
         (arguments
           (module_unpack
-            (call_arguments (value_identifier))))))))
+            (value_identifier))))))
+  (module_declaration
+    (module_identifier)
+    (module_unpack
+      (value_identifier)
+      (module_type_annotation (module_identifier))))
+  (module_declaration
+    (module_identifier)
+    (module_unpack
+      (value_identifier)
+      (module_type_annotation
+        (module_type_constraint (module_identifier)
+          (constrain_type (type_identifier) (type_identifier))))))
+  (module_declaration
+    (module_identifier)
+    (module_unpack
+      (call_expression
+        (value_identifier_path (module_identifier) (value_identifier)) 
+        (arguments (value_identifier)))))
+  (module_declaration
+    (module_identifier)
+      (module_unpack
+        (extension_expression
+          (extension_identifier)
+          (expression_statement (value_identifier))))))
 
 
 ===========================================

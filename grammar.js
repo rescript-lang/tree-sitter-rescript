@@ -214,7 +214,19 @@ module.exports = grammar({
       $.extension_expression,
     ),
 
-    module_unpack: $ => seq('unpack', $.call_arguments),
+    module_unpack: $ => seq(
+      'unpack',
+      '(',
+      choice(
+        seq(
+          choice($.value_identifier, $.value_identifier_path),
+          optional($.module_type_annotation)
+        ),
+        $.call_expression,
+        $.extension_expression
+      ),
+      ')'
+    ),
 
     functor: $ => seq(
       field('parameters', $.functor_parameters),
@@ -1137,7 +1149,7 @@ module.exports = grammar({
       $.block,
     ),
 
-    lazy_expression: $ =>  seq(
+    lazy_expression: $ => seq(
       'lazy',
       $.expression,
     ),
@@ -1353,7 +1365,7 @@ module.exports = grammar({
       $._escape_identifier,
     ),
 
-    _escape_identifier: $ => token(seq('\\"', /[^"]+/ , '"')),
+    _escape_identifier: $ => token(seq('\\"', /[^"]+/, '"')),
 
     module_identifier: $ => /[A-Z][a-zA-Z0-9_']*/,
 
@@ -1447,7 +1459,7 @@ module.exports = grammar({
           choice(
             /[a-z_][a-zA-Z0-9_']*/,
             // escape_sequence
-            seq('\\"', /[^"]+/ , '"'),
+            seq('\\"', /[^"]+/, '"'),
           )
         ),
         '`',
