@@ -226,29 +226,33 @@ module S = unpack(%extension(payload))
           (module_unpack
             (value_identifier))))))
   (module_declaration
-    (module_identifier)
-    (module_unpack
-      (value_identifier)
-      (module_type_annotation (module_identifier))))
-  (module_declaration
-    (module_identifier)
-    (module_unpack
-      (value_identifier)
-      (module_type_annotation
-        (module_type_constraint (module_identifier)
-          (constrain_type (type_identifier) (type_identifier))))))
-  (module_declaration
-    (module_identifier)
-    (module_unpack
-      (call_expression
-        (value_identifier_path (module_identifier) (value_identifier)) 
-        (arguments (value_identifier)))))
-  (module_declaration
-    (module_identifier)
+    (module_binding
+      (module_identifier)
       (module_unpack
-        (extension_expression
-          (extension_identifier)
-          (expression_statement (value_identifier))))))
+        (value_identifier)
+        (module_type_annotation (module_identifier)))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_unpack
+        (value_identifier)
+        (module_type_annotation
+          (module_type_constraint (module_identifier)
+          (constrain_type (type_identifier) (type_identifier)))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_unpack
+        (call_expression
+          (value_identifier_path (module_identifier) (value_identifier)) 
+          (arguments (value_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+        (module_unpack
+          (extension_expression
+            (extension_identifier)
+            (expression_statement (value_identifier)))))))
 
 
 ===========================================
@@ -275,7 +279,7 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
             (module_identifier)
             (module_type_annotation (block (type_declaration (type_binding name: (type_identifier)))))))
         return_module_type: (module_type_annotation
-            (block 
+            (block
               (type_declaration
                 (type_binding name: (type_identifier)))
               (type_declaration
