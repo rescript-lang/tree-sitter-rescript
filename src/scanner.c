@@ -11,6 +11,7 @@ enum TokenType {
   TEMPLATE_CHARS,
   L_PAREN,
   R_PAREN,
+  LIST_CONSTRUCTOR
 };
 
 typedef struct ScannerState {
@@ -44,6 +45,7 @@ void tree_sitter_rescript_external_scanner_deserialize(void* state, const char *
 }
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
+static void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
 
 static bool is_inline_whitespace(int32_t c) {
   return c == ' ' || c == '\t';
@@ -138,7 +140,7 @@ bool tree_sitter_rescript_external_scanner_scan(
   const in_string = state->in_quotes || state->in_backticks;
 
   while (is_inline_whitespace(lexer->lookahead) && !in_string) {
-    advance(lexer);
+    skip(lexer);
   }
 
   if (valid_symbols[TEMPLATE_CHARS]) {
@@ -283,6 +285,26 @@ bool tree_sitter_rescript_external_scanner_scan(
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
     return true;
+  }
+
+  if (valid_symbols[LIST_CONSTRUCTOR]) {
+    lexer->result_symbol = LIST_CONSTRUCTOR;
+    if (lexer->lookahead == 'l') {
+      advance(lexer);
+      if (lexer->lookahead == 'i') {
+        advance(lexer);
+        if (lexer->lookahead == 's') {
+          advance(lexer);
+          if (lexer->lookahead == 't') {
+            advance(lexer);
+            if (lexer->lookahead == '{') {
+              lexer->mark_end(lexer);
+              return true;
+            }
+          }
+        }
+      }
+    }
   }
 
   lexer->advance(lexer, iswspace(lexer->lookahead));

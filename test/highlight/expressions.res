@@ -52,6 +52,6 @@ try {
 
 
 let c = list{a, ...list{b}}
-//          ^ type
+//        ^ type
 //           ^ variable
 //                      ^ variable
