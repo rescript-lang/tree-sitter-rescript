@@ -54,7 +54,7 @@ module.exports = grammar({
       $.ternary_expression,
       $.mutation_expression,
       $.function,
-      $.let_binding,
+      $.let_declaration,
     ],
     // Nested.Module.Path precendence
     [
@@ -83,9 +83,10 @@ module.exports = grammar({
     [$.array, $.array_pattern],
     [$.record_field, $.record_pattern],
     [$.expression_statement, $.ternary_expression],
-    [$._type_declaration],
-    [$._let_binding],
-    [$.let_binding, $.ternary_expression],
+    [$.type_declaration],
+    [$.type_binding],
+    [$.let_declaration],
+    [$.let_declaration, $.ternary_expression],
     [$.variant_identifier, $.module_identifier],
     [$.variant, $.variant_pattern],
     [$.variant_declaration, $.function_type_parameter],
@@ -102,13 +103,15 @@ module.exports = grammar({
     [$.primary_expression, $.parameter, $._pattern],
     [$.parameter, $._pattern],
     [$.parameter, $.parenthesized_pattern],
+    [$.parameter, $.tuple_item_pattern],
     [$.variant_declaration],
     [$.unit, $._function_type_parameter_list],
     [$.functor_parameter, $.module_primary_expression, $.module_identifier_path],
     [$._reserved_identifier, $.function],
     [$.polyvar_type],
-    [$._let_binding, $.or_pattern],
-    [$.exception_pattern, $.or_pattern]
+    [$.let_binding, $.or_pattern],
+    [$.exception_pattern, $.or_pattern],
+    [$.type_binding, $._inline_type]
   ],
 
   rules: {
@@ -176,13 +179,13 @@ module.exports = grammar({
 
     declaration: $ => choice(
       $.type_declaration,
-      $.let_binding,
+      $.let_declaration,
       $.module_declaration,
       $.external_declaration,
       $.exception_declaration,
     ),
 
-    _module_binding: $ => prec.left(seq(
+    module_binding: $ => prec.left(seq(
       field('name', choice($.module_identifier, $.type_identifier)),
       optional(seq(
         ':',
@@ -191,20 +194,14 @@ module.exports = grammar({
       optional(seq(
         '=',
         field('definition', $._module_definition),
-        optional($._module_binding_and)
       )),
     )),
-
-    _module_binding_and: $ => seq(
-      'and',
-      $._module_binding
-    ),
 
     module_declaration: $ => seq(
       'module',
       optional('rec'),
       optional('type'),
-      $._module_binding,
+      sep1('and', $.module_binding)
     ),
 
     _module_definition: $ => choice(
@@ -273,31 +270,24 @@ module.exports = grammar({
       optional('export'),
       'type',
       optional('rec'),
-      $._type_declaration
+      sep1(
+        seq(repeat($._newline), repeat($.decorator), 'and'),
+        $.type_binding
+      )
     ),
 
-    _type_declaration: $ => seq(
-      choice($.type_identifier, $.type_identifier_path),
+    type_binding: $ => seq(
+      field('name', choice($.type_identifier, $.type_identifier_path)),
       optional($.type_parameters),
       optional(seq(
-        optional(seq('=', $._type)),
+        optional(seq('=', $._non_function_inline_type)),
         optional(seq(
           choice('=', '+='),
           optional('private'),
-          $._type,
+          field('body', $._type),
         )),
         repeat($.type_constraint),
       )),
-      optional(alias($._type_declaration_and, $.type_declaration))
-    ),
-
-    _type_declaration_and: $ => seq(
-      // New line here not necessary terminates the statement,
-      // show this doubt to the parser
-      repeat($._newline),
-      repeat($.decorator),
-      'and',
-      $._type_declaration
     ),
 
     type_parameters: $ => seq(
@@ -480,30 +470,33 @@ module.exports = grammar({
       ),
     ),
 
-    let_binding: $ => seq(
+    let_declaration: $ => seq(
       choice('export', 'let'),
       optional('rec'),
-      $._let_binding,
+      sep1(
+        seq(repeat($._newline), repeat($.decorator), 'and'),
+        $.let_binding
+      )
     ),
 
-    _let_binding: $ => seq(
-      $._pattern,
-      optional($.type_annotation),
-      optional(seq(
-        '=',
-        repeat($.decorator),
-        $.expression,
-        optional(alias($._let_binding_and, $.let_binding)),
-      )),
-    ),
-
-    _let_binding_and: $ => seq(
-      // New line here not necessary terminates the statement,
-      // show this doubt to the parser
-      repeat($._newline),
-      repeat($.decorator),
-      'and',
-      $._let_binding,
+    let_binding: $ => seq(
+      field('pattern', $._pattern),
+      choice(
+        seq(
+          $.type_annotation,
+          optional(
+            seq('=',
+              repeat($.decorator),
+              field('body', $.expression)
+            )
+          )
+        ),
+        seq(
+          '=',
+          repeat($.decorator),
+          field('body', $.expression),
+        )
+      )
     ),
 
     expression_statement: $ => $.expression,
@@ -820,7 +813,7 @@ module.exports = grammar({
     parameter: $ => seq(
       optional($.uncurry),
       choice(
-        $._pattern,
+        seq($._pattern, optional($.type_annotation)),
         $.labeled_parameter,
         $.unit,
         $.abstract_type
@@ -865,7 +858,6 @@ module.exports = grammar({
         $.range_pattern,
         $.exception_pattern
       ),
-      optional($.type_annotation),
       optional($.as_aliasing),
     )),
 
@@ -938,14 +930,15 @@ module.exports = grammar({
       '}'
     ),
 
+    tuple_item_pattern: $ => seq(
+      repeat($.decorator),
+      $._pattern,
+      optional($.type_annotation),
+    ),
+
     tuple_pattern: $ => seq(
       '(',
-      commaSep2t(
-        alias(
-          seq(repeat($.decorator), $._pattern),
-          $.tuple_item_pattern
-        )
-      ),
+      commaSep2t($.tuple_item_pattern),
       ')',
     ),
 

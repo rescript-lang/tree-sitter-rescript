@@ -48,8 +48,11 @@ include module type of {
       (module_identifier_path (module_identifier) (module_identifier))
       (arguments
         (block
-          (type_declaration (type_identifier))
-          (let_binding (value_identifier) (type_annotation (type_identifier)))))))
+          (type_declaration (type_binding (type_identifier)))
+          (let_declaration
+            (let_binding
+              (value_identifier)
+              (type_annotation (type_identifier))))))))
   (include_statement
     (module_type_of
       (module_identifier_path (module_identifier) (module_identifier))))
@@ -89,8 +92,9 @@ module MyModule = {
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (block (type_declaration (type_identifier)))))
+    (module_binding
+      (module_identifier)
+      (block (type_declaration (type_binding (type_identifier)))))))
 
 ===========================================
 Signature and definition
@@ -116,19 +120,41 @@ module MyModule: {
 
 (source_file
   (module_declaration
-    name: (module_identifier)
-    signature: (block
-      (let_binding (value_identifier) (type_annotation (type_identifier)))
-      (let_binding (value_identifier) (type_annotation (type_identifier)))
-      (let_binding (value_identifier) (type_annotation (type_identifier)))))
+    (module_binding
+      name: (module_identifier)
+      signature: (block
+        (let_declaration
+          (let_binding
+            pattern: (value_identifier) (type_annotation (type_identifier))))
+        (let_declaration
+          (let_binding 
+            pattern: (value_identifier) (type_annotation (type_identifier))))
+        (let_declaration
+          (let_binding
+            pattern: (value_identifier) (type_annotation (type_identifier)))))))
   (module_declaration
-    name: (module_identifier)
-    signature: (module_identifier_path (module_identifier) (module_identifier))
-    definition: (block (type_declaration (type_identifier))))
+    (module_binding
+      name: (module_identifier)
+      signature: (module_identifier_path (module_identifier) (module_identifier))
+      definition:
+        (block
+          (type_declaration
+            (type_binding
+              name: (type_identifier))))))
   (module_declaration
-    name: (module_identifier)
-    signature: (block (type_declaration (type_identifier)))
-    definition: (block (type_declaration (type_identifier) (type_identifier)))))
+    (module_binding
+      name: (module_identifier)
+      signature: 
+        (block
+          (type_declaration
+            (type_binding
+              name: (type_identifier))))
+      definition:
+        (block
+          (type_declaration
+            (type_binding
+              name: (type_identifier)
+              (type_identifier)))))))
 
 ===========================================
 Module types
@@ -142,13 +168,15 @@ module type t
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (block (type_declaration (type_identifier))))
+    (module_binding
+      (module_identifier)
+      (block (type_declaration (type_binding (type_identifier))))))
   (module_declaration
-    (module_identifier)
-    (module_type_of
-      (module_identifier_path (module_identifier) (module_identifier))))
-  (module_declaration (type_identifier)))
+    (module_binding
+      (module_identifier)
+      (module_type_of
+        (module_identifier_path (module_identifier) (module_identifier)))))
+  (module_declaration (module_binding (type_identifier))))
 
 ===========================================
 First Class module
@@ -184,10 +212,11 @@ module S = unpack(%extension(payload))
   (expression_statement
     (module_pack
       (block
-        (type_declaration (type_identifier))
-        (let_binding
-          (value_identifier)
-          (string (string_fragment))))
+        (type_declaration (type_binding (type_identifier)))
+        (let_declaration
+          (let_binding
+            (value_identifier)
+            (string (string_fragment)))))
       (module_type_annotation (module_identifier))))
   (expression_statement
     (module_pack
@@ -235,24 +264,31 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
 
 (source_file
   (module_declaration
-    name: (module_identifier)
-    definition: (functor
-      parameters: (functor_parameters
-        (functor_parameter
-          (module_identifier)
-          (module_type_annotation (block (type_declaration (type_identifier)))))
-        (functor_parameter
-          (module_identifier)
-          (module_type_annotation (block (type_declaration (type_identifier))))))
-      return_module_type: (module_type_annotation
-          (block (type_declaration (type_identifier)) (type_declaration (type_identifier))))
-      body: (block
-        (type_declaration
-          (type_identifier)
-          (type_identifier_path (module_identifier) (type_identifier)))
-        (type_declaration
-          (type_identifier)
-          (type_identifier_path (module_identifier) (type_identifier)))))))
+    (module_binding
+      name: (module_identifier)
+      definition: (functor
+        parameters: (functor_parameters
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation (block (type_declaration (type_binding name: (type_identifier))))))
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation (block (type_declaration (type_binding name: (type_identifier)))))))
+        return_module_type: (module_type_annotation
+            (block 
+              (type_declaration
+                (type_binding name: (type_identifier)))
+              (type_declaration
+                (type_binding name: (type_identifier)))))
+        body: (block
+          (type_declaration
+            (type_binding
+              name: (type_identifier)
+              (type_identifier_path (module_identifier) (type_identifier))))
+          (type_declaration
+            (type_binding
+              name: (type_identifier)
+              (type_identifier_path (module_identifier) (type_identifier)))))))))
 
 ===========================================
 Functor signature
@@ -266,17 +302,19 @@ module Make: (Content: StaticContent) => {
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (functor
-      (functor_parameters
-        (functor_parameter
-          (module_identifier)
-          (module_type_annotation (module_identifier))))
-      (block
-        (let_binding
-          (value_identifier)
-          (type_annotation
-            (function_type (function_type_parameters (type_identifier)) (type_identifier))))))))
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameters
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation (module_identifier))))
+        (block
+          (let_declaration
+            (let_binding
+              (value_identifier)
+              (type_annotation
+                (function_type (function_type_parameters (type_identifier)) (type_identifier))))))))))
 
 ===========================================
 Functor use
@@ -288,12 +326,13 @@ module M = MyFunctor(Foo, Bar.Baz)
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (functor_use
+    (module_binding
       (module_identifier)
-      (arguments
+      (functor_use
         (module_identifier)
-        (module_identifier_path (module_identifier) (module_identifier))))))
+        (arguments
+          (module_identifier)
+          (module_identifier_path (module_identifier) (module_identifier)))))))
 
 ===========================================
 Alias
@@ -306,15 +345,17 @@ module Foo' = Foo
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (module_identifier_path
+    (module_binding
+      (module_identifier)
       (module_identifier_path
-        (module_identifier)
-        (module_identifier))
-      (module_identifier)))
+        (module_identifier_path
+          (module_identifier)
+          (module_identifier))
+        (module_identifier))))
   (module_declaration
-    (module_identifier)
-    (module_identifier)))
+    (module_binding
+      (module_identifier)
+      (module_identifier))))
 
 ===========================================
 Recursive
@@ -335,22 +376,27 @@ and B: T = {
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (block
-      (include_statement (module_identifier)))
-    (module_identifier))
+    (module_binding
+      (module_identifier)
+      (block
+        (include_statement (module_identifier)))
+      (module_identifier)))
 
   (module_declaration
-    (module_identifier) (module_identifier)
-    (block
-      (let_binding
-        (value_identifier)
-        (value_identifier_path
-          (module_identifier) (value_identifier))))
-    (module_identifier) (module_identifier)
-    (block
-      (let_binding
-        (value_identifier) (number)))))
+    (module_binding
+      (module_identifier) (module_identifier)
+      (block
+        (let_declaration
+          (let_binding
+            (value_identifier)
+            (value_identifier_path
+              (module_identifier) (value_identifier))))))
+    (module_binding
+      (module_identifier) (module_identifier)
+      (block
+        (let_declaration
+          (let_binding
+            (value_identifier) (number)))))))
 
 ===========================================
 Definition through extension
@@ -362,10 +408,11 @@ module Styles = %makeStyles(())
 
 (source_file
   (module_declaration
-    (module_identifier)
-    (extension_expression
-      (extension_identifier)
-      (expression_statement (unit)))))
+    (module_binding
+      (module_identifier)
+      (extension_expression
+        (extension_identifier)
+        (expression_statement (unit))))))
 
 ===========================================
 Externals
@@ -537,38 +584,40 @@ module M = (Na: N, Nb: N): (
             (type_identifier))))))
 
   (module_declaration
-    name: (module_identifier)
-    definition: (functor
-      parameters: (functor_parameters)
-      return_module_type: (module_type_annotation
-        (parenthesized_module_expression
-          (module_type_constraint
-            (module_identifier)
-            (constrain_type
-              (type_identifier)
-              (type_identifier)))))
-      body: (block)))
+    (module_binding
+      name: (module_identifier)
+      definition: (functor
+        parameters: (functor_parameters)
+        return_module_type: (module_type_annotation
+          (parenthesized_module_expression
+            (module_type_constraint
+              (module_identifier)
+              (constrain_type
+                (type_identifier)
+                (type_identifier)))))
+        body: (block))))
 
   (module_declaration
-    name: (module_identifier)
-    definition: (functor
-      parameters: (functor_parameters
-        (functor_parameter
-          (module_identifier)
-          (module_type_annotation (module_identifier)))
-        (functor_parameter
-          (module_identifier)
-          (module_type_annotation (module_identifier))))
-      return_module_type: (module_type_annotation
-        (parenthesized_module_expression
-          (module_type_constraint
-            (parenthesized_module_expression
-              (module_type_constraint
-                (module_identifier)
-                (constrain_type
-                  (type_identifier)
-                  (type_identifier))))
-            (constrain_type
-              (type_identifier)
-              (type_identifier)))))
-      body: (block))))
+    (module_binding
+      name: (module_identifier)
+      definition: (functor
+        parameters: (functor_parameters
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation (module_identifier)))
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation (module_identifier))))
+        return_module_type: (module_type_annotation
+          (parenthesized_module_expression
+            (module_type_constraint
+              (parenthesized_module_expression
+                (module_type_constraint
+                  (module_identifier)
+                  (constrain_type
+                    (type_identifier)
+                    (type_identifier))))
+              (constrain_type
+                (type_identifier)
+                (type_identifier)))))
+        body: (block)))))

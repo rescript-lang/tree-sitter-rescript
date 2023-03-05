@@ -10,11 +10,14 @@ type t and b
 ---
 
 (source_file
- (type_declaration (type_identifier))
- (type_declaration (type_identifier))
- (type_declaration (type_identifier))
- (type_declaration (type_identifier)
-  (type_declaration (type_identifier))))
+ (type_declaration (type_binding (type_identifier)))
+ (type_declaration  (type_binding (type_identifier)))
+ (type_declaration (type_binding (type_identifier)))
+ (type_declaration
+  (type_binding
+    (type_identifier))
+  (type_binding
+    (type_identifier))))
 
 ===========================================
 Export
@@ -25,7 +28,7 @@ export type t
 ---
 
 (source_file
- (type_declaration (type_identifier)))
+ (type_declaration (type_binding (type_identifier))))
 
 
 ===========================================
@@ -38,12 +41,13 @@ type t = Foo.Bar.qux
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (type_identifier_path
-      (module_identifier_path
-        (module_identifier)
-        (module_identifier))
-      (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (type_identifier_path
+        (module_identifier_path
+          (module_identifier)
+          (module_identifier))
+        (type_identifier)))))
 
 ===========================================
 Private
@@ -53,7 +57,7 @@ type t = private string
 
 ---
 
-(source_file (type_declaration (type_identifier) (type_identifier)))
+(source_file (type_declaration (type_binding (type_identifier) (type_identifier))))
 
 ===========================================
 Tuple type
@@ -65,8 +69,9 @@ type t = (int, string, float)
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (tuple_type (type_identifier) (type_identifier) (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (tuple_type (type_identifier) (type_identifier) (type_identifier)))))
 
 ===========================================
 Record type
@@ -92,33 +97,36 @@ type t = {}
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (record_type
-      (record_type_field
-        (property_identifier) (type_annotation (type_identifier)))
-      (record_type_field
-        (property_identifier) (type_annotation (type_identifier)))
-      (record_type_field
-        (decorator
-          (decorator_identifier)
-          (decorator_arguments (string (string_fragment))))
-        (property_identifier)
-        (type_annotation (type_identifier)))
-      (record_type_field
-        (property_identifier) (type_annotation (type_identifier)))
-      (record_type_field
-        (property_identifier) (type_annotation (type_identifier)))))
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier) (type_annotation (type_identifier)))
+        (record_type_field
+          (property_identifier) (type_annotation (type_identifier)))
+        (record_type_field
+          (decorator
+            (decorator_identifier)
+            (decorator_arguments (string (string_fragment))))
+          (property_identifier)
+          (type_annotation (type_identifier)))
+        (record_type_field
+          (property_identifier) (type_annotation (type_identifier)))
+        (record_type_field
+          (property_identifier) (type_annotation (type_identifier))))))
   (type_declaration
-    (type_identifier)
-    (type_identifier_path
-      (module_identifier) (type_identifier))
-    (record_type
-      (record_type_field
-        (property_identifier)
-        (type_annotation (type_identifier)))))
+    (type_binding
+      (type_identifier)
+      (type_identifier_path
+        (module_identifier) (type_identifier))
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation (type_identifier))))))
   (type_declaration
-    (type_identifier)
-    (record_type)))
+    (type_binding
+      (type_identifier)
+      (record_type))))
 
 ===========================================
 Extensible Variant
@@ -136,19 +144,22 @@ type M.t +=
 
 (source_file
   (type_declaration
-    (type_identifier))
+    (type_binding
+      (type_identifier)))
   (type_declaration
-    (type_identifier)
-    (variant_type
-      (variant_declaration
-        (variant_identifier))))
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
   (type_declaration
-    (type_identifier_path (module_identifier) (type_identifier))
-    (variant_type
-      (variant_declaration
-        (variant_identifier))
-      (variant_declaration
-        (variant_identifier)))))
+    (type_binding
+      (type_identifier_path (module_identifier) (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier))))))
 
 ===========================================
 Variant
@@ -167,32 +178,33 @@ type t =
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (variant_type
-      (variant_declaration (variant_identifier))
-      (variant_declaration (variant_identifier))
-      (variant_declaration
-        (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
-        (variant_identifier))
-      (variant_declaration
-        (variant_identifier) (variant_parameters (type_identifier)))
-      (variant_declaration
-        (variant_identifier)
-        (variant_parameters
-          (record_type
-            (record_type_field
-              (property_identifier) (type_annotation (type_identifier)))
-            (record_type_field
-              (property_identifier) (type_annotation (type_identifier))))))
-      (variant_declaration
-        (variant_identifier)
-        (variant_parameters
-          (module_pack (module_identifier))))
-      (variant_declaration
-        (variant_identifier)
-        (variant_parameters
-          (module_pack
-            (type_identifier_path (module_identifier) (type_identifier))))))))
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration (variant_identifier))
+        (variant_declaration (variant_identifier))
+        (variant_declaration
+          (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier) (variant_parameters (type_identifier)))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (record_type
+              (record_type_field
+                (property_identifier) (type_annotation (type_identifier)))
+              (record_type_field
+                (property_identifier) (type_annotation (type_identifier))))))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (module_pack (module_identifier))))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (module_pack
+              (type_identifier_path (module_identifier) (type_identifier)))))))))
 
 ===========================================
 Annotated variant
@@ -204,12 +216,13 @@ type rec t = Any('a): t
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (variant_type
-      (variant_declaration
-        (variant_identifier)
-        (variant_parameters (type_identifier))
-        (type_annotation (type_identifier))))))
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters (type_identifier))
+          (type_annotation (type_identifier)))))))
 
 ===========================================
 Polyvar
@@ -234,36 +247,39 @@ type t<'w> = [M.t<'w>]
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (polyvar_type
-      (polyvar_declaration (polyvar_identifier))
-      (polyvar_declaration (polyvar_identifier))
-      (polyvar_declaration
-        (polyvar_identifier) (polyvar_parameters (type_identifier)))
-      (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
-      (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
-      (polyvar_declaration (polyvar_identifier))
-      (polyvar_declaration (decorator (decorator_identifier) (decorator_arguments (string (string_fragment)))) (polyvar_identifier))
-      (polyvar_declaration (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (polyvar_type
+        (polyvar_declaration (polyvar_identifier))
+        (polyvar_declaration (polyvar_identifier))
+        (polyvar_declaration
+          (polyvar_identifier) (polyvar_parameters (type_identifier)))
+        (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
+        (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
+        (polyvar_declaration (polyvar_identifier))
+        (polyvar_declaration (decorator (decorator_identifier) (decorator_arguments (string (string_fragment)))) (polyvar_identifier))
+        (polyvar_declaration (type_identifier)))))
 
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))
-    (polyvar_type
-      (decorator (decorator_identifier))
-      (polyvar_declaration (polyvar_identifier))
-      (polyvar_declaration (polyvar_identifier))
-      (polyvar_declaration (polyvar_identifier))
-      (as_aliasing_type (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (type_parameters (type_identifier))
+      (polyvar_type
+        (decorator (decorator_identifier))
+        (polyvar_declaration (polyvar_identifier))
+        (polyvar_declaration (polyvar_identifier))
+        (polyvar_declaration (polyvar_identifier))
+        (as_aliasing_type (type_identifier)))))
 
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))
-    (polyvar_type
-      (polyvar_declaration
-        (generic_type
-          (type_identifier_path (module_identifier) (type_identifier))
-          (type_arguments (type_identifier)))))))
+    (type_binding
+      (type_identifier)
+      (type_parameters (type_identifier))
+      (polyvar_type
+        (polyvar_declaration
+          (generic_type
+            (type_identifier_path (module_identifier) (type_identifier))
+            (type_arguments (type_identifier))))))))
 
 ===========================================
 Function
@@ -278,34 +294,38 @@ type fooD = (~arg1: t1, ~arg2: t2=?, unit) => float
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (function_type
-      (function_type_parameters (type_identifier))
-      (type_identifier)))
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters (type_identifier))
+        (type_identifier))))
   (type_declaration
-    (type_identifier)
-    (function_type
-      (function_type_parameters (parameter (type_identifier)))
-      (type_identifier)))
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters (parameter (type_identifier)))
+        (type_identifier))))
   (type_declaration
-    (type_identifier)
-    (function_type
-      (function_type_parameters
-        (parameter (type_identifier))
-        (parameter (type_identifier)))
-      (type_identifier)))
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters
+          (parameter (type_identifier))
+          (parameter (type_identifier)))
+        (type_identifier))))
   (type_declaration
-    (type_identifier)
-    (function_type
-      (function_type_parameters
-        (parameter (labeled_parameter
-          (value_identifier)
-          (type_annotation (type_identifier))))
-        (parameter (labeled_parameter
-          (value_identifier)
-          (type_annotation (type_identifier))))
-        (parameter (unit_type)))
-      (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters
+          (parameter (labeled_parameter
+            (value_identifier)
+            (type_annotation (type_identifier))))
+          (parameter (labeled_parameter
+            (value_identifier)
+            (type_annotation (type_identifier))))
+          (parameter (unit_type)))
+        (type_identifier)))))
 
 ===========================================
 Object
@@ -325,27 +345,32 @@ type t<'a> = {.."name": string} as 'a
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (object_type))
+    (type_binding
+      (type_identifier)
+      (object_type)))
   (type_declaration
-    (type_identifier)
-    (object_type))
+    (type_binding
+      (type_identifier)
+      (object_type)))
   (type_declaration
-    (type_identifier)
-    (object_type
-      (field (property_identifier (string_fragment)) (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (object_type
+        (field (property_identifier (string_fragment)) (type_identifier)))))
   (type_declaration
-    (type_identifier)
-    (object_type
-      (field (property_identifier (string_fragment)) (type_identifier))
-      (field (property_identifier (string_fragment)) (type_identifier))
-      (field (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (object_type
+        (field (property_identifier (string_fragment)) (type_identifier))
+        (field (property_identifier (string_fragment)) (type_identifier))
+        (field (type_identifier)))))
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))
-    (object_type
-      (field (property_identifier (string_fragment)) (type_identifier))
-      (as_aliasing_type (type_identifier)))))
+    (type_binding
+      (type_identifier)
+      (type_parameters (type_identifier))
+      (object_type
+        (field (property_identifier (string_fragment)) (type_identifier))
+        (as_aliasing_type (type_identifier))))))
 
 ===========================================
 Generic
@@ -359,26 +384,29 @@ type t<'a> = generic<'a> as 's
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier) (type_identifier))
-    (tuple_type
-      (generic_type (type_identifier) (type_arguments (type_identifier)))
-      (generic_type (type_identifier) (type_arguments (type_identifier)))))
-  (type_declaration
-    (type_identifier)
-    (generic_type
+    (type_binding
       (type_identifier)
-      (type_arguments
-        (unit)
-        (type_identifier))))
+      (type_parameters (type_identifier) (type_identifier))
+      (tuple_type
+        (generic_type (type_identifier) (type_arguments (type_identifier)))
+        (generic_type (type_identifier) (type_arguments (type_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (unit)
+          (type_identifier)))))
 
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))
-    (generic_type
+    (type_binding
       (type_identifier)
-      (type_arguments (type_identifier))
-      (as_aliasing_type (type_identifier)))))
+      (type_parameters (type_identifier))
+      (generic_type
+        (type_identifier)
+        (type_arguments (type_identifier))
+        (as_aliasing_type (type_identifier))))))
 
 ===========================================
 Recursive
@@ -389,7 +417,7 @@ type rec t = t
 ---
 
 (source_file
-  (type_declaration (type_identifier) (type_identifier)))
+  (type_declaration (type_binding (type_identifier) (type_identifier))))
 
 ===========================================
 Decorated
@@ -408,23 +436,25 @@ type person = {@meth "say": (string, string) => unit}
   (decorated
     (decorator (decorator_identifier) (decorator_arguments (value_identifier)))
     (type_declaration
-      (type_identifier)
-      (record_type
-        (record_type_field
-          (property_identifier)
-          (type_annotation (type_identifier))))))
+      (type_binding
+        (type_identifier)
+        (record_type
+          (record_type_field
+            (property_identifier)
+            (type_annotation (type_identifier)))))))
 
   (type_declaration
-    (type_identifier)
-    (object_type
-      (field
-        (decorator (decorator_identifier))
-        (property_identifier (string_fragment))
-        (function_type
-          (function_type_parameters
-            (parameter (type_identifier))
-            (parameter (type_identifier)))
-          (unit_type))))))
+    (type_binding
+      (type_identifier)
+      (object_type
+        (field
+          (decorator (decorator_identifier))
+          (property_identifier (string_fragment))
+          (function_type
+            (function_type_parameters
+              (parameter (type_identifier))
+              (parameter (type_identifier)))
+            (unit_type)))))))
 
 ===========================================
 Mutually Recursive
@@ -441,13 +471,14 @@ and teacher = {
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (record_type
-      (record_type_field
-        (property_identifier)
-        (type_annotation
-          (type_identifier))))
-    (type_declaration
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier)))))
+    (type_binding
       (type_identifier)
       (record_type
         (record_type_field
@@ -469,16 +500,17 @@ type test = (. ~attr: string) => unit
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (function_type
-      (function_type_parameters
-        (parameter
-          (uncurry)
-          (labeled_parameter
-            (value_identifier)
-            (type_annotation
-              (type_identifier)))))
-      (unit_type))))
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters
+          (parameter
+            (uncurry)
+            (labeled_parameter
+              (value_identifier)
+              (type_annotation
+                (type_identifier)))))
+        (unit_type)))))
 
 ===========================================
 Polymorphic type
@@ -491,34 +523,36 @@ let add: type a. (number<a>, number<a>) => a
 ---
 
 (source_file
-  (let_binding
-    (value_identifier)
-    (type_annotation
-      (polymorphic_type
-        (type_identifier)
-        (function_type
-          (function_type_parameters (type_identifier))
-          (type_identifier))))
-    (function
+  (let_declaration
+    (let_binding
       (value_identifier)
-      (value_identifier)))
+      (type_annotation
+        (polymorphic_type
+          (type_identifier)
+          (function_type
+            (function_type_parameters (type_identifier))
+            (type_identifier))))
+      (function
+        (value_identifier)
+        (value_identifier))))
 
-  (let_binding
-    (value_identifier)
-    (type_annotation
-      (polymorphic_type
-        (abstract_type (type_identifier))
-        (function_type
-          (function_type_parameters
-            (parameter
-              (generic_type
-                (type_identifier)
-                (type_arguments (type_identifier))))
-            (parameter
-              (generic_type
-                (type_identifier)
-                (type_arguments
-                  (type_identifier))))) (type_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (polymorphic_type
+          (abstract_type (type_identifier))
+          (function_type
+            (function_type_parameters
+              (parameter
+                (generic_type
+                  (type_identifier)
+                  (type_arguments (type_identifier))))
+              (parameter
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier))))) (type_identifier)))))))
 
 ===========================================
 Variance annotations
@@ -531,11 +565,13 @@ type t<-'a>
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier)))
+    (type_binding
+      (type_identifier)
+      (type_parameters (type_identifier))))
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))))
+    (type_binding
+      (type_identifier)
+      (type_parameters (type_identifier)))))
 
 ===========================================
 Type constraint
@@ -549,29 +585,32 @@ type t<'a> constraint 'a = t
 
 (source_file
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))
-    (type_identifier)
-    (type_constraint
-      (type_identifier) (type_identifier)))
+    (type_binding
+      (type_identifier)
+      (type_parameters (type_identifier))
+      (type_identifier)
+      (type_constraint
+        (type_identifier) (type_identifier))))
 
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier) (type_identifier))
-    (function_type
-      (function_type_parameters (type_identifier))
-      (type_identifier))
-    (type_constraint
-      (type_identifier) (type_identifier))
-    (type_constraint
+    (type_binding
       (type_identifier)
+      (type_parameters (type_identifier) (type_identifier))
       (function_type
         (function_type_parameters (type_identifier))
-        (type_identifier))))
+        (type_identifier))
+      (type_constraint
+        (type_identifier) (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (function_type
+          (function_type_parameters (type_identifier))
+          (type_identifier)))))
 
   (type_declaration
-    (type_identifier)
-    (type_parameters (type_identifier))
-    (type_constraint
+    (type_binding
       (type_identifier)
-      (type_identifier))))
+      (type_parameters (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (type_identifier)))))

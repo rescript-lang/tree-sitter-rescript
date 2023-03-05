@@ -87,16 +87,17 @@ let foo = (type a, x: 'a): a => x
 ---
 
 (source_file
-  (let_binding
-    (value_identifier)
-    (function
-      (formal_parameters
-        (parameter (abstract_type (type_identifier)))
-        (parameter
-          (value_identifier)
-          (type_annotation (type_identifier))))
-      (type_annotation (type_identifier))
-      (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter (abstract_type (type_identifier)))
+          (parameter
+            (value_identifier)
+            (type_annotation (type_identifier))))
+        (type_annotation (type_identifier))
+        (value_identifier)))))
 
 ===================================================
 Parameter defaults
@@ -145,8 +146,8 @@ Parameter aliasing
         (parameter
           (labeled_parameter
             (value_identifier)
-            (as_aliasing (value_identifier)
-            (type_annotation (type_identifier)))
+            (as_aliasing (value_identifier))
+            (type_annotation (type_identifier))
             (number))))
       (number)))
 
