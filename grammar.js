@@ -66,6 +66,7 @@ module.exports = grammar({
     ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
+    [$._reserved_identifier, $.module_unpack]
   ],
 
   conflicts: $ => [
@@ -1495,7 +1496,8 @@ module.exports = grammar({
     uncurry: $ => '.',
 
     _reserved_identifier: $ => choice(
-      'async'
+      'async',
+      'unpack'
     )
   },
 });

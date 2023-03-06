@@ -114,12 +114,13 @@
   "assert"
   "await"
   "with"
-  "unpack"
   "lazy"
   "constraint"
 ] @keyword
 
 ((function "async" @keyword))
+
+(module_unpack "unpack" @keyword)
 
 [
   "if"
