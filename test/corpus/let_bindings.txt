@@ -8,6 +8,7 @@ let c = #foo
 let list = 1
 let a = list
 let async = 1
+let unpack = 2
 export d = 5
 
 ---
@@ -23,6 +24,8 @@ export d = 5
     (let_binding (value_identifier) (number)))
   (let_declaration
     (let_binding (value_identifier) (value_identifier)))
+  (let_declaration
+    (let_binding (value_identifier) (number)))
   (let_declaration
     (let_binding (value_identifier) (number)))
   (let_declaration
