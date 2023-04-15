@@ -1273,7 +1273,7 @@ try switch foo() {
 | Js.Exn.Error(obj) => "error"
 }
 
-try if true {
+try for i in 0 to 10 {
   call()
 } catch {
 | Not_found => false
@@ -1330,7 +1330,7 @@ try if true {
 
   (expression_statement
     (try_expression
-      (if_expression (true)
+      (for_expression (value_identifier) (number) (number)
         (block
           (expression_statement
             (call_expression (value_identifier) (arguments)))))
