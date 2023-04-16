@@ -895,6 +895,7 @@ module.exports = grammar({
     ),
 
     variant_pattern: $ => seq(
+      optional('?'),
       choice(
         $.variant_identifier,
         $.nested_variant_identifier,
