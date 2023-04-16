@@ -113,7 +113,8 @@ module.exports = grammar({
     [$.polyvar_type],
     [$.let_binding, $.or_pattern],
     [$.exception_pattern, $.or_pattern],
-    [$.type_binding, $._inline_type]
+    [$.type_binding, $._inline_type],
+    [$.function]
   ],
 
   rules: {
@@ -568,7 +569,7 @@ module.exports = grammar({
     function: $ => prec.left(seq(
       optional('async'),
       choice(
-        field('parameter', $.value_identifier),
+        field('parameter', seq(repeat($.decorator), $.value_identifier)),
         $._definition_signature
       ),
       '=>',
