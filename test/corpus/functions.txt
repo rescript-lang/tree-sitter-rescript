@@ -66,6 +66,7 @@ Type annotations
 ===================================================
 
 (x: int, ~y: float): int => 5
+({contents: (x: int)}, {contents: y}) => x == y
 
 ---
 
@@ -76,7 +77,22 @@ Type annotations
         (parameter (value_identifier) (type_annotation (type_identifier)))
         (parameter (labeled_parameter (value_identifier) (type_annotation (type_identifier)))))
       return_type: (type_annotation (type_identifier))
-      body: (number))))
+      body: (number)))
+
+  (expression_statement
+    (function parameters:
+      (formal_parameters
+        (parameter
+          (record_pattern
+            (value_identifier)
+            (parenthesized_pattern (value_identifier) (type_annotation (type_identifier)))))
+        (parameter
+          (record_pattern
+            (value_identifier)
+            (value_identifier))))
+      body: (binary_expression
+        left: (value_identifier)
+        right: (value_identifier)))))
 
 ===================================================
 Abstract type
