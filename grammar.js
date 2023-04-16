@@ -1461,7 +1461,7 @@ module.exports = grammar({
         ),
         '`',
       )),
-      $.template_string_content,
+      optional($.template_string_content),
       '`'
     ),
 
@@ -1470,6 +1470,7 @@ module.exports = grammar({
         choice(
           $._template_chars,
           $.template_substitution,
+          /\s/,
           choice(
             alias('\\`', $.escape_sequence),
             $.escape_sequence,
