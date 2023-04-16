@@ -819,6 +819,7 @@ module.exports = grammar({
 
     parameter: $ => seq(
       optional($.uncurry),
+      repeat($.decorator),
       choice(
         seq($._pattern, optional($.type_annotation)),
         $.labeled_parameter,
