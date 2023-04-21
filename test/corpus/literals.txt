@@ -111,6 +111,9 @@ Quote escaping
 Template strings
 ============================================
 
+``
+` `
+` \b`
 `one line`
 `multi
   line`
@@ -132,9 +135,13 @@ The caller should either handle this error, or expect that exit code.`
 
 anything`Hello`
 
+
 ----
 
 (source_file
+  (expression_statement (template_string))
+  (expression_statement (template_string (template_string_content)))
+  (expression_statement (template_string (template_string_content (escape_sequence))))
   (expression_statement (template_string (template_string_content)))
   (expression_statement (template_string (template_string_content)))
   (expression_statement (template_string (template_string_content)))
