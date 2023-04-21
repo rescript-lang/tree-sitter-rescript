@@ -1369,9 +1369,10 @@ module.exports = grammar({
     extension_identifier: $ => /[a-zA-Z0-9_\.]+/,
 
     number: $ => {
+      // OCaml: https://github.com/tree-sitter/tree-sitter-ocaml/blob/f1106bf834703f1f2f795da1a3b5f8f40174ffcc/ocaml/grammar.js#L26
       const hex_literal = seq(
-        choice('0x', '0X'),
-        /[\da-fA-F](_?[\da-fA-F])*/
+        optional(choice('-', '+')),
+        /0[xX][0-9A-Fa-f][0-9A-Fa-f_]*(\.[0-9A-Fa-f_]*)?([pP][+\-]?[0-9][0-9_]*)?[g-zG-Z]?/
       )
 
       const decimal_digits = /\d(_?\d)*/
@@ -1385,8 +1386,8 @@ module.exports = grammar({
       const bigint_literal = seq(choice(hex_literal, binary_literal, octal_literal, decimal_digits), 'n')
 
       const decimal_integer_literal = choice(
-        '0',
-        seq(optional('0'), /[1-9]/, optional(seq(optional('_'), decimal_digits)))
+        repeat('0'),
+        seq(repeat('0'), /[1-9]/, optional(seq(optional('_'), decimal_digits)))
       )
 
       const decimal_literal = seq(

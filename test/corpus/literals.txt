@@ -42,10 +42,46 @@ Numbers
 0o1234L
 10l
 0xffffffffl
+-0x3.p+1
+0x1p2047
+-0x1p2047
+0x1.2p2047
+0x1p-1022
+0x0.0000_0000_0000_1p-1022
+0x1p-52
+0x1.0000_0000_0000_1
+0x1p-1023
+0xffffp0
+00007.0
+02e3
+0000.2
+00.
+000.
+01.
+001.
+002e3
 
 ---
 
 (source_file
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
+  (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
   (expression_statement (number))
