@@ -862,7 +862,7 @@ module.exports = grammar({
       optional($.as_aliasing),
     )),
 
-    parenthesized_pattern: $ => seq('(', $._pattern, ')'),
+    parenthesized_pattern: $ => seq('(', $._pattern, optional($.type_annotation), ')'),
 
     range_pattern: $ => seq(
       $._literal_pattern,
