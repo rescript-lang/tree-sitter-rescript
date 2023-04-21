@@ -443,6 +443,7 @@ switch foo {
 | Some(x as qux: int, {y, z}) => x
 | Option.None => 42
 | Surprise() => 0
+| ?Some(_) => 1
 }
 
 ---
@@ -470,6 +471,9 @@ switch foo {
         (sequence_expression (expression_statement (number))))
       (switch_match
         (variant_pattern (variant_identifier) (formal_parameters))
+        (sequence_expression (expression_statement (number))))
+      (switch_match
+        (variant_pattern (variant_identifier) (formal_parameters (value_identifier)))
         (sequence_expression (expression_statement (number)))))))
 
 ===========================================
