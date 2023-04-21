@@ -104,10 +104,10 @@ type t = {}
           (property_identifier) (type_annotation (type_identifier)))
         (record_type_field
           (property_identifier) (type_annotation (type_identifier)))
-        (record_type_field
-          (decorator
+        (decorator
             (decorator_identifier)
             (decorator_arguments (string (string_fragment))))
+        (record_type_field
           (property_identifier)
           (type_annotation (type_identifier)))
         (record_type_field
@@ -183,8 +183,8 @@ type t =
       (variant_type
         (variant_declaration (variant_identifier))
         (variant_declaration (variant_identifier))
+        (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
         (variant_declaration
-          (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
           (variant_identifier))
         (variant_declaration
           (variant_identifier) (variant_parameters (type_identifier)))
@@ -257,16 +257,17 @@ type t<'w> = [M.t<'w>]
         (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
         (polyvar_declaration (polyvar_identifier (polyvar_string (string_fragment))))
         (polyvar_declaration (polyvar_identifier))
-        (polyvar_declaration (decorator (decorator_identifier) (decorator_arguments (string (string_fragment)))) (polyvar_identifier))
+        (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
+        (polyvar_declaration (polyvar_identifier))
         (polyvar_declaration (type_identifier)))))
 
   (type_declaration
     (type_binding
       (type_identifier)
       (type_parameters (type_identifier))
+      (decorator (decorator_identifier))
       (as_aliasing_type
         (polyvar_type
-          (decorator (decorator_identifier))
           (polyvar_declaration (polyvar_identifier))
           (polyvar_declaration (polyvar_identifier))
           (polyvar_declaration (polyvar_identifier)))
@@ -436,22 +437,21 @@ type person = {@meth "say": (string, string) => unit}
 ---
 
 (source_file
-  (decorated
-    (decorator (decorator_identifier) (decorator_arguments (value_identifier)))
-    (type_declaration
-      (type_binding
-        (type_identifier)
-        (record_type
-          (record_type_field
-            (property_identifier)
-            (type_annotation (type_identifier)))))))
+  (decorator (decorator_identifier) (decorator_arguments (value_identifier)))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation (type_identifier))))))
 
   (type_declaration
     (type_binding
       (type_identifier)
       (object_type
+        (decorator (decorator_identifier))
         (field
-          (decorator (decorator_identifier))
           (property_identifier (string_fragment))
           (function_type
             (function_type_parameters

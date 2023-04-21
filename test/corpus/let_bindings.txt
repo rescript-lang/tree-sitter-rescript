@@ -295,21 +295,20 @@ and b = c
 ---
 
 (source_file
-  (decorated
+  (decorator (decorator_identifier))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (value_identifier))
     (decorator (decorator_identifier))
-    (let_declaration
-      (let_binding
-        (value_identifier)
-        (value_identifier))
-      (decorator (decorator_identifier))
-        (decorator (decorator_identifier))
-      (let_binding
-        (value_identifier)
-        (value_identifier))
-      (decorator (decorator_identifier))
-      (let_binding
-        (value_identifier)
-        (number)))))
+    (decorator (decorator_identifier))
+    (let_binding
+      (value_identifier)
+      (value_identifier))
+    (decorator (decorator_identifier))
+    (let_binding
+      (value_identifier)
+      (number))))
 
 ===========================================
 Labled function with uncurried

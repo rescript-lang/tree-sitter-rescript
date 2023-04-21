@@ -11,7 +11,9 @@ enum TokenType {
   TEMPLATE_CHARS,
   L_PAREN,
   R_PAREN,
-  LIST_CONSTRUCTOR
+  LIST_CONSTRUCTOR,
+  DECORATOR,
+  DECORATOR_INLINE,
 };
 
 typedef struct ScannerState {
@@ -49,6 +51,22 @@ static void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
 
 static bool is_inline_whitespace(int32_t c) {
   return c == ' ' || c == '\t';
+}
+
+static bool is_identifier_start(char c) {
+  return c == '_' || (c >= 'a' && c <= 'z');
+}
+
+static bool is_decorator_start(char c) {
+  return c == '_' || c == '\\' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+static bool is_decorator_identifier(char c) {
+  return c == '_' || c == '.' || c == '\'' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+}
+
+static bool is_whitespace(char c) {
+  return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }
 
 static void scan_whitespace(TSLexer *lexer, bool skip) {
@@ -125,10 +143,6 @@ static bool scan_whitespace_and_comments(TSLexer *lexer) {
   }
 
   return has_comments;
-}
-
-static bool is_identifier_start(char c) {
-  return c == '_' || (c >= 'a' && c <= 'z');
 }
 
 bool tree_sitter_rescript_external_scanner_scan(
@@ -305,6 +319,59 @@ bool tree_sitter_rescript_external_scanner_scan(
         }
       }
     }
+  }
+
+  if (valid_symbols[DECORATOR] && valid_symbols[DECORATOR_INLINE] && lexer->lookahead == '@') {
+    advance(lexer);
+    if (lexer->lookahead == '@') {
+      advance(lexer);
+    }
+
+    if (is_decorator_start(lexer->lookahead)) {
+      advance(lexer);
+
+      if (lexer->lookahead == '"') {
+        advance(lexer);
+        while (lexer->lookahead != '"') {
+          advance(lexer);
+          if (lexer->eof(lexer)) {
+            return false;
+          }
+        }
+        advance(lexer);
+        if (is_whitespace(lexer->lookahead)) {
+          lexer->result_symbol = DECORATOR_INLINE;
+          lexer->mark_end(lexer);
+          return true;
+        }
+        if (lexer -> lookahead == '(') {
+          lexer->result_symbol = DECORATOR;
+          lexer->mark_end(lexer);
+          return true;
+        }
+        return false;
+      }
+
+      while (is_decorator_identifier(lexer->lookahead)) {
+        advance(lexer);
+        if (lexer->eof(lexer)) {
+          return false;
+        }
+      }
+
+      if (is_whitespace(lexer->lookahead)) {
+        lexer->result_symbol = DECORATOR_INLINE;
+        lexer->mark_end(lexer);
+        return true;
+      }
+
+      if (lexer->lookahead == '(') {
+          lexer->result_symbol = DECORATOR;
+          lexer->mark_end(lexer);
+          return true;
+      }
+    }
+    return false;
   }
 
   lexer->advance(lexer, iswspace(lexer->lookahead));
