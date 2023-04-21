@@ -32,6 +32,11 @@ include (Belt: module type of Belt with module Map.Inner := Belt.Map and module 
 include module type of {
   include T
 }
+include (
+  {
+    let a = Js.log("Hello")
+  }
+)
 
 ---
 
@@ -78,7 +83,15 @@ include module type of {
 
   (include_statement
     (module_type_of
-      (block (include_statement (module_identifier))))))
+      (block (include_statement (module_identifier)))))
+
+  (include_statement
+    (block
+      (let_declaration
+        (let_binding (value_identifier)
+        (call_expression
+          (value_identifier_path (module_identifier) (value_identifier))
+          (arguments (string (string_fragment)))))))))
 
 ===========================================
 Simple definition

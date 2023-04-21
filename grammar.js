@@ -113,7 +113,8 @@ module.exports = grammar({
     [$.polyvar_type],
     [$.let_binding, $.or_pattern],
     [$.exception_pattern, $.or_pattern],
-    [$.type_binding, $._inline_type]
+    [$.type_binding, $._inline_type],
+    [$._module_structure, $.parenthesized_module_expression]
   ],
 
   rules: {
@@ -176,7 +177,10 @@ module.exports = grammar({
 
     include_statement: $ => seq(
       'include',
-      $.module_expression,
+      choice(
+        $._module_definition,
+        parenthesize($._module_structure)
+      )
     ),
 
     declaration: $ => choice(
@@ -204,6 +208,11 @@ module.exports = grammar({
       optional('rec'),
       optional('type'),
       sep1('and', $.module_binding)
+    ),
+
+    _module_structure: $ => seq(
+      $._module_definition,
+      optional($.module_type_annotation),
     ),
 
     _module_definition: $ => choice(
@@ -754,13 +763,7 @@ module.exports = grammar({
 
     module_pack: $ => seq(
       'module',
-      '(',
-      choice(
-        $.type_identifier_path,
-        $._module_definition,
-      ),
-      optional($.module_type_annotation),
-      ')'
+      parenthesize(choice($._module_structure, $.type_identifier_path))
     ),
 
     call_arguments: $ => seq(
@@ -1533,4 +1536,8 @@ function sep1(delimiter, rule) {
 
 function path(prefix, final) {
   return choice(final, seq(prefix, '.', final))
+}
+
+function parenthesize(rule) {
+  return seq('(', rule, ')')
 }
