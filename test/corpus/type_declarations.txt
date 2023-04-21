@@ -264,12 +264,13 @@ type t<'w> = [M.t<'w>]
     (type_binding
       (type_identifier)
       (type_parameters (type_identifier))
-      (polyvar_type
-        (decorator (decorator_identifier))
-        (polyvar_declaration (polyvar_identifier))
-        (polyvar_declaration (polyvar_identifier))
-        (polyvar_declaration (polyvar_identifier))
-        (as_aliasing_type (type_identifier)))))
+      (as_aliasing_type
+        (polyvar_type
+          (decorator (decorator_identifier))
+          (polyvar_declaration (polyvar_identifier))
+          (polyvar_declaration (polyvar_identifier))
+          (polyvar_declaration (polyvar_identifier)))
+          (type_identifier))))
 
   (type_declaration
     (type_binding
@@ -368,9 +369,10 @@ type t<'a> = {.."name": string} as 'a
     (type_binding
       (type_identifier)
       (type_parameters (type_identifier))
-      (object_type
-        (field (property_identifier (string_fragment)) (type_identifier))
-        (as_aliasing_type (type_identifier))))))
+      (as_aliasing_type
+        (object_type
+          (field (property_identifier (string_fragment)) (type_identifier)))
+          (type_identifier)))))
 
 ===========================================
 Generic
@@ -403,10 +405,11 @@ type t<'a> = generic<'a> as 's
     (type_binding
       (type_identifier)
       (type_parameters (type_identifier))
-      (generic_type
-        (type_identifier)
-        (type_arguments (type_identifier))
-        (as_aliasing_type (type_identifier))))))
+      (as_aliasing_type
+        (generic_type
+          (type_identifier)
+          (type_arguments (type_identifier)))
+          (type_identifier)))))
 
 ===========================================
 Recursive

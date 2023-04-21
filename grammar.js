@@ -322,6 +322,7 @@ module.exports = grammar({
       $._inline_type,
       $.variant_type,
       $.record_type,
+      $.as_aliasing_type,
     ),
 
     _inline_type: $ => choice(
@@ -384,7 +385,6 @@ module.exports = grammar({
       optional('|'),
       barSep1($.polyvar_declaration),
       ']',
-      optional($.as_aliasing_type)
     )),
 
     polyvar_declaration: $ => prec.right(
@@ -426,7 +426,6 @@ module.exports = grammar({
         seq('..', commaSept($._object_type_field)),
       ),
       '}',
-      optional($.as_aliasing_type)
     )),
 
     _object_type_field: $ => alias($.object_type_field, $.field),
@@ -445,7 +444,6 @@ module.exports = grammar({
     generic_type: $ => prec.left(seq(
       $._type_identifier,
       $.type_arguments,
-      optional($.as_aliasing_type)
     )),
 
     type_arguments: $ => seq(
@@ -740,7 +738,7 @@ module.exports = grammar({
       optional($.type_annotation)
     )),
 
-    as_aliasing_type: $ => seq('as', $.type_identifier),
+    as_aliasing_type: $ => seq($._type, 'as', $.type_identifier),
 
     assert_expression: $ => prec.left(seq('assert', $.expression)),
 
