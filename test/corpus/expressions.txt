@@ -1273,6 +1273,12 @@ try switch foo() {
 | Js.Exn.Error(obj) => "error"
 }
 
+try for i in 0 to 10 {
+  call()
+} catch {
+| Not_found => false
+} 
+
 ---
 
 (source_file
@@ -1320,7 +1326,17 @@ try switch foo() {
               (module_identifier))
             (variant_identifier))
           (formal_parameters (value_identifier)))
-        (sequence_expression (expression_statement (string (string_fragment))))))))
+        (sequence_expression (expression_statement (string (string_fragment)))))))
+
+  (expression_statement
+    (try_expression
+      (for_expression (value_identifier) (number) (number)
+        (block
+          (expression_statement
+            (call_expression (value_identifier) (arguments)))))
+      (switch_match
+        (variant_pattern (variant_identifier))
+        (sequence_expression (expression_statement (false)))))))
 
 ===========================================
 Mutation expressions
