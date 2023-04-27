@@ -1,149 +1,61 @@
 ============================================
-This decorator
+Decorator inline
 ============================================
 
-foo(bar, @this (me, amount) => set(me, amount))
+@@deprecated
+@@Uppercase
+@@Upper._2323
+@@_.decorator
+@@_.1decorator
+@@_123
+@@\"escape"
+@@\"de.2precated"
 
 ---
 
 (source_file
-  (expression_statement
-    (call_expression
-      (value_identifier)
-      (arguments
-        (value_identifier)
-        (decorator (decorator_identifier))
-        (function
-          (formal_parameters
-            (parameter (value_identifier))
-            (parameter (value_identifier)))
-          (call_expression
-            (value_identifier)
-            (arguments
-              (value_identifier)
-              (value_identifier))))))))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier))
+  (decorator (decorator_identifier)))
+
 
 ============================================
-Reanalyze Decorator
+Decorator with arguments
 ============================================
 
-let foo = (@doesNotRaise String.make)(12, ' ')
-
-let foo = @doesNotRaise String.make(12, ' ')
-
-let onResult = () => @doesNotRaise Belt.Array.getExn([], 0)
-
-@local
-call()
+@@deprecated()
+@@Uppercase()
+@@Upper._2323()
+@@_.decorator()
+@@_.1decorator()
+@@_123()
+@@\"escape"()
+@@\"de.2precated"()
 
 ---
 
 (source_file
-  (let_declaration
-    (let_binding
-      (value_identifier)
-      (call_expression
-        (parenthesized_expression
-          (decorator (decorator_identifier))
-          (value_identifier_path
-            (module_identifier)
-            (value_identifier)))
-        (arguments
-          (number)
-          (character)))))
-
-  (let_declaration
-    (let_binding
-      (value_identifier)
-      (decorator (decorator_identifier))
-      (call_expression
-        (value_identifier_path
-          (module_identifier)
-          (value_identifier))
-        (arguments
-          (number)
-          (character)))))
-
-  (let_declaration
-    (let_binding
-      (value_identifier)
-      (function
-        (formal_parameters)
-        (decorator (decorator_identifier))
-        (call_expression
-          (value_identifier_path
-            (module_identifier_path
-              (module_identifier)
-              (module_identifier))
-            (value_identifier))
-          (arguments
-            (array)
-            (number))))))
-
-  (decorated
-    (decorator (decorator_identifier))
-    (expression_statement
-      (call_expression
-        (value_identifier) (arguments)))))
-
-============================================
-Decorator before type `and`
-============================================
-
-@deriving
-type foo = {
-  foo: string
-}
-@deriving
-and bar = {bar: int}
-
-
-@deriving @hello and baz = {baz: float}
-
----
-
-(source_file
-  (decorated
-    (decorator (decorator_identifier))
-    (type_declaration
-      (type_binding
-        (type_identifier)
-        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier)))))
-      (decorator (decorator_identifier))
-      (type_binding
-        (type_identifier)
-        (record_type (record_type_field (property_identifier) (type_annotation (type_identifier)))))
-        (decorator (decorator_identifier))
-        (decorator (decorator_identifier))
-        (type_binding
-          (type_identifier)
-          (record_type (record_type_field (property_identifier) (type_annotation (type_identifier))))))))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments))
+  (decorator (decorator_identifier) (decorator_arguments)))
 
 ============================================
 Decorator with type
 ============================================
 
 @react.component(:sharedProps)
-let make = (~x, ~y) => React.string(x ++ y)
 
 ---
 
 (source_file
-  (decorated
-    (decorator
-      (decorator_identifier)
-      (decorator_arguments
-        (type_annotation (type_identifier))))
-    (let_declaration
-      (let_binding
-        (value_identifier)
-        (function
-          (formal_parameters
-            (parameter (labeled_parameter (value_identifier)))
-            (parameter (labeled_parameter (value_identifier))))
-          (call_expression
-            (value_identifier_path
-              (module_identifier) (value_identifier))
-            (arguments
-              (binary_expression
-                (value_identifier) (value_identifier)))))))))
+  (decorator (decorator_identifier) (decorator_arguments (type_annotation (type_identifier)))))

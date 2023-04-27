@@ -461,27 +461,26 @@ external add: (
         (function_type_parameters (type_identifier))
         (type_identifier)))
     (string (string_fragment)))
-  (decorated
-    (decorator (decorator_identifier))
-    (external_declaration
-      (value_identifier)
-      (type_annotation (type_identifier))
-      (string (string_fragment))))
-  (decorated
-    (decorator (decorator_identifier))
-    (external_declaration
-      (value_identifier)
-      (type_annotation (type_identifier))
-      (string (string_fragment))))
-  (decorated
-    (decorator
-      (decorator_identifier)
-      (decorator_arguments (string (string_fragment))))
-    (decorator (decorator_identifier))
-    (external_declaration
-      (value_identifier)
-      (type_annotation (type_identifier))
-      (string (string_fragment))))
+
+  (decorator (decorator_identifier))
+  (external_declaration
+    (value_identifier)
+    (type_annotation (type_identifier))
+    (string (string_fragment)))
+
+  (decorator (decorator_identifier))
+  (external_declaration
+    (value_identifier)
+    (type_annotation (type_identifier))
+    (string (string_fragment)))
+
+  (decorator (decorator_identifier) (decorator_arguments (string (string_fragment))))
+  (decorator (decorator_identifier))
+  (external_declaration
+    (value_identifier)
+    (type_annotation (type_identifier))
+    (string (string_fragment)))
+
   (external_declaration
     (value_identifier)
     (type_annotation
@@ -491,63 +490,51 @@ external add: (
           (parameter (uncurry) (unit_type)))
         (object_type)))
     (string (string_fragment)))
-  (decorated
-    (decorator (decorator_identifier))
-    (external_declaration
-      (value_identifier)
-      (type_annotation
-        (function_type
-          (function_type_parameters
-            (parameter
-              (type_identifier_path (module_identifier) (type_identifier)))
-            (parameter
-              (decorator (decorator_identifier) (decorator_arguments (template_string (template_string_content))))
-              (type_identifier))
-            (parameter
-              (decorator (decorator_identifier) (decorator_arguments (string)))
-              (type_identifier))
-            (parameter
-              (labeled_parameter
-                (value_identifier) (type_annotation (type_identifier)))))
-          (unit_type)))
-        (string (string_fragment))))
-  (decorated
-    (decorator (decorator_identifier))
-    (external_declaration
-      (value_identifier)
-      (type_annotation
-        (function_type
-          (function_type_parameters
-            (parameter (type_identifier))
-            (parameter
-              (labeled_parameter
-                (value_identifier)
-                (type_annotation
-                  (decorator (decorator_identifier))
-                  (polyvar_type
-                    (polyvar_declaration
-                      (polyvar_identifier)
-                      (polyvar_parameters
-                        (type_identifier_path (module_identifier) (type_identifier))))
-                    (polyvar_declaration
-                      (polyvar_identifier)
-                      (polyvar_parameters
-                        (type_identifier_path (module_identifier) (type_identifier)))))))))
-          (unit_type)))
-        (string (string_fragment)))))
 
-===========================================
-Decorators
-===========================================
 
-@@warning("-27")
+  (decorator (decorator_identifier))
+  (external_declaration
+    (value_identifier)
+    (type_annotation
+      (function_type
+        (function_type_parameters
+          (parameter
+            (type_identifier_path (module_identifier) (type_identifier)))
+          (decorator (decorator_identifier) (decorator_arguments (template_string (template_string_content))))
+          (parameter
+            (type_identifier))
+          (decorator (decorator_identifier) (decorator_arguments (string)))
+          (parameter
+            (type_identifier))
+          (parameter
+            (labeled_parameter
+              (value_identifier) (type_annotation (type_identifier)))))
+        (unit_type)))
+      (string (string_fragment)))
 
----
-
-(source_file
-  (decorator_statement
-    (decorator_identifier)
-    (decorator_arguments (string (string_fragment)))))
+  (decorator (decorator_identifier))
+  (external_declaration
+    (value_identifier)
+    (type_annotation
+      (function_type
+        (function_type_parameters
+          (parameter (type_identifier))
+          (parameter
+            (labeled_parameter
+              (value_identifier)
+              (type_annotation
+                (decorator (decorator_identifier))
+                (polyvar_type
+                  (polyvar_declaration
+                    (polyvar_identifier)
+                    (polyvar_parameters
+                      (type_identifier_path (module_identifier) (type_identifier))))
+                  (polyvar_declaration
+                    (polyvar_identifier)
+                    (polyvar_parameters
+                      (type_identifier_path (module_identifier) (type_identifier)))))))))
+        (unit_type)))
+      (string (string_fragment))))
 
 ===========================================
 Exception declaration
