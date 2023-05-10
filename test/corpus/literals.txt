@@ -1,19 +1,21 @@
-============================================
+================================================================================
 Boolean
-============================================
+================================================================================
 
 true
 false
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (true))
-  (expression_statement (false)))
+  (expression_statement
+    (true))
+  (expression_statement
+    (false)))
 
-============================================
+================================================================================
 Numbers
-============================================
+================================================================================
 
 04000
 400
@@ -61,91 +63,150 @@ Numbers
 001.
 002e3
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number))
-  (expression_statement (number)))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number))
+  (expression_statement
+    (number)))
 
-==========================================
+================================================================================
 Strings containing comment-like content
-==========================================
+================================================================================
 
 "//ok\n//what"
 "/*ok\n/*what"
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
-    (string (string_fragment) (escape_sequence) (string_fragment)))
+    (string
+      (string_fragment)
+      (escape_sequence)
+      (string_fragment)))
   (expression_statement
-    (string (string_fragment) (escape_sequence) (string_fragment))))
+    (string
+      (string_fragment)
+      (escape_sequence)
+      (string_fragment))))
 
-==========================================
+================================================================================
 Quote escaping
-==========================================
+================================================================================
 
 ""
 "\""
 "a\"b"
 "it's a tiny tiny world"
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (string))
-  (expression_statement (string (escape_sequence)))
   (expression_statement
-    (string (string_fragment) (escape_sequence) (string_fragment)))
-  (expression_statement (string (string_fragment))))
+    (string))
+  (expression_statement
+    (string
+      (escape_sequence)))
+  (expression_statement
+    (string
+      (string_fragment)
+      (escape_sequence)
+      (string_fragment)))
+  (expression_statement
+    (string
+      (string_fragment))))
 
-============================================
+================================================================================
 Template strings
-============================================
+================================================================================
 
 ``
 ` `
@@ -172,22 +233,38 @@ The caller should either handle this error, or expect that exit code.`
 anything`Hello`
 
 
-----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (template_string))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content (escape_sequence))))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content)))
+  (expression_statement
+    (template_string))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content
+        (escape_sequence))))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content)))
   (expression_statement
     (template_string
       (template_string_content
         (template_substitution
-          (binary_expression (number) (number)))
+          (binary_expression
+            (number)
+            (number)))
         (template_substitution
-          (binary_expression (number) (number))))))
+          (binary_expression
+            (number)
+            (number))))))
   (expression_statement
     (template_string
       (template_string_content
@@ -198,15 +275,23 @@ anything`Hello`
             (arguments
               (string
                 (string_fragment)))))
-      (escape_sequence)
-      (template_substitution (value_identifier)))))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content (escape_sequence))))
-  (expression_statement (template_string (template_string_content))))
+        (escape_sequence)
+        (template_substitution
+          (value_identifier)))))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content
+        (escape_sequence))))
+  (expression_statement
+    (template_string
+      (template_string_content))))
 
-============================================
+================================================================================
 Tricky template strings
-============================================
+================================================================================
 
 `$`
 `$$`
@@ -214,18 +299,28 @@ Tricky template strings
 `$-notAsubstitution`
 `$NotAsubstitution`
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content)))
-  (expression_statement (template_string (template_string_content))))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content))))
 
-============================================
+================================================================================
 Characters
-============================================
+================================================================================
 'a'
 '\''
 '\\'
@@ -236,22 +331,36 @@ Characters
 '\u{1F600}'
 '@'
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (character))
-  (expression_statement (character (escape_sequence)))
-  (expression_statement (character (escape_sequence)))
-  (expression_statement (character))
-  (expression_statement (character))
-  (expression_statement (character (escape_sequence)))
-  (expression_statement (character (escape_sequence)))
-  (expression_statement (character (escape_sequence)))
-  (expression_statement (character)))
+  (expression_statement
+    (character))
+  (expression_statement
+    (character
+      (escape_sequence)))
+  (expression_statement
+    (character
+      (escape_sequence)))
+  (expression_statement
+    (character))
+  (expression_statement
+    (character))
+  (expression_statement
+    (character
+      (escape_sequence)))
+  (expression_statement
+    (character
+      (escape_sequence)))
+  (expression_statement
+    (character
+      (escape_sequence)))
+  (expression_statement
+    (character)))
 
-============================================
+================================================================================
 Polyvars
-============================================
+================================================================================
 
 #foo
 #Bar(7)
@@ -259,16 +368,27 @@ Polyvars
 #\"qux"
 #77
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
-    (polyvar (polyvar_identifier)))
+    (polyvar
+      (polyvar_identifier)))
   (expression_statement
-    (polyvar (polyvar_identifier) (arguments (number))))
+    (polyvar
+      (polyvar_identifier)
+      (arguments
+        (number))))
   (expression_statement
-    (polyvar (polyvar_identifier (polyvar_string (string_fragment)))))
+    (polyvar
+      (polyvar_identifier
+        (polyvar_string
+          (string_fragment)))))
   (expression_statement
-    (polyvar (polyvar_identifier (polyvar_string (string_fragment)))))
+    (polyvar
+      (polyvar_identifier
+        (polyvar_string
+          (string_fragment)))))
   (expression_statement
-    (polyvar (polyvar_identifier))))
+    (polyvar
+      (polyvar_identifier))))

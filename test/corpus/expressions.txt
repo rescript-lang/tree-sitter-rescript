@@ -1,42 +1,46 @@
-===========================================
+================================================================================
 Unit
-===========================================
+================================================================================
 
 ()
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (unit)))
+  (expression_statement
+    (unit)))
 
-===========================================
+================================================================================
 Parenthesized expressions
-===========================================
+================================================================================
 
 (5)
 (5: int)
 (())
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
-    (parenthesized_expression (number)))
+    (parenthesized_expression
+      (number)))
   (expression_statement
     (parenthesized_expression
       (number)
-      (type_annotation (type_identifier))))
+      (type_annotation
+        (type_identifier))))
   (expression_statement
-    (parenthesized_expression (unit))))
+    (parenthesized_expression
+      (unit))))
 
-===========================================
+================================================================================
 Nested identifiers
-===========================================
+================================================================================
 
 Foo.Bar.baz
 Foo.Bar.baz.qux
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -52,36 +56,42 @@ Foo.Bar.baz.qux
           (module_identifier)
           (module_identifier))
         (value_identifier))
-    (property_identifier))))
+      (property_identifier))))
 
-===========================================
+================================================================================
 Escape identifiers
-===========================================
+================================================================================
 
 \"+."
 
----
+--------------------------------------------------------------------------------
 
-(source_file (expression_statement (value_identifier)))
+(source_file
+  (expression_statement
+    (value_identifier)))
 
-===========================================
+================================================================================
 Tuple
-===========================================
+================================================================================
 
 (1, 2)
 (1, 2,)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
-    (tuple (number) (number)))
+    (tuple
+      (number)
+      (number)))
   (expression_statement
-    (tuple (number) (number))))
+    (tuple
+      (number)
+      (number))))
 
-===========================================
+================================================================================
 Call expression
-===========================================
+================================================================================
 
 min(1, 2)
 pow(2.0: float, ~exp=3.0: float)
@@ -101,25 +111,28 @@ blocky(
   ~third={3},
 )
 f(raise)
-call(~a=@decorator 1)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (call_expression
       function: (value_identifier)
-      arguments: (arguments (number) (number))))
+      arguments: (arguments
+        (number)
+        (number))))
   (expression_statement
     (call_expression
       function: (value_identifier)
       arguments: (arguments
         (number)
-        (type_annotation (type_identifier))
+        (type_annotation
+          (type_identifier))
         (labeled_argument
           label: (value_identifier)
           value: (number)
-          type: (type_annotation (type_identifier))))))
+          type: (type_annotation
+            (type_identifier))))))
   (expression_statement
     (call_expression
       function: (value_identifier)
@@ -143,7 +156,9 @@ call(~a=@decorator 1)
   (expression_statement
     (call_expression
       function: (value_identifier)
-      arguments: (arguments (uncurry) (number))))
+      arguments: (arguments
+        (uncurry)
+        (number))))
   (expression_statement
     (call_expression
       function: (value_identifier)
@@ -163,30 +178,24 @@ call(~a=@decorator 1)
       arguments: (arguments
         (number)
         (block
-          (open_statement (module_identifier))
-          (expression_statement (value_identifier)))
+          (open_statement
+            (module_identifier))
+          (expression_statement
+            (value_identifier)))
         (labeled_argument
           label: (value_identifier)
-          value: (block (expression_statement (number)))))))
-
+          value: (block
+            (expression_statement
+              (number)))))))
   (expression_statement
     (call_expression
       function: (value_identifier)
       arguments: (arguments
-        (value_identifier))))
+        (value_identifier)))))
 
-  (expression_statement
-    (call_expression
-      function: (value_identifier)
-      arguments: (arguments
-        (labeled_argument
-          label: (value_identifier)
-          (decorator (decorator_identifier))
-          value: (number))))))
-
-===========================================
+================================================================================
 Pipe
-===========================================
+================================================================================
 
 foo->bar->baz
 foo |> bar |> baz
@@ -208,16 +217,20 @@ foo->{
 
 {foo}->print()
 
----
+--------------------------------------------------------------------------------
 
 (source_file
- (expression_statement
+  (expression_statement
     (pipe_expression
-      (pipe_expression (value_identifier) (value_identifier))
+      (pipe_expression
+        (value_identifier)
+        (value_identifier))
       (value_identifier)))
- (expression_statement
+  (expression_statement
     (pipe_expression
-      (pipe_expression (value_identifier) (value_identifier))
+      (pipe_expression
+        (value_identifier)
+        (value_identifier))
       (value_identifier)))
   (expression_statement
     (pipe_expression
@@ -227,18 +240,21 @@ foo->{
           (value_identifier_path
             (module_identifier)
             (value_identifier))
-          (arguments (value_identifier))))
+          (arguments
+            (value_identifier))))
       (value_identifier_path
         (module_identifier)
         (value_identifier))))
   (expression_statement
     (pipe_expression
       (number)
-      (variant (variant_identifier))))
+      (variant
+        (variant_identifier))))
   (expression_statement
     (pipe_expression
       (value_identifier)
-      (polyvar (polyvar_identifier))))
+      (polyvar
+        (polyvar_identifier))))
   (expression_statement
     (pipe_expression
       (value_identifier)
@@ -249,21 +265,29 @@ foo->{
       (parenthesized_expression
         (function
           (value_identifier)
-          (binary_expression (value_identifier) (number))))))
+          (binary_expression
+            (value_identifier)
+            (number))))))
   (expression_statement
     (pipe_expression
       (value_identifier)
       (block
-        (open_statement (module_identifier))
-        (expression_statement (value_identifier)))))
+        (open_statement
+          (module_identifier))
+        (expression_statement
+          (value_identifier)))))
   (expression_statement
     (pipe_expression
-      (block (expression_statement (value_identifier)))
-      (call_expression (value_identifier) (arguments)))))
+      (block
+        (expression_statement
+          (value_identifier)))
+      (call_expression
+        (value_identifier)
+        (arguments)))))
 
-===========================================
+================================================================================
 Record
-===========================================
+================================================================================
 
 {
   ...old,
@@ -281,49 +305,70 @@ Record
 
 { ?optPunning }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (record
-      (spread_element (value_identifier))
-      (record_field (property_identifier) (number))
-      (record_field (property_identifier) (string (string_fragment)))
-      (record_field (property_identifier))))
-  (expression_statement
-    (record
-      (record_field (property_identifier))
-      (record_field (property_identifier))
-      (record_field (property_identifier))))
+      (spread_element
+        (value_identifier))
+      (record_field
+        (property_identifier)
+        (number))
+      (record_field
+        (property_identifier)
+        (string
+          (string_fragment)))
+      (record_field
+        (property_identifier))))
   (expression_statement
     (record
       (record_field
-        (property_identifier (module_identifier) (value_identifier))
+        (property_identifier))
+      (record_field
+        (property_identifier))
+      (record_field
+        (property_identifier))))
+  (expression_statement
+    (record
+      (record_field
+        (property_identifier
+          (module_identifier)
+          (value_identifier))
         (number))))
   (expression_statement
     (record
       (record_field
-        (property_identifier (module_identifier) (value_identifier))
+        (property_identifier
+          (module_identifier)
+          (value_identifier))
         (number))
       (record_field
         (property_identifier)
-        (string (string_fragment)))))
+        (string
+          (string_fragment)))))
   (expression_statement
     (record
       (record_field
         (property_identifier)
-        (variant (variant_identifier)))
-      (record_field (property_identifier))
+        (variant
+          (variant_identifier)))
+      (record_field
+        (property_identifier))
       (record_field
         (property_identifier)
         (parenthesized_expression
-          (variant (variant_identifier))
-          (type_annotation (type_identifier))))))
-  (expression_statement (record (property_identifier))))
+          (variant
+            (variant_identifier))
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (record
+      (property_identifier))))
 
-===========================================
+================================================================================
 Object
-===========================================
+================================================================================
 
 {
   "foo": 32,
@@ -334,30 +379,38 @@ Object
 { .. "x": 1 }
 { .. }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (object
       (field
-        (property_identifier (string_fragment))
+        (property_identifier
+          (string_fragment))
         (number))
       (field
-        (property_identifier (string_fragment))
-        (string (string_fragment)))
-    ))
+        (property_identifier
+          (string_fragment))
+        (string
+          (string_fragment)))))
   (expression_statement
-    (object (field
-      (property_identifier (string_fragment)) (number))))
+    (object
+      (field
+        (property_identifier
+          (string_fragment))
+        (number))))
   (expression_statement
-    (object (field
-      (property_identifier (string_fragment)) (number))))
+    (object
+      (field
+        (property_identifier
+          (string_fragment))
+        (number))))
   (expression_statement
     (object)))
 
-===========================================
+================================================================================
 If/else
-===========================================
+================================================================================
 
 if predicate {
   foo
@@ -379,33 +432,49 @@ if predicateA {
   bar
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (if_expression
       (value_identifier)
-      (block (expression_statement (value_identifier)))))
+      (block
+        (expression_statement
+          (value_identifier)))))
   (expression_statement
     (if_expression
       (value_identifier)
-      (block (expression_statement (value_identifier)))
-      (else_clause (block (expression_statement (value_identifier))))))
+      (block
+        (expression_statement
+          (value_identifier)))
+      (else_clause
+        (block
+          (expression_statement
+            (value_identifier))))))
   (expression_statement
     (if_expression
       (value_identifier)
-      (block (expression_statement (value_identifier)))
+      (block
+        (expression_statement
+          (value_identifier)))
       (else_if_clause
         (value_identifier)
-        (block (expression_statement (value_identifier))))
+        (block
+          (expression_statement
+            (value_identifier))))
       (else_if_clause
         (value_identifier)
-        (block (expression_statement (value_identifier))))
-      (else_clause (block (expression_statement (value_identifier)))))))
+        (block
+          (expression_statement
+            (value_identifier))))
+      (else_clause
+        (block
+          (expression_statement
+            (value_identifier)))))))
 
-===========================================
+================================================================================
 Switch of literals
-===========================================
+================================================================================
 
 switch foo {
 | 1 | 2 => "few"
@@ -414,7 +483,7 @@ switch foo {
   s ++ "many"
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -424,20 +493,27 @@ switch foo {
         (or_pattern
           (number)
           (number))
-        (sequence_expression (expression_statement (string (string_fragment)))))
+        (sequence_expression
+          (expression_statement
+            (string
+              (string_fragment)))))
       (switch_match
         (value_identifier)
         (sequence_expression
           (let_declaration
-            (let_binding (value_identifier) (string (string_fragment))))
+            (let_binding
+              (value_identifier)
+              (string
+                (string_fragment))))
           (expression_statement
             (binary_expression
               (value_identifier)
-              (string (string_fragment)))))))))
+              (string
+                (string_fragment)))))))))
 
-===========================================
+================================================================================
 Switch of variants
-===========================================
+================================================================================
 
 switch foo {
 | Some(x as qux: int, {y, z}) => x
@@ -446,7 +522,7 @@ switch foo {
 | ?Some(_) => 1
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -457,28 +533,43 @@ switch foo {
           (variant_identifier)
           (formal_parameters
             (value_identifier)
-            (as_aliasing (value_identifier))
-            (type_annotation (type_identifier))
+            (as_aliasing
+              (value_identifier))
+            (type_annotation
+              (type_identifier))
             (record_pattern
               (value_identifier)
               (value_identifier))))
-        (sequence_expression (expression_statement (value_identifier))))
+        (sequence_expression
+          (expression_statement
+            (value_identifier))))
       (switch_match
         (variant_pattern
           (nested_variant_identifier
             (module_identifier)
             (variant_identifier)))
-        (sequence_expression (expression_statement (number))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (variant_pattern (variant_identifier) (formal_parameters))
-        (sequence_expression (expression_statement (number))))
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (variant_pattern (variant_identifier) (formal_parameters (value_identifier)))
-        (sequence_expression (expression_statement (number)))))))
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of polyvars
-===========================================
+================================================================================
 
 switch foo {
 | #Bar => 42
@@ -486,36 +577,47 @@ switch foo {
 | #...Polyvar.t as toto => 5
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (switch_expression
       (value_identifier)
       (switch_match
-        (polyvar_pattern (polyvar_identifier))
-        (sequence_expression (expression_statement (number))))
+        (polyvar_pattern
+          (polyvar_identifier))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (polyvar_pattern
           (polyvar_identifier)
           (formal_parameters
             (value_identifier)
-            (as_aliasing (value_identifier))
-            (type_annotation (type_identifier))
+            (as_aliasing
+              (value_identifier))
+            (type_annotation
+              (type_identifier))
             (number)))
-        (as_aliasing (value_identifier))
-        (sequence_expression (expression_statement (number))))
+        (as_aliasing
+          (value_identifier))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (polyvar_type_pattern
           (type_identifier_path
             (module_identifier)
             (type_identifier)))
-            (as_aliasing (value_identifier))
-        (sequence_expression (expression_statement (number)))))))
+        (as_aliasing
+          (value_identifier))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of vars
-===========================================
+================================================================================
 
 switch foo {
 | x if x > 42 && x < 99 => x
@@ -523,7 +625,7 @@ switch foo {
 | _ => 42
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -533,21 +635,33 @@ switch foo {
         (value_identifier)
         (guard
           (binary_expression
-            (binary_expression (value_identifier) (number))
-            (binary_expression (value_identifier) (number))))
-        (sequence_expression (expression_statement (value_identifier))))
+            (binary_expression
+              (value_identifier)
+              (number))
+            (binary_expression
+              (value_identifier)
+              (number))))
+        (sequence_expression
+          (expression_statement
+            (value_identifier))))
       (switch_match
         (value_identifier)
         (guard
-          (binary_expression (value_identifier) (number)))
-        (sequence_expression (expression_statement (value_identifier))))
+          (binary_expression
+            (value_identifier)
+            (number)))
+        (sequence_expression
+          (expression_statement
+            (value_identifier))))
       (switch_match
         (value_identifier)
-        (sequence_expression (expression_statement (number)))))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of tuples
-===========================================
+================================================================================
 
 switch (foo, bar) {
 | (42, 99 as zoo) => 42
@@ -555,38 +669,56 @@ switch (foo, bar) {
 | (_, _) => 13
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (switch_expression
-      (tuple (value_identifier) (value_identifier))
+      (tuple
+        (value_identifier)
+        (value_identifier))
       (switch_match
         (tuple_pattern
-          (tuple_item_pattern (number))
-          (tuple_item_pattern (number) (as_aliasing (value_identifier))))
-        (sequence_expression (expression_statement (number))))
+          (tuple_item_pattern
+            (number))
+          (tuple_item_pattern
+            (number)
+            (as_aliasing
+              (value_identifier))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (tuple_pattern
-          (tuple_item_pattern (variant_pattern (variant_identifier)))
-          (tuple_item_pattern (polyvar_type_pattern (type_identifier))))
-        (sequence_expression (expression_statement (number))))
+          (tuple_item_pattern
+            (variant_pattern
+              (variant_identifier)))
+          (tuple_item_pattern
+            (polyvar_type_pattern
+              (type_identifier))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (tuple_pattern
-          (tuple_item_pattern (value_identifier))
-          (tuple_item_pattern (value_identifier)))
-        (sequence_expression (expression_statement (number)))))))
+          (tuple_item_pattern
+            (value_identifier))
+          (tuple_item_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of mixed tuples
-===========================================
+================================================================================
 
 switch tuple {
 | (Variant1 | Variant2, 42.0) => 10
 | _ => 20
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -596,17 +728,24 @@ switch tuple {
         (tuple_pattern
           (tuple_item_pattern
             (or_pattern
-              (variant_pattern (variant_identifier))
-              (variant_pattern (variant_identifier))))
-          (tuple_item_pattern (number)))
-        (sequence_expression (expression_statement (number))))
-    (switch_match
-      (value_identifier)
-      (sequence_expression (expression_statement (number)))))))
+              (variant_pattern
+                (variant_identifier))
+              (variant_pattern
+                (variant_identifier))))
+          (tuple_item_pattern
+            (number)))
+        (sequence_expression
+          (expression_statement
+            (number))))
+      (switch_match
+        (value_identifier)
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of record patterns
-===========================================
+================================================================================
 
 switch person {
 | Teacher({name: "Mary" | "Joe"}) => 10
@@ -618,7 +757,7 @@ switch person {
 | Student({name}) => 40
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -631,9 +770,13 @@ switch person {
             (record_pattern
               (value_identifier)
               (or_pattern
-                (string (string_fragment))
-                (string (string_fragment))))))
-        (sequence_expression (expression_statement (number))))
+                (string
+                  (string_fragment))
+                (string
+                  (string_fragment))))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -647,29 +790,39 @@ switch person {
               (or_pattern
                 (variant_pattern
                   (variant_identifier)
-                  (formal_parameters (value_identifier)))
+                  (formal_parameters
+                    (value_identifier)))
                 (variant_pattern
                   (variant_identifier)
-                  (formal_parameters (value_identifier)))))))
-        (sequence_expression (expression_statement (number))))
+                  (formal_parameters
+                    (value_identifier)))))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
           (formal_parameters
             (record_pattern
               (value_identifier)
-              (variant_pattern (variant_identifier)))))
-        (sequence_expression (expression_statement (number))))
+              (variant_pattern
+                (variant_identifier)))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
           (formal_parameters
-            (record_pattern (value_identifier))))
-        (sequence_expression (expression_statement (number)))))))
+            (record_pattern
+              (value_identifier))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of lists
-===========================================
+================================================================================
 
 switch foo {
 | list{current as qux, ...others} => 1
@@ -679,7 +832,7 @@ switch foo {
 | list{1, 2, ...list{b, ..._} as rest} => rest
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -688,18 +841,34 @@ switch foo {
       (switch_match
         (list_pattern
           (value_identifier)
-          (as_aliasing (value_identifier))
-          (spread_pattern (value_identifier)))
-        (sequence_expression (expression_statement (number))))
+          (as_aliasing
+            (value_identifier))
+          (spread_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (list_pattern (number) (number) (value_identifier))
-        (sequence_expression (expression_statement (number))))
+        (list_pattern
+          (number)
+          (number)
+          (value_identifier))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (list_pattern (number))
-        (sequence_expression (expression_statement (number))))
+        (list_pattern
+          (number))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (list_pattern (spread_pattern (value_identifier)))
-        (sequence_expression (expression_statement (number))))
+        (list_pattern
+          (spread_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (list_pattern
           (number)
@@ -707,13 +876,17 @@ switch foo {
           (spread_pattern
             (list_pattern
               (value_identifier)
-              (spread_pattern (value_identifier))))
-          (as_aliasing (value_identifier)))
-        (sequence_expression (expression_statement (value_identifier)))))))
+              (spread_pattern
+                (value_identifier))))
+          (as_aliasing
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (value_identifier)))))))
 
-===========================================
+================================================================================
 Switch of arrays
-===========================================
+================================================================================
 
 switch foo {
 | [head, ...others] => 1
@@ -723,32 +896,47 @@ switch foo {
 | [...others] => 4
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (switch_expression
       (value_identifier)
       (switch_match
-        (array_pattern (value_identifier) (spread_pattern (value_identifier)))
-        (sequence_expression (expression_statement (number))))
+        (array_pattern
+          (value_identifier)
+          (spread_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (array_pattern
           (number)
           (number)
-          (as_aliasing (value_identifier))
+          (as_aliasing
+            (value_identifier))
           (value_identifier))
-        (sequence_expression (expression_statement (number))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (array_pattern (number))
-        (sequence_expression (expression_statement (number))))
+        (array_pattern
+          (number))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
-        (array_pattern (spread_pattern (value_identifier)))
-        (sequence_expression (expression_statement (number)))))))
+        (array_pattern
+          (spread_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch of statements
-===========================================
+================================================================================
 
 switch (element->HtmlInputElement.ofElement) {
 | Some(input) =>
@@ -757,7 +945,7 @@ switch (element->HtmlInputElement.ofElement) {
 | None => ()
 };
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -765,13 +953,14 @@ switch (element->HtmlInputElement.ofElement) {
       (parenthesized_expression
         (pipe_expression
           (value_identifier)
-          (value_identifier_path (module_identifier) (value_identifier))))
+          (value_identifier_path
+            (module_identifier)
+            (value_identifier))))
       (switch_match
-        pattern:
-          (variant_pattern
-            (variant_identifier)
-            (formal_parameters
-              (value_identifier)))
+        pattern: (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (value_identifier)))
         body: (sequence_expression
           (expression_statement
             (call_expression
@@ -788,71 +977,85 @@ switch (element->HtmlInputElement.ofElement) {
               arguments: (arguments
                 (value_identifier))))))
       (switch_match
-        pattern:
-          (variant_pattern
-            (variant_identifier))
+        pattern: (variant_pattern
+          (variant_identifier))
         body: (sequence_expression
           (expression_statement
             (unit)))))))
 
-===========================================
+================================================================================
 Switch exceptions
-===========================================
+================================================================================
 
 switch parseExn(str) {
 | json => 42
 | exception Js.Exn.Error(obj) => 99
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (switch_expression
-      (call_expression (value_identifier) (arguments (value_identifier)))
+      (call_expression
+        (value_identifier)
+        (arguments
+          (value_identifier)))
       (switch_match
         (value_identifier)
-        (sequence_expression (expression_statement (number))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (exception_pattern
           (variant_pattern
             (nested_variant_identifier
-              (module_identifier_path (module_identifier) (module_identifier))
+              (module_identifier_path
+                (module_identifier)
+                (module_identifier))
               (variant_identifier))
-            (formal_parameters (value_identifier))))
-        (sequence_expression (expression_statement (number)))))))
+            (formal_parameters
+              (value_identifier))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch block
-===========================================
+================================================================================
 
 switch { open Mod; foo() } {
 | _ => 42
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (switch_expression
       (block
-        (open_statement (module_identifier))
+        (open_statement
+          (module_identifier))
         (expression_statement
-          (call_expression (value_identifier) (arguments))))
+          (call_expression
+            (value_identifier)
+            (arguments))))
       (switch_match
         (value_identifier)
-        (sequence_expression (expression_statement (number)))))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch parenthesized
-===========================================
+================================================================================
 
 switch n {
 | (1 | 2) => 1
 | Some((This | That) | Unknow) => 0
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -863,7 +1066,9 @@ switch n {
           (or_pattern
             (number)
             (number)))
-        (sequence_expression (expression_statement (number))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -871,20 +1076,25 @@ switch n {
             (or_pattern
               (parenthesized_pattern
                 (or_pattern
-                  (variant_pattern (variant_identifier))
-                  (variant_pattern (variant_identifier))))
-            (variant_pattern (variant_identifier)))))
-          (sequence_expression (expression_statement (number)))))))
+                  (variant_pattern
+                    (variant_identifier))
+                  (variant_pattern
+                    (variant_identifier))))
+              (variant_pattern
+                (variant_identifier)))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Switch ranges
-===========================================
+================================================================================
 
 switch c {
 | 'b' .. 'z' => 100
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -892,83 +1102,112 @@ switch c {
       (value_identifier)
       (switch_match
         (range_pattern
-          (character) (character))
-        (sequence_expression (expression_statement (number)))))))
+          (character)
+          (character))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
-===========================================
+================================================================================
 Math operators
-===========================================
+================================================================================
 
 - 1 + 2 / 3
 -. 1.0 +. 2.0 /. 3.0
 2.0 ** 3.0
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (binary_expression
-      (unary_expression (number))
-      (binary_expression (number) (number)))
-  )
+      (unary_expression
+        (number))
+      (binary_expression
+        (number)
+        (number))))
   (expression_statement
     (binary_expression
-      (unary_expression (number))
-      (binary_expression (number) (number)))
-  )
+      (unary_expression
+        (number))
+      (binary_expression
+        (number)
+        (number))))
   (expression_statement
-    (binary_expression (number) (number)))
-  )
+    (binary_expression
+      (number)
+      (number))))
 
-============================================
+================================================================================
 Boolean operators
-============================================
+================================================================================
 
 i || j;
 i && j;
 !a && !b || !c && !d;
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (binary_expression (value_identifier) (value_identifier)))
-  (expression_statement (binary_expression (value_identifier) (value_identifier)))
-  (expression_statement (binary_expression
+  (expression_statement
     (binary_expression
-      (unary_expression (value_identifier))
-      (unary_expression (value_identifier)))
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
     (binary_expression
-      (unary_expression (value_identifier))
-      (unary_expression (value_identifier))))))
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (unary_expression
+          (value_identifier))
+        (unary_expression
+          (value_identifier)))
+      (binary_expression
+        (unary_expression
+          (value_identifier))
+        (unary_expression
+          (value_identifier))))))
 
-============================================
+================================================================================
 String operators
-============================================
+================================================================================
 
 s1 ++ s2
 s1 ++ s2 ++ s3
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (binary_expression (value_identifier) (value_identifier)))
-  (expression_statement (binary_expression
-    (binary_expression (value_identifier) (value_identifier))
-    (value_identifier))))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (value_identifier)
+        (value_identifier))
+      (value_identifier))))
 
-============================================
+================================================================================
 Coercion operator
-============================================
+================================================================================
 
 value :> newType
 
----
+--------------------------------------------------------------------------------
 
-(source_file (expression_statement (coercion_expression (value_identifier) (type_identifier))))
+(source_file
+  (expression_statement
+    (coercion_expression
+      (value_identifier)
+      (type_identifier))))
 
-==============================================
+================================================================================
 Ternaries
-==============================================
+================================================================================
 
 condition ? case1 : case2
 
@@ -976,17 +1215,23 @@ condition
   ? case1
   : case2
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (ternary_expression
-    (value_identifier) (value_identifier) (value_identifier)))
-  (expression_statement (ternary_expression
-    (value_identifier) (value_identifier) (value_identifier))))
+  (expression_statement
+    (ternary_expression
+      (value_identifier)
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (ternary_expression
+      (value_identifier)
+      (value_identifier)
+      (value_identifier))))
 
-============================================
+================================================================================
 Arrays
-============================================
+================================================================================
 
 []
 [1]
@@ -997,17 +1242,26 @@ Arrays
   2,
 ]
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (array))
-  (expression_statement (array (number)))
-  (expression_statement (array (number) (number)))
-  (expression_statement (array (number) (number))))
+  (expression_statement
+    (array))
+  (expression_statement
+    (array
+      (number)))
+  (expression_statement
+    (array
+      (number)
+      (number)))
+  (expression_statement
+    (array
+      (number)
+      (number))))
 
-============================================
+================================================================================
 Lists
-============================================
+================================================================================
 
 list{}
 list{1}
@@ -1020,29 +1274,49 @@ list{
 list{ 1, 2, ...xs }
 list{ ...xs, 1, 2 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (list))
-  (expression_statement (list (number)))
-  (expression_statement (list (number)))
-  (expression_statement (list (number) (number)))
-  (expression_statement (list (number) (number) (spread_element (value_identifier))))
-  (expression_statement (list (spread_element (value_identifier)) (number) (number))))
+  (expression_statement
+    (list))
+  (expression_statement
+    (list
+      (number)))
+  (expression_statement
+    (list
+      (number)))
+  (expression_statement
+    (list
+      (number)
+      (number)))
+  (expression_statement
+    (list
+      (number)
+      (number)
+      (spread_element
+        (value_identifier))))
+  (expression_statement
+    (list
+      (spread_element
+        (value_identifier))
+      (number)
+      (number))))
 
-============================================
+================================================================================
 Member expressions
-============================================
+================================================================================
 
 foo.bar.baz
 foo.ModuleName.bar
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (member_expression
-      (member_expression (value_identifier) (property_identifier))
+      (member_expression
+        (value_identifier)
+        (property_identifier))
       (property_identifier)))
   (expression_statement
     (member_expression
@@ -1050,23 +1324,29 @@ foo.ModuleName.bar
       (module_identifier)
       (property_identifier))))
 
-============================================
+================================================================================
 Subscript expressions
-============================================
+================================================================================
 
 myArray[42]
 myObj["foo"]
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (subscript_expression (value_identifier) (number)))
   (expression_statement
-    (subscript_expression (value_identifier) (string (string_fragment)))))
+    (subscript_expression
+      (value_identifier)
+      (number)))
+  (expression_statement
+    (subscript_expression
+      (value_identifier)
+      (string
+        (string_fragment)))))
 
-============================================
+================================================================================
 Variants
-============================================
+================================================================================
 
 Foo
 Foo(42)
@@ -1074,36 +1354,50 @@ Foo(42: int)
 Foo(qux, { bar: 3 }, )
 Foo((Obj.magic(v): string))
 
----
+--------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement (variant (variant_identifier)))
-  (expression_statement (variant (variant_identifier) (arguments (number))))
+  (expression_statement
+    (variant
+      (variant_identifier)))
+  (expression_statement
+    (variant
+      (variant_identifier)
+      (arguments
+        (number))))
   (expression_statement
     (variant
       (variant_identifier)
       (arguments
         (number)
-        (type_annotation (type_identifier)))))
+        (type_annotation
+          (type_identifier)))))
   (expression_statement
     (variant
       (variant_identifier)
       (arguments
         (value_identifier)
-        (record (record_field (property_identifier) (number))))))
+        (record
+          (record_field
+            (property_identifier)
+            (number))))))
   (expression_statement
     (variant
       (variant_identifier)
       (arguments
         (parenthesized_expression
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
-            (arguments (value_identifier)))
-          (type_annotation (type_identifier)))))))
+            (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            (arguments
+              (value_identifier)))
+          (type_annotation
+            (type_identifier)))))))
 
-============================================
+================================================================================
 Extensions
-============================================
+================================================================================
 
 %debugger
 %re("/[^1-9]/g")
@@ -1131,7 +1425,7 @@ module Test = %graphql(`
   }
 `)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -1157,8 +1451,10 @@ module Test = %graphql(`
           pattern: (value_identifier)
           body: (function
             parameters: (formal_parameters
-              (parameter (value_identifier))
-              (parameter (value_identifier)))
+              (parameter
+                (value_identifier))
+              (parameter
+                (value_identifier)))
             body: (binary_expression
               left: (value_identifier)
               right: (value_identifier)))))))
@@ -1176,24 +1472,24 @@ module Test = %graphql(`
           body: (number)))))
   (let_declaration
     (let_binding
-        pattern: (value_identifier)
-          body: (extension_expression
-            (extension_identifier)
-            (expression_statement
-              (template_string
-                (template_string_content
-                  (escape_sequence)
-                  (escape_sequence)))))))
+      pattern: (value_identifier)
+      body: (extension_expression
+        (extension_identifier)
+        (expression_statement
+          (template_string
+            (template_string_content
+              (escape_sequence)
+              (escape_sequence)))))))
   (let_declaration
     (let_binding
-        pattern: (value_identifier)
-          body: (extension_expression
-            (extension_identifier)
-            (expression_statement
-              (template_string
-                (template_string_content
-                  (escape_sequence)
-                  (escape_sequence)))))))
+      pattern: (value_identifier)
+      body: (extension_expression
+        (extension_identifier)
+        (expression_statement
+          (template_string
+            (template_string_content
+              (escape_sequence)
+              (escape_sequence)))))))
   (module_declaration
     (module_binding
       name: (module_identifier)
@@ -1203,14 +1499,14 @@ module Test = %graphql(`
           (template_string
             (template_string_content)))))))
 
-===========================================
+================================================================================
 Raise expression
-===========================================
+================================================================================
 
 raise(BadArgument({myMessage: "Oops!"}))
 raise(InvalidInput,)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -1219,30 +1515,33 @@ raise(InvalidInput,)
       arguments: (arguments
         (variant
           (variant_identifier)
-        (arguments
-          (record
-            (record_field
-              (property_identifier)
-              (string (string_fragment)))))))))
+          (arguments
+            (record
+              (record_field
+                (property_identifier)
+                (string
+                  (string_fragment)))))))))
   (expression_statement
     (call_expression
       function: (value_identifier)
       arguments: (arguments
-        (variant (variant_identifier))))))
+        (variant
+          (variant_identifier))))))
 
-===========================================
+================================================================================
 Assert expression
-===========================================
+================================================================================
 
 assert false
 assert { 1 > 2 }
 let f = () => assert false
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
-    (assert_expression (false)))
+    (assert_expression
+      (false)))
   (expression_statement
     (assert_expression
       (block
@@ -1255,11 +1554,12 @@ let f = () => assert false
       (value_identifier)
       (function
         (formal_parameters)
-        (assert_expression (false))))))
+        (assert_expression
+          (false))))))
 
-============================================
+================================================================================
 Try-catch
-============================================
+================================================================================
 
 try {
   someOtherJSFunctionThatThrows()
@@ -1283,15 +1583,22 @@ try for i in 0 to 10 {
 | Not_found => false
 } 
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (try_expression
-      (block (expression_statement (call_expression (value_identifier) (arguments))))
-      (switch_match 
-        (variant_pattern (variant_identifier)) 
-        (sequence_expression (expression_statement (number))))
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments))))
+      (switch_match
+        (variant_pattern
+          (variant_identifier))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (variant_pattern
           (variant_identifier)
@@ -1299,7 +1606,9 @@ try for i in 0 to 10 {
             (record_pattern
               (value_identifier)
               (value_identifier))))
-        (sequence_expression (expression_statement (number))))
+        (sequence_expression
+          (expression_statement
+            (number))))
       (switch_match
         (variant_pattern
           (nested_variant_identifier
@@ -1307,21 +1616,35 @@ try for i in 0 to 10 {
               (module_identifier)
               (module_identifier))
             (variant_identifier))
-          (formal_parameters (value_identifier)))
-        (sequence_expression (expression_statement (number))))))
+          (formal_parameters
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (number))))))
   (expression_statement
     (try_expression
       (switch_expression
-        (call_expression (value_identifier) (arguments))
+        (call_expression
+          (value_identifier)
+          (arguments))
         (switch_match
           (number)
-          (sequence_expression (expression_statement (string (string_fragment)))))
+          (sequence_expression
+            (expression_statement
+              (string
+                (string_fragment)))))
         (switch_match
           (number)
-          (sequence_expression (expression_statement (string (string_fragment)))))
+          (sequence_expression
+            (expression_statement
+              (string
+                (string_fragment)))))
         (switch_match
           (value_identifier)
-          (sequence_expression (expression_statement (string (string_fragment))))))
+          (sequence_expression
+            (expression_statement
+              (string
+                (string_fragment))))))
       (switch_match
         (variant_pattern
           (nested_variant_identifier
@@ -1329,46 +1652,64 @@ try for i in 0 to 10 {
               (module_identifier)
               (module_identifier))
             (variant_identifier))
-          (formal_parameters (value_identifier)))
-        (sequence_expression (expression_statement (string (string_fragment)))))))
-
+          (formal_parameters
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (string
+              (string_fragment)))))))
   (expression_statement
     (try_expression
-      (for_expression (value_identifier) (number) (number)
+      (for_expression
+        (value_identifier)
+        (number)
+        (number)
         (block
           (expression_statement
-            (call_expression (value_identifier) (arguments)))))
+            (call_expression
+              (value_identifier)
+              (arguments)))))
       (switch_match
-        (variant_pattern (variant_identifier))
-        (sequence_expression (expression_statement (false)))))))
+        (variant_pattern
+          (variant_identifier))
+        (sequence_expression
+          (expression_statement
+            (false)))))))
 
-===========================================
+================================================================================
 Mutation expressions
-===========================================
+================================================================================
 
 foo["bar"] = qux
 foo.bar = qux
 foo.bar := qux
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (mutation_expression
-      (subscript_expression (value_identifier) (string (string_fragment)))
+      (subscript_expression
+        (value_identifier)
+        (string
+          (string_fragment)))
       (value_identifier)))
   (expression_statement
     (mutation_expression
-      (member_expression (value_identifier) (property_identifier))
+      (member_expression
+        (value_identifier)
+        (property_identifier))
       (value_identifier)))
   (expression_statement
     (mutation_expression
-      (member_expression (value_identifier) (property_identifier))
+      (member_expression
+        (value_identifier)
+        (property_identifier))
       (value_identifier))))
 
-===========================================
+================================================================================
 For loop
-===========================================
+================================================================================
 
 for x in 1 to 3 {
   Js.log(x)
@@ -1378,7 +1719,7 @@ for x in 1 downto 3 {
   Js.log(x)
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -1389,8 +1730,11 @@ for x in 1 downto 3 {
       (block
         (expression_statement
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
-            (arguments (value_identifier)))))))
+            (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            (arguments
+              (value_identifier)))))))
   (expression_statement
     (for_expression
       (value_identifier)
@@ -1399,18 +1743,21 @@ for x in 1 downto 3 {
       (block
         (expression_statement
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
-            (arguments (value_identifier))))))))
+            (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            (arguments
+              (value_identifier))))))))
 
-===========================================
+================================================================================
 While loop
-===========================================
+================================================================================
 
 while true {
   Js.log("Still running")
 }
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
@@ -1419,38 +1766,47 @@ while true {
       (block
         (expression_statement
           (call_expression
-            (value_identifier_path (module_identifier) (value_identifier))
-            (arguments (string (string_fragment)))))))))
+            (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            (arguments
+              (string
+                (string_fragment)))))))))
 
-===========================================
+================================================================================
 Await expression
-===========================================
+================================================================================
 
 await somePromise
 await foo()
 await foo->bar + 5
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
-    (await_expression (value_identifier)))
+    (await_expression
+      (value_identifier)))
   (expression_statement
     (await_expression
-      (call_expression (value_identifier) (arguments))))
+      (call_expression
+        (value_identifier)
+        (arguments))))
   (expression_statement
     (binary_expression
       (await_expression
-        (pipe_expression (value_identifier) (value_identifier)))
+        (pipe_expression
+          (value_identifier)
+          (value_identifier)))
       (number))))
 
-===========================================
+================================================================================
 As aliasing
-===========================================
+================================================================================
 
 let f = ({name, _} as foo: T.t) => {}
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (let_declaration
@@ -1464,27 +1820,29 @@ let f = ({name, _} as foo: T.t) => {}
               (value_identifier))
             (as_aliasing
               (value_identifier))
-              (type_annotation
-                (type_identifier_path
-                  (module_identifier)
-                  (type_identifier)))))
+            (type_annotation
+              (type_identifier_path
+                (module_identifier)
+                (type_identifier)))))
         body: (block)))))
 
-===========================================
+================================================================================
 Lazy Expression
-===========================================
+================================================================================
 
 lazy { 1 }
 lazy call()
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (lazy_expression
       (block
-        (expression_statement (number)))))
+        (expression_statement
+          (number)))))
   (expression_statement
     (lazy_expression
       (call_expression
-        (value_identifier) (arguments)))))
+        (value_identifier)
+        (arguments)))))
