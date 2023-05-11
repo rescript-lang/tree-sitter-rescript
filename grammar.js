@@ -225,7 +225,7 @@ module.exports = grammar({
 
     functor_parameter: $ => seq(
       $.module_identifier,
-      $.module_type_annotation,
+      optional($.module_type_annotation),
     ),
 
     module_type_annotation: $ => seq(
