@@ -1042,8 +1042,8 @@ module.exports = grammar({
     ),
 
     decorator: $ => choice(
-      alias($._decorator_inline, $.decorator_identifier),
-      seq(alias($._decorator, $.decorator_identifier), $.decorator_arguments)
+      $._decorator_inline,
+      seq($._decorator, $.decorator_arguments)
     ),
 
     decorator_arguments: $ => seq(

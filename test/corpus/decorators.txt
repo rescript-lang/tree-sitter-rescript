@@ -14,22 +14,14 @@ Decorator inline
 --------------------------------------------------------------------------------
 
 (source_file
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier))
-  (decorator
-    (decorator_identifier)))
+  (decorator)
+  (decorator)
+  (decorator)
+  (decorator)
+  (decorator)
+  (decorator)
+  (decorator)
+  (decorator))
 
 ================================================================================
 Decorator with arguments
@@ -48,28 +40,20 @@ Decorator with arguments
 
 (source_file
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments))
   (decorator
-    (decorator_identifier)
     (decorator_arguments)))
 
 ================================================================================
@@ -82,7 +66,6 @@ Decorator with type
 
 (source_file
   (decorator
-    (decorator_identifier)
     (decorator_arguments
       (type_annotation
         (type_identifier)))))
