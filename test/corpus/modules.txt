@@ -380,10 +380,13 @@ module F2: (S1, S1) => T = (X: S, Y: S) => {
   (module_declaration
     (module_binding
       name: (module_identifier)
-      signature: (parenthesized_module_expression
-        (module_identifier)
-        (ERROR))
-      (ERROR)
+      signature: (functor
+        parameters: (functor_parameters
+          (functor_parameter
+            (module_identifier))
+          (functor_parameter
+            (module_identifier)))
+        body: (module_identifier))
       definition: (functor
         parameters: (functor_parameters
           (functor_parameter
