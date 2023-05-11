@@ -332,7 +332,6 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
 
 module F2: (S1, S1) => T = (X: S, Y: S) => {
   let cow = x => Y.foo(X.foo(x))
-  let sheep = x => 1 + cow(x)
 }
 
 --------------------------------------------------------------------------------
@@ -381,13 +380,10 @@ module F2: (S1, S1) => T = (X: S, Y: S) => {
   (module_declaration
     (module_binding
       name: (module_identifier)
-      signature: (functor
-        parameters: (functor_parameters
-          (functor_parameter
-            (module_identifier))
-          (functor_parameter
-            (module_identifier)))
-        body: (module_identifier))
+      signature: (parenthesized_module_expression
+        (module_identifier)
+        (ERROR))
+      (ERROR)
       definition: (functor
         parameters: (functor_parameters
           (functor_parameter
@@ -414,18 +410,7 @@ module F2: (S1, S1) => T = (X: S, Y: S) => {
                         (module_identifier)
                         (value_identifier))
                       arguments: (arguments
-                        (value_identifier))))))))
-          (let_declaration
-            (let_binding
-              pattern: (value_identifier)
-              body: (function
-                parameter: (value_identifier)
-                body: (binary_expression
-                  left: (number)
-                  right: (call_expression
-                    function: (value_identifier)
-                    arguments: (arguments
-                      (value_identifier))))))))))))
+                        (value_identifier)))))))))))))
 
 ================================================================================
 Functor signature
