@@ -330,6 +330,10 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
   type ty = Y.t
 }
 
+module F2: (S1, S1) => T = (X: S, Y: S) => {
+  let cow = x => Y.foo(X.foo(x))
+}
+
 --------------------------------------------------------------------------------
 
 (source_file
@@ -372,7 +376,44 @@ module MyFunctor = (X: {type t}, Y: {type t}): {type tx; type ty} => {
               name: (type_identifier)
               (type_identifier_path
                 (module_identifier)
-                (type_identifier)))))))))
+                (type_identifier))))))))
+  (module_declaration
+    (module_binding
+      name: (module_identifier)
+      signature: (functor
+        parameters: (functor_parameters
+          (functor_parameter
+            (module_identifier))
+          (functor_parameter
+            (module_identifier)))
+        body: (module_identifier))
+      definition: (functor
+        parameters: (functor_parameters
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation
+              (module_identifier)))
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation
+              (module_identifier))))
+        body: (block
+          (let_declaration
+            (let_binding
+              pattern: (value_identifier)
+              body: (function
+                parameter: (value_identifier)
+                body: (call_expression
+                  function: (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  arguments: (arguments
+                    (call_expression
+                      function: (value_identifier_path
+                        (module_identifier)
+                        (value_identifier))
+                      arguments: (arguments
+                        (value_identifier)))))))))))))
 
 ================================================================================
 Functor signature
