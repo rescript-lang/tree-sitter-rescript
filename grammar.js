@@ -69,7 +69,8 @@ module.exports = grammar({
     ],
     [$._jsx_attribute_value, $.pipe_expression],
     [$.function_type_parameters, $.function_type],
-    [$._reserved_identifier, $.module_unpack]
+    [$._reserved_identifier, $.module_unpack],
+    [$.lazy_pattern, $.or_pattern]
   ],
 
   conflicts: $ => [
@@ -925,13 +926,7 @@ module.exports = grammar({
 
     lazy_pattern: $ => seq(
       'lazy',
-      choice(
-        $.value_identifier,
-        $._literal_pattern,
-        $._destructuring_pattern,
-        $.polyvar_type_pattern,
-        $.parenthesized_pattern,
-      )
+      $._pattern
     ),
 
     _jsx_element: $ => choice($.jsx_element, $.jsx_self_closing_element),
