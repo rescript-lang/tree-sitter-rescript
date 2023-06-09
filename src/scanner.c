@@ -239,8 +239,11 @@ bool tree_sitter_rescript_external_scanner_scan(
       if (lexer->lookahead == 'n') {
         advance(lexer);
         if (lexer->lookahead == 'd') {
-          // Ignore new lines before `and` keyword (recursive definition)
-          in_multiline_statement = true;
+          advance(lexer);
+          if (is_whitespace(lexer->lookahead)) {
+            // Ignore new lines before `and` keyword (recursive definition)
+            in_multiline_statement = true;
+          }
         }
       }
     }
