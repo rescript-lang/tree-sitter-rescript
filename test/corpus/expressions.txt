@@ -1109,6 +1109,40 @@ switch c {
             (number)))))))
 
 ================================================================================
+Switch of lazy patterns
+================================================================================
+
+switch c {
+| lazy(r) => r
+| (lazy (), lazy 3) => false
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match
+        (lazy_pattern
+          (parenthesized_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (value_identifier))))
+      (switch_match
+        (tuple_pattern
+          (tuple_item_pattern
+            (lazy_pattern
+              (unit)))
+          (tuple_item_pattern
+            (lazy_pattern
+              (number))))
+        (sequence_expression
+          (expression_statement
+            (false)))))))
+
+================================================================================
 Math operators
 ================================================================================
 
