@@ -151,7 +151,7 @@ bool tree_sitter_rescript_external_scanner_scan(
     const bool* valid_symbols
     ) {
   ScannerState* state = (ScannerState*)payload;
-  const in_string = state->in_quotes || state->in_backticks;
+  bool in_string = state->in_quotes || state->in_backticks;
 
   while (is_inline_whitespace(lexer->lookahead) && !in_string) {
     skip(lexer);
