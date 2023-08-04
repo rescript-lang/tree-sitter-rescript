@@ -17,7 +17,19 @@
         "res",
         "resi"
       ],
-      "injection-regex": "rescript"
+      "injection-regex": "rescript",
+      "highlights": [
+        "queries/rescript/highlights.scm"
+      ],
+      "locals": [
+        "queries/rescript/locals.scm"
+      ],
+      "injections": [
+        "queries/rescript/injections.scm"
+      ],
+      "textobjects": [
+        "queries/rescript/textobjects.scm"
+      ]
     }
   ]
 }
