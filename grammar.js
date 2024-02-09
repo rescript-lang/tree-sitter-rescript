@@ -105,7 +105,8 @@ module.exports = grammar({
     [$._reserved_identifier, $.function],
     [$.exception_pattern, $.or_pattern],
     [$.type_binding, $._inline_type],
-    [$._module_structure, $.parenthesized_module_expression]
+    [$._module_structure, $.parenthesized_module_expression],
+    [$.record_type_field, $.object_type_field],
   ],
 
   rules: {
@@ -382,11 +383,14 @@ module.exports = grammar({
       '}',
     ),
 
-    record_type_field: $ => seq(
-      optional('mutable'),
-      alias($.value_identifier, $.property_identifier),
-      optional('?'),
-      $.type_annotation,
+    record_type_field: $ => choice(
+      seq('...', choice($.type_identifier, $.type_identifier_path)),
+      seq(
+        optional('mutable'),
+        alias($.value_identifier, $.property_identifier),
+        optional('?'),
+        $.type_annotation,
+      ),
     ),
 
     object_type: $ => prec.left(seq(
