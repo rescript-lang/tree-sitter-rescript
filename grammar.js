@@ -174,6 +174,7 @@ module.exports = grammar({
       )),
       optional(seq(
         '=',
+        optional('await'),
         field('definition', $._module_definition),
       )),
     )),
