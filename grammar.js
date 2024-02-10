@@ -725,7 +725,13 @@ module.exports = grammar({
     call_arguments: $ => seq(
       '(',
       optional($.uncurry),
-      optional(commaSep1t($._call_argument)),
+      choice(
+        optional(commaSep1t($._call_argument)),
+        seq(
+          optional(commaSep1($._call_argument)),
+          optional(seq(',', $.partial_application)),
+        ),
+      ),
       ')'
     ),
 
@@ -1439,6 +1445,7 @@ module.exports = grammar({
     lparen: $ => alias($._lparen, '('),
     rparen: $ => alias($._rparen, ')'),
     uncurry: $ => '.',
+    partial_application: $ => '...',
 
     _reserved_identifier: $ => choice(
       'async',

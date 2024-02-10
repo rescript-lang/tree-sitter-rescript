@@ -247,3 +247,22 @@ async () => body
 (source_file
   (expression_statement
     (function (formal_parameters) (value_identifier))))
+
+===================================================
+Partial application
+===================================================
+
+let foo = bar(1, 2, ...)
+
+---
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (number)
+          (number)
+          (partial_application))))))
