@@ -679,3 +679,36 @@ type t<'a> constraint 'a = t
       (type_constraint
         (type_identifier)
         (type_identifier)))))
+
+================================================================================
+Variant type spread
+================================================================================
+
+type t = Zero | ...t | Three | Four
+type t = | ...t | Three | Four
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_type_spread
+          (type_identifier))
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_type_spread
+          (type_identifier))
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier))))))

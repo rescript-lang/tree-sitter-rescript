@@ -337,7 +337,10 @@ module.exports = grammar({
 
     variant_type: $ => prec.left(seq(
       optional('|'),
-      barSep1($.variant_declaration),
+      barSep1(choice(
+        $.variant_declaration,
+        $.variant_type_spread,
+      )),
     )),
 
     variant_declaration: $ => prec.right(seq(
@@ -350,6 +353,11 @@ module.exports = grammar({
       '(',
       commaSep1t($._type),
       ')',
+    ),
+
+    variant_type_spread: $ => seq(
+      '...',
+      $.type_identifier,
     ),
 
     polyvar_type: $ => prec.left(seq(
