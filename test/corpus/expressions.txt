@@ -1149,6 +1149,8 @@ Math operators
 - 1 + 2 / 3
 -. 1.0 +. 2.0 /. 3.0
 2.0 ** 3.0
+-0l
+-ln
 
 --------------------------------------------------------------------------------
 
@@ -1170,7 +1172,12 @@ Math operators
   (expression_statement
     (binary_expression
       (number)
-      (number))))
+      (number)))
+  (expression_statement
+    (number))
+  (expression_statement
+    (unary_expression
+      (value_identifier))))
 
 ================================================================================
 Boolean operators

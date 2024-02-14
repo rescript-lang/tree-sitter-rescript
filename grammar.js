@@ -1,3 +1,5 @@
+/// <reference types="tree-sitter-cli/dsl" />
+
 module.exports = grammar({
   name: 'rescript',
 
@@ -1331,7 +1333,7 @@ module.exports = grammar({
       const bigint_literal = seq(choice(hex_literal, binary_literal, octal_literal, decimal_digits), 'n')
 
       const decimal_integer_literal = choice(
-        repeat('0'),
+        repeat1('0'),
         seq(repeat('0'), /[1-9]/, optional(seq(optional('_'), decimal_digits)))
       )
 
