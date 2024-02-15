@@ -243,6 +243,18 @@ bool tree_sitter_rescript_external_scanner_scan(
           in_multiline_statement = true;
         }
       }
+    } else if (lexer->lookahead == 'e') {
+      advance(lexer);
+      if (lexer->lookahead == 'l') {
+        advance(lexer);
+        if (lexer->lookahead == 's') {
+          advance(lexer);
+          if (lexer->lookahead == 'e') {
+            // Ignore new lines before `else` keyword
+            in_multiline_statement = true;
+          }
+        }
+      }
     }
 
     if (in_multiline_statement) {

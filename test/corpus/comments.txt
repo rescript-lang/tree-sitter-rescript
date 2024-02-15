@@ -37,6 +37,19 @@ switch foo {
 // in-switch
 }
 
+if predicate {
+  foo
+} /* comment */
+else {
+  bar
+}
+
+/* comment */
+let foo = 1
+/* comment */
+@baz
+and bar = 2
+
 --------------------------------------------------------------------------------
 
 (source_file
@@ -80,4 +93,25 @@ switch foo {
         (sequence_expression
           (expression_statement
             (number))))
-      (comment))))
+      (comment)))
+  (expression_statement
+    (if_expression
+      (value_identifier)
+      (block
+        (expression_statement
+          (value_identifier)))
+      (comment)
+      (else_clause
+        (block
+          (expression_statement
+            (value_identifier))))))
+  (comment)
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number))
+    (decorator
+      (decorator_identifier))
+    (let_binding
+      (value_identifier)
+      (number))))
