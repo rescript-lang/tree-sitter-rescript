@@ -386,7 +386,7 @@ module.exports = grammar({
     ),
 
     record_type_field: $ => choice(
-      seq('...', choice($.type_identifier, $.type_identifier_path)),
+      seq('...', choice($.type_identifier, $.generic_type, $.type_identifier_path)),
       seq(
         optional('mutable'),
         alias($.value_identifier, $.property_identifier),

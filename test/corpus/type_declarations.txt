@@ -108,7 +108,9 @@ type t = {}
 
 type t = {
   ...a,
-  ...b,
+  ...b<t>,
+  ...Mod.t<t>,
+  ...Mod.t,
   other: int,
 }
 
@@ -155,17 +157,31 @@ type t = {
       (type_identifier)
       (record_type)))
   (type_declaration
-    (type_binding
-      (type_identifier)
-      (record_type
-        (record_type_field
-          (type_identifier))
-        (record_type_field
-          (type_identifier))
-        (record_type_field
-          (property_identifier)
-          (type_annotation
-            (type_identifier)))))))
+      (type_binding
+        (type_identifier)
+        (record_type
+          (record_type_field
+            (type_identifier))
+          (record_type_field
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier))))
+          (record_type_field
+            (generic_type
+              (type_identifier_path
+                (module_identifier)
+                (type_identifier))
+              (type_arguments
+                (type_identifier))))
+          (record_type_field
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier)))
+          (record_type_field
+            (property_identifier)
+            (type_annotation
+              (type_identifier)))))))
 
 ================================================================================
 Extensible Variant
