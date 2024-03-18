@@ -109,6 +109,7 @@ module.exports = grammar({
     [$.type_binding, $._inline_type],
     [$._module_structure, $.parenthesized_module_expression],
     [$.record_type_field, $.object_type_field],
+    [$._record_type_member, $._object_type_member],
   ],
 
   rules: {
@@ -382,40 +383,48 @@ module.exports = grammar({
 
     record_type: $ => seq(
       '{',
-      commaSept($.record_type_field),
+      commaSept($._record_type_member),
       '}',
     ),
 
-    record_type_field: $ => choice(
-      seq('...', choice($.type_identifier, $.generic_type, $.type_identifier_path)),
+    record_type_field: $ =>
       seq(
         optional('mutable'),
         alias($.value_identifier, $.property_identifier),
         optional('?'),
         $.type_annotation,
       ),
+
+    type_spread: $ =>
+      seq('...', choice($.type_identifier, $.generic_type, $.type_identifier_path)),
+
+    _record_type_member: $ => choice(
+      $.record_type_field,
+      $.type_spread
     ),
 
     object_type: $ => prec.left(seq(
       '{',
       choice(
-        commaSep1t($._object_type_field),
-        seq('.', commaSept($._object_type_field)),
-        seq('..', commaSept($._object_type_field)),
+        commaSep1t($._object_type_member),
+        seq('.', commaSept($._object_type_member)),
+        seq('..', commaSept($._object_type_member)),
       ),
       '}',
     )),
 
-    _object_type_field: $ => alias($.object_type_field, $.field),
+    _object_type_member: $ => 
+      choice(
+        alias($.object_type_field, $.field),
+        $.type_spread
+      ),
 
     object_type_field: $ => choice(
-      seq('...', choice($.type_identifier, $.type_identifier_path)),
       seq(
         alias($.string, $.property_identifier),
         ':',
         $._type,
       ),
-
     ),
 
     generic_type: $ => prec.left(seq(

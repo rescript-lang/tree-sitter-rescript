@@ -168,21 +168,21 @@ type t = {
       (type_binding
         (type_identifier)
         (record_type
-          (record_type_field
+          (type_spread
             (type_identifier))
-          (record_type_field
+          (type_spread
             (generic_type
               (type_identifier)
               (type_arguments
                 (type_identifier))))
-          (record_type_field
+          (type_spread
             (generic_type
               (type_identifier_path
                 (module_identifier)
                 (type_identifier))
               (type_arguments
                 (type_identifier))))
-          (record_type_field
+          (type_spread
             (type_identifier_path
               (module_identifier)
               (type_identifier)))
@@ -478,7 +478,7 @@ type t<'a> = {.."name": string} as 'a
           (property_identifier
             (string_fragment))
           (type_identifier))
-        (field
+        (type_spread
           (type_identifier)))))
   (type_declaration
     (type_binding
