@@ -111,6 +111,7 @@ blocky(
   ~third={3},
 )
 f(raise)
+f(1, ...)
 
 --------------------------------------------------------------------------------
 
@@ -191,7 +192,13 @@ f(raise)
     (call_expression
       function: (value_identifier)
       arguments: (arguments
-        (value_identifier)))))
+        (value_identifier))))
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (number)
+        (partial_application_spread)))))
 
 ================================================================================
 Pipe

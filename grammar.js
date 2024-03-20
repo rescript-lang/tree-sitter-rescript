@@ -733,6 +733,7 @@ module.exports = grammar({
       '(',
       optional($.uncurry),
       optional(commaSep1t($._call_argument)),
+      optional($.partial_application_spread),
       ')'
     ),
 
@@ -743,6 +744,8 @@ module.exports = grammar({
       ),
       $.labeled_argument,
     ),
+
+    partial_application_spread: $ => "...",
 
     labeled_argument: $ => seq(
       '~',
