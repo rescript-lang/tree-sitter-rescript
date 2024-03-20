@@ -99,7 +99,9 @@ type t = {
 
   mutable x: int,
 
-  opt?: string
+  opt?: string,
+
+  env: {..} as 'env
 }
 
 type t = Mod.t = {a: int}
@@ -140,7 +142,13 @@ type t = {
         (record_type_field
           (property_identifier)
           (type_annotation
-            (type_identifier))))))
+          (type_identifier)))
+            (record_type_field
+              (property_identifier)
+                (type_annotation
+                  (as_aliasing_type
+                      (object_type)
+                      (type_identifier)))))))
   (type_declaration
     (type_binding
       (type_identifier)

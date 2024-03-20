@@ -318,6 +318,7 @@ module.exports = grammar({
       $.module_pack,
       $.unit,
       $.polymorphic_type,
+      alias($._as_aliasing_non_function_inline_type, $.as_aliasing_type)
     ),
 
     polymorphic_type: $ => seq(
@@ -705,6 +706,9 @@ module.exports = grammar({
     )),
 
     as_aliasing_type: $ => seq($._type, 'as', $.type_identifier),
+
+    _as_aliasing_non_function_inline_type: $ => 
+      prec(2, seq($._non_function_inline_type, 'as', $.type_identifier)),
 
     assert_expression: $ => prec.left(seq('assert', $.expression)),
 
