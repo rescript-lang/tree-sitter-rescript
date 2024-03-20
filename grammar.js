@@ -528,6 +528,7 @@ module.exports = grammar({
       $.module_pack,
       $.extension_expression,
       $.lazy_expression,
+      $._jsx_element
     ),
 
     parenthesized_expression: $ => seq(

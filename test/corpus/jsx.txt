@@ -310,3 +310,20 @@ Spread props
             (value_identifier))))
       (jsx_closing_element
         (jsx_identifier)))))
+
+================================================================================
+Elements in pipes
+================================================================================
+
+<Comp />->Some
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (pipe_expression
+      (jsx_self_closing_element
+        (jsx_identifier))
+      (variant
+        (variant_identifier)))))
+
