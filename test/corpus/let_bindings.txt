@@ -101,6 +101,8 @@ Record destructuring
 let {bar, baz} = foo
 let {bar, baz: qux} = foo
 let {Bar.Bar.bar: bar} = foo
+let {?Bar.bar} = foo
+let {?bar} = foo
 
 --------------------------------------------------------------------------------
 
@@ -126,6 +128,18 @@ let {Bar.Bar.bar: bar} = foo
             (module_identifier)
             (module_identifier))
           (value_identifier))
+        (value_identifier))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (value_identifier_path
+          (module_identifier)
+          (value_identifier)))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
         (value_identifier))
       (value_identifier))))
 
