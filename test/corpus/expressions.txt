@@ -762,6 +762,7 @@ switch person {
   }) => 20
 | Student({status: Sick}) => 30
 | Student({name}) => 40
+| Student({?age}) => 50
 }
 
 --------------------------------------------------------------------------------
@@ -825,7 +826,16 @@ switch person {
               (value_identifier))))
         (sequence_expression
           (expression_statement
-            (number)))))))
+            (number))))
+        (switch_match
+          (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (value_identifier))))
+           (sequence_expression
+             (expression_statement
+               (number)))))))
 
 ================================================================================
 Switch of lists

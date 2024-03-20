@@ -886,6 +886,7 @@ module.exports = grammar({
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
+        optional("?"),
         choice(
           $.value_identifier,
           $.value_identifier_path,
