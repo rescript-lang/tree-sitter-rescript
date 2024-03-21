@@ -86,6 +86,22 @@
   pattern: (value_identifier) @function
   body: (function))
 
+; function calls
+(call_expression 
+  function: (value_identifier_path
+    _
+    (value_identifier) @function.call))
+
+(call_expression 
+  function: (value_identifier) @function.call)
+
+; highlight the right-hand side of a pipe operator as a function call
+(pipe_expression
+  _
+  (value_identifier_path
+    _
+    (value_identifier) @function.call))
+
 ; Meta
 ;-----
 
