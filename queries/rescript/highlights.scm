@@ -33,8 +33,8 @@
 ; Parameters
 ;----------------
 
-(list_pattern (value_identifier) @parameter)
-(spread_pattern (value_identifier) @parameter)
+(list_pattern (value_identifier) @variable.parameter)
+(spread_pattern (value_identifier) @variable.parameter)
 
 ; String literals
 ;----------------
