@@ -28,7 +28,7 @@
 (object (field (property_identifier) @property))
 (object_type (field (property_identifier) @property))
 (member_expression (property_identifier) @property)
-(module_identifier) @namespace
+(module_identifier) @module
 
 ; Parameters
 ;----------------
