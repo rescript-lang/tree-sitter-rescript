@@ -84,7 +84,7 @@
 ; Meta
 ;-----
 
-(decorator_identifier) @annotation
+(decorator_identifier) @attribute
 
 (extension_identifier) @keyword
 ("%") @keyword
