@@ -111,6 +111,7 @@ blocky(
   ~third={3},
 )
 f(raise)
+f(1, ...)
 
 --------------------------------------------------------------------------------
 
@@ -191,7 +192,13 @@ f(raise)
     (call_expression
       function: (value_identifier)
       arguments: (arguments
-        (value_identifier)))))
+        (value_identifier))))
+  (expression_statement
+    (call_expression
+      function: (value_identifier)
+      arguments: (arguments
+        (number)
+        (partial_application_spread)))))
 
 ================================================================================
 Pipe
@@ -755,6 +762,7 @@ switch person {
   }) => 20
 | Student({status: Sick}) => 30
 | Student({name}) => 40
+| Student({?age}) => 50
 }
 
 --------------------------------------------------------------------------------
@@ -818,7 +826,16 @@ switch person {
               (value_identifier))))
         (sequence_expression
           (expression_statement
-            (number)))))))
+            (number))))
+        (switch_match
+          (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (value_identifier))))
+           (sequence_expression
+             (expression_statement
+               (number)))))))
 
 ================================================================================
 Switch of lists
@@ -1149,6 +1166,8 @@ Math operators
 - 1 + 2 / 3
 -. 1.0 +. 2.0 /. 3.0
 2.0 ** 3.0
+-0l
+-ln
 
 --------------------------------------------------------------------------------
 
@@ -1170,7 +1189,12 @@ Math operators
   (expression_statement
     (binary_expression
       (number)
-      (number))))
+      (number)))
+  (expression_statement
+    (number))
+  (expression_statement
+    (unary_expression
+      (value_identifier))))
 
 ================================================================================
 Boolean operators

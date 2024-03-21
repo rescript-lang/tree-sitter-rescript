@@ -1,3 +1,5 @@
+/// <reference types="tree-sitter-cli/dsl" />
+
 module.exports = grammar({
   name: 'rescript',
 
@@ -105,7 +107,9 @@ module.exports = grammar({
     [$._reserved_identifier, $.function],
     [$.exception_pattern, $.or_pattern],
     [$.type_binding, $._inline_type],
-    [$._module_structure, $.parenthesized_module_expression]
+    [$._module_structure, $.parenthesized_module_expression],
+    [$.record_type_field, $.object_type_field],
+    [$._record_type_member, $._object_type_member],
   ],
 
   rules: {
@@ -174,6 +178,7 @@ module.exports = grammar({
       )),
       optional(seq(
         '=',
+        optional('await'),
         field('definition', $._module_definition),
       )),
     )),
@@ -314,6 +319,7 @@ module.exports = grammar({
       $.module_pack,
       $.unit,
       $.polymorphic_type,
+      alias($._as_aliasing_non_function_inline_type, $.as_aliasing_type)
     ),
 
     polymorphic_type: $ => seq(
@@ -377,37 +383,48 @@ module.exports = grammar({
 
     record_type: $ => seq(
       '{',
-      commaSept($.record_type_field),
+      commaSept($._record_type_member),
       '}',
     ),
 
-    record_type_field: $ => seq(
-      optional('mutable'),
-      alias($.value_identifier, $.property_identifier),
-      optional('?'),
-      $.type_annotation,
+    record_type_field: $ =>
+      seq(
+        optional('mutable'),
+        alias($.value_identifier, $.property_identifier),
+        optional('?'),
+        $.type_annotation,
+      ),
+
+    type_spread: $ =>
+      seq('...', choice($.type_identifier, $.generic_type, $.type_identifier_path)),
+
+    _record_type_member: $ => choice(
+      $.record_type_field,
+      $.type_spread
     ),
 
     object_type: $ => prec.left(seq(
       '{',
       choice(
-        commaSep1t($._object_type_field),
-        seq('.', commaSept($._object_type_field)),
-        seq('..', commaSept($._object_type_field)),
+        commaSep1t($._object_type_member),
+        seq('.', commaSept($._object_type_member)),
+        seq('..', commaSept($._object_type_member)),
       ),
       '}',
     )),
 
-    _object_type_field: $ => alias($.object_type_field, $.field),
+    _object_type_member: $ => 
+      choice(
+        alias($.object_type_field, $.field),
+        $.type_spread
+      ),
 
     object_type_field: $ => choice(
-      seq('...', choice($.type_identifier, $.type_identifier_path)),
       seq(
         alias($.string, $.property_identifier),
         ':',
         $._type,
       ),
-
     ),
 
     generic_type: $ => prec.left(seq(
@@ -521,6 +538,7 @@ module.exports = grammar({
       $.module_pack,
       $.extension_expression,
       $.lazy_expression,
+      $._jsx_element
     ),
 
     parenthesized_expression: $ => seq(
@@ -698,6 +716,9 @@ module.exports = grammar({
 
     as_aliasing_type: $ => seq($._type, 'as', $.type_identifier),
 
+    _as_aliasing_non_function_inline_type: $ => 
+      prec(2, seq($._non_function_inline_type, 'as', $.type_identifier)),
+
     assert_expression: $ => prec.left(seq('assert', $.expression)),
 
     call_expression: $ => prec('call', seq(
@@ -726,6 +747,7 @@ module.exports = grammar({
       '(',
       optional($.uncurry),
       optional(commaSep1t($._call_argument)),
+      optional($.partial_application_spread),
       ')'
     ),
 
@@ -736,6 +758,8 @@ module.exports = grammar({
       ),
       $.labeled_argument,
     ),
+
+    partial_application_spread: $ => "...",
 
     labeled_argument: $ => seq(
       '~',
@@ -876,6 +900,7 @@ module.exports = grammar({
     record_pattern: $ => seq(
       '{',
       commaSep1t(seq(
+        optional("?"),
         choice(
           $.value_identifier,
           $.value_identifier_path,
@@ -1331,7 +1356,7 @@ module.exports = grammar({
       const bigint_literal = seq(choice(hex_literal, binary_literal, octal_literal, decimal_digits), 'n')
 
       const decimal_integer_literal = choice(
-        repeat('0'),
+        repeat1('0'),
         seq(repeat('0'), /[1-9]/, optional(seq(optional('_'), decimal_digits)))
       )
 

@@ -746,3 +746,18 @@ module M = (Na: N, Nb: N): (
                 (type_identifier)
                 (type_identifier)))))
         body: (block)))))
+
+================================================================================
+Dynamic imports
+================================================================================
+
+module LazyUtils: UtilsType = await Utils
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_identifier)
+      (module_identifier))))
