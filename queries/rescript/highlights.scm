@@ -60,8 +60,8 @@
 ] @constant.builtin
 
 (number) @number
-(polyvar) @constant
-(polyvar_string) @constant
+(polyvar) @constructor
+(polyvar_string) @constructor
 
 ; Functions
 ;----------
@@ -93,7 +93,7 @@
 ;-----
 
 (subscript_expression index: (string) @property)
-(polyvar_type_pattern "#" @constant)
+(polyvar_type_pattern "#" @constructor)
 
 [
   ("include")
