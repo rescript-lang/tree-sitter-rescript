@@ -17,7 +17,7 @@
 [
   (variant_identifier)
   (polyvar_identifier)
-] @constant
+] @constructor
 
 (record_type_field (property_identifier) @property)
 (record_field (property_identifier) @property)
