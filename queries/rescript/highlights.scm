@@ -220,7 +220,7 @@
   "..."
 ] @punctuation.special
 
-(ternary_expression ["?" ":"] @operator)
+(ternary_expression ["?" ":"] @keyword.conditional.ternary)
 
 ; JSX
 ;----------
