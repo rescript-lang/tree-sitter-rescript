@@ -14,6 +14,10 @@
   (list_pattern)
 ] @type
 
+((type_identifier) @type.builtin
+  (#any-of? @type.builtin
+    "int" "char" "string" "float" "bool" "unit"))
+
 [
   (variant_identifier)
   (polyvar_identifier)
