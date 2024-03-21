@@ -96,24 +96,34 @@
 (polyvar_type_pattern "#" @constructor)
 
 [
-  ("include")
-  ("open")
-] @include
+  "include"
+  "open"
+] @keyword.import
+
 
 [
-  "as"
+   "as"
+   "private"
+   "mutable"
+   "rec"
+] @keyword.modifier
+
+[
+  "type"
+] @keyword.type
+
+[
+  "and"
+  "with"
+] @keyword.operator
+
+[
   "export"
   "external"
   "let"
   "module"
-  "mutable"
-  "private"
-  "rec"
-  "type"
-  "and"
   "assert"
   "await"
-  "with"
   "lazy"
   "constraint"
 ] @keyword
@@ -127,17 +137,17 @@
   "else"
   "switch"
   "when"
-] @conditional
+] @keyword.conditional
 
 [
   "exception"
   "try"
   "catch"
-] @exception
+] @keyword.exception
 
 (call_expression
-  function: (value_identifier) @exception
-  (#eq? @exception "raise"))
+  function: (value_identifier) @keyword.exception
+  (#eq? @keyword.exception "raise"))
 
 [
   "for"
@@ -145,7 +155,7 @@
   "to"
   "downto"
   "while"
-] @repeat
+] @keyword.repeat
 
 [
   "."
