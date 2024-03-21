@@ -81,6 +81,11 @@
 (parameter (array_pattern (value_identifier) @variable.parameter))
 (parameter (record_pattern (value_identifier) @variable.parameter))
 
+; function identifier in let binding
+(let_binding 
+  pattern: (value_identifier) @function
+  body: (function))
+
 ; Meta
 ;-----
 
