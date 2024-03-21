@@ -30,6 +30,13 @@
 (member_expression (property_identifier) @property)
 (module_identifier) @module
 
+(record_pattern
+  (value_identifier) @variable.member)
+
+(value_identifier_path
+  (module_identifier)
+  (value_identifier) @variable.member)
+
 ; Parameters
 ;----------------
 
