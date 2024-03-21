@@ -45,10 +45,10 @@
 ] @string
 
 (template_substitution
-  "${" @punctuation.bracket
-  "}" @punctuation.bracket) @embedded
+  "${" @punctuation.special
+  "}" @punctuation.special) @embedded
 
-(character) @string.special
+(character) @character
 (escape_sequence) @string.escape
 
 ; Other literals
