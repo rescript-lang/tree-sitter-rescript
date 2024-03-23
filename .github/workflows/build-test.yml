@@ -13,3 +13,29 @@ jobs:
 
       - name: Test
         run: tree-sitter test
+
+
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install
+
+      - name: Clone repo examples
+        run: |
+          echo rescript-lang/rescript-react \
+          rescript-association/rescript-lang.org \
+          tinymce/rescript-webapi \
+          cca-io/rescript-material-ui \
+          rescript-association/reanalyze \
+          TheSpyder/rescript-nodejs.git \
+          | xargs -n1 | xargs -I{} git clone --depth 1 https://github.com/{} examples/{}
+
+
+      - run: ls examples/
+
+      - uses: tree-sitter/parse-action@v3
+        continue-on-error: true
+        with:
+          files: |-
+            examples/**

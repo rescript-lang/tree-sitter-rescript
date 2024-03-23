@@ -15,11 +15,8 @@ wild_github_repos := rescript-lang/rescript-react \
 wild_sandboxes := $(patsubst %,test_wild/%,$(wild_github_repos))
 
 .PHONY: generate
-generate: binding.gyp
+generate:
 	$(TS) generate
-
-binding.gyp: binding.gyp.json
-	cp $< $@
 
 .PHONY: test
 test: generate
