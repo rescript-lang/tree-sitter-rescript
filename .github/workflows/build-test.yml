@@ -10,3 +10,6 @@ jobs:
         with:
           install-lib: false
       - run: tree-sitter generate
+
+      - name: Test
+        run: tree-sitter test
