@@ -3,6 +3,5 @@ node_modules/
 src/*
 !src/scanner.c
 log.html
-binding.gyp
 test_wild/
 build/
