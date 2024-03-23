@@ -24,7 +24,7 @@ jobs:
           TheSpyder/rescript-nodejs.git \
           | xargs -n1 | xargs -I{} git clone --depth 1 https://github.com/{} examples/{}
 
-      - uses: tree-sitter/parse-action@v3
+      - uses: tree-sitter/parse-action@v4
         continue-on-error: true
         with:
           files: |-
