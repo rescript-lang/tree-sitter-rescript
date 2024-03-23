@@ -7,7 +7,7 @@ nan@^2.15.0:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.15.0.tgz#3f34a473ff18e15c1b5626b62903b5ad6e665fee"
   integrity sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==
 
-tree-sitter-cli@^0.20.8:
-  version "0.20.8"
-  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.20.8.tgz#06a81cea8d6d82f93d67eed7d28b6bc04a4a8916"
-  integrity sha512-XjTcS3wdTy/2cc/ptMLc/WRyOLECRYcMTrSWyhZnj1oGSOWbHLTklgsgRICU3cPfb0vy+oZCC33M43u6R1HSCA==
+tree-sitter-cli@^0.22.2:
+  version "0.22.2"
+  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.22.2.tgz#a69b8f68e78994f6ab730e7b345407b880658c13"
+  integrity sha512-ecqccEp27XMFXgjLMEEU71vK9JCWAC7fqSTTxcs5P1tnEnaaf4GkHz/wfo4lJ9l3rfxcTDPxN84tHAoitIQqdA==

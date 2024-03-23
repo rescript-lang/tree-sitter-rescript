@@ -81,7 +81,6 @@ module.exports = grammar({
     [$.primary_expression, $.record_pattern],
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
-    [$.primary_expression, $.lazy_pattern],
     [$.primary_expression, $._jsx_child],
     [$.tuple_type, $.function_type_parameter],
     [$.list, $.list_pattern],
@@ -108,7 +107,6 @@ module.exports = grammar({
     [$.exception_pattern, $.or_pattern],
     [$.type_binding, $._inline_type],
     [$._module_structure, $.parenthesized_module_expression],
-    [$.record_type_field, $.object_type_field],
     [$._record_type_member, $._object_type_member],
   ],
 
@@ -1415,7 +1413,7 @@ module.exports = grammar({
         /[0-7]{1,3}/,
         /x[0-9a-fA-F]{2}/,
         /u[0-9a-fA-F]{4}/,
-        /u{[0-9a-fA-F]+}/
+        /u\{[0-9a-fA-F]+\}/,
       )
     )),
 
