@@ -16,7 +16,7 @@ wild_sandboxes := $(patsubst %,test_wild/%,$(wild_github_repos))
 
 .PHONY: generate
 generate: binding.gyp
-	$(TS) generate
+	$(TS) generate --no-bindings
 
 binding.gyp: binding.gyp.json
 	cp $< $@
