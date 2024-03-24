@@ -124,9 +124,11 @@
 ; highlight the right-hand side of a pipe operator as a function call
 (pipe_expression
   _
-  (value_identifier_path
+  [(value_identifier_path
     _
-    (value_identifier) @function.call))
+    (value_identifier) @function.call)
+    (value_identifier) @function.call])
+
 
 ; Meta
 ;-----
