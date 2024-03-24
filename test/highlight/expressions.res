@@ -62,3 +62,9 @@ let x = fn()
 let y = x->M.f->f
 //           ^function.call
 //              ^function.call   
+
+let v = M.v
+//        ^variable.member
+
+let {x} = y
+//   ^variable.member
