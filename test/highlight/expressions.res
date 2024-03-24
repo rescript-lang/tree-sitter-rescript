@@ -71,3 +71,6 @@ let {x} = y
 
 let x = y.x
 //        ^variable.member 
+
+f(~a=b)
+// ^property
