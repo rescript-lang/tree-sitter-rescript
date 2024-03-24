@@ -41,6 +41,10 @@
   (module_identifier)
   (value_identifier) @variable.member)
 
+(labeled_argument
+   label: (value_identifier) @property)
+
+
 ; Parameters
 ;----------------
 
