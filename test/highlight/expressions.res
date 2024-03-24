@@ -9,25 +9,25 @@ foo->bar == +x +. 1.0
 //    ^ property
 
 switch foo {
-// <- conditional
+// <- keyword.conditional
 | list{1, x, ...rest} =>
 //^ type
 //     ^ number
-//        ^ parameter
+//        ^ variable.parameter
 //           ^ punctuation.special
-//              ^ parameter
-//                    ^ punctuation.special
+//              ^ variable.parameter
+//                    ^ operator
   42
 | list{1, 2, ...list{b, ..._} as rest} => rest
-//                   ^ parameter
+//                   ^ variable.parameter
 //                                ^ variable
 | exception Js.Exn.Error(_) => 99
-//^ exception
+//^ keyword.exception
 }
 
 switch bar {
 | #...Mod.t => 33
-//^ constant
+//^ constructor
 }
 
 { foo, bar: baz, qux: 1 }
@@ -35,16 +35,16 @@ switch bar {
 //     ^ property
 
 exception InputClosed(string)
-//<- exception
+//<- keyword.exception
 
 raise(InputClosed("The stream has closed!"))
-//<- exception
+//<- keyword.exception
 
 try {
-//<- exception
+//<- keyword.exception
   someOtherJSFunctionThatThrows()
 } catch {
-// ^ exception
+// ^ keyword.exception
 | Not_found => 1 // catch a ReScript exception
 | Invalid_argument(_) => 2 // catch a second ReScript exception
 | Js.Exn.Error(obj) => 3 // catch the JS exception
