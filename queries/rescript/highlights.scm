@@ -18,6 +18,10 @@
   (#any-of? @type.builtin
     "int" "char" "string" "float" "bool" "unit"))
 
+
+((unit) @constant.builtin
+  (#set! "priority" 105))
+
 [
   (variant_identifier)
   (polyvar_identifier)
