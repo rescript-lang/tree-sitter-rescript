@@ -31,8 +31,9 @@
 (record_field (property_identifier) @property)
 (object (field (property_identifier) @property))
 (object_type (field (property_identifier) @property))
-(member_expression (property_identifier) @property)
 (module_identifier) @module
+
+(member_expression (property_identifier) @variable.member)
 
 (record_pattern
   (value_identifier) @variable.member)
