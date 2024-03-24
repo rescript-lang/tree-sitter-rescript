@@ -55,3 +55,10 @@ let c = list{a, ...list{b}}
 //        ^ type
 //           ^ variable
 //                      ^ variable
+
+let x = fn()
+//      ^ function.call     
+
+let y = x->M.f->f
+//           ^function.call
+//              ^function.call   
