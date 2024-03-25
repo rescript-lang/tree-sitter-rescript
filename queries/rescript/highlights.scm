@@ -104,16 +104,6 @@
 
 ; function calls
 
-; neovim and tree-sitter-cli handle conflicts differently:
-; in tree-sitter-cli the first match wins, while in neovim the last match does.
-; to get the desired result for `raise` in both, we put it before the general function call
-; queries (for the CLI), but also add a priority metadata rule (for neovim).
-
-(call_expression
-  function: (value_identifier) @keyword.exception
-   (#set! "priority" 105)
-   (#eq? @keyword.exception "raise"))
-
 (call_expression 
   function: (value_identifier_path
     _
@@ -195,6 +185,9 @@
   "catch"
 ] @keyword.exception
 
+(call_expression
+  function: (value_identifier) @keyword.exception
+   (#eq? @keyword.exception "raise"))
 
 [
   "for"
