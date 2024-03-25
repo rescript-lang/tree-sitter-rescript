@@ -60,9 +60,6 @@
   (template_string)
 ] @string
 
-(template_substitution
-  "${" @punctuation.special
-  "}" @punctuation.special) @embedded
 
 (character) @character
 (escape_sequence) @string.escape
@@ -244,6 +241,10 @@
   "["
   "]"
 ] @punctuation.bracket
+
+(template_substitution
+  "${" @punctuation.special
+   "}" @punctuation.special) @embedded
 
 (polyvar_type
   [
