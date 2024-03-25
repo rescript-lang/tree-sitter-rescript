@@ -72,5 +72,6 @@ let {x} = y
 let x = y.x
 //        ^variable.member 
 
-f(~a=b)
+f(~a=b, ())
 // ^property
+//      ^constant.builtin
