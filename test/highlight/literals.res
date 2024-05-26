@@ -24,3 +24,8 @@
 
 /**/ '\\'
 //    ^ string.escape
+
+/**/ `${hello}`
+//    ^ punctuation.special
+//     ^ punctuation.special
+//           ^ punctuation.special
