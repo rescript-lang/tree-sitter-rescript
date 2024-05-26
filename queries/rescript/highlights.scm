@@ -40,7 +40,7 @@
 
 (value_identifier_path
   (module_identifier)
-  (value_identifier) @variable.member)
+  (value_identifier) @variable)
 
 (labeled_argument
    label: (value_identifier) @property)

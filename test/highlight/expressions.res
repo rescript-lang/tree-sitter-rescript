@@ -64,7 +64,7 @@ let y = x->M.f->f
 //              ^function.call   
 
 let v = M.v
-//        ^variable.member
+//        ^variable
 
 let {x} = y
 //   ^variable.member
