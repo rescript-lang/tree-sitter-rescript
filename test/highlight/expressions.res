@@ -67,7 +67,10 @@ let v = M.v
 //        ^variable
 
 let {x} = y
-//   ^variable.member
+//   ^variable
+
+let {X.x} = y
+//     ^variable.member
 
 let x = y.x
 //        ^variable.member 

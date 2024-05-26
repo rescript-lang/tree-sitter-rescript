@@ -35,11 +35,16 @@
 
 (member_expression (property_identifier) @variable.member)
 
-(record_pattern
-  (value_identifier) @variable.member)
-
 (value_identifier_path
   (module_identifier)
+  (value_identifier) @variable)
+
+
+(record_pattern
+  (value_identifier_path
+    (value_identifier) @variable.member))
+
+(record_pattern
   (value_identifier) @variable)
 
 (labeled_argument
