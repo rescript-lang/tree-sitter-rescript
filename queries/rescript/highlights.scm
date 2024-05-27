@@ -88,10 +88,9 @@
 ;----------
 
 ; parameter(s) in parens
-[
- (parameter (value_identifier))
- (labeled_parameter (value_identifier))
-] @variable.parameter
+
+(parameter (value_identifier) @variable.parameter)
+(labeled_parameter (value_identifier) @variable.parameter)
 
 ; single parameter with no parens
 (function parameter: (value_identifier) @variable.parameter)
