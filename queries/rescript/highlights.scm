@@ -48,7 +48,7 @@
   (value_identifier) @variable)
 
 (labeled_argument
-   label: (value_identifier) @property)
+   label: (value_identifier) @variable.parameter)
 
 
 ; Parameters
