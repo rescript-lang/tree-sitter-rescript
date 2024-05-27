@@ -7,6 +7,9 @@
 ((value_identifier) @constant.macro
  (#match? @constant.macro "^\\.*$"))
 
+
+((value_identifier) @variable)
+
 [
   (type_identifier)
   (unit_type)
@@ -248,7 +251,7 @@
 
 (template_substitution
   "${" @punctuation.special
-   "}" @punctuation.special) @embedded
+   "}" @punctuation.special) @none
 
 (polyvar_type
   [
