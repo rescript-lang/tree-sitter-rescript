@@ -206,6 +206,7 @@
   "."
   ","
   "|"
+  ":"
 ] @punctuation.delimiter
 
 [
@@ -248,6 +249,8 @@
   "}"
   "["
   "]"
+  "<"
+  ">"
 ] @punctuation.bracket
 
 (template_substitution
