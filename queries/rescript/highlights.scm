@@ -171,7 +171,9 @@
   "constraint"
 ] @keyword
 
-((function "async" @keyword))
+(("await") @keyword.coroutine)
+
+((function "async" @keyword.coroutine))
 
 (module_unpack "unpack" @keyword)
 
