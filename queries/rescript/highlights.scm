@@ -145,7 +145,6 @@
 
 
 [
-   "as"
    "private"
    "mutable"
    "rec"
@@ -158,6 +157,7 @@
 [
   "and"
   "with"
+  "as"
 ] @keyword.operator
 
 [
