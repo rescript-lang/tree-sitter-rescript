@@ -13,6 +13,6 @@ node-addon-api@^8.0.0:
   integrity sha512-ipO7rsHEBqa9STO5C5T10fj732ml+5kLN1cAG8/jdHd56ldQeGj3Q7+scUS+VHK/qy1zLEwC4wMK5+yM0btPvw==
 
 tree-sitter-cli@^0.22.2:
-  version "0.22.2"
-  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.22.2.tgz#a69b8f68e78994f6ab730e7b345407b880658c13"
-  integrity sha512-ecqccEp27XMFXgjLMEEU71vK9JCWAC7fqSTTxcs5P1tnEnaaf4GkHz/wfo4lJ9l3rfxcTDPxN84tHAoitIQqdA==
+  version "0.22.6"
+  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.22.6.tgz#f0542bce4095952c292d3f0300d72aeab442b765"
+  integrity sha512-s7mYOJXi8sIFkt/nLJSqlYZP96VmKTc3BAwIX0rrrlRxWjWuCwixFqwzxWZBQz4R8Hx01iP7z3cT3ih58BUmZQ==

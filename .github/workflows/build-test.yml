@@ -21,6 +21,11 @@ jobs:
       - name: Generate
         run: make
 
+      - run: ls src
+
+      - name: Check Git Contains Generated
+        run: git add src && git diff --quiet HEAD -- src
+
       - name: Test
         run: make test
 
