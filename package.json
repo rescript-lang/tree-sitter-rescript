@@ -9,7 +9,11 @@
     "node-addon-api": "^8.0.0"
   },
   "devDependencies": {
+    "simple-git-hooks": "^2.11.1",
     "tree-sitter-cli": "^0.22.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "make generate && git add src"
   },
   "tree-sitter": [
     {
