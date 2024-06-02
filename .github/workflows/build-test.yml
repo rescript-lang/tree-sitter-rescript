@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Display Node versions
         run: |
@@ -20,6 +20,11 @@ jobs:
 
       - name: Generate
         run: make
+
+      - run: ls src
+
+      - name: Check Git Contains Generated
+        run: git add src && git diff --quiet HEAD -- src
 
       - name: Test
         run: make test

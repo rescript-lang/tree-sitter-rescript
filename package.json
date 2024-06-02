@@ -5,31 +5,26 @@
   "author": "Victor Nakoryakov",
   "license": "MIT",
   "dependencies": {
-    "nan": "^2.15.0"
+    "nan": "^2.15.0",
+    "node-addon-api": "^8.0.0"
   },
   "devDependencies": {
+    "simple-git-hooks": "^2.11.1",
     "tree-sitter-cli": "^0.22.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "make generate && git add src"
   },
   "tree-sitter": [
     {
       "scope": "source.rescript",
-      "file-types": [
-        "res",
-        "resi"
-      ],
+      "file-types": ["res", "resi"],
       "injection-regex": "rescript",
-      "highlights": [
-        "queries/rescript/highlights.scm"
-      ],
-      "locals": [
-        "queries/rescript/locals.scm"
-      ],
-      "injections": [
-        "queries/rescript/injections.scm"
-      ],
-      "textobjects": [
-        "queries/rescript/textobjects.scm"
-      ]
+      "highlights": ["queries/rescript/highlights.scm"],
+      "locals": ["queries/rescript/locals.scm"],
+      "injections": ["queries/rescript/injections.scm"],
+      "textobjects": ["queries/rescript/textobjects.scm"]
     }
-  ]
+  ],
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
