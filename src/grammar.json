@@ -5458,8 +5458,29 @@
                     "type": "FIELD",
                     "name": "module",
                     "content": {
-                      "type": "SYMBOL",
-                      "name": "module_identifier"
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "SYMBOL",
+                                "name": "module_identifier"
+                              },
+                              {
+                                "type": "STRING",
+                                "value": "."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "module_identifier"
+                        }
+                      ]
                     }
                   },
                   {
