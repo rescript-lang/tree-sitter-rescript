@@ -761,3 +761,19 @@ module LazyUtils: UtilsType = await Utils
       (module_identifier)
       (module_identifier)
       (module_identifier))))
+
+================================================================================
+Record with module path
+================================================================================
+
+t.A.B.c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (member_expression
+      (value_identifier)
+      (module_identifier)
+      (module_identifier)
+      (property_identifier))))

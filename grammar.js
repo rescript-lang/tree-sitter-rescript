@@ -1082,7 +1082,7 @@ module.exports = grammar({
       field('record', $.primary_expression),
       '.',
       optional(seq(
-        field('module', $.module_identifier),
+        field('module', seq(repeat(seq($.module_identifier, '.')), $.module_identifier)),
         '.'
       )),
       field('property', alias($.value_identifier, $.property_identifier)),

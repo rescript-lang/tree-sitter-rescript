@@ -2356,9 +2356,13 @@
     "named": true,
     "fields": {
       "module": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
+          {
+            "type": ".",
+            "named": false
+          },
           {
             "type": "module_identifier",
             "named": true
