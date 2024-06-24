@@ -1,23 +1,23 @@
 
 @@warning("-27")
-//<- annotation
-//^annotation
+//<- attribute
+//^attribute
 //        ^ string
 
 include NumericCurve({
-// ^ include
-//      ^ namespace
+// ^ keyword.import
+//      ^ module
   let foo = foo
 })
 
 let {baz, _} = module(User.Inner)
 //             ^ keyword
-//                    ^ namespace
-//                          ^ namespace
+//                    ^ module
+//                          ^ module
 
 module Belt = {
   include (Belt: module type of Belt with module Map := Belt.Map and module Result := Belt.Result)
-  // ^ include
+  // ^ keyword.import
   //              ^ keyword
   //                                  ^ keyword
   //                                                                                ^ operator
@@ -29,7 +29,7 @@ let a = module(
     type t
     let hello = "Hello"
   }: X
-//   ^ namespace
+//   ^ module
 )
 
 module B = unpack(a)
@@ -46,5 +46,5 @@ module A: A = {
 }
 
 let packedA = module(A: A)
-//                   ^ namespace
-//                      ^ namespace
+//                   ^ module
+//                      ^ module

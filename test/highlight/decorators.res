@@ -1,5 +1,5 @@
 @name
-//<- annotation
+//<- attribute
 
 @@name
-//<- annotation
+//<- attribute
