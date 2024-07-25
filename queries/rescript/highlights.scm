@@ -74,7 +74,7 @@
 [
   (true)
   (false)
-] @constant.builtin
+] @boolean
 
 (number) @number
 (polyvar) @constructor
