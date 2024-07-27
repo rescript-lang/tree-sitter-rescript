@@ -7621,13 +7621,8 @@
                     ]
                   },
                   {
-                    "type": "SEQ",
-                    "members": [
-                      {
-                        "type": "PATTERN",
-                        "value": "\\d(_?\\d)*"
-                      }
-                    ]
+                    "type": "PATTERN",
+                    "value": "\\d(_?\\d)*"
                   }
                 ]
               }
