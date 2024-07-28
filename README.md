@@ -1,6 +1,6 @@
 # tree-sitter-rescript
 
-ReScript grammaer for [Tree-sitter](https://tree-sitter.github.io/tree-sitter/)
+ReScript grammar for [Tree-sitter](https://tree-sitter.github.io/tree-sitter/)
 
 ## Contributing
 
