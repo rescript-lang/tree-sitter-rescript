@@ -1,64 +1,6 @@
-# ReScript grammar for Tree-sitter
+# tree-sitter-rescript
 
-This repository contains a parser definition of the [ReScript](https://rescript-lang.org/) language for the [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) parser generator tool.
-
-Queries for text objects are also included which help you to navigate, select, and modify ReScript code syntactically. For NeoVim, the [`nvim-treesitter-textobjects`](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) plugin is required to use Tree-sitter text objects.
-
-## Installation
-
-### Neovim
-
-If you want ReScript Tree-sitter in NeoVim, you will first need to register a new parser for it like so:
-
-```lua
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.rescript = {
-  install_info = {
-    url = "https://github.com/rescript-lang/tree-sitter-rescript",
-    branch = "main",
-    files = { "src/parser.c", "src/scanner.c" },
-    generate_requires_npm = false,
-    requires_generate_from_grammar = true,
-    use_makefile = true, -- macOS specific instruction
-  },
-}
-```
-
-This will make `TSInstall rescript` globally available. For more persistent approach you should add this parser to your Lua configuration.
-
-Default configuration detects `.res` and `.resi` files. You can confirm that it's correctly installed by invoking `:InspectTree` when you are in the ReScript file.
-
-- Notice that by default you will not see the highlighting! To enable highlighting, you will need to install this package either as a dependency or directly.
-
-If you are using `lazy.nvim` example configuration will look like so:
-
-```lua
-  {
-    "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-      "rescript-lang/tree-sitter-rescript"
-    },
-    opts = function(_, opts) -- this is needed so you won't override your default nvim-treesitter configuration
-      vim.list_extend(opts.ensure_installed, {
-        "rescript",
-      })
-
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config.rescript = {
-        install_info = {
-          url = "https://github.com/rescript-lang/tree-sitter-rescript",
-          branch = "main",
-          files = { "src/scanner.c" },
-          generate_requires_npm = false,
-          requires_generate_from_grammar = true,
-          use_makefile = true, -- macOS specific instruction
-        },
-      }
-    end,
-  }
-```
-
-- If you want it for other purposes, you probably know what to do.
+ReScript grammar for [Tree-sitter](https://tree-sitter.github.io/tree-sitter/)
 
 ## Contributing
 
