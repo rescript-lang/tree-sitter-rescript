@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   test:
-    name: Test parser
+    name: test
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
