@@ -748,6 +748,66 @@ module M = (Na: N, Nb: N): (
         body: (block)))))
 
 ================================================================================
+Module with type constraint
+================================================================================
+
+module LogResultDecoder: OnpingStdLib_PubSub.FromJSON
+  with type t = AlarmMixLogBatchTypes.batchResult = {
+  type t = AlarmMixLogBatchTypes.batchResult
+  let fromJSON = (json: JSON.t): result<t, string> => {
+    AlarmMixLogBatchTypes.decodeBatchResult(json)
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      name: (module_identifier)
+      signature: (module_type_constraint
+        (module_identifier_path
+          (module_identifier)
+          (module_identifier))
+        (constrain_type
+          (type_identifier)
+          (type_identifier_path
+            (module_identifier)
+            (type_identifier))))
+      definition: (block
+        (type_declaration
+          (type_binding
+            name: (type_identifier)
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier))))
+        (let_declaration
+          (let_binding
+            pattern: (value_identifier)
+            body: (function
+              parameters: (formal_parameters
+                (parameter
+                  (value_identifier)
+                  (type_annotation
+                    (type_identifier_path
+                      (module_identifier)
+                      (type_identifier)))))
+              return_type: (type_annotation
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier)
+                    (type_identifier))))
+              body: (block
+                (expression_statement
+                  (call_expression
+                    function: (value_identifier_path
+                      (module_identifier)
+                      (value_identifier))
+                    arguments: (arguments
+                      (value_identifier))))))))))))
+
+================================================================================
 Dynamic imports
 ================================================================================
 

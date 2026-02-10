@@ -256,6 +256,18 @@ bool tree_sitter_rescript_external_scanner_scan(
           }
         }
       }
+    } else if (lexer->lookahead == 'w') {
+      advance(lexer);
+      if (lexer->lookahead == 'i') {
+        advance(lexer);
+        if (lexer->lookahead == 't') {
+          advance(lexer);
+          if (lexer->lookahead == 'h') {
+            // Ignore new lines before `with` keyword (module type constraints)
+            in_multiline_statement = true;
+          }
+        }
+      }
     }
 
     if (in_multiline_statement) {
