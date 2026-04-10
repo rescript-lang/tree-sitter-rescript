@@ -1226,6 +1226,7 @@ Math operators
 - 1 + 2 / 3
 -. 1.0 +. 2.0 /. 3.0
 2.0 ** 3.0
+5 % 2
 -0l
 -ln
 
@@ -1246,6 +1247,10 @@ Math operators
       (binary_expression
         (number)
         (number))))
+  (expression_statement
+    (binary_expression
+      (number)
+      (number)))
   (expression_statement
     (binary_expression
       (number)
@@ -1287,6 +1292,65 @@ i && j;
           (value_identifier))
         (unary_expression
           (value_identifier))))))
+
+================================================================================
+Bitwise operators
+================================================================================
+
+a &&& b;
+a ||| b;
+a ^^^ b;
+~~~a;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (unary_expression
+      (value_identifier))))
+
+================================================================================
+Shift operators
+================================================================================
+
+a << b;
+a >> b;
+a >>> b;
+a << b + c;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (binary_expression
+        (value_identifier)
+        (value_identifier)))))
 
 ================================================================================
 String operators

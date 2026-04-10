@@ -45,8 +45,12 @@ module.exports = grammar({
       "binary_times",
       "binary_pow",
       "binary_plus",
+      "binary_shift",
       "binary_compare",
       "binary_relation",
+      "binary_bitand",
+      "binary_bitxor",
+      "binary_bitor",
       "binary_and",
       "binary_or",
       "coercion_relation",
@@ -985,8 +989,11 @@ module.exports = grammar({
     binary_expression: ($) =>
       choice(
         ...[
+          ["&&&", "binary_bitand"],
           ["&&", "binary_and"],
+          ["|||", "binary_bitor"],
           ["||", "binary_or"],
+          ["^^^", "binary_bitxor"],
           ["++", "binary_plus"],
           ["+", "binary_plus"],
           ["+.", "binary_plus"],
@@ -994,9 +1001,13 @@ module.exports = grammar({
           ["-.", "binary_plus"],
           ["*", "binary_times"],
           ["*.", "binary_times"],
+          ["%", "binary_times"],
           ["**", "binary_pow"],
           ["/", "binary_times"],
           ["/.", "binary_times"],
+          ["<<", "binary_shift"],
+          [">>>", "binary_shift"],
+          [">>", "binary_shift"],
           ["<", "binary_relation"],
           ["<=", "binary_relation"],
           ["==", "binary_relation"],
@@ -1030,6 +1041,7 @@ module.exports = grammar({
     unary_expression: ($) =>
       choice(
         ...[
+          ["~~~", "unary_not"],
           ["!", "unary_not"],
           ["-", "unary_not"],
           ["-.", "unary_not"],
