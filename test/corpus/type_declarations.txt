@@ -227,6 +227,35 @@ type M.t +=
           (variant_identifier))))))
 
 ================================================================================
+Variant Spread
+================================================================================
+
+type base = Start | Stop | Pause
+type extended = | ...base | Resume
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_type_spread
+          (type_identifier))
+        (variant_declaration
+          (variant_identifier))))))
+
+================================================================================
 Variant
 ================================================================================
 

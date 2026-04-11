@@ -635,6 +635,59 @@ switch foo {
             (number)))))))
 
 ================================================================================
+Variant Pattern Spread
+================================================================================
+
+let handle = (event: extended) =>
+  switch event {
+  | ...base as core => Console.log2("base", core)
+  | Resume => Console.log("resuming")
+  }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (function
+        parameters: (formal_parameters
+          (parameter
+            (value_identifier)
+            (type_annotation
+              (type_identifier))))
+        body: (switch_expression
+          (value_identifier)
+          (switch_match
+            pattern: (variant_spread_pattern
+              (variant_type_pattern
+                (type_identifier))
+              (as_aliasing
+                (value_identifier)))
+            body: (sequence_expression
+              (expression_statement
+                (call_expression
+                  function: (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  arguments: (arguments
+                    (string
+                      (string_fragment))
+                    (value_identifier))))))
+          (switch_match
+            pattern: (variant_pattern
+              (variant_identifier))
+            body: (sequence_expression
+              (expression_statement
+                (call_expression
+                  function: (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  arguments: (arguments
+                    (string
+                      (string_fragment))))))))))))
+
+================================================================================
 Switch of polyvars
 ================================================================================
 

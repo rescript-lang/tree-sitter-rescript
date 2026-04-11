@@ -4179,6 +4179,10 @@
           {
             "type": "variant_pattern",
             "named": true
+          },
+          {
+            "type": "variant_spread_pattern",
+            "named": true
           }
         ]
       }
@@ -4890,6 +4894,25 @@
     }
   },
   {
+    "type": "variant_spread_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "as_aliasing",
+          "named": true
+        },
+        {
+          "type": "variant_type_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "variant_type",
     "named": true,
     "fields": {},
@@ -4899,6 +4922,48 @@
       "types": [
         {
           "type": "variant_declaration",
+          "named": true
+        },
+        {
+          "type": "variant_type_spread",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variant_type_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "type_identifier",
+          "named": true
+        },
+        {
+          "type": "type_identifier_path",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variant_type_spread",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "type_identifier",
+          "named": true
+        },
+        {
+          "type": "type_identifier_path",
           "named": true
         }
       ]

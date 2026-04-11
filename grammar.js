@@ -309,7 +309,9 @@ module.exports = grammar({
     tuple_type: ($) => prec.dynamic(-1, seq("(", commaSep1t($._type), ")")),
 
     variant_type: ($) =>
-      prec.left(seq(optional("|"), barSep1($.variant_declaration))),
+      prec.left(
+        seq(optional("|"), barSep1(choice($.variant_declaration, $.variant_type_spread))),
+      ),
 
     variant_declaration: ($) =>
       prec.right(
@@ -319,6 +321,8 @@ module.exports = grammar({
           optional($.type_annotation),
         ),
       ),
+
+    variant_type_spread: ($) => seq("...", $._type_identifier),
 
     variant_parameters: ($) => seq("(", commaSep1t($._type), ")"),
 
@@ -580,7 +584,7 @@ module.exports = grammar({
         -1,
         seq(
           "|",
-          field("pattern", $._pattern),
+          field("pattern", choice($.variant_spread_pattern, $._pattern)),
           optional($.guard),
           "=>",
           field(
@@ -593,6 +597,11 @@ module.exports = grammar({
     guard: ($) => seq(choice("if", "when"), $.expression),
 
     polyvar_type_pattern: ($) => seq("#", "...", $._type_identifier),
+
+    variant_type_pattern: ($) => seq("...", $._type_identifier),
+
+    variant_spread_pattern: ($) =>
+      seq($.variant_type_pattern, optional($.as_aliasing)),
 
     try_expression: ($) =>
       seq("try", $.expression, "catch", "{", repeat($.switch_match), "}"),
