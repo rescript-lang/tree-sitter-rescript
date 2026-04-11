@@ -546,7 +546,7 @@ module.exports = grammar({
 
     tuple: ($) => seq("(", commaSep2t($.expression), ")"),
 
-    array: ($) => seq("[", commaSept($.expression), "]"),
+    array: ($) => seq("[", commaSept(choice($.spread_element, $.expression)), "]"),
 
     list: ($) =>
       seq($._list_constructor, "{", optional(commaSep1t($._list_element)), "}"),

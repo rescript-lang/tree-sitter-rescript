@@ -1495,6 +1495,41 @@ Arrays
       (number))))
 
 ================================================================================
+Array spreads
+================================================================================
+
+let animals = ["🐶", "🐱", "🐷"]
+let moreAnimals = [...animals, "🐔", "🐴", "🐮", ...otherAnimals]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (array
+        (string
+          (string_fragment))
+        (string
+          (string_fragment))
+        (string
+          (string_fragment)))))
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (array
+        (spread_element
+          (value_identifier))
+        (string
+          (string_fragment))
+        (string
+          (string_fragment))
+        (string
+          (string_fragment))
+        (spread_element
+          (value_identifier))))))
+
+================================================================================
 Lists
 ================================================================================
 
