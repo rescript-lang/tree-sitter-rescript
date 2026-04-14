@@ -208,7 +208,8 @@ type M.t +=
 (source_file
   (type_declaration
     (type_binding
-      (type_identifier)))
+      (type_identifier)
+      (extensible_type)))
   (type_declaration
     (type_binding
       (type_identifier)
@@ -232,6 +233,10 @@ Variant Spread
 
 type base = Start | Stop | Pause
 type extended = | ...base | Resume
+type t =
+  | ...Foo.t
+  | ...Bar.t
+  | Baz
 
 --------------------------------------------------------------------------------
 
@@ -252,6 +257,20 @@ type extended = | ...base | Resume
       (variant_type
         (variant_type_spread
           (type_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_type_spread
+          (type_identifier_path
+            (module_identifier)
+            (type_identifier)))
+        (variant_type_spread
+          (type_identifier_path
+            (module_identifier)
+            (type_identifier)))
         (variant_declaration
           (variant_identifier))))))
 

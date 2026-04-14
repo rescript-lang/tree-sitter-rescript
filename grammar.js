@@ -254,19 +254,24 @@ module.exports = grammar({
         field("name", choice($.type_identifier, $.type_identifier_path)),
         optional($.type_parameters),
         optional(
-          seq(
-            optional(seq("=", $._non_function_inline_type)),
-            optional(
-              seq(
-                choice("=", "+="),
-                optional("private"),
-                field("body", $._type),
+          choice(
+            seq("=", $.extensible_type),
+            seq(
+              optional(seq("=", $._non_function_inline_type)),
+              optional(
+                seq(
+                  choice("=", "+="),
+                  optional("private"),
+                  field("body", $._type),
+                ),
               ),
+              repeat($.type_constraint),
             ),
-            repeat($.type_constraint),
           ),
         ),
       ),
+
+    extensible_type: (_$) => "..",
 
     type_parameters: ($) =>
       seq(
@@ -1106,7 +1111,7 @@ module.exports = grammar({
       ),
 
     _type_identifier: ($) =>
-      choice($.type_identifier, $.type_identifier_path, ".."),
+      choice($.type_identifier, $.type_identifier_path),
 
     type_identifier_path: ($) =>
       seq($.module_primary_expression, ".", $.type_identifier),
