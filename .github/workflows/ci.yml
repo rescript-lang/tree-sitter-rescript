@@ -8,6 +8,9 @@ on:
       - test/**
       - bindings/**
       - binding.gyp
+      - package.json
+      - package-lock.json
+      - .nvmrc
       - .github/workflows/**
   pull_request:
     paths:
@@ -16,6 +19,9 @@ on:
       - test/**
       - bindings/**
       - binding.gyp
+      - package.json
+      - package-lock.json
+      - .nvmrc
       - .github/workflows/**
 
 concurrency:
@@ -36,6 +42,8 @@ jobs:
 
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.26.3
 
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
