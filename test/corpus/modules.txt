@@ -253,6 +253,10 @@ module S = unpack(Mod.read(v))
 
 module S = unpack(%extension(payload))
 
+module T2 = unpack(make(): T)
+
+module T3 = unpack(make(): T with type t = int)
+
 --------------------------------------------------------------------------------
 
 (source_file
@@ -319,7 +323,29 @@ module S = unpack(%extension(payload))
         (extension_expression
           (extension_identifier)
           (expression_statement
-            (value_identifier)))))))
+            (value_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_unpack
+        (call_expression
+          (value_identifier)
+          (arguments))
+        (module_type_annotation
+          (module_identifier)))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_unpack
+        (call_expression
+          (value_identifier)
+          (arguments))
+        (module_type_annotation
+          (module_type_constraint
+            (module_identifier)
+            (constrain_type
+              (type_identifier)
+              (type_identifier))))))))
 
 ================================================================================
 Functor definition

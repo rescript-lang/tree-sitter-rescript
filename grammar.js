@@ -210,7 +210,7 @@ module.exports = grammar({
             ),
             optional($.module_type_annotation),
           ),
-          $.call_expression,
+          seq($.call_expression, optional($.module_type_annotation)),
           $.extension_expression,
         ),
         ")",
