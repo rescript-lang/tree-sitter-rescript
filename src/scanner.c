@@ -75,36 +75,6 @@ static void scan_whitespace(TSLexer *lexer, bool skip) {
   }
 }
 
-// Consume a `/* ... */` block comment, including nested block comments.
-// Assumes the lexer is positioned at the opening `/*`.
-static void scan_block_comment_body(TSLexer *lexer, bool skip_chars) {
-  lexer->advance(lexer, skip_chars); // consume '/'
-  lexer->advance(lexer, skip_chars); // consume '*'
-  int level = 1;
-  while (level > 0 && !lexer->eof(lexer)) {
-    switch (lexer->lookahead) {
-      case '/':
-        lexer->advance(lexer, skip_chars);
-        if (lexer->lookahead == '*') {
-          ++level;
-          lexer->advance(lexer, skip_chars);
-        }
-        break;
-
-      case '*':
-        lexer->advance(lexer, skip_chars);
-        if (lexer->lookahead == '/') {
-          --level;
-          lexer->advance(lexer, skip_chars);
-        }
-        break;
-
-      default:
-        lexer->advance(lexer, skip_chars);
-    }
-  }
-}
-
 // Tries to skip a comment (line or block) starting at the current position.
 // Returns true if a comment was consumed. All characters are skipped
 // (advance with skip=true) so they are not included in any token.
