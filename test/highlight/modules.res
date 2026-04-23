@@ -19,7 +19,7 @@ module Belt = {
   include (Belt: module type of Belt with module Map := Belt.Map and module Result := Belt.Result)
   // ^ keyword.import
   //              ^ keyword
-  //                                  ^ keyword
+  //                                  ^ keyword.operator
   //                                                                                ^ operator
 }
 

@@ -47,17 +47,24 @@
         {
           "type": "SYMBOL",
           "name": "_newline"
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_newline_and_comment"
-          },
-          "named": true,
-          "value": "comment"
         }
       ]
+    },
+    "line_comment": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "//"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^\\n]*"
+          }
+        ]
+      }
     },
     "_one_or_more_statements": {
       "type": "SEQ",
@@ -8954,7 +8961,11 @@
   "extras": [
     {
       "type": "SYMBOL",
-      "name": "comment"
+      "name": "block_comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "line_comment"
     },
     {
       "type": "SYMBOL",
@@ -9271,11 +9282,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "comment"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "_newline_and_comment"
+      "name": "block_comment"
     },
     {
       "type": "STRING",

@@ -834,10 +834,6 @@
       "required": false,
       "types": [
         {
-          "type": "comment",
-          "named": true
-        },
-        {
           "type": "statement",
           "named": true
         }
@@ -1338,10 +1334,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "comment",
-          "named": true
-        },
         {
           "type": "extension_identifier",
           "named": true
@@ -1985,10 +1977,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "comment",
-          "named": true
-        },
         {
           "type": "spread_element",
           "named": true
@@ -3935,10 +3923,6 @@
       "required": true,
       "types": [
         {
-          "type": "comment",
-          "named": true
-        },
-        {
           "type": "statement",
           "named": true
         }
@@ -3954,10 +3938,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "comment",
-          "named": true
-        },
         {
           "type": "statement",
           "named": true
@@ -5218,13 +5198,13 @@
     "named": false
   },
   {
-    "type": "catch",
-    "named": false
-  },
-  {
-    "type": "comment",
+    "type": "block_comment",
     "named": true,
     "extra": true
+  },
+  {
+    "type": "catch",
+    "named": false
   },
   {
     "type": "constraint",
@@ -5293,6 +5273,11 @@
   {
     "type": "let",
     "named": false
+  },
+  {
+    "type": "line_comment",
+    "named": true,
+    "extra": true
   },
   {
     "type": "module",

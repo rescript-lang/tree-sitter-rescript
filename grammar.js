@@ -5,8 +5,7 @@ module.exports = grammar({
 
   externals: ($) => [
     $._newline,
-    $.comment,
-    $._newline_and_comment,
+    $.block_comment,
     '"',
     "`",
     $._template_chars,
@@ -18,7 +17,12 @@ module.exports = grammar({
     $._decorator_inline,
   ],
 
-  extras: ($) => [$.comment, $.decorator, /[\s\uFEFF\u2060\u200B\u00A0]/],
+  extras: ($) => [
+    $.block_comment,
+    $.line_comment,
+    $.decorator,
+    /[\s\uFEFF\u2060\u200B\u00A0]/,
+  ],
 
   supertypes: ($) => [
     $.statement,
@@ -121,8 +125,9 @@ module.exports = grammar({
 
     _statement: ($) => seq($.statement, repeat1($._statement_delimeter)),
 
-    _statement_delimeter: ($) =>
-      choice(";", $._newline, alias($._newline_and_comment, $.comment)),
+    _statement_delimeter: ($) => choice(";", $._newline),
+
+    line_comment: ($) => token(seq("//", /[^\n]*/)),
 
     _one_or_more_statements: ($) =>
       seq(repeat($._statement), $.statement, optional($._statement_delimeter)),

@@ -1,6 +1,6 @@
 let inc = n => n + 1
 //        ^ variable.parameter
-//          ^ punctuation.special
+//          ^ operator
 //  ^ function
 
 let fn = (a, (b, c), {d, e}, [f, g]) => a + b + c + d + e + f + g
@@ -14,5 +14,5 @@ let get = async (id) => id
 
 let getFromDict = (dict{"key": value}) => value
 //                 ^ type.builtin
-//                      ^ property
+//                      ^ string
 //                             ^ variable.parameter

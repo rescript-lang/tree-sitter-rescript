@@ -4,8 +4,7 @@
 
 enum TokenType {
   NEWLINE,
-  COMMENT,
-  NEWLINE_AND_COMMENT,
+  BLOCK_COMMENT,
   QUOTE,
   BACKTICK,
   TEMPLATE_CHARS,
@@ -76,74 +75,94 @@ static void scan_whitespace(TSLexer *lexer, bool skip) {
   }
 }
 
-static void scan_multiline_comment(TSLexer *lexer) {
+// Consume a `/* ... */` block comment, including nested block comments.
+// Assumes the lexer is positioned at the opening `/*`.
+static void scan_block_comment_body(TSLexer *lexer, bool skip_chars) {
+  lexer->advance(lexer, skip_chars); // consume '/'
+  lexer->advance(lexer, skip_chars); // consume '*'
   int level = 1;
-  advance(lexer);
   while (level > 0 && !lexer->eof(lexer)) {
     switch (lexer->lookahead) {
       case '/':
-        advance(lexer);
-        if (lexer->lookahead == '*')
+        lexer->advance(lexer, skip_chars);
+        if (lexer->lookahead == '*') {
           ++level;
-        else
-          continue;
-
+          lexer->advance(lexer, skip_chars);
+        }
         break;
 
       case '*':
-        advance(lexer);
-        if (lexer->lookahead == '/')
+        lexer->advance(lexer, skip_chars);
+        if (lexer->lookahead == '/') {
           --level;
-        else
-          continue;
-
+          lexer->advance(lexer, skip_chars);
+        }
         break;
-    }
 
-    advance(lexer);
+      default:
+        lexer->advance(lexer, skip_chars);
+    }
   }
 }
 
-static bool scan_comment(TSLexer *lexer) {
-  if (lexer->lookahead != '/')
-    return false;
-
-  advance(lexer);
+// Tries to skip a comment (line or block) starting at the current position.
+// Returns true if a comment was consumed. All characters are skipped
+// (advance with skip=true) so they are not included in any token.
+static bool skip_comment(TSLexer *lexer) {
+  if (lexer->lookahead != '/') return false;
+  skip(lexer);
   switch (lexer->lookahead) {
     case '/':
       // Single-line comment
-      do {
-        advance(lexer);
-      } while (lexer->lookahead != '\n' && !lexer->eof(lexer));
+      while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
+        skip(lexer);
+      }
       return true;
 
     case '*':
-      // Multi-line comment
-      scan_multiline_comment(lexer);
+      // Multi-line block comment (may be nested)
+      // Rewind conceptually: we already skipped the leading '/', now handle '/*'.
+      // We advance past '*' and the body.
+      skip(lexer);
+      {
+        int level = 1;
+        while (level > 0 && !lexer->eof(lexer)) {
+          switch (lexer->lookahead) {
+            case '/':
+              skip(lexer);
+              if (lexer->lookahead == '*') {
+                ++level;
+                skip(lexer);
+              }
+              break;
+            case '*':
+              skip(lexer);
+              if (lexer->lookahead == '/') {
+                --level;
+                skip(lexer);
+              }
+              break;
+            default:
+              skip(lexer);
+          }
+        }
+      }
       return true;
 
     default:
-      // Division, etc
+      // Not a comment after `/` — bail out.
       return false;
   }
 }
 
-static bool scan_whitespace_and_comments(TSLexer *lexer) {
-  bool has_comments = false;
+// Skip whitespace and comments (line and block), all as skip=true.
+// Used for peek-ahead only: none of the consumed characters will be part
+// of any emitted token.
+static void skip_whitespace_and_comments(TSLexer *lexer) {
   while (!lexer->eof(lexer)) {
-    // Once a comment is found, the subsequent whitespace should not be marked
-    // as skipped to keep the correct range of the comment node if it will be
-    // marked so.
-    bool skip_whitespace = !has_comments;
-    scan_whitespace(lexer, skip_whitespace);
-    if (scan_comment(lexer)) {
-      has_comments = true;
-    } else {
-      break;
-    }
+    scan_whitespace(lexer, true);
+    if (!skip_comment(lexer)) break;
   }
-
-  return has_comments;
 }
 
 bool tree_sitter_rescript_external_scanner_scan(
@@ -195,27 +214,19 @@ bool tree_sitter_rescript_external_scanner_scan(
     return true;
   }
 
-  // Magic ahead!
-  // We have two types of newline in ReScript. The one which ends the current statement,
-  // and the one used just for pretty-formatting (e.g. separates variant type values).
-  // We report only the first one. The second one should be ignored and skipped as
-  // whitespace.
-  // What makes things worse is that we can have comments interleaved in statements.
-  // Tree-sitter gives just one chance to say what type of a token we’re on. We can’t
-  // say: “I see a significant newline, then I see a comment”. To deal with it, an
-  // artificial token NEWLINE_AND_COMMENT was introduced. It has the same semantics for
-  // the AST as simple newline and the same highlighting as a usual comment.
+  // Handle significant newlines. A newline can act as a statement delimiter,
+  // but some constructs continue over newlines (e.g. before `->`, `|`,
+  // `else`, `with`, etc.). To decide, we peek ahead past any whitespace and
+  // comments. Line comments (`// ...`) are grammar-level extras — if the
+  // newline is significant we still want the parser to capture them, so we
+  // only peek across them without advancing past the mark_end boundary.
   if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
-    bool is_unnested = state->parens_nesting == 0;
-    lexer->result_symbol = NEWLINE;
     lexer->advance(lexer, true);
     lexer->mark_end(lexer);
 
-    bool has_comment = scan_whitespace_and_comments(lexer);
-    if (has_comment && valid_symbols[NEWLINE_AND_COMMENT]) {
-      lexer->result_symbol = NEWLINE_AND_COMMENT;
-      lexer->mark_end(lexer);
-    }
+    // Peek past whitespace and any comments to determine whether the next
+    // meaningful character continues the current statement.
+    skip_whitespace_and_comments(lexer);
 
     bool in_multiline_statement = false;
     if (lexer->lookahead == '-') {
@@ -232,7 +243,7 @@ bool tree_sitter_rescript_external_scanner_scan(
       in_multiline_statement = true;
     } else if (lexer->lookahead == '}') {
       // Do not report new lines right before block/switch closings to avoid
-      // parser confustion between a terminated and unterminated statements
+      // parser confusion between a terminated and unterminated statements
       // for rules like seq(repeat($._statement), $.statement)
       in_multiline_statement = true;
     } else if (lexer->lookahead == 'a') {
@@ -270,28 +281,50 @@ bool tree_sitter_rescript_external_scanner_scan(
       }
     }
 
-    if (in_multiline_statement) {
-      if (has_comment && valid_symbols[COMMENT]) {
-        lexer->result_symbol = COMMENT;
-        return true;
-      }
-    } else {
+    if (!in_multiline_statement) {
+      lexer->result_symbol = NEWLINE;
       return true;
     }
+    // In a multi-line statement: fall through without emitting NEWLINE.
   }
 
   if (!in_string) {
     scan_whitespace(lexer, true);
   }
 
-  if (valid_symbols[COMMENT] && lexer->lookahead == '/' && !in_string) {
-    lexer->result_symbol = COMMENT;
-    if (scan_comment(lexer)) {
+  // Block comments encountered at an arbitrary position (e.g. mid-expression).
+  // These are emitted as BLOCK_COMMENT tokens and captured via grammar extras.
+  if (valid_symbols[BLOCK_COMMENT] && lexer->lookahead == '/' && !in_string) {
+    advance(lexer);
+    if (lexer->lookahead == '*') {
+      int level = 1;
+      advance(lexer); // '*'
+      while (level > 0 && !lexer->eof(lexer)) {
+        switch (lexer->lookahead) {
+          case '/':
+            advance(lexer);
+            if (lexer->lookahead == '*') {
+              ++level;
+              advance(lexer);
+            }
+            break;
+          case '*':
+            advance(lexer);
+            if (lexer->lookahead == '/') {
+              --level;
+              advance(lexer);
+            }
+            break;
+          default:
+            advance(lexer);
+        }
+      }
+      lexer->result_symbol = BLOCK_COMMENT;
       lexer->mark_end(lexer);
       return true;
-    } else {
-      return false;
     }
+    // Not a block comment — fall through to other checks.
+    return false;
   }
 
   if (valid_symbols[QUOTE] && lexer->lookahead == '"') {

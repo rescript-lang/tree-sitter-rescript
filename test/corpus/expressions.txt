@@ -527,13 +527,13 @@ else {
       (block
         (expression_statement
           (value_identifier)))
-      (comment)
+      (line_comment)
       (else_if_clause
         (value_identifier)
         (block
           (expression_statement
             (value_identifier))))
-      (comment)
+      (line_comment)
       (else_clause
         (block
           (expression_statement

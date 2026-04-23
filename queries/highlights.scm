@@ -1,4 +1,7 @@
-(comment) @comment
+[
+  (line_comment)
+  (block_comment)
+] @comment
 
 ; Identifiers
 ;------------

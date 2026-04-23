@@ -40,37 +40,37 @@ switch foo {
 --------------------------------------------------------------------------------
 
 (source_file
-  (comment)
+  (line_comment)
   (expression_statement
     (number))
-  (comment)
+  (block_comment)
   (expression_statement
     (number))
-  (comment)
+  (block_comment)
   (expression_statement
     (number))
   (expression_statement
     (number))
-  (comment)
+  (line_comment)
   (expression_statement
     (number))
-  (comment)
-  (comment)
+  (block_comment)
+  (block_comment)
   (expression_statement
     (number))
-  (comment)
+  (block_comment)
   (expression_statement
     (number))
-  (comment)
+  (block_comment)
   (expression_statement
     (number))
-  (comment)
+  (block_comment)
   (expression_statement
     (number))
   (expression_statement
     (pipe_expression
       (value_identifier)
-      (comment)
+      (line_comment)
       (value_identifier)))
   (expression_statement
     (switch_expression
@@ -80,4 +80,4 @@ switch foo {
         (sequence_expression
           (expression_statement
             (number))))
-      (comment))))
+      (line_comment))))

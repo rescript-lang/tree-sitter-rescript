@@ -24,7 +24,10 @@
 ; Comments
 ;---------
 
-(comment) @comment.outer
+[
+  (line_comment)
+  (block_comment)
+] @comment.outer
 
 ; Parameters
 ;-----------
