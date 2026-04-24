@@ -117,6 +117,8 @@ module.exports = grammar({
     [$._type, $._non_function_inline_type],
     [$._module_structure, $.parenthesized_module_expression],
     [$._record_type_member, $._object_type_member],
+    [$._non_function_inline_type, $.generic_type],
+    [$._type_identifier, $.polymorphic_type]
   ],
 
   rules: {
@@ -1053,7 +1055,7 @@ module.exports = grammar({
         seq(
           field("left", $.expression),
           field("operator", ":>"),
-          field("right", $._type_identifier),
+          field("right", $._type),
         ),
       ),
 

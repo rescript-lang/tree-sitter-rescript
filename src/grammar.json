@@ -6896,7 +6896,7 @@
             "name": "right",
             "content": {
               "type": "SYMBOL",
-              "name": "_type_identifier"
+              "name": "_type"
             }
           }
         ]
@@ -9128,6 +9128,14 @@
     [
       "_record_type_member",
       "_object_type_member"
+    ],
+    [
+      "_non_function_inline_type",
+      "generic_type"
+    ],
+    [
+      "_type_identifier",
+      "polymorphic_type"
     ]
   ],
   "precedences": [

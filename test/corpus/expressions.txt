@@ -1431,6 +1431,7 @@ Coercion operator
 ================================================================================
 
 value :> newType
+value :> t<'a>
 
 --------------------------------------------------------------------------------
 
@@ -1438,7 +1439,14 @@ value :> newType
   (expression_statement
     (coercion_expression
       (value_identifier)
-      (type_identifier))))
+      (type_identifier)))
+  (expression_statement
+    (coercion_expression
+      (value_identifier)
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (type_identifier))))))
 
 ================================================================================
 Ternaries

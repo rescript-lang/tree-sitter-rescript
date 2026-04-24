@@ -910,11 +910,7 @@
         "required": true,
         "types": [
           {
-            "type": "type_identifier",
-            "named": true
-          },
-          {
-            "type": "type_identifier_path",
+            "type": "_type",
             "named": true
           }
         ]
