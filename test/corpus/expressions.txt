@@ -940,15 +940,15 @@ switch person {
         (sequence_expression
           (expression_statement
             (number))))
-        (switch_match
-          (variant_pattern
+      (switch_match
+        (variant_pattern
           (variant_identifier)
           (formal_parameters
             (record_pattern
               (value_identifier))))
-           (sequence_expression
-             (expression_statement
-               (number)))))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
 ================================================================================
 Switch of lists
@@ -2132,6 +2132,7 @@ Dict expression
 dict{"A": 5, "B": 6}
 dict{}
 let dict = dict{"A": 5}
+let dict{"C": ?c} = d
 
 --------------------------------------------------------------------------------
 
@@ -2155,14 +2156,22 @@ let dict = dict{"A": 5}
         (dict_entry
           (string
             (string_fragment))
-          (number))))))
+          (number)))))
+  (let_declaration
+    (let_binding
+      pattern: (dict_pattern
+        (dict_pattern_entry
+          (string
+            (string_fragment))
+          (value_identifier)))
+      body: (value_identifier))))
 
 ================================================================================
 Dict pattern in switch
 ================================================================================
 
 switch json {
-| Object(dict{"lat": Number(lat)}) => lat
+| Object(dict{"lat": Number(lat), "lon": ?lon}) => lat
 | _ => 0.0
 }
 
@@ -2183,7 +2192,11 @@ switch json {
                 (variant_pattern
                   (variant_identifier)
                   (formal_parameters
-                    (value_identifier)))))))
+                    (value_identifier))))
+              (dict_pattern_entry
+                (string
+                  (string_fragment))
+                (value_identifier)))))
         (sequence_expression
           (expression_statement
             (value_identifier))))

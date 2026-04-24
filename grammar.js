@@ -734,7 +734,7 @@ module.exports = grammar({
         -1,
         seq(
           choice(
-            $.value_identifier,
+            seq(optional("?"), $.value_identifier),
             $._literal_pattern,
             $._destructuring_pattern,
             $.polyvar_type_pattern,
