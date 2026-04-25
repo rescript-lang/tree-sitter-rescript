@@ -30,6 +30,6 @@ jobs:
         uses: tree-sitter/parser-test-action@v3
         with:
           test-rust: true
-          test-node: true
+          test-node: false # https://github.com/tree-sitter/node-tree-sitter/issues/268
           test-python: true
           test-go: true
