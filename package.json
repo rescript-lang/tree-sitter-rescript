@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "main": "bindings/node",
   "author": "Victor Nakoryakov",
+  "type": "module",
   "license": "MIT",
   "dependencies": {
     "nan": "^2.15.0",
