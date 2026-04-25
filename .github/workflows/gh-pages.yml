@@ -19,12 +19,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
+
+      # Instruct a C++ compiler to use the C++20 standard
+      # See # https://github.com/tree-sitter/node-tree-sitter/issues/268
+      - name: Set env var for C++ compiler
+        shell: bash
+        run: export CXXFLAGS="-std=c++20"
 
       - name: Install dependencies
         run: npm ci
