@@ -5,12 +5,15 @@
       "name": "rescript",
       "camelcase": "ReScript",
       "scope": "source.rescript",
-      "file-types": ["res", "resi"],
-      "injection-regex": "^(res|rescript)$",
-      "class-name": "TreeSitterReScript",
+      "file-types": [
+        "res",
+        "resi"
+      ],
       "highlights": "queries/highlights.scm",
       "injections": "queries/injections.scm",
-      "locals": "queries/locals.scm"
+      "locals": "queries/locals.scm",
+      "injection-regex": "^(res|rescript)$",
+      "class-name": "TreeSitterReScript"
     }
   ],
   "metadata": {
@@ -29,6 +32,7 @@
   "bindings": {
     "c": true,
     "go": true,
+    "java": false,
     "node": true,
     "python": true,
     "rust": true,
