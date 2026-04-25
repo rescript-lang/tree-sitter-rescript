@@ -117,7 +117,7 @@ export default grammar({
     [$._module_structure, $.parenthesized_module_expression],
     [$._record_type_member, $._object_type_member],
     [$._non_function_inline_type, $.generic_type],
-    [$._type_identifier, $.polymorphic_type]
+    [$._type_identifier, $.polymorphic_type],
   ],
 
   rules: {
@@ -137,8 +137,7 @@ export default grammar({
     // Used as switch_match / try-catch bodies so that trailing NEWLINEs
     // (including those emitted between consecutive block comments) are
     // absorbed by the enclosing switch/try rule instead of being orphaned.
-    _switch_body: ($) =>
-      seq(repeat($._statement), $.statement),
+    _switch_body: ($) => seq(repeat($._statement), $.statement),
 
     statement: ($) =>
       choice(
@@ -328,7 +327,10 @@ export default grammar({
 
     variant_type: ($) =>
       prec.left(
-        seq(optional("|"), barSep1(choice($.variant_declaration, $.variant_type_spread))),
+        seq(
+          optional("|"),
+          barSep1(choice($.variant_declaration, $.variant_type_spread)),
+        ),
       ),
 
     variant_declaration: ($) =>
@@ -421,11 +423,7 @@ export default grammar({
       ),
 
     let_declaration: ($) =>
-      seq(
-        choice("export", "let"),
-        optional("rec"),
-        sep1("and", $.let_binding),
-      ),
+      seq(choice("export", "let"), optional("rec"), sep1("and", $.let_binding)),
 
     let_binding: ($) =>
       seq(
@@ -564,7 +562,8 @@ export default grammar({
 
     tuple: ($) => seq("(", commaSep2t($.expression), ")"),
 
-    array: ($) => seq("[", commaSept(choice($.spread_element, $.expression)), "]"),
+    array: ($) =>
+      seq("[", commaSept(choice($.spread_element, $.expression)), "]"),
 
     list: ($) =>
       seq($._list_constructor, "{", optional(commaSep1t($._list_element)), "}"),
@@ -611,10 +610,7 @@ export default grammar({
           field("pattern", choice($.variant_spread_pattern, $._pattern)),
           optional($.guard),
           "=>",
-          field(
-            "body",
-            alias($._switch_body, $.sequence_expression),
-          ),
+          field("body", alias($._switch_body, $.sequence_expression)),
         ),
       ),
 
@@ -1042,7 +1038,7 @@ export default grammar({
           ["*", "binary_times"],
           ["*.", "binary_times"],
           ["%", "binary_times"],
-          ["**", "binary_pow"],
+          ["**", "binary_pow", "right"],
           ["/", "binary_times"],
           ["/.", "binary_times"],
           ["<<", "binary_shift"],
@@ -1056,8 +1052,8 @@ export default grammar({
           ["!==", "binary_relation"],
           [">=", "binary_relation"],
           [">", "binary_relation"],
-        ].map(([operator, precedence]) =>
-          prec.left(
+        ].map(([operator, precedence, associativity]) =>
+          (associativity === "right" ? prec.right : prec.left)(
             precedence,
             seq(
               field("left", $.expression),
@@ -1136,8 +1132,7 @@ export default grammar({
         ),
       ),
 
-    _type_identifier: ($) =>
-      choice($.type_identifier, $.type_identifier_path),
+    _type_identifier: ($) => choice($.type_identifier, $.type_identifier_path),
 
     type_identifier_path: ($) =>
       seq($.module_primary_expression, ".", $.type_identifier),
@@ -1428,10 +1423,6 @@ function commaSep1t(rule) {
 
 function commaSep2t(rule) {
   return seq(commaSep2(rule), optional(","));
-}
-
-function commaSep(rule) {
-  return optional(commaSep1(rule));
 }
 
 function commaSept(rule) {

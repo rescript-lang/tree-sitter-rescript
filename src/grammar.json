@@ -6439,7 +6439,7 @@
           }
         },
         {
-          "type": "PREC_LEFT",
+          "type": "PREC_RIGHT",
           "value": "binary_pow",
           "content": {
             "type": "SEQ",

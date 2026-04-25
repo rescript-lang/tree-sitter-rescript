@@ -1279,6 +1279,7 @@ Math operators
 - 1 + 2 / 3
 -. 1.0 +. 2.0 /. 3.0
 2.0 ** 3.0
+2.0 ** 3.0 ** 5.0
 5 % 2
 -0l
 -ln
@@ -1304,6 +1305,12 @@ Math operators
     (binary_expression
       (number)
       (number)))
+  (expression_statement
+    (binary_expression
+      (number)
+      (binary_expression
+        (number)
+        (number))))
   (expression_statement
     (binary_expression
       (number)
@@ -1623,11 +1630,10 @@ andd[1]
       (value_identifier)
       (string
         (string_fragment))))
-
   (expression_statement
-        (subscript_expression
-          (value_identifier)
-          (number)))
+    (subscript_expression
+      (value_identifier)
+      (number)))
   (expression_statement
     (subscript_expression
       (value_identifier)
