@@ -392,3 +392,73 @@ Polyvars
   (expression_statement
     (polyvar
       (polyvar_identifier))))
+
+================================================================================
+Regex literal
+================================================================================
+
+/hello/
+/pattern/gi
+/\d+/
+/[a-z]/
+/foo\/bar/
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (regex
+      (regex_pattern)))
+  (expression_statement
+    (regex
+      (regex_pattern)
+      (regex_flags)))
+  (expression_statement
+    (regex
+      (regex_pattern)))
+  (expression_statement
+    (regex
+      (regex_pattern)))
+  (expression_statement
+    (regex
+      (regex_pattern))))
+
+================================================================================
+Regex literal in let binding
+================================================================================
+
+let r = /foo/g
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (regex
+        (regex_pattern)
+        (regex_flags)))))
+
+================================================================================
+Regex literal as function argument
+================================================================================
+
+let code = String.replaceRegExp(signature, /\\n/g, "\n")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier_path
+          (module_identifier)
+          (value_identifier))
+        (arguments
+          (value_identifier)
+          (regex
+            (regex_pattern)
+            (regex_flags))
+          (string
+            (escape_sequence)))))))

@@ -1,13 +1,13 @@
 
 type rec t =
-//<- keyword
-//   ^ keyword
+//<- keyword.type
+//   ^ keyword.modifier
 //       ^ type
   | Node(t, t)
-//  ^ constant
+//  ^ constructor
 //       ^ type
   | Terminal
-//  ^ constant
+//  ^ constructor
   | Component(module(Foo.t))
 //             ^ keyword
 

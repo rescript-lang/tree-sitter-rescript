@@ -1,26 +1,31 @@
 
 /**/ #polyvar
-//   ^ constant
-//    ^ constant
+//   ^ constructor
+//    ^ constructor
 
 /**/ #"polyvar"
-//   ^ constant
-//    ^ constant
-//     ^ constant
+//   ^ constructor
+//    ^ constructor
+//     ^ constructor
 
 /**/ #\"polyvar"
-//   ^ constant
-//    ^ constant
-//     ^ constant
-//      ^ constant
+//   ^ constructor
+//    ^ constructor
+//     ^ constructor
+//      ^ constructor
 
 /**/ #77
-//   ^ constant
-//    ^ constant
+//   ^ constructor
+//    ^ constructor
 
 /**/ 'R'
-//   ^ string.special
-//    ^ string.special
+//   ^ character
+//    ^ character
 
 /**/ '\\'
 //    ^ string.escape
+
+/**/ `${hello}`
+//    ^ punctuation.special
+//     ^ punctuation.special
+//           ^ punctuation.special

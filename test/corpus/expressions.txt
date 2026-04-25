@@ -480,6 +480,66 @@ if predicateA {
             (value_identifier)))))))
 
 ================================================================================
+If/else with else on new line
+================================================================================
+
+if predicateA {
+  foo
+}
+else if predicateB {
+  bar
+}
+else {
+  baz
+}
+
+if predicateA {
+  foo
+} // comment before else if
+else if predicateB {
+  bar
+} // comment before else
+else {
+  baz
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (if_expression
+      (value_identifier)
+      (block
+        (expression_statement
+          (value_identifier)))
+      (else_if_clause
+        (value_identifier)
+        (block
+          (expression_statement
+            (value_identifier))))
+      (else_clause
+        (block
+          (expression_statement
+            (value_identifier))))))
+  (expression_statement
+    (if_expression
+      (value_identifier)
+      (block
+        (expression_statement
+          (value_identifier)))
+      (line_comment)
+      (else_if_clause
+        (value_identifier)
+        (block
+          (expression_statement
+            (value_identifier))))
+      (line_comment)
+      (else_clause
+        (block
+          (expression_statement
+            (value_identifier)))))))
+
+================================================================================
 Switch of literals
 ================================================================================
 
@@ -573,6 +633,59 @@ switch foo {
         (sequence_expression
           (expression_statement
             (number)))))))
+
+================================================================================
+Variant Pattern Spread
+================================================================================
+
+let handle = (event: extended) =>
+  switch event {
+  | ...base as core => Console.log2("base", core)
+  | Resume => Console.log("resuming")
+  }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (function
+        parameters: (formal_parameters
+          (parameter
+            (value_identifier)
+            (type_annotation
+              (type_identifier))))
+        body: (switch_expression
+          (value_identifier)
+          (switch_match
+            pattern: (variant_spread_pattern
+              (variant_type_pattern
+                (type_identifier))
+              (as_aliasing
+                (value_identifier)))
+            body: (sequence_expression
+              (expression_statement
+                (call_expression
+                  function: (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  arguments: (arguments
+                    (string
+                      (string_fragment))
+                    (value_identifier))))))
+          (switch_match
+            pattern: (variant_pattern
+              (variant_identifier))
+            body: (sequence_expression
+              (expression_statement
+                (call_expression
+                  function: (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  arguments: (arguments
+                    (string
+                      (string_fragment))))))))))))
 
 ================================================================================
 Switch of polyvars
@@ -827,15 +940,15 @@ switch person {
         (sequence_expression
           (expression_statement
             (number))))
-        (switch_match
-          (variant_pattern
+      (switch_match
+        (variant_pattern
           (variant_identifier)
           (formal_parameters
             (record_pattern
               (value_identifier))))
-           (sequence_expression
-             (expression_statement
-               (number)))))))
+        (sequence_expression
+          (expression_statement
+            (number)))))))
 
 ================================================================================
 Switch of lists
@@ -1166,6 +1279,7 @@ Math operators
 - 1 + 2 / 3
 -. 1.0 +. 2.0 /. 3.0
 2.0 ** 3.0
+5 % 2
 -0l
 -ln
 
@@ -1186,6 +1300,10 @@ Math operators
       (binary_expression
         (number)
         (number))))
+  (expression_statement
+    (binary_expression
+      (number)
+      (number)))
   (expression_statement
     (binary_expression
       (number)
@@ -1229,6 +1347,65 @@ i && j;
           (value_identifier))))))
 
 ================================================================================
+Bitwise operators
+================================================================================
+
+a &&& b;
+a ||| b;
+a ^^^ b;
+~~~a;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (unary_expression
+      (value_identifier))))
+
+================================================================================
+Shift operators
+================================================================================
+
+a << b;
+a >> b;
+a >>> b;
+a << b + c;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (binary_expression
+      (value_identifier)
+      (binary_expression
+        (value_identifier)
+        (value_identifier)))))
+
+================================================================================
 String operators
 ================================================================================
 
@@ -1254,6 +1431,7 @@ Coercion operator
 ================================================================================
 
 value :> newType
+value :> t<'a>
 
 --------------------------------------------------------------------------------
 
@@ -1261,7 +1439,14 @@ value :> newType
   (expression_statement
     (coercion_expression
       (value_identifier)
-      (type_identifier))))
+      (type_identifier)))
+  (expression_statement
+    (coercion_expression
+      (value_identifier)
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (type_identifier))))))
 
 ================================================================================
 Ternaries
@@ -1316,6 +1501,41 @@ Arrays
     (array
       (number)
       (number))))
+
+================================================================================
+Array spreads
+================================================================================
+
+let animals = ["🐶", "🐱", "🐷"]
+let moreAnimals = [...animals, "🐔", "🐴", "🐮", ...otherAnimals]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (array
+        (string
+          (string_fragment))
+        (string
+          (string_fragment))
+        (string
+          (string_fragment)))))
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (array
+        (spread_element
+          (value_identifier))
+        (string
+          (string_fragment))
+        (string
+          (string_fragment))
+        (string
+          (string_fragment))
+        (spread_element
+          (value_identifier))))))
 
 ================================================================================
 Lists
@@ -1650,7 +1870,7 @@ try for i in 0 to 10 {
   call()
 } catch {
 | Not_found => false
-} 
+}
 
 --------------------------------------------------------------------------------
 
@@ -1915,3 +2135,84 @@ lazy call()
       (call_expression
         (value_identifier)
         (arguments)))))
+
+================================================================================
+Dict expression
+================================================================================
+
+dict{"A": 5, "B": 6}
+dict{}
+let dict = dict{"A": 5}
+let dict{"C": ?c} = d
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (dict
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))))
+  (expression_statement
+    (dict))
+  (let_declaration
+    (let_binding
+      pattern: (value_identifier)
+      body: (dict
+        (dict_entry
+          (string
+            (string_fragment))
+          (number)))))
+  (let_declaration
+    (let_binding
+      pattern: (dict_pattern
+        (dict_pattern_entry
+          (string
+            (string_fragment))
+          (value_identifier)))
+      body: (value_identifier))))
+
+================================================================================
+Dict pattern in switch
+================================================================================
+
+switch json {
+| Object(dict{"lat": Number(lat), "lon": ?lon}) => lat
+| _ => 0.0
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (dict_pattern
+              (dict_pattern_entry
+                (string
+                  (string_fragment))
+                (variant_pattern
+                  (variant_identifier)
+                  (formal_parameters
+                    (value_identifier))))
+              (dict_pattern_entry
+                (string
+                  (string_fragment))
+                (value_identifier)))))
+        (sequence_expression
+          (expression_statement
+            (value_identifier))))
+      (switch_match
+        (value_identifier)
+        (sequence_expression
+          (expression_statement
+            (number)))))))

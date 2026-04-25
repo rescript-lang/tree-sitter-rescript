@@ -1,4 +1,11 @@
-((comment) @injection.content (#set! injection.language "comment"))
+([
+  (line_comment)
+  (block_comment)
+] @injection.content (#set! injection.language "comment"))
+
+; regex literal
+(regex
+  (regex_pattern) @injection.content (#set! injection.language "regex"))
 
 ; %re
 (extension_expression
@@ -26,4 +33,3 @@
   (#eq? @_name "relay")
   (expression_statement
     (_ (_) @injection.content (#set! injection.language "graphql") )))
-

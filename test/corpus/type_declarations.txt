@@ -208,7 +208,8 @@ type M.t +=
 (source_file
   (type_declaration
     (type_binding
-      (type_identifier)))
+      (type_identifier)
+      (extensible_type)))
   (type_declaration
     (type_binding
       (type_identifier)
@@ -223,6 +224,53 @@ type M.t +=
       (variant_type
         (variant_declaration
           (variant_identifier))
+        (variant_declaration
+          (variant_identifier))))))
+
+================================================================================
+Variant Spread
+================================================================================
+
+type base = Start | Stop | Pause
+type extended = | ...base | Resume
+type t =
+  | ...Foo.t
+  | ...Bar.t
+  | Baz
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_type_spread
+          (type_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_type_spread
+          (type_identifier_path
+            (module_identifier)
+            (type_identifier)))
+        (variant_type_spread
+          (type_identifier_path
+            (module_identifier)
+            (type_identifier)))
         (variant_declaration
           (variant_identifier))))))
 
@@ -721,3 +769,106 @@ type t<'a> constraint 'a = t
       (type_constraint
         (type_identifier)
         (type_identifier)))))
+
+================================================================================
+Nested record type
+================================================================================
+
+type profile = {
+  name: string,
+  extra?: {
+    location: {city: string, country: string},
+    mutable note: option<string>,
+  },
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier)))
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (record_type
+              (record_type_field
+                (property_identifier)
+                (type_annotation
+                  (record_type
+                    (record_type_field
+                      (property_identifier)
+                      (type_annotation
+                        (type_identifier)))
+                    (record_type_field
+                      (property_identifier)
+                      (type_annotation
+                        (type_identifier))))))
+              (record_type_field
+                (property_identifier)
+                (type_annotation
+                  (generic_type
+                    (type_identifier)
+                    (type_arguments
+                      (type_identifier))))))))))))
+
+================================================================================
+Nested record in generic type argument
+================================================================================
+
+type response = {
+  items: array<{id: int, name: string}>,
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (record_type
+                  (record_type_field
+                    (property_identifier)
+                    (type_annotation
+                      (type_identifier)))
+                  (record_type_field
+                    (property_identifier)
+                    (type_annotation
+                      (type_identifier))))))))))))
+
+================================================================================
+Nested record in function type
+================================================================================
+
+type handler = {config: string} => {result: bool}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters
+          (record_type
+            (record_type_field
+              (property_identifier)
+              (type_annotation
+                (type_identifier)))))
+        (record_type
+          (record_type_field
+            (property_identifier)
+            (type_annotation
+              (type_identifier))))))))
