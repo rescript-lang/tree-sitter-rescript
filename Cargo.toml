@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-rescript"
 description = "rescript grammar for the tree-sitter parsing library"
-version = "0.0.1"
+version = "6.0.0"
 keywords = ["incremental", "parsing", "rescript"]
 categories = ["parsing", "text-editors"]
 repository = "https://github.com/tree-sitter/tree-sitter-rescript"

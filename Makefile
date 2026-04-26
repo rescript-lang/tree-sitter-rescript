@@ -1,6 +1,6 @@
 LANGUAGE_NAME := tree-sitter-rescript
 HOMEPAGE_URL := https://github.com/tree-sitter/tree-sitter-rescript
-VERSION := 5.0.0
+VERSION := 6.0.0
 
 # repository
 SRC_DIR := src

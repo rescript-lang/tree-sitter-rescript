@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tree-sitter-rescript"
 description = "ReScript parser for Tree-Sitter"
-version = "5.0.0"
+version = "6.0.0"
 keywords = ["incremental", "parsing", "tree-sitter", "rescript"]
 classifiers = [
   "Intended Audience :: Developers",

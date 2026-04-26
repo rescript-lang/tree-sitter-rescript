@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-rescript
-        VERSION "5.0.0"
+        VERSION "6.0.0"
         DESCRIPTION "ReScript parser for Tree-Sitter"
         HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-rescript"
         LANGUAGES C)
