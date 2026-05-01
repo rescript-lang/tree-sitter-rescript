@@ -1274,6 +1274,7 @@ export default grammar({
       const octal_literal = seq(choice("0o", "0O"), /[0-7](_?[0-7])*/);
 
       const bigint_literal = seq(
+        optional(choice("-", "+")),
         choice(hex_literal, binary_literal, octal_literal, decimal_digits),
         "n",
       );
