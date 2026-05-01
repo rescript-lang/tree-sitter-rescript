@@ -1719,6 +1719,7 @@ module Test = %graphql(`
     }
   }
 `)
+%extension.type(: Mod.t)
 
 --------------------------------------------------------------------------------
 
@@ -1792,7 +1793,14 @@ module Test = %graphql(`
         (extension_identifier)
         (expression_statement
           (template_string
-            (template_string_content)))))))
+            (template_string_content))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (type_annotation
+        (type_identifier_path
+          (module_identifier)
+          (type_identifier))))))
 
 ================================================================================
 Raise expression

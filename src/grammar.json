@@ -7130,8 +7130,17 @@
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "_one_or_more_statements"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_one_or_more_statements"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "type_annotation"
+            }
+          ]
         },
         {
           "type": "CHOICE",

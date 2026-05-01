@@ -1103,7 +1103,7 @@ export default grammar({
     _extension_expression_payload: ($) =>
       seq(
         "(",
-        $._one_or_more_statements,
+        choice($._one_or_more_statements, $.type_annotation),
         // explicit newline here because it won’t be reported otherwise by the scanner
         // because we’re in parens
         optional($._newline),
