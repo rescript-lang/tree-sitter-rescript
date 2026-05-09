@@ -245,6 +245,8 @@ module(
 )
 module(SomeFunctor(unpack(x)))
 
+module M = unpack(module(Cleanup): PipelineStep with type state = t)
+
 module T = unpack(foo: T)
 
 module S = unpack(foo: T with type t = a)
@@ -288,6 +290,18 @@ module T3 = unpack(make(): T with type t = int)
         (arguments
           (module_unpack
             (value_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_unpack
+        (module_pack
+          (module_identifier))
+        (module_type_annotation
+          (module_type_constraint
+            (module_identifier)
+            (constrain_type
+              (type_identifier)
+              (type_identifier)))))))
   (module_declaration
     (module_binding
       (module_identifier)

@@ -2849,6 +2849,10 @@
           "named": true
         },
         {
+          "type": "module_pack",
+          "named": true
+        },
+        {
           "type": "module_type_annotation",
           "named": true
         },

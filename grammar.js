@@ -218,6 +218,7 @@ export default grammar({
             optional($.module_type_annotation),
           ),
           seq($.call_expression, optional($.module_type_annotation)),
+          seq($.module_pack, optional($.module_type_annotation)),
           $.extension_expression,
         ),
         ")",
