@@ -3,7 +3,8 @@
 #include <wctype.h>
 
 enum TokenType {
-  NEWLINE,
+  AUTOMATIC_SEMICOLON,
+  CONTINUATION,
   BLOCK_COMMENT,
   QUOTE,
   BACKTICK,
@@ -21,6 +22,7 @@ typedef struct ScannerState {
   bool in_quotes;
   bool in_backticks;
   bool eof_reported;
+  bool saw_line_terminator;
 } ScannerState;
 
 void *tree_sitter_rescript_external_scanner_create() {
@@ -57,6 +59,12 @@ static bool is_identifier_start(char c) {
   return c == '_' || (c >= 'a' && c <= 'z');
 }
 
+static bool is_identifier_continue(int32_t c) {
+  return c == '_' || c == '\'' ||
+    (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+    (c >= '0' && c <= '9');
+}
+
 static bool is_decorator_start(char c) {
   return c == '_' || c == '\\' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
@@ -69,34 +77,75 @@ static bool is_whitespace(char c) {
   return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }
 
+static bool is_line_terminator(int32_t c) {
+  return c == '\n' || c == '\r' || c == 0x2028 || c == 0x2029;
+}
+
 static void scan_whitespace(TSLexer *lexer, bool skip) {
   while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
     lexer->advance(lexer, skip);
   }
 }
 
-// Tries to skip a line comment (//) starting at the current position.
-// Returns true if a line comment was consumed. Block comments are intentionally
-// NOT handled here: they are external tokens that must be left for the
-// BLOCK_COMMENT scanner handler.
-static bool skip_line_comment(TSLexer *lexer) {
-  if (lexer->lookahead != '/') return false;
-  skip(lexer);  // advance past first '/'
-  if (lexer->lookahead != '/') return false;  // not a line comment
-  while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
+static bool scan_keyword(TSLexer *lexer, const char *keyword) {
+  for (unsigned i = 0; keyword[i] != '\0'; i++) {
+    if (lexer->lookahead != keyword[i]) return false;
     skip(lexer);
   }
-  return true;
+  return !is_identifier_continue(lexer->lookahead);
 }
 
-// Skip whitespace and line comments only, all as skip=true.
-// Used for NEWLINE peek-ahead: block comments are external tokens and must
-// not be consumed here, otherwise the BLOCK_COMMENT handler never fires.
-static void skip_whitespace_and_line_comments(TSLexer *lexer) {
-  while (!lexer->eof(lexer)) {
-    scan_whitespace(lexer, true);
-    if (!skip_line_comment(lexer)) break;
+static bool token_continues_statement(TSLexer *lexer) {
+  switch (lexer->lookahead) {
+    case '.':
+    case '|':
+    case '?':
+    case ':':
+    case ';':
+      return true;
+    case '-':
+      skip(lexer);
+      return lexer->lookahead == '>';
+    case 'a':
+      return scan_keyword(lexer, "and");
+    case 'e':
+      return scan_keyword(lexer, "else");
+    case 'w':
+      return scan_keyword(lexer, "with");
+    default:
+      return false;
   }
+}
+
+static bool scan_block_comment_after_slash(
+    TSLexer *lexer,
+    bool *comment_has_newline
+    ) {
+  if (lexer->lookahead != '*') return false;
+
+  int level = 1;
+  advance(lexer);
+  while (level > 0 && !lexer->eof(lexer)) {
+    if (lexer->lookahead == '/') {
+      advance(lexer);
+      if (lexer->lookahead == '*') {
+        level++;
+        advance(lexer);
+      }
+    } else if (lexer->lookahead == '*') {
+      advance(lexer);
+      if (lexer->lookahead == '/') {
+        level--;
+        advance(lexer);
+      }
+    } else {
+      if (comment_has_newline && is_line_terminator(lexer->lookahead)) {
+        *comment_has_newline = true;
+      }
+      advance(lexer);
+    }
+  }
+  return true;
 }
 
 bool tree_sitter_rescript_external_scanner_scan(
@@ -137,100 +186,64 @@ bool tree_sitter_rescript_external_scanner_scan(
     return true;
   }
 
-  // If a source file missing EOL at EOF, give the last statement a chance:
-  // report the statement delimiting EOL at the very end of file. Make sure
-  // it’s done only once, otherwise the scanner will enter dead-lock because
-  // we report NEWLINE again and again, no matter the lexer is exhausted
-  // already.
-  if (valid_symbols[NEWLINE] && lexer->eof(lexer) && !state->eof_reported) {
-    lexer->result_symbol = NEWLINE;
-    state->eof_reported = true;
-    return true;
-  }
-
-  // Handle significant newlines. A newline can act as a statement delimiter,
-  // but some constructs continue over newlines (e.g. before `->`, `|`,
-  // `else`, `with`, etc.). To decide, we peek ahead past any whitespace and
-  // comments. Line comments (`// ...`) are grammar-level extras — if the
-  // newline is significant we still want the parser to capture them, so we
-  // only peek across them without advancing past the mark_end boundary.
-  if (valid_symbols[NEWLINE] && lexer->lookahead == '\n') {
-    lexer->advance(lexer, true);
+  if (valid_symbols[AUTOMATIC_SEMICOLON]) {
+    lexer->result_symbol = AUTOMATIC_SEMICOLON;
     lexer->mark_end(lexer);
 
-    // Peek past whitespace and line comments to determine whether the next
-    // meaningful character continues the current statement.
-    // Block comments are NOT skipped here: they are external tokens and must
-    // be left for the BLOCK_COMMENT handler in a subsequent scanner call.
-    skip_whitespace_and_line_comments(lexer);
-
-    bool in_multiline_statement = false;
-    if (lexer->lookahead == '-') {
-      advance(lexer);
-      if (lexer->lookahead == '>') {
-        // Ignore new lines before pipe operator (->)
-        in_multiline_statement = true;
-      }
-    } else if (lexer->lookahead == '.') {
-      // Ignore new lines before chained member access.
-      in_multiline_statement = true;
-    } else if (lexer->lookahead == '|') {
-      // Ignore new lines before variant declarations and switch matches
-      in_multiline_statement = true;
-    } else if (lexer->lookahead == '?' || lexer->lookahead == ':') {
-      // Ignore new lines before potential ternaries
-      in_multiline_statement = true;
-    } else if (lexer->lookahead == '}') {
-      // Do not report new lines right before block/switch closings to avoid
-      // parser confusion between a terminated and unterminated statements
-      // for rules like seq(repeat($._statement), $.statement)
-      in_multiline_statement = true;
-    } else if (lexer->lookahead == 'a') {
-      advance(lexer);
-      if (lexer->lookahead == 'n') {
-        advance(lexer);
-        if (lexer->lookahead == 'd') {
-          advance(lexer);
-          if (is_whitespace(lexer->lookahead)) {
-            // Ignore new lines before `and` keyword (recursive definition)
-            in_multiline_statement = true;
-          }
-        }
-      }
-    } else if (lexer->lookahead == 'e') {
-      advance(lexer);
-      if (lexer->lookahead == 'l') {
-        advance(lexer);
-        if (lexer->lookahead == 's') {
-          advance(lexer);
-          if (lexer->lookahead == 'e') {
-            // Ignore new lines before `else` keyword (else/else if clauses)
-            in_multiline_statement = true;
-          }
-        }
-      }
-    } else if (lexer->lookahead == 'w') {
-      advance(lexer);
-      if (lexer->lookahead == 'i') {
-        advance(lexer);
-        if (lexer->lookahead == 't') {
-          advance(lexer);
-          if (lexer->lookahead == 'h') {
-            advance(lexer);
-            if (is_whitespace(lexer->lookahead)) {
-              // Ignore new lines before `with` keyword (module type constraints)
-              in_multiline_statement = true;
-            }
-          }
-        }
-      }
+    bool had_saved_line_terminator = state->saw_line_terminator;
+    bool saw_line_terminator = had_saved_line_terminator;
+    state->saw_line_terminator = false;
+    while (iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
+      if (is_line_terminator(lexer->lookahead)) saw_line_terminator = true;
+      skip(lexer);
     }
 
-    if (!in_multiline_statement) {
-      lexer->result_symbol = NEWLINE;
+    if (lexer->eof(lexer)) {
+      if (state->eof_reported) return false;
+      state->eof_reported = true;
       return true;
     }
-    // In a multi-line statement: fall through without emitting NEWLINE.
+    if (lexer->lookahead == '}') {
+      // A same-line `}` may close a record pattern, as in `({id}) => ...`.
+      // Emitting here would commit the parser to the competing block parse.
+      return saw_line_terminator;
+    }
+    if (lexer->is_at_included_range_start(lexer)) {
+      return true;
+    }
+
+    if (lexer->lookahead == '/') {
+      advance(lexer);
+      if (lexer->lookahead == '*' && valid_symbols[BLOCK_COMMENT]) {
+        bool comment_has_newline = false;
+        scan_block_comment_after_slash(lexer, &comment_has_newline);
+        lexer->result_symbol = BLOCK_COMMENT;
+        lexer->mark_end(lexer);
+        state->saw_line_terminator =
+          saw_line_terminator || comment_has_newline;
+        return true;
+      }
+      if (lexer->lookahead == '/') {
+        state->saw_line_terminator = saw_line_terminator;
+        return false;
+      }
+      if (saw_line_terminator) return true;
+      return false;
+    } else if (lexer->lookahead == '@') {
+      // Preserve the newline until the decorator has been emitted. This lets
+      // an attribute appear between a type binding and its following `and`.
+      state->saw_line_terminator = saw_line_terminator;
+    } else {
+      if (!saw_line_terminator) return false;
+      if (token_continues_statement(lexer)) {
+        if (had_saved_line_terminator && valid_symbols[CONTINUATION]) {
+          lexer->result_symbol = CONTINUATION;
+          return true;
+        }
+        return false;
+      }
+      return true;
+    }
   }
 
   if (!in_string) {
@@ -241,29 +254,7 @@ bool tree_sitter_rescript_external_scanner_scan(
   // These are emitted as BLOCK_COMMENT tokens and captured via grammar extras.
   if (valid_symbols[BLOCK_COMMENT] && lexer->lookahead == '/' && !in_string) {
     advance(lexer);
-    if (lexer->lookahead == '*') {
-      int level = 1;
-      advance(lexer); // '*'
-      while (level > 0 && !lexer->eof(lexer)) {
-        switch (lexer->lookahead) {
-          case '/':
-            advance(lexer);
-            if (lexer->lookahead == '*') {
-              ++level;
-              advance(lexer);
-            }
-            break;
-          case '*':
-            advance(lexer);
-            if (lexer->lookahead == '/') {
-              --level;
-              advance(lexer);
-            }
-            break;
-          default:
-            advance(lexer);
-        }
-      }
+    if (scan_block_comment_after_slash(lexer, NULL)) {
       lexer->result_symbol = BLOCK_COMMENT;
       lexer->mark_end(lexer);
       return true;
