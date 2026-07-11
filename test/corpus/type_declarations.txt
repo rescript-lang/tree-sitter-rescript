@@ -635,6 +635,39 @@ and teacher = {
                 (type_identifier)))))))))
 
 ================================================================================
+Mutually Recursive With Decorator
+================================================================================
+
+type t = {
+  a: bool
+}
+@attr
+and tt = {
+  b: bool,
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier)))))
+    (decorator
+      (decorator_identifier))
+    (type_binding
+      (type_identifier)
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier)))))))
+
+================================================================================
 Labled function with uncurried
 ================================================================================
 

@@ -122,3 +122,34 @@ switch l {
       (block_comment)
       (block_comment)
       (block_comment))))
+
+================================================================================
+Consecutive block comments at end of block
+================================================================================
+
+module UI = {
+  @get external detail: t => int = "detail"
+  /* external view : t -> Dom.window = "view" [@@get] */
+  /* Should return DOMAbstractView/WindowProxy */
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (block
+        (decorator
+          (decorator_identifier))
+        (external_declaration
+          (value_identifier)
+          (type_annotation
+            (function_type
+              (function_type_parameters
+                (type_identifier))
+              (type_identifier)))
+          (string
+            (string_fragment)))
+        (block_comment)
+        (block_comment)))))

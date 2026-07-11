@@ -118,6 +118,7 @@ export default grammar({
     [$._record_type_member, $._object_type_member],
     [$._non_function_inline_type, $.generic_type],
     [$._type_identifier, $.polymorphic_type],
+    [$.type_declaration],
   ],
 
   rules: {
@@ -148,7 +149,18 @@ export default grammar({
       ),
 
     block: ($) =>
-      prec.right(seq("{", optional($._one_or_more_statements), "}")),
+      prec.right(
+        seq(
+          "{",
+          optional(
+            seq(
+              $._one_or_more_statements,
+              repeat($._statement_delimeter),
+            ),
+          ),
+          "}",
+        ),
+      ),
 
     open_statement: ($) => seq("open", optional("!"), $.module_expression),
 
@@ -259,7 +271,7 @@ export default grammar({
         optional("export"),
         "type",
         optional("rec"),
-        sep1("and", $.type_binding),
+        sep1(seq(optional($._newline), "and"), $.type_binding),
       ),
 
     type_binding: ($) =>
