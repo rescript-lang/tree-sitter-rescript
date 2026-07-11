@@ -4,7 +4,8 @@ export default grammar({
   name: "rescript",
 
   externals: ($) => [
-    $._newline,
+    $._automatic_semicolon,
+    $._continuation,
     $.block_comment,
     '"',
     "`",
@@ -18,6 +19,7 @@ export default grammar({
   ],
 
   extras: ($) => [
+    $._continuation,
     $.block_comment,
     $.line_comment,
     $.decorator,
@@ -34,7 +36,7 @@ export default grammar({
     $.module_primary_expression,
   ],
 
-  inline: ($) => [$._module_definition],
+  inline: ($) => [$._module_definition, $._semicolon],
 
   precedences: ($) => [
     // + - Operators -> precendence
@@ -97,7 +99,6 @@ export default grammar({
     [$._record_element, $._record_single_field],
     [$._record_pun_field, $._record_single_pun_field],
     [$._record_field_name, $.record_pattern],
-    [$._statement, $._one_or_more_statements],
     [$._statement, $._switch_body],
     [$._inline_type, $.function_type_parameters],
     [$.primary_expression, $.parameter, $._pattern],
@@ -118,27 +119,20 @@ export default grammar({
     [$._record_type_member, $._object_type_member],
     [$._non_function_inline_type, $.generic_type],
     [$._type_identifier, $.polymorphic_type],
-    [$.type_declaration],
-    [$.variant_type],
   ],
 
   rules: {
-    source_file: ($) =>
-      seq(repeat($._statement_delimeter), repeat($._statement)),
+    source_file: ($) => repeat($._statement),
 
-    _statement: ($) => seq($.statement, repeat1($._statement_delimeter)),
+    _statement: ($) => seq($.statement, $._semicolon),
 
-    _statement_delimeter: ($) => choice(";", $._newline),
+    _semicolon: ($) => choice(";", $._automatic_semicolon),
 
     line_comment: ($) => token(seq("//", /[^\n]*/)),
 
     _one_or_more_statements: ($) =>
-      seq(repeat($._statement), $.statement, optional($._statement_delimeter)),
+      seq(repeat($._statement), $.statement, optional($._semicolon)),
 
-    // Like _one_or_more_statements but without a trailing delimiter.
-    // Used as switch_match / try-catch bodies so that trailing NEWLINEs
-    // (including those emitted between consecutive block comments) are
-    // absorbed by the enclosing switch/try rule instead of being orphaned.
     _switch_body: ($) => seq(repeat($._statement), $.statement),
 
     statement: ($) =>
@@ -150,18 +144,7 @@ export default grammar({
       ),
 
     block: ($) =>
-      prec.right(
-        seq(
-          "{",
-          optional(
-            seq(
-              $._one_or_more_statements,
-              repeat($._statement_delimeter),
-            ),
-          ),
-          "}",
-        ),
-      ),
+      prec.right(seq("{", optional($._one_or_more_statements), "}")),
 
     open_statement: ($) => seq("open", optional("!"), $.module_expression),
 
@@ -272,7 +255,7 @@ export default grammar({
         optional("export"),
         "type",
         optional("rec"),
-        sep1(seq(optional($._newline), "and"), $.type_binding),
+        sep1("and", $.type_binding),
       ),
 
     type_binding: ($) =>
@@ -340,11 +323,10 @@ export default grammar({
     tuple_type: ($) => prec.dynamic(-1, seq("(", commaSep1t($._type), ")")),
 
     variant_type: ($) =>
-      seq(
-        optional("|"),
-        sep1(
-          seq(repeat($._newline), "|"),
-          choice($.variant_declaration, $.variant_type_spread),
+      prec.left(
+        seq(
+          optional("|"),
+          barSep1(choice($.variant_declaration, $.variant_type_spread)),
         ),
       ),
 
@@ -613,7 +595,7 @@ export default grammar({
         "switch",
         $.expression,
         "{",
-        repeat(seq($.switch_match, repeat($._statement_delimeter))),
+        repeat(seq($.switch_match, optional($._semicolon))),
         "}",
       ),
 
@@ -644,7 +626,7 @@ export default grammar({
         $.expression,
         "catch",
         "{",
-        repeat(seq($.switch_match, repeat($._statement_delimeter))),
+        repeat(seq($.switch_match, optional($._semicolon))),
         "}",
       ),
 
@@ -1141,9 +1123,6 @@ export default grammar({
       seq(
         "(",
         choice($._one_or_more_statements, $.type_annotation),
-        // explicit newline here because it won’t be reported otherwise by the scanner
-        // because we’re in parens
-        optional($._newline),
         ")",
       ),
 

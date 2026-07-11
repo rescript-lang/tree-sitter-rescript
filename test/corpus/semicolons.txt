@@ -1,0 +1,235 @@
+================================================================================
+Explicit semicolons
+================================================================================
+
+let first = 1; let second = 2;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number))))
+
+================================================================================
+Automatic semicolons at newlines and end of file
+================================================================================
+
+let first = 1
+let second = 2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number))))
+
+================================================================================
+Automatic semicolon before a closing brace
+================================================================================
+
+let value = {
+  let nested = 1
+  nested
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (let_declaration
+          (let_binding
+            (value_identifier)
+            (number)))
+        (expression_statement
+          (value_identifier))))))
+
+================================================================================
+Comments at statement boundaries
+================================================================================
+
+let first = 1
+/* between statements */
+let second = 2
+// before the final statement
+let third = 3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (block_comment)
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (line_comment)
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number))))
+
+================================================================================
+Comments inside multiline expressions
+================================================================================
+
+let length = items
+  /* continue the pipe */
+  ->Array.map(item => item)
+  /* continue the chain */
+  .length
+
+let selected = condition
+  /* continue the ternary */
+  ? first
+  : second
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (pipe_expression
+        (value_identifier)
+        (block_comment)
+        (member_expression
+          (call_expression
+            (value_identifier_path
+              (module_identifier)
+              (value_identifier))
+            (arguments
+              (function
+                (value_identifier)
+                (value_identifier))))
+          (block_comment)
+          (property_identifier)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (block_comment)
+        (value_identifier)
+        (value_identifier)))))
+
+================================================================================
+ReScript declaration continuations
+================================================================================
+
+type rec first =
+  | First
+  /* continue the variant */
+  | Shared
+/* continue the recursive declaration */
+and second =
+  | Second
+
+module Constrained = Base
+  /* continue the module constraint */
+  with type t = int
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (block_comment)
+        (variant_declaration
+          (variant_identifier))))
+    (block_comment)
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_type_constraint
+        (module_identifier)
+        (block_comment)
+        (constrain_type
+          (type_identifier)
+          (type_identifier))))))
+
+================================================================================
+Else clause continuation
+================================================================================
+
+let result = if condition {
+  first
+}
+/* continue the conditional */
+else {
+  second
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (if_expression
+        (value_identifier)
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block_comment)
+        (else_clause
+          (block
+            (expression_statement
+              (value_identifier))))))))
+
+================================================================================
+Record patterns do not trigger automatic semicolons
+================================================================================
+
+let getId = ({id}) => id
+let getName = ({
+  name,
+}) => name
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (record_pattern
+              (value_identifier))))
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (record_pattern
+              (value_identifier))))
+        (value_identifier)))))
