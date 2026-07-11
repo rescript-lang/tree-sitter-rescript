@@ -330,6 +330,30 @@ type t =
                 (type_identifier)))))))))
 
 ================================================================================
+Variant comments
+================================================================================
+
+type t =
+  | Before
+  /* first */
+  /* second */
+  | After
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (block_comment)
+        (block_comment)
+        (variant_declaration
+          (variant_identifier))))))
+
+================================================================================
 Annotated variant
 ================================================================================
 

@@ -119,6 +119,7 @@ export default grammar({
     [$._non_function_inline_type, $.generic_type],
     [$._type_identifier, $.polymorphic_type],
     [$.type_declaration],
+    [$.variant_type],
   ],
 
   rules: {
@@ -339,10 +340,11 @@ export default grammar({
     tuple_type: ($) => prec.dynamic(-1, seq("(", commaSep1t($._type), ")")),
 
     variant_type: ($) =>
-      prec.left(
-        seq(
-          optional("|"),
-          barSep1(choice($.variant_declaration, $.variant_type_spread)),
+      seq(
+        optional("|"),
+        sep1(
+          seq(repeat($._newline), "|"),
+          choice($.variant_declaration, $.variant_type_spread),
         ),
       ),
 
