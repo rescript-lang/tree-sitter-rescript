@@ -2018,6 +2018,8 @@ Mutation expressions
 foo["bar"] = qux
 foo.bar = qux
 foo.bar := qux
+itemIdx := lastIdx
+withExhaustiveCheck := false
 
 --------------------------------------------------------------------------------
 
@@ -2040,7 +2042,15 @@ foo.bar := qux
       (member_expression
         (value_identifier)
         (property_identifier))
-      (value_identifier))))
+      (value_identifier)))
+  (expression_statement
+    (mutation_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (mutation_expression
+      (value_identifier)
+      (false))))
 
 ================================================================================
 For loop

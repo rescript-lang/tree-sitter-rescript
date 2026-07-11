@@ -216,8 +216,11 @@ bool tree_sitter_rescript_external_scanner_scan(
         if (lexer->lookahead == 't') {
           advance(lexer);
           if (lexer->lookahead == 'h') {
-            // Ignore new lines before `with` keyword (module type constraints)
-            in_multiline_statement = true;
+            advance(lexer);
+            if (is_whitespace(lexer->lookahead)) {
+              // Ignore new lines before `with` keyword (module type constraints)
+              in_multiline_statement = true;
+            }
           }
         }
       }
