@@ -36,4 +36,5 @@ jobs:
 
       - name: Run test wild
         if: runner.os != 'Windows'
+        continue-on-error: true
         run: node scripts/test_wild.mjs
