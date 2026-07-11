@@ -33,3 +33,6 @@ jobs:
           node-version: 22 # https://github.com/tree-sitter/node-tree-sitter/issues/268
           test-python: true
           test-go: true
+
+      - name: Run test wild
+        run: node scripts/test_wild.mjs
