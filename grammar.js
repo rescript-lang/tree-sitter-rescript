@@ -745,8 +745,20 @@ export default grammar({
         "~",
         $.value_identifier,
         optional($.as_aliasing),
-        optional($.type_annotation),
-        optional(field("default_value", $._labeled_parameter_default_value)),
+        optional(
+          choice(
+            seq(
+              $.type_annotation,
+              optional(
+                field("default_value", $._labeled_parameter_default_value),
+              ),
+            ),
+            seq(
+              field("default_value", $._labeled_parameter_default_value),
+              optional($.type_annotation),
+            ),
+          ),
+        ),
       ),
 
     abstract_type: ($) => seq("type", repeat1($.type_identifier)),
@@ -1080,10 +1092,20 @@ export default grammar({
     coercion_expression: ($) =>
       prec.left(
         "coercion_relation",
-        seq(
-          field("left", $.expression),
-          field("operator", ":>"),
-          field("right", $._type),
+        choice(
+          seq(
+            field("left", $.expression),
+            field("operator", ":>"),
+            field("right", $._type),
+          ),
+          seq(
+            "(",
+            field("left", $.expression),
+            field("source_type", $.type_annotation),
+            field("operator", ":>"),
+            field("right", $._type),
+            ")",
+          ),
         ),
       ),
 

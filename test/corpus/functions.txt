@@ -119,7 +119,7 @@ let foo = (type a, x: 'a): a => x
 Parameter defaults
 ===================================================
 
-(~x: int=3, ~y=4.0, ~z: int=?, ~w=?, ()) => 5
+(~x: int=3, ~y=4.0, ~z: int=?, ~w=?, ~chain=#1: chainId, ()) => 5
 
 ---
 
@@ -143,6 +143,13 @@ Parameter defaults
         (parameter
           (labeled_parameter
             (value_identifier)))
+        (parameter
+          (labeled_parameter
+            (value_identifier)
+            default_value: (polyvar
+              (polyvar_identifier))
+            (type_annotation
+              (type_identifier))))
         (parameter (unit)))
       body: (number))))
 
