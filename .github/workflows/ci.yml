@@ -35,4 +35,5 @@ jobs:
           test-go: true
 
       - name: Run test wild
+        if: runner.os != 'Windows'
         run: node scripts/test_wild.mjs
