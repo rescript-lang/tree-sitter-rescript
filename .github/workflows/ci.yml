@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-2022, macos-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -23,12 +23,13 @@ jobs:
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
         with:
-          tree-sitter-ref: v0.26.8
+          tree-sitter-ref: v0.26.10
 
       - name: Run tests
         uses: tree-sitter/parser-test-action@v3
         with:
           test-rust: true
-          test-node: false # https://github.com/tree-sitter/node-tree-sitter/issues/268
+          test-node: true
+          node-version: 22 # https://github.com/tree-sitter/node-tree-sitter/issues/268
           test-python: true
           test-go: true
