@@ -119,6 +119,7 @@ export default grammar({
     [$._non_function_inline_type, $.generic_type],
     [$._type_identifier, $.polymorphic_type],
     [$.type_declaration],
+    [$.variant_type],
   ],
 
   rules: {
@@ -339,10 +340,11 @@ export default grammar({
     tuple_type: ($) => prec.dynamic(-1, seq("(", commaSep1t($._type), ")")),
 
     variant_type: ($) =>
-      prec.left(
-        seq(
-          optional("|"),
-          barSep1(choice($.variant_declaration, $.variant_type_spread)),
+      seq(
+        optional("|"),
+        sep1(
+          seq(repeat($._newline), "|"),
+          choice($.variant_declaration, $.variant_type_spread),
         ),
       ),
 
@@ -745,8 +747,20 @@ export default grammar({
         "~",
         $.value_identifier,
         optional($.as_aliasing),
-        optional($.type_annotation),
-        optional(field("default_value", $._labeled_parameter_default_value)),
+        optional(
+          choice(
+            seq(
+              $.type_annotation,
+              optional(
+                field("default_value", $._labeled_parameter_default_value),
+              ),
+            ),
+            seq(
+              field("default_value", $._labeled_parameter_default_value),
+              optional($.type_annotation),
+            ),
+          ),
+        ),
       ),
 
     abstract_type: ($) => seq("type", repeat1($.type_identifier)),
@@ -1080,10 +1094,20 @@ export default grammar({
     coercion_expression: ($) =>
       prec.left(
         "coercion_relation",
-        seq(
-          field("left", $.expression),
-          field("operator", ":>"),
-          field("right", $._type),
+        choice(
+          seq(
+            field("left", $.expression),
+            field("operator", ":>"),
+            field("right", $._type),
+          ),
+          seq(
+            "(",
+            field("left", $.expression),
+            field("source_type", $.type_annotation),
+            field("operator", ":>"),
+            field("right", $._type),
+            ")",
+          ),
         ),
       ),
 

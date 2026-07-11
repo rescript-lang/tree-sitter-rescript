@@ -33,3 +33,8 @@ jobs:
           node-version: 22 # https://github.com/tree-sitter/node-tree-sitter/issues/268
           test-python: true
           test-go: true
+
+      - name: Run test wild
+        if: runner.os != 'Windows'
+        continue-on-error: true
+        run: node scripts/test_wild.mjs

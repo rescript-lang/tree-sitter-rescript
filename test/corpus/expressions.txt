@@ -1439,6 +1439,8 @@ Coercion operator
 
 value :> newType
 value :> t<'a>
+(value: oldType :> newType)
+({field: value}: sourceType :> targetType)
 
 --------------------------------------------------------------------------------
 
@@ -1453,7 +1455,22 @@ value :> t<'a>
       (generic_type
         (type_identifier)
         (type_arguments
-          (type_identifier))))))
+          (type_identifier)))))
+  (expression_statement
+    (coercion_expression
+      (value_identifier)
+      (type_annotation
+        (type_identifier))
+      (type_identifier)))
+  (expression_statement
+    (coercion_expression
+      (record
+        (record_field
+          (property_identifier)
+          (value_identifier)))
+      (type_annotation
+        (type_identifier))
+      (type_identifier))))
 
 ================================================================================
 Ternaries
@@ -1593,6 +1610,9 @@ Member expressions
 
 foo.bar.baz
 foo.ModuleName.bar
+t
+  .expect(value)
+  .toEqual(true)
 
 --------------------------------------------------------------------------------
 
@@ -1607,7 +1627,19 @@ foo.ModuleName.bar
     (member_expression
       (value_identifier)
       (module_identifier)
-      (property_identifier))))
+      (property_identifier)))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (call_expression
+          (member_expression
+            (value_identifier)
+            (property_identifier))
+          (arguments
+            (value_identifier)))
+        (property_identifier))
+      (arguments
+        (true)))))
 
 ================================================================================
 Subscript expressions
@@ -1986,6 +2018,8 @@ Mutation expressions
 foo["bar"] = qux
 foo.bar = qux
 foo.bar := qux
+itemIdx := lastIdx
+withExhaustiveCheck := false
 
 --------------------------------------------------------------------------------
 
@@ -2008,7 +2042,15 @@ foo.bar := qux
       (member_expression
         (value_identifier)
         (property_identifier))
-      (value_identifier))))
+      (value_identifier)))
+  (expression_statement
+    (mutation_expression
+      (value_identifier)
+      (value_identifier)))
+  (expression_statement
+    (mutation_expression
+      (value_identifier)
+      (false))))
 
 ================================================================================
 For loop
