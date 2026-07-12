@@ -1521,6 +1521,10 @@
           "named": true
         },
         {
+          "type": "uncurry",
+          "named": true
+        },
+        {
           "type": "unit",
           "named": true
         },
