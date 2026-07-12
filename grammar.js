@@ -26,6 +26,36 @@ export default grammar({
     /[\s\uFEFF\u2060\u200B\u00A0]/,
   ],
 
+  word: ($) => $._identifier,
+
+  reserved: {
+    global: ($) => [
+      "and",
+      "as",
+      "constraint",
+      "else",
+      "exception",
+      "external",
+      "false",
+      "for",
+      "if",
+      "in",
+      "include",
+      "let",
+      "module",
+      "mutable",
+      "of",
+      "open",
+      "rec",
+      "switch",
+      "true",
+      "try",
+      "type",
+      "when",
+      "while",
+    ],
+  },
+
   supertypes: ($) => [
     $.statement,
     $.declaration,
@@ -1120,11 +1150,7 @@ export default grammar({
       ),
 
     _extension_expression_payload: ($) =>
-      seq(
-        "(",
-        choice($._one_or_more_statements, $.type_annotation),
-        ")",
-      ),
+      seq("(", choice($._one_or_more_statements, $.type_annotation), ")"),
 
     variant: ($) =>
       prec.right(
@@ -1235,14 +1261,12 @@ export default grammar({
       ),
 
     type_identifier: ($) =>
-      choice(/[a-z_'][a-zA-Z0-9_']*/, $._escape_identifier),
+      choice($._identifier, /'[a-zA-Z0-9_']*/, $._escape_identifier),
+
+    _identifier: (_) => /[a-z_][a-zA-Z0-9_']*/,
 
     value_identifier: ($) =>
-      choice(
-        /[a-z_][a-zA-Z0-9_']*/,
-        $._reserved_identifier,
-        $._escape_identifier,
-      ),
+      choice($._identifier, $._reserved_identifier, $._escape_identifier),
 
     _escape_identifier: ($) => token(seq('\\"', /[^"]+/, '"')),
 
