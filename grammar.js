@@ -1240,7 +1240,7 @@ export default grammar({
         $.module_primary_expression,
       ),
 
-    constrain_type: ($) => seq("type", $._type, choice("=", ":="), $._type),
+    constrain_type: ($) => seq("type", $._type, choice("=", ":="), optional("private"), $._type),
 
     functor_use: ($) =>
       seq($.module_primary_expression, alias($.functor_arguments, $.arguments)),

@@ -732,6 +732,8 @@ module M = (Na: N, Nb: N): (
   (S with type t = x) with type a = b
 ) => {}
 
+module M: S with type t = private int
+
 --------------------------------------------------------------------------------
 
 (source_file
@@ -785,7 +787,15 @@ module M = (Na: N, Nb: N): (
               (constrain_type
                 (type_identifier)
                 (type_identifier)))))
-        body: (block)))))
+        body: (block))))
+  (module_declaration
+    (module_binding
+      name: (module_identifier)
+      signature: (module_type_constraint
+        (module_identifier)
+        (constrain_type
+          (type_identifier)
+          (type_identifier))))))
 
 ================================================================================
 Module with type constraint
