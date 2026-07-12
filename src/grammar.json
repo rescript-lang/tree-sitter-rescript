@@ -9534,6 +9534,10 @@
       },
       {
         "type": "STRING",
+        "value": "assert"
+      },
+      {
+        "type": "STRING",
         "value": "constraint"
       },
       {

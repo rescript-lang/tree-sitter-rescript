@@ -32,6 +32,7 @@ export default grammar({
     global: ($) => [
       "and",
       "as",
+      "assert",
       "constraint",
       "else",
       "exception",
