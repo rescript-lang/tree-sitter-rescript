@@ -1448,6 +1448,7 @@ export default grammar({
 });
 
 /**
+ * Creates a rule that matches one or more rules separated by vertical bars.
  *
  * @param {Rule} rule
  *
@@ -1458,6 +1459,7 @@ function barSep1(rule) {
 }
 
 /**
+ * Creates a rule that matches one or more rules separated by commas.
  *
  * @param {Rule} rule
  *
@@ -1468,6 +1470,7 @@ function commaSep1(rule) {
 }
 
 /**
+ * Creates a rule that matches two or more rules separated by commas.
  *
  * @param {Rule} rule
  *
@@ -1478,6 +1481,7 @@ function commaSep2(rule) {
 }
 
 /**
+ * Creates a comma-separated list with at least one rule and an optional trailing comma.
  *
  * @param {Rule} rule
  *
@@ -1488,6 +1492,7 @@ function commaSep1t(rule) {
 }
 
 /**
+ * Creates a comma-separated list with at least two rules and an optional trailing comma.
  *
  * @param {Rule} rule
  *
@@ -1498,6 +1503,7 @@ function commaSep2t(rule) {
 }
 
 /**
+ * Creates an optional comma-separated list with an optional trailing comma.
  *
  * @param {Rule} rule
  *
@@ -1508,6 +1514,7 @@ function commaSept(rule) {
 }
 
 /**
+ * Creates a rule that matches one or more rules separated by a delimiter.
  *
  * @param {string} delimiter
  * @param {Rule} rule
@@ -1519,6 +1526,7 @@ function sep1(delimiter, rule) {
 }
 
 /**
+ * Creates a rule that matches a final rule with an optional dotted prefix.
  *
  * @param {Rule} prefix
  * @param {Rule} final
@@ -1530,6 +1538,7 @@ function path(prefix, final) {
 }
 
 /**
+ * Creates a rule enclosed in parentheses.
  *
  * @param {Rule} rule
  *
