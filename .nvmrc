@@ -1,1 +1,2 @@
-v24.11.1
+# Using v22 due https://github.com/tree-sitter/node-tree-sitter/issues/268
+v22

@@ -19,18 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
 
-      # Instruct a C++ compiler to use the C++20 standard
-      # Required to install tree-sitter dev dependencie
-      # See # https://github.com/tree-sitter/node-tree-sitter/issues/268
       - name: Install dependencies
-        run: CXXFLAGS="-std=c++20" npm ci
+        run: npm ci
 
       - name: Build WASM
         run: npx tree-sitter build --wasm
@@ -43,10 +40,10 @@ jobs:
           sed -i 's|LANGUAGE_BASE_URL = ""|LANGUAGE_BASE_URL = "/tree-sitter-rescript"|' ./public/index.html
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
