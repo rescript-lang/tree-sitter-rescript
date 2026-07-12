@@ -4,6 +4,7 @@ Simple parameters
 
 a => 1
 () => 2
+(.) => ()
 (d, e) => 3
 (f, g) => {
   h
@@ -23,6 +24,9 @@ a => 1
   (expression_statement (function
     (formal_parameters)
     (number)))
+  (expression_statement (function
+    (formal_parameters (uncurry))
+    (unit)))
   (expression_statement (function
     (formal_parameters
       (parameter (value_identifier)) (parameter (value_identifier)))

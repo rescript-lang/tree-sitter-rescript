@@ -742,7 +742,7 @@ export default grammar({
 
     _return_type_annotation: ($) => seq(":", $._non_function_inline_type),
 
-    formal_parameters: ($) => seq("(", optional(commaSep1t($.parameter)), ")"),
+    formal_parameters: ($) => seq("(", optional(choice(commaSep1t($.parameter), $.uncurry)), ")"),
 
     parameter: ($) =>
       seq(
