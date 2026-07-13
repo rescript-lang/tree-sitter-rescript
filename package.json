@@ -11,9 +11,11 @@
     "node-gyp-build": "^4.8.2"
   },
   "devDependencies": {
+    "eslint-config-treesitter": "^1.0.2",
+    "prettier": "3.9.5",
     "rescript": "^12.1.0",
     "tree-sitter": "^0.25.0",
-    "tree-sitter-cli": "^0.26.3"
+    "tree-sitter-cli": "^0.26.11"
   },
   "peerDependencies": {
     "tree-sitter": "^0.21.1"
@@ -24,11 +26,21 @@
     }
   },
   "scripts": {
+    "lint": "eslint grammar.js",
+    "format": "prettier grammar.js --write",
+    "checkformat": "prettier grammar.js --check",
     "install": "node-gyp-build",
     "prestart": "tree-sitter build --wasm",
     "start": "tree-sitter playground",
     "test": "tree-sitter test",
     "parse": "tree-sitter parse",
-    "generate": "tree-sitter generate"
+    "generate": "tree-sitter generate",
+    "update-tests": "tree-sitter test --update"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
   }
 }

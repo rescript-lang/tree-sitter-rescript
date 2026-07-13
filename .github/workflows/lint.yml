@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - grammar.js
+  pull_request:
+    paths:
+      - grammar.js
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Install modules
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+      - name: Checkformat
+        run: npm run checkformat
+      - name: Generate parser
+        run: npm run generate
+      - name: Check for diffs in parse files
+        run: git diff --exit-code
