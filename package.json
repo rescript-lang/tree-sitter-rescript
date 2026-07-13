@@ -38,9 +38,9 @@
     "update-tests": "tree-sitter test --update"
   },
   "prettier": {
-    "trailingComma": "es5",
+    "trailingComma": "all",
     "tabWidth": 2,
-    "semi": false,
+    "semi": true,
     "singleQuote": true
   }
 }
