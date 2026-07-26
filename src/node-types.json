@@ -8,6 +8,10 @@
         "named": true
       },
       {
+        "type": "extension_expression",
+        "named": true
+      },
+      {
         "type": "function_type",
         "named": true
       },
@@ -294,6 +298,10 @@
         "named": true
       },
       {
+        "type": "tagged_template",
+        "named": true
+      },
+      {
         "type": "template_string",
         "named": true
       },
@@ -385,6 +393,10 @@
           "named": true
         },
         {
+          "type": "module_type_annotation",
+          "named": true
+        },
+        {
           "type": "partial_application_spread",
           "named": true
         },
@@ -394,6 +406,10 @@
         },
         {
           "type": "uncurry",
+          "named": true
+        },
+        {
+          "type": "unit",
           "named": true
         }
       ]
@@ -444,6 +460,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -515,6 +535,10 @@
           "named": true
         },
         {
+          "type": "type_annotation",
+          "named": true
+        },
+        {
           "type": "unit",
           "named": true
         },
@@ -555,6 +579,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -859,6 +887,10 @@
         "required": true,
         "types": [
           {
+            "type": "block",
+            "named": true
+          },
+          {
             "type": "primary_expression",
             "named": true
           }
@@ -953,6 +985,10 @@
         {
           "type": "_type",
           "named": true
+        },
+        {
+          "type": "type_constraint",
+          "named": true
         }
       ]
     }
@@ -978,6 +1014,25 @@
     }
   },
   {
+    "type": "decorator_argument",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "guard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "decorator_arguments",
     "named": true,
     "fields": {},
@@ -986,7 +1041,11 @@
       "required": false,
       "types": [
         {
-          "type": "expression",
+          "type": "declaration",
+          "named": true
+        },
+        {
+          "type": "decorator_argument",
           "named": true
         },
         {
@@ -1071,6 +1130,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -1195,6 +1258,10 @@
           "named": true
         },
         {
+          "type": "type_annotation",
+          "named": true
+        },
+        {
           "type": "variant_identifier",
           "named": true
         },
@@ -1231,6 +1298,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -1345,6 +1416,10 @@
           "named": true
         },
         {
+          "type": "let_declaration",
+          "named": true
+        },
+        {
           "type": "statement",
           "named": true
         },
@@ -1404,17 +1479,124 @@
   {
     "type": "for_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "pattern": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "?",
+            "named": false
+          },
+          {
+            "type": "array_pattern",
+            "named": true
+          },
+          {
+            "type": "as_aliasing",
+            "named": true
+          },
+          {
+            "type": "character",
+            "named": true
+          },
+          {
+            "type": "dict_pattern",
+            "named": true
+          },
+          {
+            "type": "exception_pattern",
+            "named": true
+          },
+          {
+            "type": "extension_expression",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "lazy_pattern",
+            "named": true
+          },
+          {
+            "type": "list_pattern",
+            "named": true
+          },
+          {
+            "type": "module_pack",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "or_pattern",
+            "named": true
+          },
+          {
+            "type": "parenthesized_pattern",
+            "named": true
+          },
+          {
+            "type": "polyvar_pattern",
+            "named": true
+          },
+          {
+            "type": "polyvar_type_pattern",
+            "named": true
+          },
+          {
+            "type": "range_pattern",
+            "named": true
+          },
+          {
+            "type": "record_pattern",
+            "named": true
+          },
+          {
+            "type": "regex",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "template_string",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "tuple_pattern",
+            "named": true
+          },
+          {
+            "type": "unit",
+            "named": true
+          },
+          {
+            "type": "value_identifier",
+            "named": true
+          },
+          {
+            "type": "variant_pattern",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
           "type": "expression",
-          "named": true
-        },
-        {
-          "type": "value_identifier",
           "named": true
         }
       ]
@@ -1446,6 +1628,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -1617,6 +1803,10 @@
           "named": true
         },
         {
+          "type": "extension_expression",
+          "named": true
+        },
+        {
           "type": "generic_type",
           "named": true
         },
@@ -1698,6 +1888,10 @@
         "required": true,
         "types": [
           {
+            "type": "functor_parameter",
+            "named": true
+          },
+          {
             "type": "functor_parameters",
             "named": true
           }
@@ -1729,6 +1923,10 @@
         },
         {
           "type": "module_type_annotation",
+          "named": true
+        },
+        {
+          "type": "unit",
           "named": true
         }
       ]
@@ -2168,6 +2366,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2253,6 +2461,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -2374,6 +2586,10 @@
           },
           {
             "type": "exception_pattern",
+            "named": true
+          },
+          {
+            "type": "extension_expression",
             "named": true
           },
           {
@@ -2529,6 +2745,10 @@
           "named": true
         },
         {
+          "type": "extension_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -2597,6 +2817,10 @@
           "named": true
         },
         {
+          "type": "type_annotation",
+          "named": true
+        },
+        {
           "type": "unit",
           "named": true
         },
@@ -2643,6 +2867,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "block",
+            "named": true
+          },
           {
             "type": "primary_expression",
             "named": true
@@ -2791,6 +3019,10 @@
       "types": [
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "functor",
           "named": true
         },
         {
@@ -3021,6 +3253,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -3288,6 +3524,10 @@
           "named": true
         },
         {
+          "type": "extension_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -3388,7 +3628,19 @@
           "named": true
         },
         {
+          "type": "for_expression",
+          "named": true
+        },
+        {
+          "type": "mutation_expression",
+          "named": true
+        },
+        {
           "type": "primary_expression",
+          "named": true
+        },
+        {
+          "type": "while_expression",
           "named": true
         }
       ]
@@ -3408,6 +3660,10 @@
         },
         {
           "type": "as_aliasing_type",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -3489,27 +3745,7 @@
       "required": true,
       "types": [
         {
-          "type": "as_aliasing_type",
-          "named": true
-        },
-        {
-          "type": "function_type",
-          "named": true
-        },
-        {
-          "type": "generic_type",
-          "named": true
-        },
-        {
-          "type": "module_pack",
-          "named": true
-        },
-        {
-          "type": "object_type",
-          "named": true
-        },
-        {
-          "type": "polymorphic_type",
+          "type": "_type",
           "named": true
         },
         {
@@ -3518,34 +3754,6 @@
         },
         {
           "type": "polyvar_parameters",
-          "named": true
-        },
-        {
-          "type": "polyvar_type",
-          "named": true
-        },
-        {
-          "type": "record_type",
-          "named": true
-        },
-        {
-          "type": "tuple_type",
-          "named": true
-        },
-        {
-          "type": "type_identifier",
-          "named": true
-        },
-        {
-          "type": "type_identifier_path",
-          "named": true
-        },
-        {
-          "type": "unit",
-          "named": true
-        },
-        {
-          "type": "unit_type",
           "named": true
         }
       ]
@@ -3787,6 +3995,10 @@
         },
         {
           "type": "exception_pattern",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -4043,6 +4255,10 @@
         "required": true,
         "types": [
           {
+            "type": "block",
+            "named": true
+          },
+          {
             "type": "primary_expression",
             "named": true
           }
@@ -4109,6 +4325,10 @@
           },
           {
             "type": "exception_pattern",
+            "named": true
+          },
+          {
+            "type": "extension_expression",
             "named": true
           },
           {
@@ -4200,6 +4420,33 @@
       "types": [
         {
           "type": "guard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tagged_template",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "template_string",
+          "named": true
+        },
+        {
+          "type": "value_identifier",
+          "named": true
+        },
+        {
+          "type": "value_identifier_path",
           "named": true
         }
       ]
@@ -4357,6 +4604,10 @@
           "named": true
         },
         {
+          "type": "extension_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -4482,6 +4733,10 @@
           "named": true
         },
         {
+          "type": "extension_expression",
+          "named": true
+        },
+        {
           "type": "function_type",
           "named": true
         },
@@ -4586,6 +4841,10 @@
         },
         {
           "type": "extensible_type",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
           "named": true
         },
         {
@@ -4847,6 +5106,10 @@
       "required": true,
       "types": [
         {
+          "type": "nested_variant_identifier",
+          "named": true
+        },
+        {
           "type": "type_annotation",
           "named": true
         },
@@ -5028,6 +5291,10 @@
     "named": false
   },
   {
+    "type": "&",
+    "named": false
+  },
+  {
     "type": "&&",
     "named": false
   },
@@ -5197,6 +5464,10 @@
   },
   {
     "type": "^^^",
+    "named": false
+  },
+  {
+    "type": "_",
     "named": false
   },
   {

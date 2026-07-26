@@ -929,3 +929,1411 @@ type handler = {config: string} => {result: bool}
             (property_identifier)
             (type_annotation
               (type_identifier))))))))
+
+================================================================================
+Polymorphic variant conjunctions
+================================================================================
+
+type madness = [< | #\"type" & (\"let") & (\"Super exotic") | #\"Bad Idea" ]
+type empty_conj =
+  | X([< | #X&('a) &(int, float)]): empty_conj
+
+type conj =
+  | X([< | #X(int) &([< | #B(int) &(float)])]): conj
+
+
+let f: [< | #T([< u2]) & ([< u2]) & ([< u1])] => unit
+let g: [< | #S&([< u2]) & ([< u2]) & ([< u1])] => unit;
+
+let f: [< | #T([< u2]) & ([< u2]) & ([< u1])] => unit
+let g: [< | #S&([< u2]) & ([< u2]) & ([< u1])] => unit
+let g: [< | #"Exotic-S+"&([< #"Exotic-u2+"]) & ([< #"Exotic-u2-"]) & ([< #"Exotic-u1+++"])] => unit
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (polyvar_type
+        (polyvar_declaration
+          (polyvar_identifier
+            (polyvar_string
+              (string_fragment)))
+          (tuple_type
+            (type_identifier))
+          (tuple_type
+            (type_identifier)))
+        (polyvar_declaration
+          (polyvar_identifier
+            (polyvar_string
+              (string_fragment)))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (tuple_type
+                  (type_identifier))
+                (tuple_type
+                  (type_identifier)
+                  (type_identifier)))))
+          (type_annotation
+            (type_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (polyvar_parameters
+                  (type_identifier))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (polyvar_identifier)
+                      (polyvar_parameters
+                        (type_identifier))
+                      (tuple_type
+                        (type_identifier))))))))
+          (type_annotation
+            (type_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (polyvar_parameters
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier)))))))
+          (unit_type)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier)))))))
+          (unit_type)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (polyvar_parameters
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier)))))))
+          (unit_type)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier)
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (type_identifier)))))))
+          (unit_type)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (polyvar_type
+              (polyvar_declaration
+                (polyvar_identifier
+                  (polyvar_string
+                    (string_fragment)))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (polyvar_identifier
+                        (polyvar_string
+                          (string_fragment))))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (polyvar_identifier
+                        (polyvar_string
+                          (string_fragment))))))
+                (tuple_type
+                  (polyvar_type
+                    (polyvar_declaration
+                      (polyvar_identifier
+                        (polyvar_string
+                          (string_fragment)))))))))
+          (unit_type))))))
+
+================================================================================
+Escaped identifiers in type expressions
+================================================================================
+
+type s = \"type"
+type s = '\"type"
+type s = \"module" as '\"type"
+
+type s = (~\"let": \"type") => \"module"
+
+type t = (\"let", \"module", \"type")
+
+type t = Foo.list<a>
+type t = Foo.\"let"<\"let", \"module">
+
+let f: 'a. \"let" => \"type" = ()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (as_aliasing_type
+        (type_identifier)
+        (type_identifier))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters
+          (parameter
+            (labeled_parameter
+              (value_identifier)
+              (type_annotation
+                (type_identifier)))))
+        (type_identifier))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (tuple_type
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (generic_type
+        (type_identifier_path
+          (module_identifier)
+          (type_identifier))
+        (type_arguments
+          (type_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (generic_type
+        (type_identifier_path
+          (module_identifier)
+          (type_identifier))
+        (type_arguments
+          (type_identifier)
+          (type_identifier)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (polymorphic_type
+          (type_identifier)
+          (function_type
+            (function_type_parameters
+              (type_identifier))
+            (type_identifier))))
+      (unit))))
+
+================================================================================
+Extended function type parameters
+================================================================================
+
+type t = (_, typeConstr<'a, state, 'foo>, 'x as 'y, module(S), %extension) => string
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (function_type
+        (function_type_parameters
+          (parameter
+            (type_identifier))
+          (parameter
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)
+                (type_identifier)
+                (type_identifier))))
+          (parameter
+            (as_aliasing_type
+              (type_identifier)
+              (type_identifier)))
+          (parameter
+            (module_pack
+              (module_identifier)))
+          (parameter
+            (extension_expression
+              (extension_identifier))))
+        (type_identifier)))))
+
+================================================================================
+Constraints after variant declarations
+================================================================================
+
+type color = Red | Blue
+  constraint 't = string
+
+type result<'good, 'bad> =
+  | Good('good)
+  | Bad('bad)
+  constraint 'good = boolean
+  constraint 'bad = float
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)))
+      (type_constraint
+        (type_identifier)
+        (type_identifier))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier)))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier))))
+      (type_constraint
+        (type_identifier)
+        (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (type_identifier)))))
+
+================================================================================
+Variance parameters followed by constraints
+================================================================================
+
+type t<+'superlongthing, -'superlongthing, +'superlongthing, -'superlongthing, +'superlongthing>
+  constraint 't = ('state, 'action) => 'nextSubtree
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (function_type
+          (function_type_parameters
+            (parameter
+              (type_identifier))
+            (parameter
+              (type_identifier)))
+          (type_identifier))))))
+
+================================================================================
+Multiple constraints after record declarations
+================================================================================
+
+type result<'good, 'bad> = {good: 'good, bad: 'bad}
+  constraint 'good = boolean constraint 'bad = float
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier)))
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier))))
+      (type_constraint
+        (type_identifier)
+        (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (type_identifier)))))
+
+================================================================================
+Private extensible types with constraints
+================================================================================
+
+type t =  private ..
+type t<'a, 'b> = ..
+type t<'a, 'b> = private ..
+
+type t = ..
+  constraint 't = ('s, 'a) => 'sub
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (extensible_type)))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (extensible_type)))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (extensible_type)))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (extensible_type)
+      (type_constraint
+        (type_identifier)
+        (function_type
+          (function_type_parameters
+            (parameter
+              (type_identifier))
+            (parameter
+              (type_identifier)))
+          (type_identifier))))))
+
+================================================================================
+Escaped identifiers in type declarations
+================================================================================
+
+type \"type" = User.\"type" = {
+  \"module": \"type",
+  \"let": \"module"
+}
+
+type \"Color" =
+  | Red(\"let", \"module", \"type")
+  | Blue(\"let", \"module", \"type"): \"Color"<\"let", \"SuperType">
+
+type \"type"<'\"😱 gadt", '\"😻">
+  constraint '\"type" = \"let"
+
+type \"type"<'\"😆SuperIdent"> += Blue(\"type", \"ExtremeType")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier_path
+        (module_identifier)
+        (type_identifier))
+      (record_type
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier)))
+        (record_type_field
+          (property_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier)
+            (type_identifier)
+            (type_identifier)))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier)
+            (type_identifier)
+            (type_identifier))
+          (type_annotation
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)
+                (type_identifier))))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (type_identifier))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier)
+            (type_identifier)))))))
+
+================================================================================
+Decorated types in constraints
+================================================================================
+
+type t = Reducer
+  constraint 't = @attr ('state, 'action) => 'nextSubtree
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))
+      (type_constraint
+        (type_identifier)
+        (decorator
+          (decorator_identifier))
+        (function_type
+          (function_type_parameters
+            (parameter
+              (type_identifier))
+            (parameter
+              (type_identifier)))
+          (type_identifier))))))
+
+================================================================================
+Consecutive decorators on type declarations
+================================================================================
+
+@attr type t = float
+@attr
+type t = float
+
+@attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr type t = int
+@attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr
+type t = int
+
+@attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName@attrWithSuperLongIdentifeirName type t = string
+@attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName@attrWithSuperLongIdentifeirName
+type t = string
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier))))
+
+================================================================================
+Constraints after type aliases
+================================================================================
+
+type t<'superlongthing, 'superlongthing, 'superlongthing, 'superlongthing, 'superlongthing> = Module.Long.With.Very.VeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeryLongName.t
+  constraint 't = ('s, 'a) => 'sub
+
+type t = 't
+  constraint 't = ('s, 'a) => 'sub
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))
+      (type_identifier_path
+        (module_identifier_path
+          (module_identifier_path
+            (module_identifier_path
+              (module_identifier_path
+                (module_identifier)
+                (module_identifier))
+              (module_identifier))
+            (module_identifier))
+          (module_identifier))
+        (type_identifier))
+      (type_constraint
+        (type_identifier)
+        (function_type
+          (function_type_parameters
+            (parameter
+              (type_identifier))
+            (parameter
+              (type_identifier)))
+          (type_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)
+      (type_constraint
+        (type_identifier)
+        (function_type
+          (function_type_parameters
+            (parameter
+              (type_identifier))
+            (parameter
+              (type_identifier)))
+          (type_identifier))))))
+
+================================================================================
+Qualified, private, and attributed type extensions
+================================================================================
+
+type t += Foo
+type Foo.Bar.t += Foo
+type t<'a, 'b> += Foo('a)
+type Foo.Bar.t<'a, 'b> += Foo('a)
+
+type t += private Foo
+type t += private Foo | Bar
+type t += private | Foo
+type t += private | Foo | Bar
+
+type t += Circle(string, int) | Point({x: int, y: int})
+type t += | Circle(string, int) | Point({x: int, y: int})
+
+type t += Foo = Bar
+type t += Foo = Bar | Circle = Circle2
+type t += Foo = Bar | Circle = Geo.Circle2
+type t += private Foo = Bar
+type t += private Foo = Bar | Circle = Circle2
+type t += private Foo = Bar | Circle = Geo.Circle2
+type t += | Foo = Bar
+type t += | Foo = Bar | Circle = Circle2
+type t += | Foo = Bar | Circle = Geo.Circle2
+type t += private | Foo = Bar
+type t += private | Foo = Bar | Circle = Circle2
+type t += private | Foo = Bar | Circle = Geo.Circle2
+type t += Foo = Geo.Metry.Bar
+
+@attr type t += @attr1 Foo
+@attr
+type t += | @attr1 Foo
+@attr
+type t += @attr1 Foo | @attr2 Bar
+@attr
+type t += | @attr1 Foo | @attr2 Bar
+
+@attr
+type t += private @attr1 Foo
+@attr
+type t += private | @attr1 Foo
+@attr
+type t += private @attr1 Foo | @attr2 Bar
+@attr
+type t += private | @attr1 Foo | @attr2 Bar
+
+@attr
+type t += @attr1 Foo = Bar
+@attr
+type t += | @attr1 Foo = Bar
+@attr
+type t += @attr1 Foo = Foo2 | @attr2 Bar = Bar2
+@attr
+type t += | @attr1 Foo = Foo2 | @attr2 Bar = Bar2
+
+@attr
+type t += private @attr1 Foo = Foo2
+@attr
+type t += private | @attr1 Foo = Foo2
+@attr
+type t += private @attr1 Foo = Foo2 | @attr2 Bar = Bar2
+@attr
+type t += private | @attr1 Foo = Foo2 | @attr2 Bar = Bar2
+
+
+type t += private
+  | @attr1 Foo = Foo2
+
+type t +=
+  private
+  | @attr1 Foo = Foo2
+  | @attr2 Bar = Bar2
+
+
+type t +=
+  | Foo = Bar
+
+module Tid = {
+  type t<_> = ..
+  type s<_> = ..
+  type u<_> = ..
+}
+
+module type Tid = {
+  type t
+  type Tid.t<_> += Tid: Tid.t<t>
+
+  type Tid.s<_> +=
+    | Tid: Tid.s<t>
+
+  type Tid.u<_> +=
+    | Uid: Tid.u<t>
+    | Uid2: Tid.u<t>
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier_path
+        (module_identifier_path
+          (module_identifier)
+          (module_identifier))
+        (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier_path
+        (module_identifier_path
+          (module_identifier)
+          (module_identifier))
+        (type_identifier))
+      (type_parameters
+        (type_identifier)
+        (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier)
+            (type_identifier)))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (record_type
+              (record_type_field
+                (property_identifier)
+                (type_annotation
+                  (type_identifier)))
+              (record_type_field
+                (property_identifier)
+                (type_annotation
+                  (type_identifier)))))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier)
+            (type_identifier)))
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (record_type
+              (record_type_field
+                (property_identifier)
+                (type_annotation
+                  (type_identifier)))
+              (record_type_field
+                (property_identifier)
+                (type_annotation
+                  (type_identifier)))))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (nested_variant_identifier
+            (module_identifier)
+            (variant_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (nested_variant_identifier
+            (module_identifier)
+            (variant_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (nested_variant_identifier
+            (module_identifier)
+            (variant_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (nested_variant_identifier
+            (module_identifier)
+            (variant_identifier))))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (nested_variant_identifier
+            (module_identifier_path
+              (module_identifier)
+              (module_identifier))
+            (variant_identifier))))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (decorator
+        (decorator_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier))
+        (decorator
+          (decorator_identifier))
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_identifier)))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (block
+        (type_declaration
+          (type_binding
+            (type_identifier)
+            (type_parameters
+              (type_identifier))
+            (extensible_type)))
+        (type_declaration
+          (type_binding
+            (type_identifier)
+            (type_parameters
+              (type_identifier))
+            (extensible_type)))
+        (type_declaration
+          (type_binding
+            (type_identifier)
+            (type_parameters
+              (type_identifier))
+            (extensible_type))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (block
+        (type_declaration
+          (type_binding
+            (type_identifier)))
+        (type_declaration
+          (type_binding
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier))
+            (type_parameters
+              (type_identifier))
+            (variant_type
+              (variant_declaration
+                (variant_identifier)
+                (type_annotation
+                  (generic_type
+                    (type_identifier_path
+                      (module_identifier)
+                      (type_identifier))
+                    (type_arguments
+                      (type_identifier))))))))
+        (type_declaration
+          (type_binding
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier))
+            (type_parameters
+              (type_identifier))
+            (variant_type
+              (variant_declaration
+                (variant_identifier)
+                (type_annotation
+                  (generic_type
+                    (type_identifier_path
+                      (module_identifier)
+                      (type_identifier))
+                    (type_arguments
+                      (type_identifier))))))))
+        (type_declaration
+          (type_binding
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier))
+            (type_parameters
+              (type_identifier))
+            (variant_type
+              (variant_declaration
+                (variant_identifier)
+                (type_annotation
+                  (generic_type
+                    (type_identifier_path
+                      (module_identifier)
+                      (type_identifier))
+                    (type_arguments
+                      (type_identifier)))))
+              (variant_declaration
+                (variant_identifier)
+                (type_annotation
+                  (generic_type
+                    (type_identifier_path
+                      (module_identifier)
+                      (type_identifier))
+                    (type_arguments
+                      (type_identifier))))))))))))

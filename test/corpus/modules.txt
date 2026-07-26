@@ -887,3 +887,320 @@ t.A.B.c
       (module_identifier)
       (module_identifier)
       (property_identifier))))
+
+================================================================================
+Functor signatures with unit parameters
+================================================================================
+
+module Make: () => S = (Config, ()) => {}
+module rec Make: (Config, ()) => S = (Config: Config, ()): S => {}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameters)
+        (module_identifier))
+      (functor
+        (functor_parameters
+          (functor_parameter
+            (module_identifier))
+          (functor_parameter
+            (unit)))
+        (block))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameters
+          (functor_parameter
+            (module_identifier))
+          (functor_parameter
+            (unit)))
+        (module_identifier))
+      (functor
+        (functor_parameters
+          (functor_parameter
+            (module_identifier)
+            (module_type_annotation
+              (module_identifier)))
+          (functor_parameter
+            (unit)))
+        (module_type_annotation
+          (module_identifier))
+        (block)))))
+
+================================================================================
+GADT exception result types
+================================================================================
+
+exception GadtExit(int): exit<int>
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (exception_declaration
+    (variant_identifier)
+    (variant_parameters
+      (type_identifier))
+    (type_annotation
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (type_identifier))))))
+
+================================================================================
+Repeated constraints in module type refinements
+================================================================================
+
+module type A = Foo with type t = 'st constraint 'st = int
+module type A = Foo with type t = 'st constraint 'st = int constraint 'x = int
+module type A = Foo
+  with type t = 'st constraint 'st = int constraint 'x = int
+   and type t = 'st constraint 'st = int constraint 'x = int
+   and type t = 'st constraint 'st = int constraint 'x = int
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_type_constraint
+        (module_identifier)
+        (constrain_type
+          (type_identifier)
+          (type_identifier)
+          (type_constraint
+            (type_identifier)
+            (type_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_type_constraint
+        (module_identifier)
+        (constrain_type
+          (type_identifier)
+          (type_identifier)
+          (type_constraint
+            (type_identifier)
+            (type_identifier))
+          (type_constraint
+            (type_identifier)
+            (type_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (module_type_constraint
+        (module_identifier)
+        (constrain_type
+          (type_identifier)
+          (type_identifier)
+          (type_constraint
+            (type_identifier)
+            (type_identifier))
+          (type_constraint
+            (type_identifier)
+            (type_identifier)))
+        (constrain_type
+          (type_identifier)
+          (type_identifier)
+          (type_constraint
+            (type_identifier)
+            (type_identifier))
+          (type_constraint
+            (type_identifier)
+            (type_identifier)))
+        (constrain_type
+          (type_identifier)
+          (type_identifier)
+          (type_constraint
+            (type_identifier)
+            (type_identifier))
+          (type_constraint
+            (type_identifier)
+            (type_identifier)))))))
+
+================================================================================
+Bare, anonymous, and attributed functor types
+================================================================================
+
+module type Functor = SetLike => Set
+module type Functor = (_: SetLike, _: BtreeLike) => NeoTree
+module type Functor = SetLike => BtreeLike => NeoTree
+
+module type Functor = (@attr1 _: SetLike, @attr2 _: BtreeLike) => NeoTree
+module type Functor = @attr0 (@attr1 _: SetLike, @attr2 _: BtreeLike) => NeoTree
+
+
+module type Functor = @attr1 SetLike => @attr2 BtreeLike => @attr3 NeoTree
+
+module type Functor = SetLike => Set with type t = A.t
+module type Functor = SetLike => (Set with type t = A.t)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameter
+          (module_identifier))
+        (module_identifier))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameters
+          (functor_parameter
+            (module_type_annotation
+              (module_identifier)))
+          (functor_parameter
+            (module_type_annotation
+              (module_identifier))))
+        (module_identifier))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameter
+          (module_identifier))
+        (functor
+          (functor_parameter
+            (module_identifier))
+          (module_identifier)))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameters
+          (decorator
+            (decorator_identifier))
+          (functor_parameter
+            (module_type_annotation
+              (module_identifier)))
+          (decorator
+            (decorator_identifier))
+          (functor_parameter
+            (module_type_annotation
+              (module_identifier))))
+        (module_identifier))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (decorator
+        (decorator_identifier))
+      (functor
+        (functor_parameters
+          (decorator
+            (decorator_identifier))
+          (functor_parameter
+            (module_type_annotation
+              (module_identifier)))
+          (decorator
+            (decorator_identifier))
+          (functor_parameter
+            (module_type_annotation
+              (module_identifier))))
+        (module_identifier))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (decorator
+        (decorator_identifier))
+      (functor
+        (functor_parameter
+          (module_identifier))
+        (decorator
+          (decorator_identifier))
+        (functor
+          (functor_parameter
+            (module_identifier))
+          (decorator
+            (decorator_identifier))
+          (module_identifier)))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameter
+          (module_identifier))
+        (module_type_constraint
+          (module_identifier)
+          (constrain_type
+            (type_identifier)
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier)))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor
+        (functor_parameter
+          (module_identifier))
+        (parenthesized_module_expression
+          (module_type_constraint
+            (module_identifier)
+            (constrain_type
+              (type_identifier)
+              (type_identifier_path
+                (module_identifier)
+                (type_identifier)))))))))
+
+================================================================================
+Type-constrained functor arguments
+================================================================================
+
+module X = F(A : SetLike)
+module X = F(A : SetLike, B: TreeLike)
+module X = F(A : SetLike, B: TreeLike, C: BtreeLike, D: RedBlackTreeLike, E: AvlTreeLike)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor_use
+        (module_identifier)
+        (arguments
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor_use
+        (module_identifier)
+        (arguments
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))))))
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (functor_use
+        (module_identifier)
+        (arguments
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier))
+          (module_identifier)
+          (module_type_annotation
+            (module_identifier)))))))

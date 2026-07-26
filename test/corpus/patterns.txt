@@ -1,0 +1,199 @@
+================================================================================
+Extension expressions in record patterns
+================================================================================
+
+let get_age3 = ({age: %raw("__GC"), name: _}) => age2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (record_pattern
+              (value_identifier)
+              (extension_expression
+                (extension_identifier)
+                (expression_statement
+                  (string
+                    (string_fragment))))
+              (value_identifier)
+              (value_identifier))))
+        (value_identifier)))))
+
+================================================================================
+Extension patterns in let bindings
+================================================================================
+
+let %extensionPoint = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (extension_expression
+        (extension_identifier))
+      (number))))
+
+================================================================================
+Type annotations on nested patterns
+================================================================================
+
+switch thing {
+| Some((node: node)) => ()
+| Some(node: Feature.node) => ()
+| list{(child: node), ...rest} => ()
+| list{child: node, ...rest} => ()
+| (Some(_), Some((menuItem: Menu.item))) => ()
+| (Some(_), Some(menuItem: Menu.item)) => ()
+| SettingChanged(({fullName, value, _}: Nova.Setting.t)) => ()
+| SettingChanged({fullName, value, _}: Nova.Setting.t) => ()
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (parenthesized_pattern
+              (value_identifier)
+              (type_annotation
+                (type_identifier)))))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (value_identifier)
+            (type_annotation
+              (type_identifier_path
+                (module_identifier)
+                (type_identifier)))))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (list_pattern
+          (parenthesized_pattern
+            (value_identifier)
+            (type_annotation
+              (type_identifier)))
+          (spread_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (list_pattern
+          (value_identifier)
+          (type_annotation
+            (type_identifier))
+          (spread_pattern
+            (value_identifier)))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (tuple_pattern
+          (tuple_item_pattern
+            (variant_pattern
+              (variant_identifier)
+              (formal_parameters
+                (value_identifier))))
+          (tuple_item_pattern
+            (variant_pattern
+              (variant_identifier)
+              (formal_parameters
+                (parenthesized_pattern
+                  (value_identifier)
+                  (type_annotation
+                    (type_identifier_path
+                      (module_identifier)
+                      (type_identifier))))))))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (tuple_pattern
+          (tuple_item_pattern
+            (variant_pattern
+              (variant_identifier)
+              (formal_parameters
+                (value_identifier))))
+          (tuple_item_pattern
+            (variant_pattern
+              (variant_identifier)
+              (formal_parameters
+                (value_identifier)
+                (type_annotation
+                  (type_identifier_path
+                    (module_identifier)
+                    (type_identifier)))))))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (parenthesized_pattern
+              (record_pattern
+                (value_identifier)
+                (value_identifier)
+                (value_identifier))
+              (type_annotation
+                (type_identifier_path
+                  (module_identifier_path
+                    (module_identifier)
+                    (module_identifier))
+                  (type_identifier))))))
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (switch_match
+        (variant_pattern
+          (variant_identifier)
+          (formal_parameters
+            (record_pattern
+              (value_identifier)
+              (value_identifier)
+              (value_identifier))
+            (type_annotation
+              (type_identifier_path
+                (module_identifier_path
+                  (module_identifier)
+                  (module_identifier))
+                (type_identifier)))))
+        (sequence_expression
+          (expression_statement
+            (unit)))))))
+
+================================================================================
+Escaped identifiers in for-loop patterns
+================================================================================
+
+for `literal constant` in 0 to 10 { () }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (for_expression
+      (template_string
+        (template_string_content))
+      (number)
+      (number)
+      (block
+        (expression_statement
+          (unit))))))

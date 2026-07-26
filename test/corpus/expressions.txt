@@ -2272,3 +2272,1012 @@ switch json {
         (sequence_expression
           (expression_statement
             (number)))))))
+
+================================================================================
+Decorated mutations in pipe expressions
+================================================================================
+
+let () =
+  @attr user.name = "steve"->@attr user.name = "steve"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (unit)
+      (decorator
+        (decorator_identifier))
+      (mutation_expression
+        (member_expression
+          (value_identifier)
+          (property_identifier))
+        (pipe_expression
+          (string
+            (string_fragment))
+          (decorator
+            (decorator_identifier))
+          (mutation_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (string
+              (string_fragment))))))))
+
+================================================================================
+Optional record pattern fields
+================================================================================
+
+let _ = switch z {
+  | {x: ? None, y: ? None, z: ? (None:tt)} => 11
+  | {name:  ? name, x: 3} => 42
+  | {name:  ? dd, x: 3} => 42
+  | {x: ? None, y: ? None, z: ? (None:tt)} => 11
+  | {name: ? name, x: 3} => 42
+  | {? name, x: 3} => 4242
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (switch_expression
+        (value_identifier)
+        (switch_match
+          (record_pattern
+            (value_identifier)
+            (variant_pattern
+              (variant_identifier))
+            (value_identifier)
+            (variant_pattern
+              (variant_identifier))
+            (value_identifier)
+            (parenthesized_pattern
+              (variant_pattern
+                (variant_identifier))
+              (type_annotation
+                (type_identifier))))
+          (sequence_expression
+            (expression_statement
+              (number))))
+        (switch_match
+          (record_pattern
+            (value_identifier)
+            (value_identifier)
+            (value_identifier)
+            (number))
+          (sequence_expression
+            (expression_statement
+              (number))))
+        (switch_match
+          (record_pattern
+            (value_identifier)
+            (value_identifier)
+            (value_identifier)
+            (number))
+          (sequence_expression
+            (expression_statement
+              (number))))
+        (switch_match
+          (record_pattern
+            (value_identifier)
+            (variant_pattern
+              (variant_identifier))
+            (value_identifier)
+            (variant_pattern
+              (variant_identifier))
+            (value_identifier)
+            (parenthesized_pattern
+              (variant_pattern
+                (variant_identifier))
+              (type_annotation
+                (type_identifier))))
+          (sequence_expression
+            (expression_statement
+              (number))))
+        (switch_match
+          (record_pattern
+            (value_identifier)
+            (value_identifier)
+            (value_identifier)
+            (number))
+          (sequence_expression
+            (expression_statement
+              (number))))
+        (switch_match
+          (record_pattern
+            (value_identifier)
+            (value_identifier)
+            (number))
+          (sequence_expression
+            (expression_statement
+              (number))))))))
+
+================================================================================
+Locally abstract function parameters
+================================================================================
+
+let cancel_and_collect_callbacks:
+  'a 'u 'c.
+  (list<packed_callbacks>, promise<'a, 'u, 'c>) => list<packed_callbacks>
+ =
+  (type x, callbacks_accumulator, p: promise<_, _, c>) => ();
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (polymorphic_type
+          (type_identifier)
+          (type_identifier)
+          (type_identifier)
+          (function_type
+            (function_type_parameters
+              (parameter
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier))))
+              (parameter
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier)
+                    (type_identifier)
+                    (type_identifier)))))
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier))))))
+      (function
+        (formal_parameters
+          (parameter
+            (abstract_type
+              (type_identifier)))
+          (parameter
+            (value_identifier))
+          (parameter
+            (value_identifier)
+            (type_annotation
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier)
+                  (type_identifier)
+                  (type_identifier))))))
+        (unit)))))
+
+================================================================================
+Coercions in labeled call arguments
+================================================================================
+
+call(~x=y :> int, ~z=w : int :> int, ~a, ~b)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (value_identifier)
+            (type_identifier)))
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (value_identifier)
+            (type_annotation
+              (type_identifier))
+            (type_identifier)))
+        (labeled_argument
+          (value_identifier))
+        (labeled_argument
+          (value_identifier))))))
+
+================================================================================
+Braced expression receivers and operands
+================================================================================
+
+let _ =  {apply}(a, b)
+let _ = { user.name }.toString()
+let _ = { { user.name }.toString() }
+let _ = { user.name }.first
+let _ = { { user.name }.first }
+{myArray}[{0}]
+{
+  myArray}[{
+    0}]
+{myArray}[{0}] = {20}
+{
+  myArray}[{
+    0}] = {
+      20}
+
+{jsObject}["foo"]
+{jsObject}["foo"] = { "bar" }
+{jsObject}["foo"] = {
+  a + b
+}
+{
+  jsObject}["foo"]
+{jsObject}["foo"] = { "bar" }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (arguments
+          (value_identifier)
+          (value_identifier)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (member_expression
+          (block
+            (expression_statement
+              (member_expression
+                (value_identifier)
+                (property_identifier))))
+          (property_identifier))
+        (arguments))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (member_expression
+              (block
+                (expression_statement
+                  (member_expression
+                    (value_identifier)
+                    (property_identifier))))
+              (property_identifier))
+            (arguments))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (member_expression
+        (block
+          (expression_statement
+            (member_expression
+              (value_identifier)
+              (property_identifier))))
+        (property_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (expression_statement
+          (member_expression
+            (block
+              (expression_statement
+                (member_expression
+                  (value_identifier)
+                  (property_identifier))))
+            (property_identifier))))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block
+          (expression_statement
+            (number))))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block
+          (expression_statement
+            (number))))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (string
+        (string_fragment))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (string
+            (string_fragment))))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (binary_expression
+            (value_identifier)
+            (value_identifier))))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (string
+        (string_fragment))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (string
+            (string_fragment)))))))
+
+================================================================================
+Pipes with loops, mutations, and member access
+================================================================================
+
+let x = for i in 0 to 10 { () }->for i in 0 to 10 { () }
+let x = x.left = value->x.right = value
+let x = (x.left = value)->x.right = value
+let () = x.left = (value->process)->x.right = value->process
+
+let () = {
+  let () = sideEffect()
+  if (
+    (isLeft(successor) && sibling.right === None) ||
+      ((sibling.right->castNotOption).color === Black &&
+      sibling.left !== None &&
+      (sibling.left->castNotOption).color === Red)
+  ) {
+    sibling.color = Red
+    sibling.left->castNotOption.color = Black
+    rotateRight(rbt, sibling)
+  }
+  if (
+    sibling !== None && (sibling->castNotOption).color === Black
+  ) {
+    let sibling = sibling->castNotOption
+    if (
+      isLeft(successor) &&
+      sibling.right === None ||
+        (sibling.right->castNotOption).color === Black &&
+      sibling.left !== None &&
+      (sibling.left->castNotOption).color === Red
+    ) {
+      sibling.color = Red
+      sibling.left->castNotOption.color = Black
+      rotateRight(rbt, sibling)
+    } else if (
+      !isLeft(successor) &&
+      sibling.left === None ||
+        (sibling.left->castNotOption).color === Black &&
+      sibling.right !== None &&
+      (sibling.right->castNotOption).color === Red
+    ) {
+      sibling.color = Red
+      sibling.right->castNotOption.color = Black
+      rotateLeft(rbt, sibling)
+    }
+    break.contents = true
+  } else {
+    let sibling = siblingOf(successor)
+    let sibling = sibling->castNotOption
+    sibling.color = successorParent.color
+    if isLeft(successor) {
+      sibling.right->castNotOption.color = Black
+      rotateRight(rbt, successorParent)
+    } else {
+      sibling.left->castNotOption.color = Black
+      rotateLeft(rbt, successorParent)
+    }
+  }
+}
+
+let () = node.left := value->process->node.right = value->process
+let () = (node.left := value->process)->node.right = value->process
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (pipe_expression
+        (for_expression
+          (value_identifier)
+          (number)
+          (number)
+          (block
+            (expression_statement
+              (unit))))
+        (for_expression
+          (value_identifier)
+          (number)
+          (number)
+          (block
+            (expression_statement
+              (unit)))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (mutation_expression
+        (member_expression
+          (value_identifier)
+          (property_identifier))
+        (pipe_expression
+          (value_identifier)
+          (mutation_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (value_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (pipe_expression
+        (parenthesized_expression
+          (mutation_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (value_identifier)))
+        (mutation_expression
+          (member_expression
+            (value_identifier)
+            (property_identifier))
+          (value_identifier)))))
+  (let_declaration
+    (let_binding
+      (unit)
+      (mutation_expression
+        (member_expression
+          (value_identifier)
+          (property_identifier))
+        (pipe_expression
+          (parenthesized_expression
+            (pipe_expression
+              (value_identifier)
+              (value_identifier)))
+          (mutation_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (pipe_expression
+              (value_identifier)
+              (value_identifier)))))))
+  (let_declaration
+    (let_binding
+      (unit)
+      (block
+        (let_declaration
+          (let_binding
+            (unit)
+            (call_expression
+              (value_identifier)
+              (arguments))))
+        (expression_statement
+          (if_expression
+            (parenthesized_expression
+              (binary_expression
+                (parenthesized_expression
+                  (binary_expression
+                    (call_expression
+                      (value_identifier)
+                      (arguments
+                        (value_identifier)))
+                    (binary_expression
+                      (member_expression
+                        (value_identifier)
+                        (property_identifier))
+                      (variant
+                        (variant_identifier)))))
+                (parenthesized_expression
+                  (binary_expression
+                    (binary_expression
+                      (binary_expression
+                        (member_expression
+                          (parenthesized_expression
+                            (pipe_expression
+                              (member_expression
+                                (value_identifier)
+                                (property_identifier))
+                              (value_identifier)))
+                          (property_identifier))
+                        (variant
+                          (variant_identifier)))
+                      (binary_expression
+                        (member_expression
+                          (value_identifier)
+                          (property_identifier))
+                        (variant
+                          (variant_identifier))))
+                    (binary_expression
+                      (member_expression
+                        (parenthesized_expression
+                          (pipe_expression
+                            (member_expression
+                              (value_identifier)
+                              (property_identifier))
+                            (value_identifier)))
+                        (property_identifier))
+                      (variant
+                        (variant_identifier)))))))
+            (block
+              (expression_statement
+                (mutation_expression
+                  (member_expression
+                    (value_identifier)
+                    (property_identifier))
+                  (variant
+                    (variant_identifier))))
+              (expression_statement
+                (pipe_expression
+                  (member_expression
+                    (value_identifier)
+                    (property_identifier))
+                  (mutation_expression
+                    (member_expression
+                      (value_identifier)
+                      (property_identifier))
+                    (variant
+                      (variant_identifier)))))
+              (expression_statement
+                (call_expression
+                  (value_identifier)
+                  (arguments
+                    (value_identifier)
+                    (value_identifier)))))))
+        (expression_statement
+          (if_expression
+            (parenthesized_expression
+              (binary_expression
+                (binary_expression
+                  (value_identifier)
+                  (variant
+                    (variant_identifier)))
+                (binary_expression
+                  (member_expression
+                    (parenthesized_expression
+                      (pipe_expression
+                        (value_identifier)
+                        (value_identifier)))
+                    (property_identifier))
+                  (variant
+                    (variant_identifier)))))
+            (block
+              (let_declaration
+                (let_binding
+                  (value_identifier)
+                  (pipe_expression
+                    (value_identifier)
+                    (value_identifier))))
+              (expression_statement
+                (if_expression
+                  (parenthesized_expression
+                    (binary_expression
+                      (binary_expression
+                        (call_expression
+                          (value_identifier)
+                          (arguments
+                            (value_identifier)))
+                        (binary_expression
+                          (member_expression
+                            (value_identifier)
+                            (property_identifier))
+                          (variant
+                            (variant_identifier))))
+                      (binary_expression
+                        (binary_expression
+                          (binary_expression
+                            (member_expression
+                              (parenthesized_expression
+                                (pipe_expression
+                                  (member_expression
+                                    (value_identifier)
+                                    (property_identifier))
+                                  (value_identifier)))
+                              (property_identifier))
+                            (variant
+                              (variant_identifier)))
+                          (binary_expression
+                            (member_expression
+                              (value_identifier)
+                              (property_identifier))
+                            (variant
+                              (variant_identifier))))
+                        (binary_expression
+                          (member_expression
+                            (parenthesized_expression
+                              (pipe_expression
+                                (member_expression
+                                  (value_identifier)
+                                  (property_identifier))
+                                (value_identifier)))
+                            (property_identifier))
+                          (variant
+                            (variant_identifier))))))
+                  (block
+                    (expression_statement
+                      (mutation_expression
+                        (member_expression
+                          (value_identifier)
+                          (property_identifier))
+                        (variant
+                          (variant_identifier))))
+                    (expression_statement
+                      (pipe_expression
+                        (member_expression
+                          (value_identifier)
+                          (property_identifier))
+                        (mutation_expression
+                          (member_expression
+                            (value_identifier)
+                            (property_identifier))
+                          (variant
+                            (variant_identifier)))))
+                    (expression_statement
+                      (call_expression
+                        (value_identifier)
+                        (arguments
+                          (value_identifier)
+                          (value_identifier)))))
+                  (else_if_clause
+                    (parenthesized_expression
+                      (binary_expression
+                        (binary_expression
+                          (unary_expression
+                            (call_expression
+                              (value_identifier)
+                              (arguments
+                                (value_identifier))))
+                          (binary_expression
+                            (member_expression
+                              (value_identifier)
+                              (property_identifier))
+                            (variant
+                              (variant_identifier))))
+                        (binary_expression
+                          (binary_expression
+                            (binary_expression
+                              (member_expression
+                                (parenthesized_expression
+                                  (pipe_expression
+                                    (member_expression
+                                      (value_identifier)
+                                      (property_identifier))
+                                    (value_identifier)))
+                                (property_identifier))
+                              (variant
+                                (variant_identifier)))
+                            (binary_expression
+                              (member_expression
+                                (value_identifier)
+                                (property_identifier))
+                              (variant
+                                (variant_identifier))))
+                          (binary_expression
+                            (member_expression
+                              (parenthesized_expression
+                                (pipe_expression
+                                  (member_expression
+                                    (value_identifier)
+                                    (property_identifier))
+                                  (value_identifier)))
+                              (property_identifier))
+                            (variant
+                              (variant_identifier))))))
+                    (block
+                      (expression_statement
+                        (mutation_expression
+                          (member_expression
+                            (value_identifier)
+                            (property_identifier))
+                          (variant
+                            (variant_identifier))))
+                      (expression_statement
+                        (pipe_expression
+                          (member_expression
+                            (value_identifier)
+                            (property_identifier))
+                          (mutation_expression
+                            (member_expression
+                              (value_identifier)
+                              (property_identifier))
+                            (variant
+                              (variant_identifier)))))
+                      (expression_statement
+                        (call_expression
+                          (value_identifier)
+                          (arguments
+                            (value_identifier)
+                            (value_identifier))))))))
+              (expression_statement
+                (mutation_expression
+                  (member_expression
+                    (value_identifier)
+                    (property_identifier))
+                  (true))))
+            (else_clause
+              (block
+                (let_declaration
+                  (let_binding
+                    (value_identifier)
+                    (call_expression
+                      (value_identifier)
+                      (arguments
+                        (value_identifier)))))
+                (let_declaration
+                  (let_binding
+                    (value_identifier)
+                    (pipe_expression
+                      (value_identifier)
+                      (value_identifier))))
+                (expression_statement
+                  (mutation_expression
+                    (member_expression
+                      (value_identifier)
+                      (property_identifier))
+                    (member_expression
+                      (value_identifier)
+                      (property_identifier))))
+                (expression_statement
+                  (if_expression
+                    (call_expression
+                      (value_identifier)
+                      (arguments
+                        (value_identifier)))
+                    (block
+                      (expression_statement
+                        (pipe_expression
+                          (member_expression
+                            (value_identifier)
+                            (property_identifier))
+                          (mutation_expression
+                            (member_expression
+                              (value_identifier)
+                              (property_identifier))
+                            (variant
+                              (variant_identifier)))))
+                      (expression_statement
+                        (call_expression
+                          (value_identifier)
+                          (arguments
+                            (value_identifier)
+                            (value_identifier)))))
+                    (else_clause
+                      (block
+                        (expression_statement
+                          (pipe_expression
+                            (member_expression
+                              (value_identifier)
+                              (property_identifier))
+                            (mutation_expression
+                              (member_expression
+                                (value_identifier)
+                                (property_identifier))
+                              (variant
+                                (variant_identifier)))))
+                        (expression_statement
+                          (call_expression
+                            (value_identifier)
+                            (arguments
+                              (value_identifier)
+                              (value_identifier)))))))))))))))
+  (let_declaration
+    (let_binding
+      (unit)
+      (mutation_expression
+        (member_expression
+          (value_identifier)
+          (property_identifier))
+        (pipe_expression
+          (pipe_expression
+            (value_identifier)
+            (value_identifier))
+          (mutation_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (pipe_expression
+              (value_identifier)
+              (value_identifier)))))))
+  (let_declaration
+    (let_binding
+      (unit)
+      (pipe_expression
+        (parenthesized_expression
+          (mutation_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (pipe_expression
+              (value_identifier)
+              (value_identifier))))
+        (mutation_expression
+          (member_expression
+            (value_identifier)
+            (property_identifier))
+          (pipe_expression
+            (value_identifier)
+            (value_identifier)))))))
+
+================================================================================
+Typed labels and uncurried call arguments
+================================================================================
+
+call(~a: int)
+call(~\"let": int)
+
+document.createElementWithOptions(. "div", elementProps(~onClick=_ =>
+    Js.log("hello world")
+  ))
+
+f(. 1)
+f(. [1, 2, 3])
+f(. [suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong,])
+f(. (1, 2, 3))
+f(. {"a": 1})
+f(. list{1})
+f(. `
+ template
+ string
+`)
+f(. `single line`)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (value_identifier)
+        (property_identifier))
+      (arguments
+        (uncurry)
+        (string
+          (string_fragment))
+        (call_expression
+          (value_identifier)
+          (arguments
+            (labeled_argument
+              (value_identifier)
+              (function
+                (value_identifier)
+                (call_expression
+                  (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  (arguments
+                    (string
+                      (string_fragment)))))))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (number))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (array
+          (number)
+          (number)
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (array
+          (value_identifier)
+          (value_identifier)
+          (value_identifier)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (tuple
+          (number)
+          (number)
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (object
+          (field
+            (property_identifier
+              (string_fragment))
+            (number))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (list
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (template_string
+          (template_string_content)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (template_string
+          (template_string_content))))))

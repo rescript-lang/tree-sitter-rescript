@@ -86,3 +86,103 @@ Decorator with type
     (decorator_arguments
       (type_annotation
         (type_identifier)))))
+
+================================================================================
+Decorators and extensions with complex payloads
+================================================================================
+
+@attr(?var)
+@attr(?var when x === 1)
+%ext(: let x: int)
+%ext(:
+  let x: int
+  let y: float
+)
+
+%%ext("A"; "B")
+
+@@superPrivate(
+  @module("./logo.svg") external logo: string = "default"
+)
+
+@inlinePrivate(
+  @module("./logo.svg") external logo: string = "default"
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (decorator_argument
+        (value_identifier))))
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (decorator_argument
+        (value_identifier)
+        (guard
+          (binary_expression
+            (value_identifier)
+            (number))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (expression_statement
+        (string
+          (string_fragment)))
+      (expression_statement
+        (string
+          (string_fragment)))))
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (decorator
+        (decorator_identifier)
+        (decorator_arguments
+          (decorator_argument
+            (string
+              (string_fragment)))))
+      (external_declaration
+        (value_identifier)
+        (type_annotation
+          (type_identifier))
+        (string
+          (string_fragment)))))
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (decorator
+        (decorator_identifier)
+        (decorator_arguments
+          (decorator_argument
+            (string
+              (string_fragment)))))
+      (external_declaration
+        (value_identifier)
+        (type_annotation
+          (type_identifier))
+        (string
+          (string_fragment))))))
