@@ -102,12 +102,15 @@ static bool token_continues_statement(TSLexer *lexer) {
     case '?':
     case ':':
     case ';':
+    case '=':
       return true;
     case '-':
       skip(lexer);
       return lexer->lookahead == '>';
     case 'a':
       return scan_keyword(lexer, "and");
+    case 'c':
+      return scan_keyword(lexer, "constraint");
     case 'e':
       return scan_keyword(lexer, "else");
     case 'w':
@@ -373,7 +376,7 @@ bool tree_sitter_rescript_external_scanner_scan(
         }
       }
 
-      if (is_whitespace(lexer->lookahead)) {
+      if (is_whitespace(lexer->lookahead) || lexer->lookahead == '@') {
         lexer->result_symbol = DECORATOR_INLINE;
         lexer->mark_end(lexer);
         return true;

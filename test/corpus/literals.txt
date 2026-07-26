@@ -486,3 +486,26 @@ let code = String.replaceRegExp(signature, /\\n/g, "\n")
             (regex_flags))
           (string
             (escape_sequence)))))))
+
+================================================================================
+Tagged template strings
+================================================================================
+
+let taggedTemplate = Pg.sql`select * from ${table} where id = ${id}`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (tagged_template
+        (value_identifier_path
+          (module_identifier)
+          (value_identifier))
+        (template_string
+          (template_string_content
+            (template_substitution
+              (value_identifier))
+            (template_substitution
+              (value_identifier))))))))
