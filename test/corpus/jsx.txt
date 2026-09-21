@@ -327,3 +327,22 @@ Elements in pipes
       (variant
         (variant_identifier)))))
 
+
+================================================================================
+Identifier followed by a template string in children
+================================================================================
+
+<div> sql`x` </div>
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (jsx_element
+      (jsx_opening_element
+        (jsx_identifier))
+      (value_identifier)
+      (template_string
+        (template_string_content))
+      (jsx_closing_element
+        (jsx_identifier)))))

@@ -125,6 +125,14 @@
 (call_expression
   function: (value_identifier) @function.call)
 
+(tagged_template_expression
+  function: (value_identifier_path
+    _
+    (value_identifier) @function.call))
+
+(tagged_template_expression
+  function: (value_identifier) @function.call)
+
 ; highlight the right-hand side of a pipe operator as a function call
 (pipe_expression
   _

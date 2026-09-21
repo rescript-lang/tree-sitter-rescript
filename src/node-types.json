@@ -294,6 +294,10 @@
         "named": true
       },
       {
+        "type": "tagged_template_expression",
+        "named": true
+      },
+      {
         "type": "template_string",
         "named": true
       },
@@ -4203,6 +4207,36 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "tagged_template_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "template_string",
+            "named": true
+          }
+        ]
+      },
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "value_identifier",
+            "named": true
+          },
+          {
+            "type": "value_identifier_path",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
