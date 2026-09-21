@@ -8,7 +8,6 @@ export default grammar({
     $._continuation,
     $.block_comment,
     '"',
-    '`',
     $._template_chars,
     $._lparen,
     $._rparen,
@@ -1438,9 +1437,6 @@ export default grammar({
     character: ($) =>
       // prettier-ignore
       seq('\'', repeat(choice(/[^\\']/, $.escape_sequence)), '\''),
-
-    _unescaped_template_string_fragment: ($) =>
-      token.immediate(prec(1, /[^`\\\$]+/)),
 
     lparen: ($) => alias($._lparen, '('),
     rparen: ($) => alias($._rparen, ')'),

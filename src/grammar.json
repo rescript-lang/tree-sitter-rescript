@@ -9110,17 +9110,6 @@
         }
       ]
     },
-    "_unescaped_template_string_fragment": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "[^`\\\\\\$]+"
-        }
-      }
-    },
     "lparen": {
       "type": "ALIAS",
       "content": {
@@ -9496,10 +9485,6 @@
     {
       "type": "STRING",
       "value": "\""
-    },
-    {
-      "type": "STRING",
-      "value": "`"
     },
     {
       "type": "SYMBOL",

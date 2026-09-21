@@ -7,7 +7,6 @@ enum TokenType {
   CONTINUATION,
   BLOCK_COMMENT,
   QUOTE,
-  BACKTICK,
   TEMPLATE_CHARS,
   L_PAREN,
   R_PAREN,
@@ -20,7 +19,6 @@ enum TokenType {
 typedef struct ScannerState {
   int parens_nesting;
   bool in_quotes;
-  bool in_backticks;
   bool eof_reported;
   bool saw_line_terminator;
 } ScannerState;
@@ -154,7 +152,7 @@ bool tree_sitter_rescript_external_scanner_scan(
     const bool* valid_symbols
     ) {
   ScannerState* state = (ScannerState*)payload;
-  bool in_string = state->in_quotes || state->in_backticks;
+  bool in_string = state->in_quotes;
 
   while (is_inline_whitespace(lexer->lookahead) && !in_string) {
     skip(lexer);
@@ -166,7 +164,6 @@ bool tree_sitter_rescript_external_scanner_scan(
       lexer->mark_end(lexer);
       switch (lexer->lookahead) {
         case '`':
-          state->in_backticks = false;
           return has_content;
         case '\0':
           return false;
@@ -266,14 +263,6 @@ bool tree_sitter_rescript_external_scanner_scan(
   if (valid_symbols[QUOTE] && lexer->lookahead == '"') {
     state->in_quotes = !state->in_quotes;
     lexer->result_symbol = QUOTE;
-    lexer->advance(lexer, false);
-    lexer->mark_end(lexer);
-    return true;
-  }
-
-  if (valid_symbols[BACKTICK] && lexer->lookahead == '`') {
-    state->in_backticks = !state->in_backticks;
-    lexer->result_symbol = BACKTICK;
     lexer->advance(lexer, false);
     lexer->mark_end(lexer);
     return true;
