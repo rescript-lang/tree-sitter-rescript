@@ -1814,10 +1814,12 @@ module Test = %graphql(`
       body: (extension_expression
         (extension_identifier)
         (expression_statement
-          (template_string
-            (template_string_content
-              (escape_sequence)
-              (escape_sequence)))))))
+          (tagged_template_expression
+            function: (value_identifier)
+            arguments: (template_string
+              (template_string_content
+                (escape_sequence)
+                (escape_sequence))))))))
   (module_declaration
     (module_binding
       name: (module_identifier)

@@ -276,8 +276,10 @@ anything`Hello`
     (template_string
       (template_string_content)))
   (expression_statement
-    (template_string
-      (template_string_content)))
+    (tagged_template_expression
+      (value_identifier)
+      (template_string
+        (template_string_content))))
   (expression_statement
     (template_string
       (template_string_content
@@ -310,8 +312,10 @@ anything`Hello`
       (template_string_content
         (escape_sequence))))
   (expression_statement
-    (template_string
-      (template_string_content))))
+    (tagged_template_expression
+      (value_identifier)
+      (template_string
+        (template_string_content)))))
 
 ================================================================================
 Tricky template strings
@@ -338,6 +342,74 @@ Tricky template strings
   (expression_statement
     (template_string
       (template_string_content)))
+  (expression_statement
+    (template_string
+      (template_string_content))))
+
+================================================================================
+Tagged template strings
+================================================================================
+
+sql`bare tag`
+SQL.query`qualified tag`
+A.B.query`nested module path`
+j`old interpolation prefix`
+\"escaped name"`escaped tag`
+SQL.query `space before the literal`
+sql->(SQL.query`piped into parens`)
+`untagged`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (tagged_template_expression
+      (value_identifier)
+      (template_string
+        (template_string_content))))
+  (expression_statement
+    (tagged_template_expression
+      (value_identifier_path
+        (module_identifier)
+        (value_identifier))
+      (template_string
+        (template_string_content))))
+  (expression_statement
+    (tagged_template_expression
+      (value_identifier_path
+        (module_identifier_path
+          (module_identifier)
+          (module_identifier))
+        (value_identifier))
+      (template_string
+        (template_string_content))))
+  (expression_statement
+    (tagged_template_expression
+      (value_identifier)
+      (template_string
+        (template_string_content))))
+  (expression_statement
+    (tagged_template_expression
+      (value_identifier)
+      (template_string
+        (template_string_content))))
+  (expression_statement
+    (tagged_template_expression
+      (value_identifier_path
+        (module_identifier)
+        (value_identifier))
+      (template_string
+        (template_string_content))))
+  (expression_statement
+    (pipe_expression
+      (value_identifier)
+      (parenthesized_expression
+        (tagged_template_expression
+          (value_identifier_path
+            (module_identifier)
+            (value_identifier))
+          (template_string
+            (template_string_content))))))
   (expression_statement
     (template_string
       (template_string_content))))

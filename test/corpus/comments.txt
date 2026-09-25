@@ -153,3 +153,29 @@ module UI = {
             (string_fragment)))
         (block_comment)
         (block_comment)))))
+
+================================================================================
+Block comment after a template substitution
+================================================================================
+
+let a = `t ${x}`
+let b = f(/* c */ 1)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (template_string
+        (template_string_content
+          (template_substitution
+            (value_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (block_comment)
+          (number))))))

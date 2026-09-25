@@ -8,7 +8,6 @@ export default grammar({
     $._continuation,
     $.block_comment,
     '"',
-    '`',
     $._template_chars,
     $._lparen,
     $._rparen,
@@ -118,6 +117,7 @@ export default grammar({
     [$.primary_expression, $.spread_pattern],
     [$.primary_expression, $._literal_pattern],
     [$.primary_expression, $._jsx_child],
+    [$._jsx_child, $.tagged_template_expression],
     [$.tuple_type, $.function_type_parameter],
     [$.list, $.list_pattern],
     [$.array, $.array_pattern],
@@ -491,6 +491,7 @@ export default grammar({
         $.value_identifier,
         $.number,
         $.string,
+        $.tagged_template_expression,
         $.template_string,
         $.character,
         $.true,
@@ -1404,23 +1405,20 @@ export default grammar({
         ),
       ),
 
-    template_string: ($) =>
-      seq(
-        token(
-          seq(
-            optional(
-              choice(
-                /[a-z_][a-zA-Z0-9_']*/,
-                // escape_sequence
-                seq('\\"', /[^"]+/, '"'),
-              ),
-            ),
-            '`',
+    // The tag is a function: ReScript parses this as an application
+    tagged_template_expression: ($) =>
+      prec(
+        'call',
+        seq(
+          field(
+            'function',
+            choice($.value_identifier, $.value_identifier_path),
           ),
+          field('arguments', $.template_string),
         ),
-        optional($.template_string_content),
-        '`',
       ),
+
+    template_string: ($) => seq('`', optional($.template_string_content), '`'),
 
     template_string_content: ($) =>
       repeat1(
@@ -1438,9 +1436,6 @@ export default grammar({
     character: ($) =>
       // prettier-ignore
       seq('\'', repeat(choice(/[^\\']/, $.escape_sequence)), '\''),
-
-    _unescaped_template_string_fragment: ($) =>
-      token.immediate(prec(1, /[^`\\\$]+/)),
 
     lparen: ($) => alias($._lparen, '('),
     rparen: ($) => alias($._rparen, ')'),

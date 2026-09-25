@@ -2407,6 +2407,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "tagged_template_expression"
+        },
+        {
+          "type": "SYMBOL",
           "name": "template_string"
         },
         {
@@ -8941,54 +8945,46 @@
         ]
       }
     },
+    "tagged_template_expression": {
+      "type": "PREC",
+      "value": "call",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "function",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "value_identifier"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "value_identifier_path"
+                }
+              ]
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "arguments",
+            "content": {
+              "type": "SYMBOL",
+              "name": "template_string"
+            }
+          }
+        ]
+      }
+    },
     "template_string": {
       "type": "SEQ",
       "members": [
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "PATTERN",
-                        "value": "[a-z_][a-zA-Z0-9_']*"
-                      },
-                      {
-                        "type": "SEQ",
-                        "members": [
-                          {
-                            "type": "STRING",
-                            "value": "\\\""
-                          },
-                          {
-                            "type": "PATTERN",
-                            "value": "[^\"]+"
-                          },
-                          {
-                            "type": "STRING",
-                            "value": "\""
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              },
-              {
-                "type": "STRING",
-                "value": "`"
-              }
-            ]
-          }
+          "type": "STRING",
+          "value": "`"
         },
         {
           "type": "CHOICE",
@@ -9110,17 +9106,6 @@
         }
       ]
     },
-    "_unescaped_template_string_fragment": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "[^`\\\\\\$]+"
-        }
-      }
-    },
     "lparen": {
       "type": "ALIAS",
       "content": {
@@ -9203,6 +9188,10 @@
     [
       "primary_expression",
       "_jsx_child"
+    ],
+    [
+      "_jsx_child",
+      "tagged_template_expression"
     ],
     [
       "tuple_type",
@@ -9496,10 +9485,6 @@
     {
       "type": "STRING",
       "value": "\""
-    },
-    {
-      "type": "STRING",
-      "value": "`"
     },
     {
       "type": "SYMBOL",
