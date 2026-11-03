@@ -14,7 +14,7 @@ libraries as GitHub Release assets:
 | macOS ARM64 | `tree-sitter-rescript-macos-arm64.dylib` |
 
 These shared libraries export `tree_sitter_rescript` and use Tree-sitter language
-ABI 15. Linux binaries are built on Ubuntu 22.04 and require glibc. Download the
+ABI 15. Linux binaries are built on Ubuntu 24.04 and require glibc. Download the
 asset for your platform and rename it as required by your editor or loader.
 
 The workflow runs corpus tests on all three platforms before publishing. It also
