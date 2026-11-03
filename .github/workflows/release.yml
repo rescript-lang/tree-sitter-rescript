@@ -1,0 +1,97 @@
+name: Native releases
+
+on:
+  push:
+    tags: ['v[0-9]*.[0-9]*.[0-9]*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux-x64
+            os: ubuntu-22.04
+            arch: X64
+            extension: so
+          - platform: windows-x64
+            os: windows-2022
+            arch: X64
+            extension: dll
+          - platform: macos-arm64
+            os: macos-15
+            arch: ARM64
+            extension: dylib
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Verify runner architecture
+        env:
+          EXPECTED_ARCH: ${{ matrix.arch }}
+        run: test "$RUNNER_ARCH" = "$EXPECTED_ARCH"
+
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.26.11
+
+      - name: Run corpus tests
+        run: tree-sitter test
+
+      - name: Build native library
+        env:
+          LIBRARY: tree-sitter-rescript-${{ matrix.platform }}.${{ matrix.extension }}
+        run: |
+          mkdir -p dist
+          tree-sitter build --output "dist/$LIBRARY"
+
+      - name: Upload native library
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-${{ matrix.platform }}
+          path: dist/tree-sitter-rescript-${{ matrix.platform }}.${{ matrix.extension }}
+          if-no-files-found: error
+
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Download native libraries
+        uses: actions/download-artifact@v8
+        with:
+          pattern: native-*
+          merge-multiple: true
+          path: dist
+
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+          else
+            flags=()
+            if [[ "$TAG" == *-* ]]; then
+              flags+=(--prerelease)
+            fi
+            gh release create "$TAG" dist/* --verify-tag --generate-notes "${flags[@]}"
+          fi
