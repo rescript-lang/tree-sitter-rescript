@@ -1151,6 +1151,10 @@
         {
           "type": "dict_entry",
           "named": true
+        },
+        {
+          "type": "spread_element",
+          "named": true
         }
       ]
     }

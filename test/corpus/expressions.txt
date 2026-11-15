@@ -2953,3 +2953,63 @@ let finally = x => x
       (function
         (value_identifier)
         (value_identifier)))))
+
+==================
+Dictionary spreads interleaved with entries
+==================
+dict{...foo}
+dict{...foo, "bar": 2, ...qux}
+dict{"a": 1, ...foo, ...qux, "b": 2,}
+dict{
+  /* before spread */ ...foo,
+  "nested": dict{...qux},
+  ...dict{"c": 3},
+}
+---
+
+(source_file
+  (expression_statement
+    (dict
+      (spread_element
+        (value_identifier))))
+  (expression_statement
+    (dict
+      (spread_element
+        (value_identifier))
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))
+      (spread_element
+        (value_identifier))))
+  (expression_statement
+    (dict
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))
+      (spread_element
+        (value_identifier))
+      (spread_element
+        (value_identifier))
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))))
+  (expression_statement
+    (dict
+      (block_comment)
+      (spread_element
+        (value_identifier))
+      (dict_entry
+        (string
+          (string_fragment))
+        (dict
+          (spread_element
+            (value_identifier))))
+      (spread_element
+        (dict
+          (dict_entry
+            (string
+              (string_fragment))
+            (number)))))))

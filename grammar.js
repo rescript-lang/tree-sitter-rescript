@@ -673,7 +673,7 @@ export default grammar({
       seq(
         alias($._dict_constructor, 'dict'),
         '{',
-        commaSept($.dict_entry),
+        commaSept(choice($.dict_entry, $.spread_element)),
         '}',
       ),
 
