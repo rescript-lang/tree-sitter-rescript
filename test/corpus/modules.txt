@@ -703,6 +703,7 @@ Exception declaration
 exception InputClosed(string)
 exception Error = Failed
 exception Invalid = Errors.Invalid
+exception GadtExit(int): exit<int>
 
 --------------------------------------------------------------------------------
 
@@ -932,25 +933,6 @@ module rec Make: (Config, ()) => S = (Config: Config, ()): S => {}
         (module_type_annotation
           (module_identifier))
         (block)))))
-
-================================================================================
-GADT exception result types
-================================================================================
-
-exception GadtExit(int): exit<int>
-
---------------------------------------------------------------------------------
-
-(source_file
-  (exception_declaration
-    (variant_identifier)
-    (variant_parameters
-      (type_identifier))
-    (type_annotation
-      (generic_type
-        (type_identifier)
-        (type_arguments
-          (type_identifier))))))
 
 ================================================================================
 Repeated constraints in module type refinements

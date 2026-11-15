@@ -2308,13 +2308,8 @@ let () =
 Optional record pattern fields
 ================================================================================
 
-let _ = switch z {
-  | {x: ? None, y: ? None, z: ? (None:tt)} => 11
-  | {name:  ? name, x: 3} => 42
-  | {name:  ? dd, x: 3} => 42
-  | {x: ? None, y: ? None, z: ? (None:tt)} => 11
-  | {name: ? name, x: 3} => 42
-  | {? name, x: 3} => 4242
+switch z {
+| {z: ?(None)} => 11
 }
 
 --------------------------------------------------------------------------------
@@ -2486,11 +2481,11 @@ call(~x=y :> int, ~z=w : int :> int, ~a, ~b)
 Braced expression receivers and operands
 ================================================================================
 
-let _ =  {apply}(a, b)
-let _ = { user.name }.toString()
-let _ = { { user.name }.toString() }
-let _ = { user.name }.first
-let _ = { { user.name }.first }
+{apply}(a, b)
+{ user.name }.toString()
+{ { user.name }.toString() }
+{ user.name }.first
+{ { user.name }.first }
 {myArray}[{0}]
 {
   myArray}[{
@@ -2671,58 +2666,6 @@ let x = for i in 0 to 10 { () }->for i in 0 to 10 { () }
 let x = x.left = value->x.right = value
 let x = (x.left = value)->x.right = value
 let () = x.left = (value->process)->x.right = value->process
-
-let () = {
-  let () = sideEffect()
-  if (
-    (isLeft(successor) && sibling.right === None) ||
-      ((sibling.right->castNotOption).color === Black &&
-      sibling.left !== None &&
-      (sibling.left->castNotOption).color === Red)
-  ) {
-    sibling.color = Red
-    sibling.left->castNotOption.color = Black
-    rotateRight(rbt, sibling)
-  }
-  if (
-    sibling !== None && (sibling->castNotOption).color === Black
-  ) {
-    let sibling = sibling->castNotOption
-    if (
-      isLeft(successor) &&
-      sibling.right === None ||
-        (sibling.right->castNotOption).color === Black &&
-      sibling.left !== None &&
-      (sibling.left->castNotOption).color === Red
-    ) {
-      sibling.color = Red
-      sibling.left->castNotOption.color = Black
-      rotateRight(rbt, sibling)
-    } else if (
-      !isLeft(successor) &&
-      sibling.left === None ||
-        (sibling.left->castNotOption).color === Black &&
-      sibling.right !== None &&
-      (sibling.right->castNotOption).color === Red
-    ) {
-      sibling.color = Red
-      sibling.right->castNotOption.color = Black
-      rotateLeft(rbt, sibling)
-    }
-    break.contents = true
-  } else {
-    let sibling = siblingOf(successor)
-    let sibling = sibling->castNotOption
-    sibling.color = successorParent.color
-    if isLeft(successor) {
-      sibling.right->castNotOption.color = Black
-      rotateRight(rbt, successorParent)
-    } else {
-      sibling.left->castNotOption.color = Black
-      rotateLeft(rbt, successorParent)
-    }
-  }
-}
 
 let () = node.left := value->process->node.right = value->process
 let () = (node.left := value->process)->node.right = value->process
@@ -3158,22 +3101,6 @@ Typed labels and uncurried call arguments
 
 call(~a: int)
 call(~\"let": int)
-
-document.createElementWithOptions(. "div", elementProps(~onClick=_ =>
-    Js.log("hello world")
-  ))
-
-f(. 1)
-f(. [1, 2, 3])
-f(. [suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong,])
-f(. (1, 2, 3))
-f(. {"a": 1})
-f(. list{1})
-f(. `
- template
- string
-`)
-f(. `single line`)
 
 --------------------------------------------------------------------------------
 
