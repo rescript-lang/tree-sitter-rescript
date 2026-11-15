@@ -1573,6 +1573,52 @@ condition ? a + b : c + d
         (value_identifier)))))
 
 ================================================================================
+Nested ternary consequents preserve the outer colon
+================================================================================
+
+let value = outer ? inner ? 1 : 2 : 3
+let value = outer ? inner ? first : second : third
+let value = outer ? inner ? 1 : 2 : int :> int : 3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (ternary_expression
+          (value_identifier)
+          (number)
+          (number))
+        (number))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (ternary_expression
+          (value_identifier)
+          (value_identifier)
+          (value_identifier))
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (coercion_expression
+          (ternary_expression
+            (value_identifier)
+            (number)
+            (number))
+          (type_annotation
+            (type_identifier))
+          (type_identifier))
+        (number)))))
+
+================================================================================
 Arrays
 ================================================================================
 

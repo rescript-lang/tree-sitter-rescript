@@ -157,6 +157,9 @@ export default grammar({
     [$.call_expression, $._jsx_child],
     [$.subscript_expression, $._jsx_child],
     [$._labeled_parameter_default_value, $.coercion_expression],
+    [$.await_expression, $.coercion_expression],
+    [$.lazy_expression, $.coercion_expression],
+    [$.mutation_expression, $.coercion_expression],
     // A ternary's ':' can also start a coercion's source type annotation.
     [$.type_identifier, $.value_identifier],
     [$._non_function_inline_type, $.primary_expression],
@@ -1213,9 +1216,9 @@ export default grammar({
             ),
           ),
         ),
-        // Shift ')' into the parenthesized form instead of reducing early.
+        // Do not force ':' to shift before a nested ternary can reduce.
+        // Right associativity still preserves the parenthesized coercion form.
         prec.right(
-          'coercion_relation',
           seq(
             field('left', $.expression),
             field('source_type', $.type_annotation),

@@ -7265,7 +7265,7 @@
         },
         {
           "type": "PREC_RIGHT",
-          "value": "coercion_relation",
+          "value": 0,
           "content": {
             "type": "SEQ",
             "members": [
@@ -9671,6 +9671,18 @@
     ],
     [
       "_labeled_parameter_default_value",
+      "coercion_expression"
+    ],
+    [
+      "await_expression",
+      "coercion_expression"
+    ],
+    [
+      "lazy_expression",
+      "coercion_expression"
+    ],
+    [
+      "mutation_expression",
       "coercion_expression"
     ],
     [
