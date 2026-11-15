@@ -2274,3 +2274,344 @@ switch json {
         (sequence_expression
           (expression_statement
             (number)))))))
+
+================================================================================
+Source and target coercions in labeled arguments
+================================================================================
+
+call(~x=y :> int, ~z=w : int :> int, ~a, ~b)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (value_identifier)
+            (type_identifier)))
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (value_identifier)
+            (type_annotation
+              (type_identifier))
+            (type_identifier)))
+        (labeled_argument
+          (value_identifier))
+        (labeled_argument
+          (value_identifier))))))
+
+================================================================================
+Braced receivers for calls, fields, and subscripts
+================================================================================
+
+let _ =  {apply}(a, b)
+let _ = { user.name }.toString()
+let _ = { { user.name }.toString() }
+let _ = { user.name }.first
+let _ = { { user.name }.first }
+{myArray}[{0}]
+{
+  myArray}[{
+    0}]
+{myArray}[{0}] = {20}
+{
+  myArray}[{
+    0}] = {
+      20}
+
+{jsObject}["foo"]
+{jsObject}["foo"] = { "bar" }
+{jsObject}["foo"] = {
+  a + b
+}
+{
+  jsObject}["foo"]
+{jsObject}["foo"] = { "bar" }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (arguments
+          (value_identifier)
+          (value_identifier)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (member_expression
+          (block
+            (expression_statement
+              (member_expression
+                (value_identifier)
+                (property_identifier))))
+          (property_identifier))
+        (arguments))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (member_expression
+              (block
+                (expression_statement
+                  (member_expression
+                    (value_identifier)
+                    (property_identifier))))
+              (property_identifier))
+            (arguments))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (member_expression
+        (block
+          (expression_statement
+            (member_expression
+              (value_identifier)
+              (property_identifier))))
+        (property_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (expression_statement
+          (member_expression
+            (block
+              (expression_statement
+                (member_expression
+                  (value_identifier)
+                  (property_identifier))))
+            (property_identifier))))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block
+          (expression_statement
+            (number))))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block
+          (expression_statement
+            (number))))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (string
+        (string_fragment))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (string
+            (string_fragment))))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (binary_expression
+            (value_identifier)
+            (value_identifier))))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (string
+        (string_fragment))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (string
+            (string_fragment)))))))
+
+================================================================================
+Typed labels and legacy uncurried calls
+================================================================================
+
+call(~a: int)
+call(~\"let": int)
+
+document.createElementWithOptions(. "div", elementProps(~onClick=_ =>
+    Js.log("hello world")
+  ))
+
+f(. 1)
+f(. [1, 2, 3])
+f(. [suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong,])
+f(. (1, 2, 3))
+f(. {"a": 1})
+f(. list{1})
+f(. `
+ template
+ string
+`)
+f(. `single line`)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (value_identifier)
+        (property_identifier))
+      (arguments
+        (uncurry)
+        (string
+          (string_fragment))
+        (call_expression
+          (value_identifier)
+          (arguments
+            (labeled_argument
+              (value_identifier)
+              (function
+                (value_identifier)
+                (call_expression
+                  (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  (arguments
+                    (string
+                      (string_fragment)))))))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (number))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (array
+          (number)
+          (number)
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (array
+          (value_identifier)
+          (value_identifier)
+          (value_identifier)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (tuple
+          (number)
+          (number)
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (object
+          (field
+            (property_identifier
+              (string_fragment))
+            (number))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (list
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (template_string
+          (template_string_content)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (template_string
+          (template_string_content))))))

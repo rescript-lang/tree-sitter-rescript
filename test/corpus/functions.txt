@@ -258,3 +258,145 @@ async () => body
 (source_file
   (expression_statement
     (function (formal_parameters) (value_identifier))))
+
+================================================================================
+Polymorphic functions with locally abstract parameters
+================================================================================
+
+let cancel_and_collect_callbacks:
+  'a 'u 'c.
+  (list<packed_callbacks>, promise<'a, 'u, 'c>) => list<packed_callbacks>
+ =
+  (type x, callbacks_accumulator, p: promise<_, _, c>) => ();
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (polymorphic_type
+          (type_identifier)
+          (type_identifier)
+          (type_identifier)
+          (function_type
+            (function_type_parameters
+              (parameter
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier))))
+              (parameter
+                (generic_type
+                  (type_identifier)
+                  (type_arguments
+                    (type_identifier)
+                    (type_identifier)
+                    (type_identifier)))))
+            (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier))))))
+      (function
+        (formal_parameters
+          (parameter
+            (abstract_type
+              (type_identifier)))
+          (parameter
+            (value_identifier))
+          (parameter
+            (value_identifier)
+            (type_annotation
+              (generic_type
+                (type_identifier)
+                (type_arguments
+                  (type_identifier)
+                  (type_identifier)
+                  (type_identifier))))))
+        (unit)))))
+
+================================================================================
+Tuple callbacks remain distinct from functor parameters
+================================================================================
+
+let map = (value, callback) => callback(value)
+let triple = map((1, 2, 3), ((_, _, data)) => data)
+let pair = map((1, 2), ((_, value)) => value)
+let compare = ((_, a), (_, b)) => a - b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (value_identifier))
+          (parameter
+            (value_identifier)))
+        (call_expression
+          (value_identifier)
+          (arguments
+            (value_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (tuple
+            (number)
+            (number)
+            (number))
+          (function
+            (formal_parameters
+              (parameter
+                (tuple_pattern
+                  (tuple_item_pattern
+                    (value_identifier))
+                  (tuple_item_pattern
+                    (value_identifier))
+                  (tuple_item_pattern
+                    (value_identifier)))))
+            (value_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (tuple
+            (number)
+            (number))
+          (function
+            (formal_parameters
+              (parameter
+                (tuple_pattern
+                  (tuple_item_pattern
+                    (value_identifier))
+                  (tuple_item_pattern
+                    (value_identifier)))))
+            (value_identifier))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (tuple_pattern
+              (tuple_item_pattern
+                (value_identifier))
+              (tuple_item_pattern
+                (value_identifier))))
+          (parameter
+            (tuple_pattern
+              (tuple_item_pattern
+                (value_identifier))
+              (tuple_item_pattern
+                (value_identifier)))))
+        (binary_expression
+          (value_identifier)
+          (value_identifier))))))

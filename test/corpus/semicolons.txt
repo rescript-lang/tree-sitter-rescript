@@ -233,3 +233,66 @@ let getName = ({
             (record_pattern
               (value_identifier))))
         (value_identifier)))))
+
+================================================================================
+Declaration continuations through comments and keyword boundaries
+================================================================================
+
+type result<'a> = Value('a)
+/* Keep the constraint in the same declaration. */
+constraint 'a = int
+let identity: int => int
+/* Keep the initializer in the same binding. */
+= value => value
+let first = 1
+constraintValue(first)
+let second = 2
+constraint_(second)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_parameters
+        (type_identifier))
+      (variant_type
+        (variant_declaration
+          (variant_identifier)
+          (variant_parameters
+            (type_identifier))))
+      (block_comment)
+      (type_constraint
+        (type_identifier)
+        (type_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (type_annotation
+        (function_type
+          (function_type_parameters
+            (type_identifier))
+          (type_identifier)))
+      (block_comment)
+      (function
+        (value_identifier)
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (value_identifier)))))
