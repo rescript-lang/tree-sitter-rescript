@@ -218,6 +218,8 @@
   "to"
   "downto"
   "while"
+  (break_expression)
+  (continue_expression)
 ] @keyword.repeat
 
 [

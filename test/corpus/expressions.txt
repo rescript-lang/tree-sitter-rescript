@@ -3013,3 +3013,116 @@ dict{
             (string
               (string_fragment))
             (number)))))))
+
+==================
+Break and continue in loop bodies and switch branches
+==================
+while true {
+  if done { break }
+  if skip { continue }
+  work()
+}
+for x of xs {
+  switch x {
+  | Stop => break
+  | Skip => continue
+  | _ => work()
+  }
+}
+for await x of xs { continue; break }
+for i in 0 to 10 { continue; break }
+let \"break" = 1
+let \"continue" = 2
+---
+
+(source_file
+  (expression_statement
+    (while_expression
+      (true)
+      (block
+        (expression_statement
+          (if_expression
+            (value_identifier)
+            (block
+              (expression_statement
+                (break_expression)))))
+        (expression_statement
+          (if_expression
+            (value_identifier)
+            (block
+              (expression_statement
+                (continue_expression)))))
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (switch_expression
+            (value_identifier)
+            (switch_match
+              (variant_pattern
+                (variant_identifier))
+              (sequence_expression
+                (expression_statement
+                  (break_expression))))
+            (switch_match
+              (variant_pattern
+                (variant_identifier))
+              (sequence_expression
+                (expression_statement
+                  (continue_expression))))
+            (switch_match
+              (value_identifier)
+              (sequence_expression
+                (expression_statement
+                  (call_expression
+                    (value_identifier)
+                    (arguments))))))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (continue_expression))
+        (expression_statement
+          (break_expression)))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (number)
+      (number)
+      (block
+        (expression_statement
+          (continue_expression))
+        (expression_statement
+          (break_expression)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number)))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (number))))
+==================
+Break is reserved in bindings
+:error
+==================
+let break = 1
+---
+(ERROR)
+
+==================
+Continue is reserved in bindings
+:error
+==================
+let continue = 1
+---
+(ERROR)
+
