@@ -94,8 +94,6 @@ static bool scan_keyword(TSLexer *lexer, const char *keyword) {
   return !is_identifier_continue(lexer->lookahead);
 }
 
-static bool scan_finally_continuation(TSLexer *lexer);
-
 static bool token_continues_statement(TSLexer *lexer) {
   switch (lexer->lookahead) {
     case '.':
@@ -114,8 +112,6 @@ static bool token_continues_statement(TSLexer *lexer) {
       return scan_keyword(lexer, "constraint");
     case 'e':
       return scan_keyword(lexer, "else");
-    case 'f':
-      return scan_finally_continuation(lexer);
     case 'w':
       return scan_keyword(lexer, "with");
     default:
