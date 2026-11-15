@@ -112,15 +112,7 @@
         "named": true
       },
       {
-        "type": "break_expression",
-        "named": true
-      },
-      {
         "type": "coercion_expression",
-        "named": true
-      },
-      {
-        "type": "continue_expression",
         "named": true
       },
       {
@@ -5578,20 +5570,12 @@
     "extra": true
   },
   {
-    "type": "break_expression",
-    "named": true
-  },
-  {
     "type": "catch",
     "named": false
   },
   {
     "type": "constraint",
     "named": false
-  },
-  {
-    "type": "continue_expression",
-    "named": true
   },
   {
     "type": "decorator_identifier",

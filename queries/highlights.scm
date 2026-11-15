@@ -219,9 +219,11 @@
   "to"
   "downto"
   "while"
-  (break_expression)
-  (continue_expression)
 ] @keyword.repeat
+
+(expression_statement
+  (value_identifier) @keyword.repeat
+  (#any-of? @keyword.repeat "break" "continue"))
 
 [
   "."

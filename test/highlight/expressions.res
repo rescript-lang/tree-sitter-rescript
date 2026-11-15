@@ -78,3 +78,18 @@ let x = y.x
 f(~a=b, ())
 // ^variable.parameter
 //      ^constant.builtin
+while true {
+  break
+//^ keyword.repeat
+  continue
+//^ keyword.repeat
+}
+
+let continue = ref(true)
+//  ^ variable
+let break = ref(false)
+//  ^ variable
+continue.contents
+//<- variable
+break.contents
+//<- variable

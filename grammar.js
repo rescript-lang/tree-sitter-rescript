@@ -33,9 +33,7 @@ export default grammar({
       'and',
       'as',
       'assert',
-      'break',
       'constraint',
-      'continue',
       'else',
       'exception',
       'external',
@@ -553,8 +551,6 @@ export default grammar({
         $.ternary_expression,
         $.for_expression,
         $.while_expression,
-        $.break_expression,
-        $.continue_expression,
         $.mutation_expression,
         $.await_expression,
         $.block,
@@ -1193,10 +1189,6 @@ export default grammar({
     _for_of_header: ($) => seq($.value_identifier, 'of', $.expression),
 
     while_expression: ($) => seq('while', $.expression, $.block),
-
-    break_expression: (_) => 'break',
-
-    continue_expression: (_) => 'continue',
 
     lazy_expression: ($) => seq('lazy', $.expression),
 

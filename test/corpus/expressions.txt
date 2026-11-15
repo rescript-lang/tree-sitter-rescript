@@ -3015,47 +3015,55 @@ dict{
             (number)))))))
 
 ==================
-Break and continue in loop bodies and switch branches
+Loop control identifiers remain compatible with legacy bindings
 ==================
-while true {
-  if done { break }
-  if skip { continue }
-  work()
+let continue = ref(true)
+let break = ref(false)
+while continue.contents {
+  if break.contents { break }
+  continue := false
+  continue
 }
 for x of xs {
-  switch x {
-  | Stop => break
-  | Skip => continue
-  | _ => work()
-  }
+  switch x { | Stop => break | _ => continue }
 }
-for await x of xs { continue; break }
-for i in 0 to 10 { continue; break }
-let \"break" = 1
-let \"continue" = 2
 ---
 
 (source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (true)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (false)))))
   (expression_statement
     (while_expression
-      (true)
+      (member_expression
+        (value_identifier)
+        (property_identifier))
       (block
         (expression_statement
           (if_expression
-            (value_identifier)
+            (member_expression
+              (value_identifier)
+              (property_identifier))
             (block
               (expression_statement
-                (break_expression)))))
+                (value_identifier)))))
         (expression_statement
-          (if_expression
+          (mutation_expression
             (value_identifier)
-            (block
-              (expression_statement
-                (continue_expression)))))
+            (false)))
         (expression_statement
-          (call_expression
-            (value_identifier)
-            (arguments))))))
+          (value_identifier)))))
   (expression_statement
     (for_expression
       (value_identifier)
@@ -3069,60 +3077,9 @@ let \"continue" = 2
                 (variant_identifier))
               (sequence_expression
                 (expression_statement
-                  (break_expression))))
-            (switch_match
-              (variant_pattern
-                (variant_identifier))
-              (sequence_expression
-                (expression_statement
-                  (continue_expression))))
+                  (value_identifier))))
             (switch_match
               (value_identifier)
               (sequence_expression
                 (expression_statement
-                  (call_expression
-                    (value_identifier)
-                    (arguments))))))))))
-  (expression_statement
-    (for_expression
-      (value_identifier)
-      (value_identifier)
-      (block
-        (expression_statement
-          (continue_expression))
-        (expression_statement
-          (break_expression)))))
-  (expression_statement
-    (for_expression
-      (value_identifier)
-      (number)
-      (number)
-      (block
-        (expression_statement
-          (continue_expression))
-        (expression_statement
-          (break_expression)))))
-  (let_declaration
-    (let_binding
-      (value_identifier)
-      (number)))
-  (let_declaration
-    (let_binding
-      (value_identifier)
-      (number))))
-==================
-Break is reserved in bindings
-:error
-==================
-let break = 1
----
-(ERROR)
-
-==================
-Continue is reserved in bindings
-:error
-==================
-let continue = 1
----
-(ERROR)
-
+                  (value_identifier))))))))))
