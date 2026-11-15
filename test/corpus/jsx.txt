@@ -327,7 +327,6 @@ Elements in pipes
       (variant
         (variant_identifier)))))
 
-
 ================================================================================
 Identifier followed by a template string in children
 ================================================================================
@@ -346,3 +345,91 @@ Identifier followed by a template string in children
         (template_string_content))
       (jsx_closing_element
         (jsx_identifier)))))
+
+==================
+Finally remains a JSX attribute after try catch
+==================
+<C value=try f() catch { | _ => () } finally=true />
+<C value=try f() catch { | _ => () }
+  finally=true />
+<C value=try f() catch { | _ => () } /* boundary */ finally=true />
+<C value=try f() catch { | _ => () } finally /* cleanup */ { clean() } finally=true />
+---
+
+(source_file
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_attribute
+        (property_identifier)
+        (try_expression
+          (call_expression
+            (value_identifier)
+            (arguments))
+          (switch_match
+            (value_identifier)
+            (sequence_expression
+              (expression_statement
+                (unit))))))
+      (jsx_attribute
+        (property_identifier)
+        (true))))
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_attribute
+        (property_identifier)
+        (try_expression
+          (call_expression
+            (value_identifier)
+            (arguments))
+          (switch_match
+            (value_identifier)
+            (sequence_expression
+              (expression_statement
+                (unit))))))
+      (jsx_attribute
+        (property_identifier)
+        (true))))
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_attribute
+        (property_identifier)
+        (try_expression
+          (call_expression
+            (value_identifier)
+            (arguments))
+          (switch_match
+            (value_identifier)
+            (sequence_expression
+              (expression_statement
+                (unit))))))
+      (block_comment)
+      (jsx_attribute
+        (property_identifier)
+        (true))))
+  (expression_statement
+    (jsx_self_closing_element
+      (jsx_identifier)
+      (jsx_attribute
+        (property_identifier)
+        (try_expression
+          (call_expression
+            (value_identifier)
+            (arguments))
+          (switch_match
+            (value_identifier)
+            (sequence_expression
+              (expression_statement
+                (unit))))
+          (finally_clause
+            (block_comment)
+            (block
+              (expression_statement
+                (call_expression
+                  (value_identifier)
+                  (arguments)))))))
+      (jsx_attribute
+        (property_identifier)
+        (true)))))

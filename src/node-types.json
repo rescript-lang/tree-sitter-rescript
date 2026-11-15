@@ -1151,6 +1151,10 @@
         {
           "type": "dict_entry",
           "named": true
+        },
+        {
+          "type": "spread_element",
+          "named": true
         }
       ]
     }
@@ -1556,6 +1560,21 @@
         },
         {
           "type": "property_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "finally_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
           "named": true
         }
       ]
@@ -4012,6 +4031,10 @@
           "named": true
         },
         {
+          "type": "record_rest_pattern",
+          "named": true
+        },
+        {
           "type": "regex",
           "named": true
         },
@@ -4045,6 +4068,80 @@
         },
         {
           "type": "variant_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "record_rest_pattern",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "value_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "as_aliasing_type",
+          "named": true
+        },
+        {
+          "type": "extension_expression",
+          "named": true
+        },
+        {
+          "type": "generic_type",
+          "named": true
+        },
+        {
+          "type": "module_pack",
+          "named": true
+        },
+        {
+          "type": "object_type",
+          "named": true
+        },
+        {
+          "type": "polymorphic_type",
+          "named": true
+        },
+        {
+          "type": "polyvar_type",
+          "named": true
+        },
+        {
+          "type": "record_type",
+          "named": true
+        },
+        {
+          "type": "tuple_type",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
+          "named": true
+        },
+        {
+          "type": "type_identifier_path",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        },
+        {
+          "type": "unit_type",
           "named": true
         }
       ]
@@ -4520,6 +4617,10 @@
       "types": [
         {
           "type": "expression",
+          "named": true
+        },
+        {
+          "type": "finally_clause",
           "named": true
         },
         {
@@ -5515,6 +5616,10 @@
   {
     "type": "false",
     "named": true
+  },
+  {
+    "type": "finally",
+    "named": false
   },
   {
     "type": "for",

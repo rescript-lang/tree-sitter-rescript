@@ -109,6 +109,7 @@
 (parameter (tuple_pattern (tuple_item_pattern (value_identifier) @variable.parameter)))
 (parameter (array_pattern (value_identifier) @variable.parameter))
 (parameter (record_pattern (value_identifier) @variable.parameter))
+(parameter (record_pattern (record_rest_pattern name: (value_identifier) @variable.parameter)))
 
 ; function identifier in let binding
 (let_binding
@@ -205,6 +206,7 @@
   "exception"
   "try"
   "catch"
+  "finally"
 ] @keyword.exception
 
 (call_expression
@@ -218,6 +220,10 @@
   "downto"
   "while"
 ] @keyword.repeat
+
+(expression_statement
+  (value_identifier) @keyword.repeat
+  (#any-of? @keyword.repeat "break" "continue"))
 
 [
   "."

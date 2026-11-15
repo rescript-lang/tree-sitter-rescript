@@ -1653,8 +1653,10 @@ let value = call(~x=input : 'a :> 'a)
       (value_identifier)
       (ternary_expression
         (value_identifier)
-        (character (escape_sequence))
-        (character (escape_sequence)))))
+        (character
+          (escape_sequence))
+        (character
+          (escape_sequence)))))
   (let_declaration
     (let_binding
       (value_identifier)
@@ -1663,7 +1665,8 @@ let value = call(~x=input : 'a :> 'a)
           (value_identifier)
           (character)
           (character))
-        (type_annotation (type_identifier))
+        (type_annotation
+          (type_identifier))
         (type_identifier))))
   (let_declaration
     (let_binding
@@ -1675,7 +1678,8 @@ let value = call(~x=input : 'a :> 'a)
             (value_identifier)
             (coercion_expression
               (value_identifier)
-              (type_annotation (type_identifier))
+              (type_annotation
+                (type_identifier))
               (type_identifier))))))))
 
 ================================================================================
@@ -2797,3 +2801,285 @@ f(. `single line`)
         (uncurry)
         (template_string
           (template_string_content))))))
+
+==================
+Iterable and asynchronous for loops
+==================
+for x of xs { log(x) }
+for _ of xs->items { () }
+for (x of xs) { for i in 0 to 2 { log(x) } }
+for await x of xs { log(x) }
+for await (_ of xs) { () }
+---
+
+(source_file
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments
+              (value_identifier)))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (pipe_expression
+        (value_identifier)
+        (value_identifier))
+      (block
+        (expression_statement
+          (unit)))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (for_expression
+            (value_identifier)
+            (number)
+            (number)
+            (block
+              (expression_statement
+                (call_expression
+                  (value_identifier)
+                  (arguments
+                    (value_identifier))))))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments
+              (value_identifier)))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (unit))))))
+
+==================
+Try finally and contextual finally calls
+==================
+try dangerous() finally { cleanup() }
+try { dangerous() } catch { | _ => () }
+/* between clauses */
+finally /* before block */ { cleanup() }
+try { try work() finally { inner() } }
+finally { outer() }
+try work() catch { | _ => () }
+finally(x)
+let finally = x => x
+---
+
+(source_file
+  (expression_statement
+    (try_expression
+      (call_expression
+        (value_identifier)
+        (arguments))
+      (finally_clause
+        (block
+          (expression_statement
+            (call_expression
+              (value_identifier)
+              (arguments)))))))
+  (expression_statement
+    (try_expression
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments))))
+      (switch_match
+        (value_identifier)
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (block_comment)
+      (finally_clause
+        (block_comment)
+        (block
+          (expression_statement
+            (call_expression
+              (value_identifier)
+              (arguments)))))))
+  (expression_statement
+    (try_expression
+      (block
+        (expression_statement
+          (try_expression
+            (call_expression
+              (value_identifier)
+              (arguments))
+            (finally_clause
+              (block
+                (expression_statement
+                  (call_expression
+                    (value_identifier)
+                    (arguments))))))))
+      (finally_clause
+        (block
+          (expression_statement
+            (call_expression
+              (value_identifier)
+              (arguments)))))))
+  (expression_statement
+    (try_expression
+      (call_expression
+        (value_identifier)
+        (arguments))
+      (switch_match
+        (value_identifier)
+        (sequence_expression
+          (expression_statement
+            (unit))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (value_identifier)
+        (value_identifier)))))
+
+==================
+Dictionary spreads interleaved with entries
+==================
+dict{...foo}
+dict{...foo, "bar": 2, ...qux}
+dict{"a": 1, ...foo, ...qux, "b": 2,}
+dict{
+  /* before spread */ ...foo,
+  "nested": dict{...qux},
+  ...dict{"c": 3},
+}
+---
+
+(source_file
+  (expression_statement
+    (dict
+      (spread_element
+        (value_identifier))))
+  (expression_statement
+    (dict
+      (spread_element
+        (value_identifier))
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))
+      (spread_element
+        (value_identifier))))
+  (expression_statement
+    (dict
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))
+      (spread_element
+        (value_identifier))
+      (spread_element
+        (value_identifier))
+      (dict_entry
+        (string
+          (string_fragment))
+        (number))))
+  (expression_statement
+    (dict
+      (block_comment)
+      (spread_element
+        (value_identifier))
+      (dict_entry
+        (string
+          (string_fragment))
+        (dict
+          (spread_element
+            (value_identifier))))
+      (spread_element
+        (dict
+          (dict_entry
+            (string
+              (string_fragment))
+            (number)))))))
+
+==================
+Loop control identifiers remain compatible with legacy bindings
+==================
+let continue = ref(true)
+let break = ref(false)
+while continue.contents {
+  if break.contents { break }
+  continue := false
+  continue
+}
+for x of xs {
+  switch x { | Stop => break | _ => continue }
+}
+---
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (true)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (false)))))
+  (expression_statement
+    (while_expression
+      (member_expression
+        (value_identifier)
+        (property_identifier))
+      (block
+        (expression_statement
+          (if_expression
+            (member_expression
+              (value_identifier)
+              (property_identifier))
+            (block
+              (expression_statement
+                (value_identifier)))))
+        (expression_statement
+          (mutation_expression
+            (value_identifier)
+            (false)))
+        (expression_statement
+          (value_identifier)))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (switch_expression
+            (value_identifier)
+            (switch_match
+              (variant_pattern
+                (variant_identifier))
+              (sequence_expression
+                (expression_statement
+                  (value_identifier))))
+            (switch_match
+              (value_identifier)
+              (sequence_expression
+                (expression_statement
+                  (value_identifier))))))))))

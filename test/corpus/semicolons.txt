@@ -296,3 +296,24 @@ constraint_(second)
       (value_identifier)
       (arguments
         (value_identifier)))))
+================================================================================
+Finally identifiers do not continue unrelated statements
+================================================================================
+
+let finally = ()
+finally
+{ () }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (unit)))
+  (expression_statement
+    (value_identifier))
+  (expression_statement
+    (block
+      (expression_statement
+        (unit)))))

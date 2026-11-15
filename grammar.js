@@ -15,6 +15,7 @@ export default grammar({
     $._dict_constructor,
     $._decorator,
     $._decorator_inline,
+    $._finally_clause_start,
   ],
 
   extras: ($) => [
@@ -66,7 +67,7 @@ export default grammar({
     $.module_primary_expression,
   ],
 
-  inline: ($) => [$._module_definition, $._semicolon],
+  inline: ($) => [$._module_definition, $._semicolon, $._record_pattern_field],
 
   precedences: ($) => [
     // + - Operators -> precendence
@@ -111,6 +112,8 @@ export default grammar({
   ],
 
   conflicts: ($) => [
+    [$.primary_expression, $.record_rest_pattern],
+    [$.record_pattern],
     [$.unit, $.formal_parameters],
     [$.primary_expression, $._pattern],
     [$.primary_expression, $.record_pattern],
@@ -673,7 +676,7 @@ export default grammar({
       seq(
         alias($._dict_constructor, 'dict'),
         '{',
-        commaSept($.dict_entry),
+        commaSept(choice($.dict_entry, $.spread_element)),
         '}',
       ),
 
@@ -723,14 +726,27 @@ export default grammar({
       seq($.variant_type_pattern, optional($.as_aliasing)),
 
     try_expression: ($) =>
+      prec.right(
+        seq(
+          'try',
+          $.expression,
+          choice(
+            seq($._catch_clause, optional($.finally_clause)),
+            $.finally_clause,
+          ),
+        ),
+      ),
+
+    _catch_clause: ($) =>
       seq(
-        'try',
-        $.expression,
         'catch',
         '{',
         repeat(seq($.switch_match, optional($._semicolon))),
         '}',
       ),
+
+    finally_clause: ($) =>
+      seq($._finally_clause_start, alias($._identifier, 'finally'), $.block),
 
     as_aliasing: ($) =>
       prec.left(seq('as', $._pattern, optional($.type_annotation))),
@@ -933,14 +949,30 @@ export default grammar({
     record_pattern: ($) =>
       seq(
         '{',
-        commaSep1t(
+        choice(
+          commaSep1t($._record_pattern_field),
           seq(
-            optional('?'),
-            choice($.value_identifier, $.value_identifier_path),
-            optional(seq(':', $._pattern)),
+            repeat(seq($._record_pattern_field, ',')),
+            $.record_rest_pattern,
+            repeat(seq(',', $._record_pattern_field)),
+            optional(','),
           ),
         ),
         '}',
+      ),
+
+    _record_pattern_field: ($) =>
+      seq(
+        optional('?'),
+        choice($.value_identifier, $.value_identifier_path),
+        optional(seq(':', $._pattern)),
+      ),
+
+    record_rest_pattern: ($) =>
+      seq(
+        '...',
+        optional(seq($._non_function_inline_type, 'as')),
+        field('name', $.value_identifier),
       ),
 
     tuple_item_pattern: ($) => seq($._pattern, optional($.type_annotation)),
@@ -1136,15 +1168,25 @@ export default grammar({
       ),
 
     for_expression: ($) =>
-      seq(
-        'for',
-        $.value_identifier,
-        'in',
-        $.expression,
-        choice('to', 'downto'),
-        $.expression,
-        $.block,
+      choice(
+        seq(
+          'for',
+          optional('await'),
+          choice($._for_of_header, parenthesize($._for_of_header)),
+          $.block,
+        ),
+        seq(
+          'for',
+          $.value_identifier,
+          'in',
+          $.expression,
+          choice('to', 'downto'),
+          $.expression,
+          $.block,
+        ),
       ),
+
+    _for_of_header: ($) => seq($.value_identifier, 'of', $.expression),
 
     while_expression: ($) => seq('while', $.expression, $.block),
 
