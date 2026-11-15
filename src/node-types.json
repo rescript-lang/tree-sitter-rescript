@@ -1562,6 +1562,21 @@
     }
   },
   {
+    "type": "finally_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "for_expression",
     "named": true,
     "fields": {},
@@ -4523,6 +4538,10 @@
           "named": true
         },
         {
+          "type": "finally_clause",
+          "named": true
+        },
+        {
           "type": "switch_match",
           "named": true
         }
@@ -5515,6 +5534,10 @@
   {
     "type": "false",
     "named": true
+  },
+  {
+    "type": "finally",
+    "named": false
   },
   {
     "type": "for",

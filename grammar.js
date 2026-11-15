@@ -723,14 +723,26 @@ export default grammar({
       seq($.variant_type_pattern, optional($.as_aliasing)),
 
     try_expression: ($) =>
+      prec.right(
+        seq(
+          'try',
+          $.expression,
+          choice(
+            seq($._catch_clause, optional($.finally_clause)),
+            $.finally_clause,
+          ),
+        ),
+      ),
+
+    _catch_clause: ($) =>
       seq(
-        'try',
-        $.expression,
         'catch',
         '{',
         repeat(seq($.switch_match, optional($._semicolon))),
         '}',
       ),
+
+    finally_clause: ($) => seq('finally', $.block),
 
     as_aliasing: ($) =>
       prec.left(seq('as', $._pattern, optional($.type_annotation))),

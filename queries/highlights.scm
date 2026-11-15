@@ -205,6 +205,7 @@
   "exception"
   "try"
   "catch"
+  "finally"
 ] @keyword.exception
 
 (call_expression

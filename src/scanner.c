@@ -93,6 +93,8 @@ static bool scan_keyword(TSLexer *lexer, const char *keyword) {
   return !is_identifier_continue(lexer->lookahead);
 }
 
+static bool scan_finally_continuation(TSLexer *lexer);
+
 static bool token_continues_statement(TSLexer *lexer) {
   switch (lexer->lookahead) {
     case '.':
@@ -111,6 +113,8 @@ static bool token_continues_statement(TSLexer *lexer) {
       return scan_keyword(lexer, "constraint");
     case 'e':
       return scan_keyword(lexer, "else");
+    case 'f':
+      return scan_finally_continuation(lexer);
     case 'w':
       return scan_keyword(lexer, "with");
     default:
@@ -147,6 +151,23 @@ static bool scan_block_comment_after_slash(
     }
   }
   return true;
+}
+
+// `finally` is contextual: a following call still starts a new statement.
+static bool scan_finally_continuation(TSLexer *lexer) {
+  if (!scan_keyword(lexer, "finally")) return false;
+  for (;;) {
+    scan_whitespace(lexer, true);
+    if (lexer->lookahead != '/') return lexer->lookahead == '{';
+    skip(lexer);
+    if (lexer->lookahead == '*') {
+      scan_block_comment_after_slash(lexer, NULL);
+    } else if (lexer->lookahead == '/') {
+      while (!lexer->eof(lexer) && !is_line_terminator(lexer->lookahead)) skip(lexer);
+    } else {
+      return false;
+    }
+  }
 }
 
 bool tree_sitter_rescript_external_scanner_scan(

@@ -2865,3 +2865,91 @@ for await (_ of xs) { () }
       (block
         (expression_statement
           (unit))))))
+
+==================
+Try finally and contextual finally calls
+==================
+try dangerous() finally { cleanup() }
+try { dangerous() } catch { | _ => () }
+/* between clauses */
+finally /* before block */ { cleanup() }
+try { try work() finally { inner() } }
+finally { outer() }
+try work() catch { | _ => () }
+finally(x)
+let finally = x => x
+---
+
+(source_file
+  (expression_statement
+    (try_expression
+      (call_expression
+        (value_identifier)
+        (arguments))
+      (finally_clause
+        (block
+          (expression_statement
+            (call_expression
+              (value_identifier)
+              (arguments)))))))
+  (expression_statement
+    (try_expression
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments))))
+      (switch_match
+        (value_identifier)
+        (sequence_expression
+          (expression_statement
+            (unit))))
+      (block_comment)
+      (finally_clause
+        (block_comment)
+        (block
+          (expression_statement
+            (call_expression
+              (value_identifier)
+              (arguments)))))))
+  (expression_statement
+    (try_expression
+      (block
+        (expression_statement
+          (try_expression
+            (call_expression
+              (value_identifier)
+              (arguments))
+            (finally_clause
+              (block
+                (expression_statement
+                  (call_expression
+                    (value_identifier)
+                    (arguments))))))))
+      (finally_clause
+        (block
+          (expression_statement
+            (call_expression
+              (value_identifier)
+              (arguments)))))))
+  (expression_statement
+    (try_expression
+      (call_expression
+        (value_identifier)
+        (arguments))
+      (switch_match
+        (value_identifier)
+        (sequence_expression
+          (expression_statement
+            (unit))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (value_identifier)
+        (value_identifier)))))
