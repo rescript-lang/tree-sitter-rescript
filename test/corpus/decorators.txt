@@ -86,3 +86,264 @@ Decorator with type
     (decorator_arguments
       (type_annotation
         (type_identifier)))))
+
+================================================================================
+Adjacent decorators on type declarations
+================================================================================
+
+@attr type t = float
+@attr
+type t = float
+
+@attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr type t = int
+@attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr @attr
+type t = int
+
+@attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName@attrWithSuperLongIdentifeirName type t = string
+@attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName @attrWithSuperLongIdentifeirName@attrWithSuperLongIdentifeirName
+type t = string
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier)))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (decorator
+    (decorator_identifier))
+  (type_declaration
+    (type_binding
+      (type_identifier)
+      (type_identifier))))
+
+================================================================================
+Pattern, declaration, and extension payloads
+================================================================================
+
+@attr(?var)
+@attr(?var when x === 1)
+%ext(: let x: int)
+%ext(:
+  let x: int
+  let y: float
+)
+
+%%ext("A"; "B")
+
+@@superPrivate(
+  @module("./logo.svg") external logo: string = "default"
+)
+
+@inlinePrivate(
+  @module("./logo.svg") external logo: string = "default"
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (value_identifier)))
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (value_identifier)
+      (guard
+        (binary_expression
+          (value_identifier)
+          (number)))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))
+      (let_declaration
+        (let_binding
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (extension_expression
+      (extension_identifier)
+      (expression_statement
+        (string
+          (string_fragment)))
+      (expression_statement
+        (string
+          (string_fragment)))))
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (decorator
+        (decorator_identifier)
+        (decorator_arguments
+          (string
+            (string_fragment))))
+      (external_declaration
+        (value_identifier)
+        (type_annotation
+          (type_identifier))
+        (string
+          (string_fragment)))))
+  (decorator
+    (decorator_identifier)
+    (decorator_arguments
+      (decorator
+        (decorator_identifier)
+        (decorator_arguments
+          (string
+            (string_fragment))))
+      (external_declaration
+        (value_identifier)
+        (type_annotation
+          (type_identifier))
+        (string
+          (string_fragment))))))
+
+================================================================================
+Decorator payloads preserve declaration boundaries
+================================================================================
+
+module Bindings = {
+  @val external first: int = "first"
+  @scope("namespace") @val external second: int = "second"
+  @scope("namespace")
+  @val external third: int = "third"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (module_declaration
+    (module_binding
+      (module_identifier)
+      (block
+        (decorator
+          (decorator_identifier))
+        (external_declaration
+          (value_identifier)
+          (type_annotation
+            (type_identifier))
+          (string
+            (string_fragment)))
+        (decorator
+          (decorator_identifier)
+          (decorator_arguments
+            (string
+              (string_fragment))))
+        (decorator
+          (decorator_identifier))
+        (external_declaration
+          (value_identifier)
+          (type_annotation
+            (type_identifier))
+          (string
+            (string_fragment)))
+        (decorator
+          (decorator_identifier)
+          (decorator_arguments
+            (string
+              (string_fragment))))
+        (decorator
+          (decorator_identifier))
+        (external_declaration
+          (value_identifier)
+          (type_annotation
+            (type_identifier))
+          (string
+            (string_fragment)))))))

@@ -20,6 +20,9 @@ npm run parse path/to/file.res
 # Compare with ReScript compiler's AST (useful for debugging grammar issues)
 npx bsc -dparsetree -only-parse -ignore-parse-errors path/to/file.res
 
+# To check if has syntax error or not
+npx bsc path/to/file.res
+
 # Launch interactive playground (builds WASM first)
 npm start
 

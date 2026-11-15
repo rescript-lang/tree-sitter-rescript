@@ -130,6 +130,9 @@ export default grammar({
     [$._record_element, $._record_single_field],
     [$._record_pun_field, $._record_single_pun_field],
     [$._record_field_name, $.record_pattern],
+    [$.primary_expression, $._record_field_name],
+    [$.primary_expression, $._record_field_name, $.record_pattern],
+    [$.primary_expression, $.object_field],
     [$._statement, $._switch_body],
     [$._inline_type, $.function_type_parameters],
     [$.primary_expression, $.parameter, $._pattern],
@@ -150,6 +153,44 @@ export default grammar({
     [$._record_type_member, $._object_type_member],
     [$._non_function_inline_type, $.generic_type],
     [$._type_identifier, $.polymorphic_type],
+    [$.functor, $.module_expression],
+    [$.call_expression, $._jsx_child],
+    [$.subscript_expression, $._jsx_child],
+    [$._labeled_parameter_default_value, $.coercion_expression],
+    [$.await_expression, $.coercion_expression],
+    [$.lazy_expression, $.coercion_expression],
+    [$.mutation_expression, $.coercion_expression],
+    // A ternary's ':' can also start a coercion's source type annotation.
+    [$.type_identifier, $.value_identifier],
+    [$._non_function_inline_type, $.primary_expression],
+    [$.block, $.record_type],
+    [$.record_type_field, $.primary_expression, $._record_field_name],
+    [$.record_type_field, $.primary_expression],
+    [$.object_type_field, $.primary_expression, $.object_field],
+    [$._function_type_parameter_list, $.formal_parameters, $.unit],
+    [$._non_function_inline_type, $.primary_expression, $._pattern],
+    [$._non_function_inline_type, $._pattern],
+    [$.function_type_parameter, $.parameter],
+    [$.variant_declaration, $.variant_pattern, $.variant],
+    [$.variant_declaration, $.variant_pattern],
+    [$.variant_declaration, $.variant],
+    [$.polyvar_declaration, $.polyvar],
+    [$.polyvar_declaration, $.polyvar_pattern],
+    [$.polyvar_declaration, $.polyvar_pattern, $.polyvar],
+    [$.object_type, $.object],
+    [
+      $.record_type_field,
+      $.primary_expression,
+      $._record_field_name,
+      $.record_pattern,
+    ],
+    [
+      $._non_function_inline_type,
+      $.primary_expression,
+      $.parameter,
+      $._pattern,
+    ],
+    [$._non_function_inline_type, $.parameter, $._pattern],
   ],
 
   rules: {
@@ -253,7 +294,13 @@ export default grammar({
 
     functor: ($) =>
       seq(
-        field('parameters', $.functor_parameters),
+        field(
+          'parameters',
+          choice(
+            $.functor_parameters,
+            alias($.module_primary_expression, $.functor_parameter),
+          ),
+        ),
         optional(field('return_module_type', $.module_type_annotation)),
         '=>',
         field('body', $._module_definition),
@@ -263,10 +310,14 @@ export default grammar({
       seq('(', optional(commaSep1t($.functor_parameter)), ')'),
 
     functor_parameter: ($) =>
-      seq($.module_identifier, optional($.module_type_annotation)),
+      choice(
+        seq($.module_identifier, optional($.module_type_annotation)),
+        seq('_', $.module_type_annotation),
+        $.unit,
+      ),
 
     module_type_annotation: ($) =>
-      seq(':', choice($.module_expression, $.block)),
+      seq(':', choice($.module_expression, $.block, $.functor)),
 
     external_declaration: ($) =>
       seq('external', $.value_identifier, $.type_annotation, '=', $.string),
@@ -276,6 +327,7 @@ export default grammar({
         'exception',
         $.variant_identifier,
         optional($.variant_parameters),
+        optional($.type_annotation),
         optional(
           seq('=', choice($.variant_identifier, $.nested_variant_identifier)),
         ),
@@ -295,7 +347,12 @@ export default grammar({
         optional($.type_parameters),
         optional(
           choice(
-            seq('=', $.extensible_type),
+            seq(
+              '=',
+              optional('private'),
+              $.extensible_type,
+              repeat($.type_constraint),
+            ),
             seq(
               optional(seq('=', $._non_function_inline_type)),
               optional(
@@ -339,6 +396,7 @@ export default grammar({
         $.module_pack,
         $.unit,
         $.polymorphic_type,
+        $.extension_expression,
         alias($._as_aliasing_non_function_inline_type, $.as_aliasing_type),
       ),
 
@@ -366,7 +424,15 @@ export default grammar({
         seq(
           $.variant_identifier,
           optional($.variant_parameters),
-          optional($.type_annotation),
+          optional(
+            choice(
+              $.type_annotation,
+              seq(
+                '=',
+                choice($.variant_identifier, $.nested_variant_identifier),
+              ),
+            ),
+          ),
         ),
       ),
 
@@ -387,7 +453,11 @@ export default grammar({
     polyvar_declaration: ($) =>
       prec.right(
         choice(
-          seq($.polyvar_identifier, optional($.polyvar_parameters)),
+          seq(
+            $.polyvar_identifier,
+            optional($.polyvar_parameters),
+            repeat(seq('&', $._type)),
+          ),
           $._inline_type,
         ),
       ),
@@ -676,7 +746,7 @@ export default grammar({
       prec(
         'call',
         seq(
-          field('function', $.primary_expression),
+          field('function', choice($.primary_expression, $.block)),
           field('arguments', alias($.call_arguments, $.arguments)),
         ),
       ),
@@ -720,6 +790,7 @@ export default grammar({
         optional(
           choice(
             '?',
+            $.type_annotation,
             seq(
               '=',
               optional('?'),
@@ -792,11 +863,13 @@ export default grammar({
         seq(
           choice(
             seq(optional('?'), $.value_identifier),
+            seq('?', $.parenthesized_pattern),
             $._literal_pattern,
             $._destructuring_pattern,
             $.polyvar_type_pattern,
             $.unit,
             $.module_pack,
+            $.extension_expression,
             $.lazy_pattern,
             $.parenthesized_pattern,
             $.or_pattern,
@@ -896,7 +969,11 @@ export default grammar({
     dict_pattern_entry: ($) => seq($.string, ':', $._pattern),
 
     _collection_element_pattern: ($) =>
-      seq(choice($._pattern, $.spread_pattern), optional($.as_aliasing)),
+      seq(
+        choice($._pattern, $.spread_pattern),
+        optional($.type_annotation),
+        optional($.as_aliasing),
+      ),
 
     spread_pattern: ($) =>
       seq('...', choice($.value_identifier, $.list_pattern, $.array_pattern)),
@@ -1004,13 +1081,22 @@ export default grammar({
       ),
 
     decorator_arguments: ($) =>
-      seq('(', choice(commaSept($.expression), $.type_annotation), ')'),
+      seq(
+        '(',
+        choice(
+          commaSept($.expression),
+          seq('?', $._pattern, optional($.guard)),
+          $.declaration,
+          $.type_annotation,
+        ),
+        ')',
+      ),
 
     subscript_expression: ($) =>
       prec.right(
         'member',
         seq(
-          field('object', $.primary_expression),
+          field('object', choice($.primary_expression, $.block)),
           '[',
           field('index', $.expression),
           ']',
@@ -1021,7 +1107,7 @@ export default grammar({
       prec(
         'member',
         seq(
-          field('record', $.primary_expression),
+          field('record', choice($.primary_expression, $.block)),
           '.',
           optional(
             seq(
@@ -1107,21 +1193,37 @@ export default grammar({
       ),
 
     coercion_expression: ($) =>
-      prec.left(
-        'coercion_relation',
-        choice(
+      choice(
+        prec.left(
+          'coercion_relation',
           seq(
             field('left', $.expression),
             field('operator', ':>'),
             field('right', $._type),
           ),
+        ),
+        prec.dynamic(
+          1,
+          prec.left(
+            'coercion_relation',
+            seq(
+              '(',
+              field('left', $.expression),
+              field('source_type', $.type_annotation),
+              field('operator', ':>'),
+              field('right', $._type),
+              ')',
+            ),
+          ),
+        ),
+        // Do not force ':' to shift before a nested ternary can reduce.
+        // Right associativity still preserves the parenthesized coercion form.
+        prec.right(
           seq(
-            '(',
             field('left', $.expression),
             field('source_type', $.type_annotation),
             field('operator', ':>'),
             field('right', $._type),
-            ')',
           ),
         ),
       ),
@@ -1153,7 +1255,20 @@ export default grammar({
       ),
 
     _extension_expression_payload: ($) =>
-      seq('(', choice($._one_or_more_statements, $.type_annotation), ')'),
+      seq(
+        '(',
+        choice(
+          $._one_or_more_statements,
+          $.type_annotation,
+          seq(
+            ':',
+            repeat(seq($.let_declaration, $._semicolon)),
+            $.let_declaration,
+            optional($._semicolon),
+          ),
+        ),
+        ')',
+      ),
 
     variant: ($) =>
       prec.right(
@@ -1243,7 +1358,14 @@ export default grammar({
       ),
 
     constrain_type: ($) =>
-      seq('type', $._type, choice('=', ':='), optional('private'), $._type),
+      seq(
+        'type',
+        $._type,
+        choice('=', ':='),
+        optional('private'),
+        $._type,
+        repeat($.type_constraint),
+      ),
 
     functor_use: ($) =>
       seq($.module_primary_expression, alias($.functor_arguments, $.arguments)),
@@ -1251,7 +1373,12 @@ export default grammar({
     functor_arguments: ($) =>
       seq('(', optional(commaSep1t($._functor_argument)), ')'),
 
-    _functor_argument: ($) => choice($.module_expression, $.block),
+    _functor_argument: ($) =>
+      choice(
+        seq($.module_expression, optional($.module_type_annotation)),
+        $.block,
+        $.unit,
+      ),
 
     variant_identifier: ($) => /[A-Z][a-zA-Z0-9_']*/,
 
@@ -1265,7 +1392,12 @@ export default grammar({
       ),
 
     type_identifier: ($) =>
-      choice($._identifier, /'[a-zA-Z0-9_']*/, $._escape_identifier),
+      choice(
+        $._identifier,
+        /'[a-zA-Z0-9_']*/,
+        seq('\u0027', $._escape_identifier),
+        $._escape_identifier,
+      ),
 
     _identifier: (_) => /[a-z_][a-zA-Z0-9_']*/,
 
@@ -1434,8 +1566,11 @@ export default grammar({
       choice(seq('$', $.value_identifier), seq('${', $.expression, '}')),
 
     character: ($) =>
-      // prettier-ignore
-      seq('\'', repeat(choice(/[^\\']/, $.escape_sequence)), '\''),
+      choice(
+        // Match the whole literal before a type variable can consume its quotes.
+        token(prec(1, seq('\u0027', /[^\\']/, '\u0027'))),
+        seq('\u0027', repeat(choice(/[^\\']/, $.escape_sequence)), '\u0027'),
+      ),
 
     lparen: ($) => alias($._lparen, '('),
     rparen: ($) => alias($._rparen, ')'),

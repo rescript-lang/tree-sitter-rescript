@@ -1473,6 +1473,71 @@ value :> t<'a>
       (type_identifier))))
 
 ================================================================================
+Source-typed coercions wrap the complete arithmetic expression
+================================================================================
+
+call(~x=1 + 2 :> int)
+call(~x=(1 + 2 : int :> int))
+call(~x=1 + 2 : int :> int)
+call(~x=1 + 2 * 3 : int :> int)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (number))
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (number))
+            (type_annotation
+              (type_identifier))
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (number))
+            (type_annotation
+              (type_identifier))
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (binary_expression
+                (number)
+                (number)))
+            (type_annotation
+              (type_identifier))
+            (type_identifier)))))))
+
+================================================================================
 Ternaries
 ================================================================================
 
@@ -1481,6 +1546,8 @@ condition ? case1 : case2
 condition
   ? case1
   : case2
+
+condition ? a + b : c + d
 
 --------------------------------------------------------------------------------
 
@@ -1494,7 +1561,122 @@ condition
     (ternary_expression
       (value_identifier)
       (value_identifier)
-      (value_identifier))))
+      (value_identifier)))
+  (expression_statement
+    (ternary_expression
+      (value_identifier)
+      (binary_expression
+        (value_identifier)
+        (value_identifier))
+      (binary_expression
+        (value_identifier)
+        (value_identifier)))))
+
+================================================================================
+Nested ternary consequents preserve the outer colon
+================================================================================
+
+let value = outer ? inner ? 1 : 2 : 3
+let value = outer ? inner ? first : second : third
+let value = outer ? inner ? 1 : 2 : int :> int : 3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (ternary_expression
+          (value_identifier)
+          (number)
+          (number))
+        (number))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (ternary_expression
+          (value_identifier)
+          (value_identifier)
+          (value_identifier))
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (coercion_expression
+          (ternary_expression
+            (value_identifier)
+            (number)
+            (number))
+          (type_annotation
+            (type_identifier))
+          (type_identifier))
+        (number)))))
+
+================================================================================
+Character-valued ternaries distinguish literals from type variables
+================================================================================
+
+let value = flag ? 'a' : 'b'
+let value = outer ? inner ? 'a' : 'b' : 'c'
+let value = flag ? '\n' : '\t'
+let value = flag ? 'a' : 'b' : char :> char
+let value = call(~x=input : 'a :> 'a)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (character)
+        (character))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (ternary_expression
+          (value_identifier)
+          (character)
+          (character))
+        (character))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (character (escape_sequence))
+        (character (escape_sequence)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (coercion_expression
+        (ternary_expression
+          (value_identifier)
+          (character)
+          (character))
+        (type_annotation (type_identifier))
+        (type_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (labeled_argument
+            (value_identifier)
+            (coercion_expression
+              (value_identifier)
+              (type_annotation (type_identifier))
+              (type_identifier))))))))
 
 ================================================================================
 Arrays
@@ -2274,3 +2456,344 @@ switch json {
         (sequence_expression
           (expression_statement
             (number)))))))
+
+================================================================================
+Source and target coercions in labeled arguments
+================================================================================
+
+call(~x=y :> int, ~z=w : int :> int, ~a, ~b)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (value_identifier)
+            (type_identifier)))
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (value_identifier)
+            (type_annotation
+              (type_identifier))
+            (type_identifier)))
+        (labeled_argument
+          (value_identifier))
+        (labeled_argument
+          (value_identifier))))))
+
+================================================================================
+Braced receivers for calls, fields, and subscripts
+================================================================================
+
+let _ =  {apply}(a, b)
+let _ = { user.name }.toString()
+let _ = { { user.name }.toString() }
+let _ = { user.name }.first
+let _ = { { user.name }.first }
+{myArray}[{0}]
+{
+  myArray}[{
+    0}]
+{myArray}[{0}] = {20}
+{
+  myArray}[{
+    0}] = {
+      20}
+
+{jsObject}["foo"]
+{jsObject}["foo"] = { "bar" }
+{jsObject}["foo"] = {
+  a + b
+}
+{
+  jsObject}["foo"]
+{jsObject}["foo"] = { "bar" }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (arguments
+          (value_identifier)
+          (value_identifier)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (member_expression
+          (block
+            (expression_statement
+              (member_expression
+                (value_identifier)
+                (property_identifier))))
+          (property_identifier))
+        (arguments))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (member_expression
+              (block
+                (expression_statement
+                  (member_expression
+                    (value_identifier)
+                    (property_identifier))))
+              (property_identifier))
+            (arguments))))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (member_expression
+        (block
+          (expression_statement
+            (member_expression
+              (value_identifier)
+              (property_identifier))))
+        (property_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (block
+        (expression_statement
+          (member_expression
+            (block
+              (expression_statement
+                (member_expression
+                  (value_identifier)
+                  (property_identifier))))
+            (property_identifier))))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block
+          (expression_statement
+            (number))))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (block
+          (expression_statement
+            (number))))
+      (block
+        (expression_statement
+          (number)))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (string
+        (string_fragment))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (string
+            (string_fragment))))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (binary_expression
+            (value_identifier)
+            (value_identifier))))))
+  (expression_statement
+    (subscript_expression
+      (block
+        (expression_statement
+          (value_identifier)))
+      (string
+        (string_fragment))))
+  (expression_statement
+    (mutation_expression
+      (subscript_expression
+        (block
+          (expression_statement
+            (value_identifier)))
+        (string
+          (string_fragment)))
+      (block
+        (expression_statement
+          (string
+            (string_fragment)))))))
+
+================================================================================
+Typed labels and legacy uncurried calls
+================================================================================
+
+call(~a: int)
+call(~\"let": int)
+
+document.createElementWithOptions(. "div", elementProps(~onClick=_ =>
+    Js.log("hello world")
+  ))
+
+f(. 1)
+f(. [1, 2, 3])
+f(. [suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong, suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperLong,])
+f(. (1, 2, 3))
+f(. {"a": 1})
+f(. list{1})
+f(. `
+ template
+ string
+`)
+f(. `single line`)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (type_annotation
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (value_identifier)
+        (property_identifier))
+      (arguments
+        (uncurry)
+        (string
+          (string_fragment))
+        (call_expression
+          (value_identifier)
+          (arguments
+            (labeled_argument
+              (value_identifier)
+              (function
+                (value_identifier)
+                (call_expression
+                  (value_identifier_path
+                    (module_identifier)
+                    (value_identifier))
+                  (arguments
+                    (string
+                      (string_fragment)))))))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (number))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (array
+          (number)
+          (number)
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (array
+          (value_identifier)
+          (value_identifier)
+          (value_identifier)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (tuple
+          (number)
+          (number)
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (object
+          (field
+            (property_identifier
+              (string_fragment))
+            (number))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (list
+          (number)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (template_string
+          (template_string_content)))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (uncurry)
+        (template_string
+          (template_string_content))))))
