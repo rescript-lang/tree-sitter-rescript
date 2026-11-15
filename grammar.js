@@ -1136,15 +1136,25 @@ export default grammar({
       ),
 
     for_expression: ($) =>
-      seq(
-        'for',
-        $.value_identifier,
-        'in',
-        $.expression,
-        choice('to', 'downto'),
-        $.expression,
-        $.block,
+      choice(
+        seq(
+          'for',
+          optional('await'),
+          choice($._for_of_header, parenthesize($._for_of_header)),
+          $.block,
+        ),
+        seq(
+          'for',
+          $.value_identifier,
+          'in',
+          $.expression,
+          choice('to', 'downto'),
+          $.expression,
+          $.block,
+        ),
       ),
+
+    _for_of_header: ($) => seq($.value_identifier, 'of', $.expression),
 
     while_expression: ($) => seq('while', $.expression, $.block),
 

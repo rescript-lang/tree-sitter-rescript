@@ -1653,8 +1653,10 @@ let value = call(~x=input : 'a :> 'a)
       (value_identifier)
       (ternary_expression
         (value_identifier)
-        (character (escape_sequence))
-        (character (escape_sequence)))))
+        (character
+          (escape_sequence))
+        (character
+          (escape_sequence)))))
   (let_declaration
     (let_binding
       (value_identifier)
@@ -1663,7 +1665,8 @@ let value = call(~x=input : 'a :> 'a)
           (value_identifier)
           (character)
           (character))
-        (type_annotation (type_identifier))
+        (type_annotation
+          (type_identifier))
         (type_identifier))))
   (let_declaration
     (let_binding
@@ -1675,7 +1678,8 @@ let value = call(~x=input : 'a :> 'a)
             (value_identifier)
             (coercion_expression
               (value_identifier)
-              (type_annotation (type_identifier))
+              (type_annotation
+                (type_identifier))
               (type_identifier))))))))
 
 ================================================================================
@@ -2797,3 +2801,67 @@ f(. `single line`)
         (uncurry)
         (template_string
           (template_string_content))))))
+
+==================
+Iterable and asynchronous for loops
+==================
+for x of xs { log(x) }
+for _ of xs->items { () }
+for (x of xs) { for i in 0 to 2 { log(x) } }
+for await x of xs { log(x) }
+for await (_ of xs) { () }
+---
+
+(source_file
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments
+              (value_identifier)))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (pipe_expression
+        (value_identifier)
+        (value_identifier))
+      (block
+        (expression_statement
+          (unit)))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (for_expression
+            (value_identifier)
+            (number)
+            (number)
+            (block
+              (expression_statement
+                (call_expression
+                  (value_identifier)
+                  (arguments
+                    (value_identifier))))))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (value_identifier)
+            (arguments
+              (value_identifier)))))))
+  (expression_statement
+    (for_expression
+      (value_identifier)
+      (value_identifier)
+      (block
+        (expression_statement
+          (unit))))))
