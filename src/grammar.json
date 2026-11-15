@@ -3843,7 +3843,16 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
+          "type": "SYMBOL",
+          "name": "_finally_clause_start"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_identifier"
+          },
+          "named": false,
           "value": "finally"
         },
         {
@@ -10231,6 +10240,10 @@
     {
       "type": "SYMBOL",
       "name": "_decorator_inline"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_finally_clause_start"
     }
   ],
   "inline": [

@@ -15,6 +15,7 @@ export default grammar({
     $._dict_constructor,
     $._decorator,
     $._decorator_inline,
+    $._finally_clause_start,
   ],
 
   extras: ($) => [
@@ -748,7 +749,8 @@ export default grammar({
         '}',
       ),
 
-    finally_clause: ($) => seq('finally', $.block),
+    finally_clause: ($) =>
+      seq($._finally_clause_start, alias($._identifier, 'finally'), $.block),
 
     as_aliasing: ($) =>
       prec.left(seq('as', $._pattern, optional($.type_annotation))),

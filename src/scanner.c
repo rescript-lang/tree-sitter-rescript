@@ -14,6 +14,7 @@ enum TokenType {
   DICT_CONSTRUCTOR,
   DECORATOR,
   DECORATOR_INLINE,
+  FINALLY_CLAUSE_START,
 };
 
 typedef struct ScannerState {
@@ -255,6 +256,13 @@ bool tree_sitter_rescript_external_scanner_scan(
       // an attribute appear between a type binding and its following `and`.
       state->saw_line_terminator = saw_line_terminator;
     } else {
+      if (valid_symbols[FINALLY_CLAUSE_START] && lexer->lookahead == 'f') {
+        if (scan_finally_continuation(lexer)) {
+          lexer->result_symbol = FINALLY_CLAUSE_START;
+          return true;
+        }
+        return saw_line_terminator;
+      }
       if (!saw_line_terminator) return false;
       if (token_continues_statement(lexer)) {
         if (had_saved_line_terminator && valid_symbols[CONTINUATION]) {
@@ -269,6 +277,14 @@ bool tree_sitter_rescript_external_scanner_scan(
 
   if (!in_string) {
     scan_whitespace(lexer, true);
+  }
+
+  // Gate the literal keyword without consuming it or its following comments.
+  if (valid_symbols[FINALLY_CLAUSE_START] && lexer->lookahead == 'f') {
+    lexer->mark_end(lexer);
+    if (!scan_finally_continuation(lexer)) return false;
+    lexer->result_symbol = FINALLY_CLAUSE_START;
+    return true;
   }
 
   // Block comments encountered at an arbitrary position (e.g. mid-expression).
