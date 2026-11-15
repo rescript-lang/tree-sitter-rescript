@@ -109,6 +109,7 @@
 (parameter (tuple_pattern (tuple_item_pattern (value_identifier) @variable.parameter)))
 (parameter (array_pattern (value_identifier) @variable.parameter))
 (parameter (record_pattern (value_identifier) @variable.parameter))
+(parameter (record_pattern (record_rest_pattern name: (value_identifier) @variable.parameter)))
 
 ; function identifier in let binding
 (let_binding

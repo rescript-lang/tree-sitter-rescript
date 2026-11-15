@@ -68,7 +68,7 @@ export default grammar({
     $.module_primary_expression,
   ],
 
-  inline: ($) => [$._module_definition, $._semicolon],
+  inline: ($) => [$._module_definition, $._semicolon, $._record_pattern_field],
 
   precedences: ($) => [
     // + - Operators -> precendence
@@ -113,6 +113,8 @@ export default grammar({
   ],
 
   conflicts: ($) => [
+    [$.primary_expression, $.record_rest_pattern],
+    [$.record_pattern],
     [$.unit, $.formal_parameters],
     [$.primary_expression, $._pattern],
     [$.primary_expression, $.record_pattern],
@@ -949,14 +951,30 @@ export default grammar({
     record_pattern: ($) =>
       seq(
         '{',
-        commaSep1t(
+        choice(
+          commaSep1t($._record_pattern_field),
           seq(
-            optional('?'),
-            choice($.value_identifier, $.value_identifier_path),
-            optional(seq(':', $._pattern)),
+            repeat(seq($._record_pattern_field, ',')),
+            $.record_rest_pattern,
+            repeat(seq(',', $._record_pattern_field)),
+            optional(','),
           ),
         ),
         '}',
+      ),
+
+    _record_pattern_field: ($) =>
+      seq(
+        optional('?'),
+        choice($.value_identifier, $.value_identifier_path),
+        optional(seq(':', $._pattern)),
+      ),
+
+    record_rest_pattern: ($) =>
+      seq(
+        '...',
+        optional(seq($._non_function_inline_type, 'as')),
+        field('name', $.value_identifier),
       ),
 
     tuple_item_pattern: ($) => seq($._pattern, optional($.type_annotation)),

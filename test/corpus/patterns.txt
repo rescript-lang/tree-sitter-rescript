@@ -243,3 +243,120 @@ let _ = switch z {
           (sequence_expression
             (expression_statement
               (number))))))))
+
+==================
+Record rest bindings and type annotations
+==================
+let {a, ...rest} = value
+let {...rest, a,} = value
+let {a, ...rest, b} = value
+let {...rest} = value
+let {a, ...t as rest} = value
+let {a, ...M.Sub.t<'a, int> as rest} = value
+let f = ({?name, ...rest}) => rest
+switch value { | {nested: {a, ...rest}} => rest }
+let {a, /* before */ ... /* type */ M.t<int> as /* name */ rest,} = value
+---
+
+(source_file
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (value_identifier)
+        (record_rest_pattern
+          (value_identifier)))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (record_rest_pattern
+          (value_identifier))
+        (value_identifier))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (value_identifier)
+        (record_rest_pattern
+          (value_identifier))
+        (value_identifier))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (record_rest_pattern
+          (value_identifier)))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (value_identifier)
+        (record_rest_pattern
+          (type_identifier)
+          (value_identifier)))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (value_identifier)
+        (record_rest_pattern
+          (generic_type
+            (type_identifier_path
+              (module_identifier_path
+                (module_identifier)
+                (module_identifier))
+              (type_identifier))
+            (type_arguments
+              (type_identifier)
+              (type_identifier)))
+          (value_identifier)))
+      (value_identifier)))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (record_pattern
+              (value_identifier)
+              (record_rest_pattern
+                (value_identifier)))))
+        (value_identifier))))
+  (expression_statement
+    (switch_expression
+      (value_identifier)
+      (switch_match
+        (record_pattern
+          (value_identifier)
+          (record_pattern
+            (value_identifier)
+            (record_rest_pattern
+              (value_identifier))))
+        (sequence_expression
+          (expression_statement
+            (value_identifier))))))
+  (let_declaration
+    (let_binding
+      (record_pattern
+        (value_identifier)
+        (block_comment)
+        (record_rest_pattern
+          (block_comment)
+          (generic_type
+            (type_identifier_path
+              (module_identifier)
+              (type_identifier))
+            (type_arguments
+              (type_identifier)))
+          (block_comment)
+          (value_identifier)))
+      (value_identifier))))
+
+==================
+Record patterns reject multiple rest bindings
+:error
+==================
+let {...Config.t as first, ...Config.t as second} = value
+---
+
+(ERROR)
