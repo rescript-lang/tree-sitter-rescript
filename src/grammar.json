@@ -7264,41 +7264,45 @@
           }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "left",
-              "content": {
-                "type": "SYMBOL",
-                "name": "primary_expression"
+          "type": "PREC_RIGHT",
+          "value": "coercion_relation",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "left",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "source_type",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "type_annotation"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "operator",
+                "content": {
+                  "type": "STRING",
+                  "value": ":>"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_type"
+                }
               }
-            },
-            {
-              "type": "FIELD",
-              "name": "source_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "type_annotation"
-              }
-            },
-            {
-              "type": "FIELD",
-              "name": "operator",
-              "content": {
-                "type": "STRING",
-                "value": ":>"
-              }
-            },
-            {
-              "type": "FIELD",
-              "name": "right",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type"
-              }
-            }
-          ]
+            ]
+          }
         }
       ]
     },
@@ -9666,8 +9670,99 @@
       "_jsx_child"
     ],
     [
-      "expression",
+      "_labeled_parameter_default_value",
       "coercion_expression"
+    ],
+    [
+      "type_identifier",
+      "value_identifier"
+    ],
+    [
+      "_non_function_inline_type",
+      "primary_expression"
+    ],
+    [
+      "block",
+      "record_type"
+    ],
+    [
+      "record_type_field",
+      "primary_expression",
+      "_record_field_name"
+    ],
+    [
+      "record_type_field",
+      "primary_expression"
+    ],
+    [
+      "object_type_field",
+      "primary_expression",
+      "object_field"
+    ],
+    [
+      "_function_type_parameter_list",
+      "formal_parameters",
+      "unit"
+    ],
+    [
+      "_non_function_inline_type",
+      "primary_expression",
+      "_pattern"
+    ],
+    [
+      "_non_function_inline_type",
+      "_pattern"
+    ],
+    [
+      "function_type_parameter",
+      "parameter"
+    ],
+    [
+      "variant_declaration",
+      "variant_pattern",
+      "variant"
+    ],
+    [
+      "variant_declaration",
+      "variant_pattern"
+    ],
+    [
+      "variant_declaration",
+      "variant"
+    ],
+    [
+      "polyvar_declaration",
+      "polyvar"
+    ],
+    [
+      "polyvar_declaration",
+      "polyvar_pattern"
+    ],
+    [
+      "polyvar_declaration",
+      "polyvar_pattern",
+      "polyvar"
+    ],
+    [
+      "object_type",
+      "object"
+    ],
+    [
+      "record_type_field",
+      "primary_expression",
+      "_record_field_name",
+      "record_pattern"
+    ],
+    [
+      "_non_function_inline_type",
+      "primary_expression",
+      "parameter",
+      "_pattern"
+    ],
+    [
+      "_non_function_inline_type",
+      "parameter",
+      "_pattern"
     ]
   ],
   "precedences": [

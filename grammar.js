@@ -156,7 +156,38 @@ export default grammar({
     [$.functor, $.module_expression],
     [$.call_expression, $._jsx_child],
     [$.subscript_expression, $._jsx_child],
-    [$.expression, $.coercion_expression],
+    [$._labeled_parameter_default_value, $.coercion_expression],
+    // A ternary's ':' can also start a coercion's source type annotation.
+    [$.type_identifier, $.value_identifier],
+    [$._non_function_inline_type, $.primary_expression],
+    [$.block, $.record_type],
+    [$.record_type_field, $.primary_expression, $._record_field_name],
+    [$.record_type_field, $.primary_expression],
+    [$.object_type_field, $.primary_expression, $.object_field],
+    [$._function_type_parameter_list, $.formal_parameters, $.unit],
+    [$._non_function_inline_type, $.primary_expression, $._pattern],
+    [$._non_function_inline_type, $._pattern],
+    [$.function_type_parameter, $.parameter],
+    [$.variant_declaration, $.variant_pattern, $.variant],
+    [$.variant_declaration, $.variant_pattern],
+    [$.variant_declaration, $.variant],
+    [$.polyvar_declaration, $.polyvar],
+    [$.polyvar_declaration, $.polyvar_pattern],
+    [$.polyvar_declaration, $.polyvar_pattern, $.polyvar],
+    [$.object_type, $.object],
+    [
+      $.record_type_field,
+      $.primary_expression,
+      $._record_field_name,
+      $.record_pattern,
+    ],
+    [
+      $._non_function_inline_type,
+      $.primary_expression,
+      $.parameter,
+      $._pattern,
+    ],
+    [$._non_function_inline_type, $.parameter, $._pattern],
   ],
 
   rules: {
@@ -1182,11 +1213,15 @@ export default grammar({
             ),
           ),
         ),
-        seq(
-          field('left', $.primary_expression),
-          field('source_type', $.type_annotation),
-          field('operator', ':>'),
-          field('right', $._type),
+        // Shift ')' into the parenthesized form instead of reducing early.
+        prec.right(
+          'coercion_relation',
+          seq(
+            field('left', $.expression),
+            field('source_type', $.type_annotation),
+            field('operator', ':>'),
+            field('right', $._type),
+          ),
         ),
       ),
 

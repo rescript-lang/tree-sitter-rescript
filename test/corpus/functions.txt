@@ -120,6 +120,47 @@ let foo = (type a, x: 'a): a => x
         (value_identifier)))))
 
 ===================================================
+Compound parameter defaults distinguish annotations from coercions
+===================================================
+
+let f = (~x=1 + 2 : int) => x
+let g = (~x=1 + 2 : int :> int) => x
+
+---
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (labeled_parameter
+              (value_identifier)
+              (binary_expression
+                (number)
+                (number))
+              (type_annotation
+                (type_identifier)))))
+        (value_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (function
+        (formal_parameters
+          (parameter
+            (labeled_parameter
+              (value_identifier)
+              (coercion_expression
+                (binary_expression
+                  (number)
+                  (number))
+                (type_annotation
+                  (type_identifier))
+                (type_identifier)))))
+        (value_identifier)))))
+
+===================================================
 Parameter defaults
 ===================================================
 

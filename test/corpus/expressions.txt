@@ -1473,6 +1473,71 @@ value :> t<'a>
       (type_identifier))))
 
 ================================================================================
+Source-typed coercions wrap the complete arithmetic expression
+================================================================================
+
+call(~x=1 + 2 :> int)
+call(~x=(1 + 2 : int :> int))
+call(~x=1 + 2 : int :> int)
+call(~x=1 + 2 * 3 : int :> int)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (number))
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (number))
+            (type_annotation
+              (type_identifier))
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (number))
+            (type_annotation
+              (type_identifier))
+            (type_identifier))))))
+  (expression_statement
+    (call_expression
+      (value_identifier)
+      (arguments
+        (labeled_argument
+          (value_identifier)
+          (coercion_expression
+            (binary_expression
+              (number)
+              (binary_expression
+                (number)
+                (number)))
+            (type_annotation
+              (type_identifier))
+            (type_identifier)))))))
+
+================================================================================
 Ternaries
 ================================================================================
 
@@ -1481,6 +1546,8 @@ condition ? case1 : case2
 condition
   ? case1
   : case2
+
+condition ? a + b : c + d
 
 --------------------------------------------------------------------------------
 
@@ -1494,7 +1561,16 @@ condition
     (ternary_expression
       (value_identifier)
       (value_identifier)
-      (value_identifier))))
+      (value_identifier)))
+  (expression_statement
+    (ternary_expression
+      (value_identifier)
+      (binary_expression
+        (value_identifier)
+        (value_identifier))
+      (binary_expression
+        (value_identifier)
+        (value_identifier)))))
 
 ================================================================================
 Arrays
