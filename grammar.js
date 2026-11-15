@@ -1566,8 +1566,11 @@ export default grammar({
       choice(seq('$', $.value_identifier), seq('${', $.expression, '}')),
 
     character: ($) =>
-      // prettier-ignore
-      seq('\'', repeat(choice(/[^\\']/, $.escape_sequence)), '\''),
+      choice(
+        // Match the whole literal before a type variable can consume its quotes.
+        token(prec(1, seq('\u0027', /[^\\']/, '\u0027'))),
+        seq('\u0027', repeat(choice(/[^\\']/, $.escape_sequence)), '\u0027'),
+      ),
 
     lparen: ($) => alias($._lparen, '('),
     rparen: ($) => alias($._rparen, ')'),

@@ -1619,6 +1619,66 @@ let value = outer ? inner ? 1 : 2 : int :> int : 3
         (number)))))
 
 ================================================================================
+Character-valued ternaries distinguish literals from type variables
+================================================================================
+
+let value = flag ? 'a' : 'b'
+let value = outer ? inner ? 'a' : 'b' : 'c'
+let value = flag ? '\n' : '\t'
+let value = flag ? 'a' : 'b' : char :> char
+let value = call(~x=input : 'a :> 'a)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (character)
+        (character))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (ternary_expression
+          (value_identifier)
+          (character)
+          (character))
+        (character))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (ternary_expression
+        (value_identifier)
+        (character (escape_sequence))
+        (character (escape_sequence)))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (coercion_expression
+        (ternary_expression
+          (value_identifier)
+          (character)
+          (character))
+        (type_annotation (type_identifier))
+        (type_identifier))))
+  (let_declaration
+    (let_binding
+      (value_identifier)
+      (call_expression
+        (value_identifier)
+        (arguments
+          (labeled_argument
+            (value_identifier)
+            (coercion_expression
+              (value_identifier)
+              (type_annotation (type_identifier))
+              (type_identifier))))))))
+
+================================================================================
 Arrays
 ================================================================================
 
